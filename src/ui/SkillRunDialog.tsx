@@ -4,9 +4,10 @@
  *  New because main had no form that renders a data schema. 「详情」 keeps main's #484 edit page (openSkillEditor). */
 import { useState } from 'react'
 
-import { uploadSkillImage, loc, missingInputs, presetImage, skillAuthor, skillMeta, skillDefaults, skillDescription, skillPreset, skillRunParams, type Skill } from '../skills'
+import { uploadSkillImage, loc, loadFavourites, missingInputs, presetImage, recordSkillUse, skillAuthor, skillMeta, skillMetaLabel, skillDefaults, skillDescription, skillPreset, skillRunParams, skillShareUrl, toggleFavourite, type Skill } from '../skills'
 import { newProject } from '../projects'
 import { BRAND } from '../brand'
+import { copyText } from '../clipboard'
 import { t } from '../i18n'
 import { useEscape } from './escape'
 import { Icons } from './icons'
@@ -21,6 +22,8 @@ export function SkillRunDialog({ skill, presetId, onClose, run = newProject }: {
   const [values, setValues] = useState(() => skillDefaults(skill))
   const [preset, setPreset] = useState(() => skillPreset(skill, presetId)?.id ?? null)
   const [uploading, setUploading] = useState<string | null>(null)
+  const [fav, setFav] = useState(() => loadFavourites().includes(skill.id))
+  const [shared, setShared] = useState(false)
   const missing = missingInputs(skill, values)
   const chosen = skillPreset(skill, preset)
   const author = skillAuthor(skill)
@@ -29,6 +32,13 @@ export function SkillRunDialog({ skill, presetId, onClose, run = newProject }: {
   const [zoom, setZoom] = useState<string | null>(null)
   const set = (key: string, v: string) => setValues((cur) => ({ ...cur, [key]: v }))
   const stop = (e: React.KeyboardEvent) => e.stopPropagation()
+  const onShare = () => {
+    const link = skillShareUrl(skill.id)
+    if (!link) return
+    void copyText(link).then(() => { setShared(true); setTimeout(() => setShared(false), 1500) })
+  }
+  const onFav = () => setFav(toggleFavourite(skill.id).includes(skill.id))
+  const onStart = () => { recordSkillUse(skill.id); run(skillRunParams(skill, values, preset)) }
   useEscape(true, onClose)
   return (
     <div className="ca-modal" data-testid="skill-run-modal" onPointerDown={(e) => { e.stopPropagation(); if (e.target === e.currentTarget) onClose() }}>
@@ -37,7 +47,7 @@ export function SkillRunDialog({ skill, presetId, onClose, run = newProject }: {
           {/* #494-2 对照结构: title / author / desc stay pinned above the template grid */}
           <header className="ca-skillrun__head" data-testid="skill-run-head">
             <h2 className="ca-skillrun__title" data-testid="skill-run-title">{skill.name}</h2>
-            {/* #541 creator row: 28px avatar + name, actions right (we have 详情; no share / bookmark data) */}
+            {/* #541/#581 creator row: 28px avatar + name; share (real clipboard) + favourite toggle (no fake count) + 详情 */}
             <div className="ca-skillrun__creator" data-testid="skill-run-creator">
               <div className="ca-skillrun__author" data-testid="skill-run-author" data-kind={author.kind}>
                 {author.kind === 'builtin'
@@ -45,10 +55,25 @@ export function SkillRunDialog({ skill, presetId, onClose, run = newProject }: {
                   : <span className="ca-swall__avatar" aria-hidden="true"><span className="ca-icon">{Icons.user}</span></span>}
                 {author.label}
               </div>
-              <button type="button" className="ca-skillrun__action" data-testid="skill-run-detail" onClick={() => { onClose(); openSkillEditor(skill.id) }}>{t('skillRun.detail')}</button>
+              <div className="ca-skillrun__actions" data-testid="skill-run-actions">
+                <button type="button" className="ca-skillrun__iconbtn" data-testid="skill-run-share"
+                  title={shared ? t('common.copied') : t('skillRun.share')}
+                  aria-label={t('skillRun.share')}
+                  onClick={onShare}>
+                  <span className="ca-icon">{shared ? Icons.check : Icons.share}</span>
+                </button>
+                <button type="button" className="ca-skillrun__iconbtn" data-testid="skill-run-favourite"
+                  data-on={fav || undefined}
+                  aria-pressed={fav}
+                  title={fav ? t('home.skillsUnfavourite') : t('home.skillsFavourite')}
+                  onClick={onFav}>
+                  <span className="ca-icon">{fav ? Icons.bookmarkFilled : Icons.bookmark}</span>
+                </button>
+                <button type="button" className="ca-skillrun__action" data-testid="skill-run-detail" onClick={() => { onClose(); openSkillEditor(skill.id) }}>{t('skillRun.detail')}</button>
+              </div>
             </div>
             {desc && <p className="ca-skillrun__desc" data-testid="skill-run-desc">{desc}</p>}
-            {meta && <p className="ca-skillrun__meta" data-testid="skill-run-meta">{t('skillRun.templateCount', meta.templates)}</p>}
+            {meta && <p className="ca-skillrun__meta" data-testid="skill-run-meta">{skillMetaLabel(meta)}</p>}
           </header>
           {(!!skill.presets?.length || !!skill.examples?.length) && (
             <div className="ca-skillrun__templates">
@@ -146,7 +171,7 @@ export function SkillRunDialog({ skill, presetId, onClose, run = newProject }: {
           </div>
           <div className="ca-skillrun__foot">
             <button type="button" className="ca-panel__primary ca-skillrun__go" data-testid="skill-run-go" disabled={missing.length > 0 || !!uploading}
-              onClick={() => run(skillRunParams(skill, values, preset))}>{t('skillRun.start')}</button>
+              onClick={onStart}>{t('skillRun.start')}</button>
           </div>
         </div>
         {zoom && (

@@ -815,6 +815,12 @@ body { background: var(--ca-float); }
   overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .ca-swall__author { display: flex; align-items: center; gap: 6px; margin-top: 4px; min-width: 0; color: var(--ca-text-2);
   font: 400 12px/18px var(--ca-font); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ca-swall__author-name { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+.ca-swall__stat {
+  display: inline-flex; align-items: center; gap: 3px; flex: none; margin-left: 2px;
+  color: var(--ca-muted); font: 400 12px/18px var(--ca-font);
+}
+.ca-swall__stat .ca-icon { width: 12px; height: 12px; }
 .ca-swall__avatar {
   display: inline-flex; align-items: center; justify-content: center;
   width: 14px; height: 14px; border-radius: 50%; background: var(--ca-hover); color: var(--ca-text); flex: none;
@@ -890,6 +896,15 @@ body { background: var(--ca-float); }
   color: var(--ca-text); font: 500 13px/20px var(--ca-font);
 }
 .ca-skillrun__author .ca-swall__avatar { width: 28px; height: 28px; }
+.ca-skillrun__actions { display: inline-flex; align-items: center; gap: 8px; flex: none; }
+.ca-skillrun__iconbtn {
+  flex: none; display: inline-flex; align-items: center; justify-content: center;
+  width: 32px; height: 32px; padding: 0; border-radius: 8px; border: 0;
+  background: var(--ca-field); color: var(--ca-text); cursor: pointer;
+}
+.ca-skillrun__iconbtn:hover { background: var(--ca-active); }
+.ca-skillrun__iconbtn[data-on] { color: var(--ca-text); }
+.ca-skillrun__iconbtn .ca-icon { width: 16px; height: 16px; }
 .ca-skillrun__action {
   flex: none; height: 32px; min-width: 60px; padding: 0 12px; border-radius: 8px; border: 0;
   background: var(--ca-field); color: var(--ca-text); font: 500 13px/32px var(--ca-font); cursor: pointer;

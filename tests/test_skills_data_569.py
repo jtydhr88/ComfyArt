@@ -73,7 +73,7 @@ def test_template_counts(got):
     for sid, n in TEMPLATE.items():
         s = got["skills"][sid]
         assert len(s["presets"]) == n, sid
-        assert s["meta"] == {"templates": n}, sid
+        assert s["meta"] == {"templates": n, "usage": 0}, sid
         assert len({p["id"] for p in s["presets"]}) == n and all(p["prompt"] and p["en"] and p["image"] for p in s["presets"]), sid
     assert got["skills"]["custom-workflow"]["presets"] is None
 

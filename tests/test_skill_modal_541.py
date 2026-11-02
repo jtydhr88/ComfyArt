@@ -30,15 +30,18 @@ def got(tmp_path_factory) -> dict:
 
 @needs_node
 def test_meta_is_template_count_only(got):
+    # #581: skillMeta also carries usage (0 when store empty). No presets + no usage → null.
     for sid, n in got["presets"].items():
-        assert got["meta"][sid] == ({"templates": n} if n else None), sid
+        assert got["meta"][sid] == ({"templates": n, "usage": 0} if n else None), sid
     assert got["meta"]["custom-workflow"] is None and got["old"] is None
 
 
 def test_meta_copy_has_no_fake_usage():
     assert ZH["skillRun.templateCount"] == "{0} 个模板" and EN["skillRun.templateCount"] == "{0} templates"
-    assert "已使用" not in DLG and "skillRun.used" not in DLG
-    assert "skillMeta(skill)" in DLG and "skill-run-meta" in DLG
+    # #581: real usage copy is allowed via skillMetaLabel; still no hardcoded fake number in the dialog source.
+    assert "skillRun.used" not in DLG
+    assert "skillMetaLabel(meta)" in DLG and "skill-run-meta" in DLG
+    assert "Math.random" not in DLG
 
 
 def test_lovart_sizes_and_theme_vars():
@@ -66,7 +69,7 @@ def test_tiles_from_presets_and_zoom_is_sibling_button():
 
 @needs_node
 def test_product_has_six_presets(got):
-    assert got["presets"]["product"] == 6 and got["meta"]["product"] == {"templates": 6}
+    assert got["presets"]["product"] == 6 and got["meta"]["product"] == {"templates": 6, "usage": 0}
     assert got["productIds"] == ["white", "lifestyle", "detail", "electronics", "food", "beauty"]
     assert all("/688a702a1f322082cde4e5ed46200c3593db9c43/541/wash/product/product__" in u for u in got["productNew"])
 

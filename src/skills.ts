@@ -526,6 +526,8 @@ export async function skillTool(args: Record<string, unknown>): Promise<unknown>
 
 /** #460/#461 — Explore wall + conversational creator (form kept as fallback). */
 const FAV_KEY = 'comfyart.skillFavourites'
+/** #581 — local per-browser usage counts (id → n). Increment only on a real run start; never seed. */
+const USAGE_KEY = 'comfyart.skillUsage'
 
 /** #462: `edit` set = Edit in Chat for an existing personal skill (same Composer chip path). */
 /** #491: `chip` = i18n key of the chip label; unset falls back to composer.skillCreator (zh 技能创建器), same key as both create entries. */
@@ -553,6 +555,43 @@ export function toggleFavourite(id: string): string[] {
   const next = [...set]
   localStorage.setItem(FAV_KEY, JSON.stringify(next))
   return next
+}
+
+/** #581 — map of skill id → local run count. Empty on a fresh install. */
+export function loadSkillUsage(): Record<string, number> {
+  try {
+    const raw = localStorage.getItem(USAGE_KEY)
+    const obj = raw ? JSON.parse(raw) as unknown : {}
+    if (!obj || typeof obj !== 'object' || Array.isArray(obj)) return {}
+    const out: Record<string, number> = {}
+    for (const [k, v] of Object.entries(obj as Record<string, unknown>)) {
+      if (typeof k === 'string' && typeof v === 'number' && Number.isFinite(v) && v > 0) out[k] = Math.floor(v)
+    }
+    return out
+  } catch {
+    return {}
+  }
+}
+
+export function getSkillUsage(id: string): number {
+  return loadSkillUsage()[id] ?? 0
+}
+
+/** #581 — bump when the user actually starts a run (dialog 「开始制作」 or direct newProject({ skill })). */
+export function recordSkillUse(id: string): number {
+  const map = loadSkillUsage()
+  const next = (map[id] ?? 0) + 1
+  map[id] = next
+  localStorage.setItem(USAGE_KEY, JSON.stringify(map))
+  return next
+}
+
+/** #581 — stable deep link (`?skill=<id>`) matching handoff.ts. */
+export function skillShareUrl(id: string, href = typeof location !== 'undefined' ? location.href : ''): string {
+  const url = new URL(href || 'http://localhost/')
+  for (const k of ['ask', 'mode', 'ref', 'tool', 'createSkill', 'editSkill', 'preset']) url.searchParams.delete(k)
+  url.searchParams.set('skill', id)
+  return url.toString()
 }
 
 /** Chip ids for Explore filters: 「为你推荐」 plus the categories (#494: read from each skill's `category`). */
@@ -623,7 +662,7 @@ export function presetVideo(_skill: Skill, preset: SkillPreset): string | null {
   return preset.video || null
 }
 
-/** #494/#489 — author line: built-ins show BRAND.name (logo); personal / imported skills say 个人. No counts. */
+/** #494/#489/#581 — author line: built-ins show BRAND.name (logo); personal / imported skills say 个人. Card footer appends real usage separately. */
 export function skillAuthor(skill: Skill): { kind: 'builtin' | 'personal'; label: string } {
   return skill.custom ? { kind: 'personal', label: t('home.skillsAuthorPersonal') } : { kind: 'builtin', label: BRAND.name }
 }
@@ -655,11 +694,20 @@ export function withPreset(skill: Skill, presetId?: string | null): Skill {
   return p?.prompt ? { ...skill, instructions: `${skill.instructions.trimEnd()}\n\n${p.prompt}` } : skill
 }
 
-/** #541 — design-spec meta line under the description. Only real data: no usage counter exists in our data, so the line
- *  carries the template count alone (never a made-up 「已使用N次」); no presets → null (no line). */
-export function skillMeta(skill: Skill): { templates: number } | null {
-  const n = skill.presets?.length ?? 0
-  return n ? { templates: n } : null
+/** #541/#581 — design-spec meta under the description. Real data only: template count from presets[];
+ *  usage from local `loadSkillUsage` (never seeded). No presets and no usage → null. */
+export function skillMeta(skill: Skill): { templates: number; usage: number } | null {
+  const templates = skill.presets?.length ?? 0
+  const usage = getSkillUsage(skill.id)
+  if (!templates && !usage) return null
+  return { templates, usage }
+}
+
+/** #581 — modal meta copy: 「已使用 N 次 · N 个模板」 when usage>0; else template-count-only (or usage-only). */
+export function skillMetaLabel(meta: { templates: number; usage: number }): string {
+  if (meta.usage > 0 && meta.templates > 0) return t('skillRun.usageAndTemplates', meta.usage, meta.templates)
+  if (meta.usage > 0) return t('skillRun.usageCount', meta.usage)
+  return t('skillRun.templateCount', meta.templates)
 }
 
 /** #494-2 — the preset's own image, else the skill's list cover (one decision point, like `skillCover`). */
