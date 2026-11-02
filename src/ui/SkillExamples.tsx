@@ -1,10 +1,11 @@
 import { useState } from 'react'
 
 import { t } from '../i18n'
-import { isSkillMediaVideo } from '../skills'
+import { filmstripIndexLabel, isSkillMediaVideo } from '../skills'
 
 /** #541 「效果示例」: 704×506 contain-centred stage + thumbnail strip.
- *  #593: numbered filmstrip (1…n) so left-column examples match dual-column gold UX.
+ *  #593: numbered filmstrip so left-column examples match dual-column gold UX.
+ *  #601: zero-padded index 01…10 (padStart 2).
  *  #575: examples may mix stills and short mp4 — stage muted-loops the current clip; leave selection → next still/video. */
 function ExampleMedia({ src, stage }: { src: string; stage?: boolean }) {
   if (isSkillMediaVideo(src)) {
@@ -43,7 +44,7 @@ export function SkillExamples({ examples }: { examples?: string[] }) {
               data-media={isSkillMediaVideo(src) ? 'video' : 'image'}
               onClick={() => setAt(i)}>
               <ExampleMedia src={src} />
-              <span className="ca-skillrun__thumbnum" aria-hidden="true">{i + 1}</span>
+              <span className="ca-skillrun__thumbnum" aria-hidden="true">{filmstripIndexLabel(i + 1)}</span>
             </button>
           ))}
         </div>
