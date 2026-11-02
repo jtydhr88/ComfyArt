@@ -136,13 +136,26 @@ export function LoomiMono() {
 
 export const Icons = {
   // #437/#442: in-house generation mark (not a Lucide stock icon)
+  /** #627 image/model row — frame + sparkle (live CN step-rail) */
   sparkleImage: (
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round">
-      <path d="M13 4H7a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3v-6" />
-      <path d="m4.5 16.5 4-4a1.5 1.5 0 0 1 2.1 0l4.9 4.9" />
-      <path d="m13.5 15.4 1.4-1.4a1.5 1.5 0 0 1 2.1 0l2.9 2.9" />
-      <path data-solid="star" fill="currentColor" stroke="none" d="M18 1.6c.35 2 1.35 3.05 3.4 3.4-2.05.35-3.05 1.4-3.4 3.4-.35-2-1.35-3.05-3.4-3.4 2.05-.35 3.05-1.4 3.4-3.4Z" />
+      <rect x="3.5" y="4.5" width="15" height="15" rx="2.5" />
+      <circle cx="8.2" cy="9.2" r="1.2" />
+      <path d="M4.8 17.2 9 13.2a1.4 1.4 0 0 1 1.9 0l2.4 2.3" />
+      <path d="m12.2 15.2 1.5-1.4a1.3 1.3 0 0 1 1.8 0L17.8 17" />
+      <path data-solid="star" fill="currentColor" stroke="none" d="M19.2 2.2c.28 1.55 1.05 2.35 2.6 2.65-1.55.3-2.32 1.12-2.6 2.65-.28-1.53-1.05-2.35-2.6-2.65 1.55-.3 2.32-1.1 2.6-2.65Z" />
     </svg>
+  ),
+  /** #627 ref-analysis row — reference card (chevron rendered beside label) */
+  refAnalysis: (
+    <Svg strokeWidth={1.5}>
+      <rect x="4" y="4" width="16" height="16" rx="2.5" />
+      <path d="M9 4v16" />
+      <path d="M6.2 8.5c.5-.7 1.2-.7 1.6 0" />
+      <path d="M6.2 12c.5-.7 1.2-.7 1.6 0" />
+      <circle cx="14.2" cy="9" r="1.3" />
+      <path d="M10.5 17.2 13.8 13a1.2 1.2 0 0 1 1.7 0l2.5 2.4" />
+    </Svg>
   ),
   // #437: in-house 56×56 search-results art
   searchFolder: (
@@ -202,8 +215,14 @@ export const Icons = {
   panelRight: L(PanelRight),
   panelLeft: L(PanelLeft),
   agent: <LoomiMono />,
-  /** #325/#326 think — Lucide-ish brain/spark; keep custom thought-process glyph */
-  think: <Svg strokeWidth={2}><path d="M12 18V5" /><path d="M15 13a4.17 4.17 0 01-3-4 4.17 4.17 0 01-3 4" /><path d="M17.707 6.294A3 3 0 1012 5a3 3 0 10-5.707 1.294" /><path d="M17.996 5.125a4 4 0 012.526 5.77" /><path d="M18 18a4 4 0 002-7.465" /><path d="M19.967 17.482a4 4 0 11-7.967.517 4 4 0 11-7.967-.517" /><path d="M6 18a4 4 0 01-2-7.465" /><path d="M6.004 5.125a4 4 0 00-2.526 5.77" /></Svg>,
+  /** #627 think done — top-down brain double-leaf outline (live CN step-rail pin; not bulb) */
+  think: (
+    <Svg strokeWidth={1.75}>
+      <path d="M12 4c-1.8 0-3.2.9-3.9 2.2C6.8 5.5 5 6.2 4.2 7.8 3.2 9.6 3.6 11.8 5 13c-.2.5-.3 1.1-.1 1.6.4 1.2 1.5 2 2.8 2h1c.5 0 1-.2 1.3-.5.4.7 1.1 1.1 2 1.1s1.6-.4 2-1.1c.3.3.8.5 1.3.5h1c1.3 0 2.4-.8 2.8-2 .2-.5.1-1.1-.1-1.6 1.4-1.2 1.8-3.4.8-5.2C19 6.2 17.2 5.5 15.9 6.2 15.2 4.9 13.8 4 12 4Z" />
+      <path d="M12 4.8v12.4" />
+      <path d="M7.4 9.2c1-.7 2-.5 2.7.2M14 9.4c.7-.7 1.7-.9 2.7-.2M7 12.2c1-.5 2-.3 2.8.4M14.2 12.6c.8-.7 1.8-.8 2.8-.3" />
+    </Svg>
+  ),
   memoryHead: <Svg strokeWidth={1.5}><path d="M7 22v-4.4a8 8 0 1 1 12.4-7.4l1.9 3.4a1 1 0 0 1-.9 1.4H19v2a2.5 2.5 0 0 1-2.5 2.5H15V22a1 1 0 0 1-1 1H8a1 1 0 0 1-1-1Z" /><path d="M12.6 6.2 10 10.6h3.2L11 14.8" /></Svg>,
   memoryChev: L(ChevronRight, 1.5),
   keyReturn: <Svg strokeWidth={1.5}><path d="M19 7v5a4 4 0 0 1-4 4H7" /><path d="m10 12-3 4 3 4" /></Svg>,
