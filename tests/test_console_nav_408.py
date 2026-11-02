@@ -1,4 +1,7 @@
-"""#408 WaveSpeed console task-history nav (adapted from upstream ComfyUI↔ComfyArt)."""
+"""#408 WaveSpeed console task-history nav (adapted from upstream ComfyUI↔ComfyArt).
+
+#498: home-rail history entry moved into SettingsMenu; ProjectHeader menu entry stays.
+"""
 from __future__ import annotations
 
 import json
@@ -11,13 +14,18 @@ HISTORY = "https://wavespeed.ai/history"
 def test_ui_and_locales_present():
     home = (ROOT / "src/home/HomeApp.tsx").read_text()
     header = (ROOT / "src/ui/ProjectHeader.tsx").read_text()
+    menu = (ROOT / "src/ui/SettingsMenu.tsx").read_text()
     icons = (ROOT / "src/ui/icons.tsx").read_text()
     key = (ROOT / "src/wavespeedKey.ts").read_text()
 
-    assert "WAVESPEED_HISTORY_URL" in home and "rail-ws-history" in home
-    assert "Icons.exit" in home and "home.waveSpeedTaskHistory" in home
-    assert "window.open(WAVESPEED_HISTORY_URL" in home
-    assert "_blank" in home and "noopener" in home
+    # #498: rail no longer hosts history; SettingsMenu does
+    assert "rail-ws-history" not in home
+    assert "settings-ws-history" in menu
+    assert "WAVESPEED_HISTORY_URL" in menu
+    assert "window.open(WAVESPEED_HISTORY_URL" in menu
+    assert "_blank" in menu and "noopener" in menu
+    assert "settings.waveSpeedTaskHistory" in menu
+    assert "Icons.exit" in menu
 
     assert "WAVESPEED_HISTORY_URL" in header and "menu-ws-history" in header
     assert "Icons.exit" in header and "home.waveSpeedTaskHistory" in header

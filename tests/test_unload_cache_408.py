@@ -24,7 +24,10 @@ def test_ui_and_locales_present():
     assert "settings.unloadModels" in menu and "settings.clearCache" in menu
     assert "reportSuccess" in menu and "showMemoryToast" in menu
     # nav jump (互跳) is deferred — must not appear in this slice
-    assert "backToComfyUI" not in menu and "rail-ws-history" not in menu
+    assert "backToComfyUI" not in menu
+    # #498: history lives in SettingsMenu (settings-ws-history), not a rail id
+    assert "rail-ws-history" not in menu
+    assert "settings-ws-history" in menu
     comfy = (ROOT / "src/comfy.ts").read_text()
     assert "export async function unloadModels" in comfy
     assert "export async function clearCache" in comfy

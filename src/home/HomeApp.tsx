@@ -1,4 +1,5 @@
 import { useEffect, useState, type ReactNode } from 'react'
+import { useValue } from 'tldraw'
 
 import { t } from '../i18n'
 import { readLocal, writeLocal } from '../localPrefs'
@@ -25,7 +26,8 @@ import { isEnter } from '../ui/keys'
 import { KeySettings } from '../ui/KeySettings'
 import { Popover } from '../ui/Popover'
 import { SettingsMenu } from '../ui/SettingsMenu'
-import { WAVESPEED_HISTORY_URL } from '../wavespeedKey'
+import { UsageDialog } from '../ui/UsageDialog'
+import { keyStatusAtom } from '../wavespeedKey'
 import '../styles/home.css'
 import { Arti } from './Arti'
 import { Assets } from './Assets'
@@ -71,6 +73,30 @@ function RailBtn({
     </button>
   )
 }
+
+/** #498: left-bottom personal entry — icon (+ label when expanded) + real balance when key/balance OK. */
+function SettingsRailBtn({ open, toggle, expanded }: { open: boolean; toggle: () => void; expanded: boolean }) {
+  const keyStatus = useValue(keyStatusAtom)
+  const balance = keyStatus?.configured && keyStatus.balance !== null
+    ? `$${keyStatus.balance.toFixed(2)}`
+    : null
+  return (
+    <button
+      type="button"
+      className="ca-rail__btn"
+      title={t('settings.settings')}
+      aria-label={t('settings.settings')}
+      data-on={open || undefined}
+      data-testid="rail-settings"
+      onClick={toggle}
+    >
+      <span className="ca-icon">{Icons.settings}</span>
+      {expanded ? <span className="ca-rail__label">{t('settings.settings')}</span> : null}
+      {expanded && balance ? <span className="ca-rail__balance" data-testid="rail-settings-balance">{balance}</span> : null}
+    </button>
+  )
+}
+
 
 function RecentRow({ entry, onChanged }: { entry: ProjectEntry; onChanged: () => void }) {
   const [menu, setMenu] = useState(false)
@@ -232,16 +258,10 @@ export function HomeApp({ view }: { view: View }) {
         ) : null}
 
         <div className="ca-rail__spacer" />
-        {/* #498: WaveSpeed history moves into the personal menu; keep here until then */}
-        <RailBtn
-          icon={Icons.exit}
-          label={t('home.waveSpeedTaskHistory')}
-          onClick={() => { window.open(WAVESPEED_HISTORY_URL, '_blank', 'noopener,noreferrer') }}
-          testId="rail-ws-history"
-          expanded={expanded}
-        />
-        {/* #498: personal entry replaces gear; keep SettingsMenu until then */}
-        <SettingsMenu trigger={({ open, toggle }) => <RailBtn icon={Icons.settings} label={t('settings.settings')} on={open} onClick={toggle} expanded={expanded} testId="rail-settings" />} />
+        {/* #498: Settings entry — Lucide settings + 设置/Settings; real $x.xx when key+balance OK; history lives in the menu */}
+        <SettingsMenu trigger={({ open, toggle }) => (
+          <SettingsRailBtn open={open} toggle={toggle} expanded={expanded} />
+        )} />
       </nav>
       <main className="ca-home__main">{main(view)}</main>
       <Confirm />
@@ -250,6 +270,7 @@ export function HomeApp({ view }: { view: View }) {
       <MemoryDialog onError={(msg) => showMemoryToast(msg)} />
       <SkillsDialog home onError={(msg) => showMemoryToast(msg, 'error')} />
       <KeySettings />
+      <UsageDialog />
     </div>
   )
 }

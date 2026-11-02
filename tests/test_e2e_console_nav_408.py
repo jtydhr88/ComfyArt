@@ -1,4 +1,4 @@
-"""#408 e2e: WaveSpeed console task-history entry on home rail + project header menu."""
+"""#408 e2e: WaveSpeed console task-history entry (#498: via SettingsMenu + project header)."""
 from __future__ import annotations
 
 import os
@@ -35,7 +35,7 @@ async def _open(p, app_url, lang: str, theme: str, path: str = "/"):
 
 
 @pytest.mark.asyncio
-async def test_home_rail_zh_light_opens_history(app_url, fake_tools, monkeypatch):  # noqa: F811
+async def test_home_settings_zh_light_opens_history(app_url, fake_tools, monkeypatch):  # noqa: F811
     monkeypatch.setenv("WAVESPEED_API_KEY", "mock-key-not-real")
     async with pw.async_playwright() as p:
         try:
@@ -43,19 +43,20 @@ async def test_home_rail_zh_light_opens_history(app_url, fake_tools, monkeypatch
         except Exception as e:
             pytest.skip(f"chromium not available: {e}")
         await pg.wait_for_selector("[data-testid=home-shell]", timeout=20000)
-        btn = pg.locator("[data-testid=rail-ws-history]")
+        assert await pg.locator("[data-testid=rail-ws-history]").count() == 0
+        await pg.locator("[data-testid=rail-settings]").click()
+        btn = pg.locator("[data-testid=settings-ws-history]")
         await btn.wait_for(timeout=10000)
-        assert await btn.get_attribute("title") == "打开 WaveSpeed 任务记录"
         await btn.hover()
         await pg.wait_for_timeout(300)
-        await _shot(pg, "home-rail-zh-light")
+        await _shot(pg, "home-settings-zh-light")
         await btn.click()
         assert await pg.evaluate("() => window.__opened") == [HISTORY]
         await browser.close()
 
 
 @pytest.mark.asyncio
-async def test_home_rail_en_dark_and_project_menu(app_url, fake_tools, monkeypatch):  # noqa: F811
+async def test_home_settings_en_dark_and_project_menu(app_url, fake_tools, monkeypatch):  # noqa: F811
     monkeypatch.setenv("WAVESPEED_API_KEY", "mock-key-not-real")
     async with pw.async_playwright() as p:
         try:
@@ -63,12 +64,14 @@ async def test_home_rail_en_dark_and_project_menu(app_url, fake_tools, monkeypat
         except Exception as e:
             pytest.skip(f"chromium not available: {e}")
         await pg.wait_for_selector("[data-testid=home-shell]", timeout=20000)
-        btn = pg.locator("[data-testid=rail-ws-history]")
+        await pg.locator("[data-testid=rail-settings]").click()
+        btn = pg.locator("[data-testid=settings-ws-history]")
         await btn.wait_for(timeout=10000)
-        assert await btn.get_attribute("title") == "Open WaveSpeed task history"
+        text = await btn.inner_text()
+        assert "WaveSpeed" in text and "task history" in text.lower()
         await btn.hover()
         await pg.wait_for_timeout(300)
-        await _shot(pg, "home-rail-en-dark")
+        await _shot(pg, "home-settings-en-dark")
         await browser.close()
 
         try:

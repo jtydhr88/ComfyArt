@@ -67,6 +67,7 @@ import { startBot } from './bot'
 import { registerCommandBus } from './botCommands'
 import { BotSettings } from './ui/BotSettings'
 import { KeySettings } from './ui/KeySettings'
+import { UsageDialog } from './ui/UsageDialog'
 import { keySettingsOpenAtom, refreshKeyStatus } from './wavespeedKey'
 import { TaskDetails } from './ui/TaskDetails'
 import { InpaintPanel } from './ui/InpaintPanel'
@@ -331,6 +332,7 @@ export function App({ id, onCanvasReady }: { id: string; onCanvasReady?: () => v
       {editor && <ScheduleDialog editor={editor} onError={setError} />}
       <BotSettings onError={setError} />
       <KeySettings />
+      <UsageDialog />
       {editor && <VideoEditor editor={editor} onError={setError} />}
       <MemoryDialog onError={setError} />
       <WorkflowsDialog onError={setError} />
