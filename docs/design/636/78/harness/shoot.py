@@ -1,4 +1,5 @@
 """#636 #78 AFTER — C deferred5 SkillRunDialog shots (zh-light + en-dark).
+Post-#637: C skills have examples:[] + text-only presets → right-side preset select (no left tiles).
 Run: DESIGN_636_78_SHOOT=1 PYTHONPATH=tests:. /workspace/.venv-589/bin/pytest -q docs/design/636/78/harness/shoot.py -s
 """
 from __future__ import annotations
@@ -55,7 +56,14 @@ async def _open_skill(pg, app_url: str, sid: str, lang: str, theme: str) -> None
     dlg = pg.get_by_test_id("skill-run-dialog")
     await dlg.wait_for(timeout=10_000)
     assert await dlg.get_attribute("data-skill") == sid
-    await pg.get_by_test_id("skill-run-preset").first.wait_for(timeout=10_000)
+    # #637 wash UI: C has no left examples/preset tiles → right preset <select>
+    sel = pg.get_by_test_id("skill-run-preset-select")
+    if await sel.count():
+        await sel.wait_for(timeout=10_000)
+    elif await pg.get_by_test_id("skill-run-preset").count():
+        await pg.get_by_test_id("skill-run-preset").first.wait_for(timeout=10_000)
+    else:
+        await pg.get_by_test_id("skill-run-form").wait_for(timeout=10_000)
     await pg.wait_for_timeout(400)
 
 
@@ -73,9 +81,16 @@ async def capture(app_url: str) -> None:
                 await _open_skill(pg, app_url, sid, lang, theme)
                 dlg = pg.get_by_test_id("skill-run-dialog")
                 await dlg.screenshot(path=str(OUT / name))
-                n = await pg.get_by_test_id("skill-run-preset").count()
-                print("wrote", OUT / name, "presets=", n)
+                n_left = await pg.get_by_test_id("skill-run-preset").count()
+                n_sel = await pg.get_by_test_id("skill-run-preset-select").count()
+                if n_sel:
+                    n = await pg.locator('[data-testid="skill-run-preset-select"] option').count()
+                else:
+                    n = n_left
+                print("wrote", OUT / name, "presets=", n, "leftTiles=", n_left, "select=", n_sel)
                 assert n >= PRESET_MIN.get(sid, 2), (sid, n)
+                # C unwash: no left examples media column expected
+                assert await pg.get_by_test_id("skill-run-presets").count() == 0, (sid, "no left preset radiogroup for C")
                 await ctx.close()
         await browser.close()
 

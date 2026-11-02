@@ -70,6 +70,11 @@ def test_phase2_ids_present_social_kept_untouched_and_no_skill_creator():
     assert "Fashion UGC" in SKILLS_TS
 
 
+PHASE2_B_WASHED = {
+    "flash-cut-video", "style-transfer", "person-swap", "commerce-strategist", "lifestyle-scene",
+}
+
+
 def test_new_skills_cut2_skeleton_categories():
     entries = _entries()
     for sid, cat in NEW_CATEGORY.items():
@@ -78,11 +83,16 @@ def test_new_skills_cut2_skeleton_categories():
         assert "instructions:" in e and "inputs:" in e, sid
         assert "name: t(" in e, sid
         assert "presets:" in e, sid
-        assert "examples: []" in e and "featured: []" in e, sid
-        # S1: no washed cover/video pins yet (S4)
         head = e.split("inputs:", 1)[0]
-        assert "cover:" not in head and "video:" not in head, sid
         assert "demo" not in e.lower() and "placeholder.webp" not in e, sid
+        if sid in PHASE2_B_WASHED:
+            # #637 S4 soft wash pins
+            assert "cover: cover637(" in head, sid
+            assert "examples: []" not in e and "featured: []" not in e, sid
+        else:
+            # C/D still deferred
+            assert "examples: []" in e and "featured: []" in e, sid
+            assert "cover:" not in head and "video:" not in head, sid
 
 
 def test_locale_titles_and_descriptions_for_new_ids():

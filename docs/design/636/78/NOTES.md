@@ -4,7 +4,9 @@
 **Scope this tip:** C only — `naive-illustration` `logo-abstract` `photo-split-poster` `ppt-visual` `promo-ecommerce`.  
 **Prior:** B .ai NEW5 merged via #652. **Follow-up:** D style4 (may be cut). Wash cover/video/examples → **#637 S4** (B NEW5 wash first per PM).  
 **Tip-pin:** absolute `raw.githubusercontent.com` URLs in the draft PR body (exact tip SHA).  
-**Merge hold:** draft parked — do not call for signs until #637 wash lands.
+**Merge:** absorbed `main@42f59675` (#654/#637 wash) into tip (merge, not rebase). C still `examples:[]`; B wash from main. Re-shoot AFTER after merge (right preset-select UI).
+
+**Merge hold:** draft — Refs #636 (not Closes). D style4 still not in this tip.
 
 ## AFTER shots (C)
 

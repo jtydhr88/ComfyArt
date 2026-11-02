@@ -1,4 +1,4 @@
-"""#636 Phase2-S3: B .ai NEW5 (merged) + C deferred.art5 production.
+"""#636 Phase2-S3: B .ai NEW5 (merged + #637 wash) + C deferred.art5 production.
 D style4 follow-up (may be cut). $0 static reads; no network. PRODUCT-LOCK-PHASE2 §B§C."""
 from __future__ import annotations
 
@@ -100,7 +100,7 @@ def _instructions(entry: str) -> str:
 def _assert_production(sid: str, cat: str, preset_min: int, required: list[str], entries: dict[str, str]):
     e = entries[sid]
     assert f"category: '{cat}'" in e, sid
-    assert "examples: []" in e and "featured: []" in e, sid  # wash = #637
+    assert "examples: []" in e and "featured: []" in e, sid  # C still unwash; B wash = #637
     head = e.split("inputs:", 1)[0]
     assert "cover:" not in head and "video:" not in head, sid
     instr = _instructions(e)
@@ -123,7 +123,28 @@ def test_b5_production_instructions_presets_inputs_dialog():
     entries = _entries()
     assert set(PHASE2_B) <= set(entries)
     for sid, cat in B_CATEGORY.items():
-        _assert_production(sid, cat, B_PRESET_MIN[sid], B_REQUIRED_INPUTS[sid], entries)
+        e = entries[sid]
+        assert f"category: '{cat}'" in e, sid
+        # #637 soft wash: cover + examples/featured filled (hardMax layouts); C tip still empty
+        head = e.split("inputs:", 1)[0]
+        assert "cover: cover637(" in head, sid
+        assert "examples: []" not in e and "featured: []" not in e, sid
+        assert "feat637(" in e or "ex637(" in e or "video637(" in e, sid
+        instr = _instructions(e)
+        assert r"\n1)" in instr and r"\n5)" in instr, sid
+        assert "You are a production" in instr, sid
+        assert "Template:" not in instr, sid
+        low = instr.lower()
+        assert "demo" not in low and "lovart" not in low, sid
+        assert "placeholder" not in e.lower(), sid
+        body = e.split("presets:", 1)[1].split("inputs:", 1)[0]
+        n = body.count("P(")
+        assert n >= B_PRESET_MIN[sid], (sid, n)
+        assert body.count("Style: ") >= B_PRESET_MIN[sid], sid
+        for key in B_REQUIRED_INPUTS[sid]:
+            assert f"I('{key}'" in e, (sid, key)
+        # dialog-capable
+        assert "inputs:" in e and "I(" in e.split("inputs:", 1)[1]
 
 
 def test_c5_production_instructions_presets_inputs_dialog():
