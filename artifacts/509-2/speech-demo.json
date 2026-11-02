@@ -1,0 +1,9 @@
+{
+  "model": "wavespeed-ai/qwen3-tts/text-to-speech",
+  "fields": {
+    "@prompt": "text"
+  },
+  "params": {
+    "voice": "Vivian"
+  }
+}
