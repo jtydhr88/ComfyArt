@@ -15,7 +15,7 @@ ROOT = Path(__file__).resolve().parents[1]
 needs_node = pytest.mark.skipif(
     not (ROOT / "node_modules" / ".bin" / "rolldown").exists() or not shutil.which("node"), reason="needs node + npm install")
 
-EFFECT = ("poster", "social", "thumbnail", "banner", "interior")
+EFFECT = ("poster", "thumbnail", "banner", "interior")  # #635: social → Fashion UGC presets
 TEMPLATE = {"brand": 6, "packaging": 5, "character": 8, "product": 6, "motion": 2}
 ASSETS = "https://raw.githubusercontent.com/ganjmeng/ComfyArt/bd043d4cff5019fc4117b5b2f3a33ae437015a28/569/wash"
 CHARACTER = [("角色转身板", "Character Turnaround Sheet", "01-character-turnaround-sheet"),
@@ -69,7 +69,21 @@ def test_effect_skills_only_upload_and_note(got):
 
 
 @needs_node
+def test_social_fashion_ugc_presets_keep_examples(got):
+    # #635 Phase2-S2: social is no longer effect-only; Fashion UGC presets ≥2 + RedNote examples carousel
+    s = got["skills"]["social"]
+    assert s["examples"], "social"
+    assert s["presets"] and len(s["presets"]) >= 2, "social"
+    assert all(p["prompt"] and p["en"] for p in s["presets"]), "social"
+    ids = {p["id"] for p in s["presets"]}
+    assert any("ugc" in i or "feed" in i or "story" in i for i in ids) or any(
+        "UGC" in (p["en"] or "") or "Fashion" in (p["en"] or "") for p in s["presets"]
+    )
+
+
+@needs_node
 def test_template_counts(got):
+
     for sid, n in TEMPLATE.items():
         s = got["skills"][sid]
         assert len(s["presets"]) == n, sid
