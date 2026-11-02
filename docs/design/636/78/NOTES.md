@@ -1,24 +1,45 @@
-# #636 → #78 tip-pin — Phase2-S3 B-first (.ai NEW5)
+# #636 → #78 tip-pin — Phase2-S3 C deferred5 soft wash (FU)
 
-**Branch:** `feat/636-skills-phase2-s3-new14` · **Asia/Shanghai** · Issue #636  
-**Scope this tip:** B only — `flash-cut-video` `style-transfer` `person-swap` `commerce-strategist` `lifestyle-scene`.  
-**Follow-ups:** C deferred5 + D style4 in later tips. Wash cover/video/examples → #637 S4.  
-**Tip-pin:** absolute `raw.githubusercontent.com` URLs in the draft PR body (exact tip SHA).
+**Branch:** `feat/636-skills-phase2-s3-c-deferred5` · **Asia/Shanghai** · Issue #636 / draft PR #653  
+**Scope:** C only — `naive-illustration` `logo-abstract` `photo-split-poster` `ppt-visual` `promo-ecommerce`.  
+**Wash:** nearMiss remap Examples-only (`WASH_636=5ccfdf0f` on `assets/636-wash-c-deferred5`; ppt example tall sheet 768×1360 (nearMiss 2n7npu8pocu8, not cover)). naive=`2qapfgd34fsw`.  
+**UI:** SkillRunDialog left = Examples-only. **No 「当前模板」**. Right rail = **NEARMISS_INPUTS** (Upload Files + single-line Additional Details; uploadArrow + click/drag hint; dark CTA). ppt LEFT stage-fill (no 3-slot gray flanks). D style4 untouched. #490 HOLD.
 
-## AFTER shots
+## AC (Ashley + product — same tip)
 
-Harness: `harness/shoot.py` + `tests/test_design_636_78_shots.py` (opt-in `DESIGN_636_78_SHOOT=1`). Opens `?view=skills` → wall card → SkillRunDialog. Playwright chromium 1280×900.
+1. C5 Examples-only: REMOVE entire 「当前模板」 row (right) for logo/photo/ppt/promo/naive — presets as defaults only, no select.
+2. LEFT column L|R matches lovart gold Examples layout/slots/media (hardMax remap).
+3. ppt hardMax1 — tall deck sheet stage-fill (object-fit:cover on data-count=1); NO gray side-slot flanks.
+4. logo filmstrip exactly ×11 filled/visible (data-count=11 thumbs 56×42).
+5. #78 tip-pin absolute raw Markdown image embeds for all AFTER + L|R pairs.
 
-| File | Shows |
-|------|-------|
-| `after/after-flash-cut-video-dialog-zh-light.png` | zh light — screenshot required + 3 style presets |
-| `after/after-flash-cut-video-dialog-en-dark.png` | en dark |
-| `after/after-style-transfer-dialog-zh-light.png` | zh light — dual upload content+style |
-| `after/after-style-transfer-dialog-en-dark.png` | en dark |
-| `after/after-person-swap-dialog-zh-light.png` | zh light — three image inputs |
-| `after/after-person-swap-dialog-en-dark.png` | en dark |
-| `after/after-commerce-strategist-dialog-zh-light.png` | zh light — strategy-then-images + 3C/beauty/food |
-| `after/after-commerce-strategist-dialog-en-dark.png` | en dark |
+## AFTER (`after/`)
 
-## Scope note
-S3 B-first = production self-written instructions/inputs/presets for .ai NEW5. `examples:[]` / no cover-video pins until #637. C/D skeletons untouched this tip. No Lovart under src/. No `fashion-ugc` id.
+All 5 × zh-light + en-dark SkillRunDialog shots. Left = **Examples-only**; right has **no** 「当前模板」.
+
+| File | Skill | Layout |
+|------|-------|--------|
+| `after-logo-abstract-dialog-{zh-light,en-dark}.png` | logo-abstract | examples-carousel hardMax**11** |
+| `after-photo-split-poster-dialog-{zh-light,en-dark}.png` | photo-split-poster | examples-single-still **1** |
+| `after-ppt-visual-dialog-{zh-light,en-dark}.png` | ppt-visual | examples-single-still **1** tall sheet stage-fill (no gray flanks) |
+| `after-promo-ecommerce-dialog-{zh-light,en-dark}.png` | promo-ecommerce | examples-carousel **4** |
+| `after-naive-illustration-dialog-{zh-light,en-dark}.png` | naive-illustration | examples-carousel **4** (near=`2qapfgd34fsw`) |
+
+## L|R composites (`lr-pairs/`)
+
+L = `phase2/bc-refs/c5-nearmiss/<near>/dialog.png`. R = AFTER wash dialog.
+
+| File | Pair |
+|------|------|
+| `LR-<skill>-zh-light.png` | gold \| AFTER zh-light |
+| `LR-<skill>-en-dark.png` | gold \| AFTER en-dark |
+
+nearMiss map: logo=`2ns5q6jxbyf4`×11 · photo=`2pg3z0ftueww`×1 · ppt=`2n7npu8pocu8`×1 · promo=`2q1txsahwp34`×4 · naive=`2qapfgd34fsw`×4.
+
+## Wash pin
+
+`WASH_636 = 5ccfdf0f481bbcbb3392516dba75f1ec3bda3ab6` → `636/wash/<id>/{cover,examples,featured}`.
+
+## Harness
+
+`DESIGN_636_78_SHOOT=1 PYTHONPATH=tests:. pytest -q tests/test_design_636_78_shots.py -s`

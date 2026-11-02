@@ -930,10 +930,19 @@ body { background: var(--ca-float); }
 }
 /* absolute fill: % height doesn't resolve on a grid item of an aspect-ratio box, which let portrait images overflow (crop) */
 .ca-skillrun__stage img, .ca-skillrun__stage video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; object-position: center; }
+/* #636 C5: single-still hardMax1 — stage-fill (no gray side-slot flanks); keep tall ppt sheet asset */
+.ca-skillrun__examples[data-count="1"] .ca-skillrun__stage img,
+.ca-skillrun__examples[data-count="1"] .ca-skillrun__stage video {
+  object-fit: cover;
+}
 .ca-skillrun__strip { display: flex; gap: 8px; margin-top: 8px; overflow-x: auto; }
 .ca-skillrun__thumb {
   flex: none; width: 64px; height: 48px; padding: 0; border: 0; border-radius: 8px; overflow: hidden; cursor: pointer;
   background: var(--ca-skillrun-tile); box-shadow: inset 0 0 0 1px transparent; opacity: .6;
+}
+/* #636 C5: carousel hardMax11 — shrink thumbs so 01–11 all fit (no clipped 11th) */
+.ca-skillrun__examples[data-count="11"] .ca-skillrun__thumb {
+  width: 56px; height: 42px;
 }
 .ca-skillrun__thumb[data-on] { opacity: 1; box-shadow: inset 0 0 0 1px var(--ca-text); }
 .ca-skillrun__thumb img, .ca-skillrun__thumb video { width: 100%; height: 100%; object-fit: contain; }
@@ -1059,9 +1068,9 @@ body { background: var(--ca-float); }
 .ca-skillrun__field > .ca-skillform__label { font: 400 12px/18px var(--ca-font); color: var(--ca-text-2); padding: 0; }
 .ca-skillrun__uploadwrap { display: flex; flex-wrap: wrap; gap: 8px; }
 .ca-skillrun__upload {
-  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px;
-  width: 100%; height: 108px; box-sizing: border-box; border-radius: 12px; cursor: pointer;
-  border: 1px dashed var(--ca-rail); background: var(--ca-float); color: var(--ca-text-2);
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px;
+  width: 100%; height: 140px; box-sizing: border-box; border-radius: 12px; cursor: pointer;
+  border: 1px dashed var(--ca-rail); background: var(--ca-field); color: var(--ca-text-2);
   font: 400 12px/18px var(--ca-font);
 }
 .ca-skillrun__upload:hover { border-color: var(--ca-muted); color: var(--ca-text); }
@@ -1205,3 +1214,15 @@ body { background: var(--ca-float); }
   font-variant-numeric: tabular-nums;
   padding-right: 2px;
 }
+
+/* #636: ban native system arrow on SkillRunDialog preset select — custom chevron only */
+.ca-skillrun__presetselect {
+  -webkit-appearance: none;
+  appearance: none;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23666' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 16px 16px;
+  padding-right: 32px;
+}
+.ca-skillrun__presetselect::-ms-expand { display: none; }
