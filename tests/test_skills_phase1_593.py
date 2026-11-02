@@ -34,7 +34,7 @@ def _entries() -> dict[str, str]:
 
 def test_new6_production_instructions_and_presets():
     entries = _entries()
-    assert len(entries) == 17
+    assert len(entries) >= 17  # #634 +14 NEW
     for sid, cat in NEW_CATEGORY.items():
         e = entries[sid]
         assert f"category: '{cat}'" in e, sid

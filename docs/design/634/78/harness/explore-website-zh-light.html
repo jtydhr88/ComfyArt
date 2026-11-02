@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="zh" data-theme="light">
+<head>
+<meta charset="utf-8"/>
+<title>Skills Explore #634</title>
+<style>
+  :root { --bg:#f4f4f5; --fg:#18181b; --muted:#71717a; --card:#fff; --line:#e4e4e7; --chip:#fff; --chipOn:#18181b; --chipOnFg:#fff; --cover:#d4d4d8; }
+  html[data-theme=dark] { --bg:#09090b; --fg:#fafafa; --muted:#a1a1aa; --card:#18181b; --line:#27272a; --chip:#27272a; --chipOn:#fafafa; --chipOnFg:#09090b; --cover:#3f3f46; }
+  * { box-sizing:border-box; }
+  body { margin:0; font:14px/1.4 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; background:var(--bg); color:var(--fg); }
+  header { padding:20px 28px 8px; }
+  h1 { margin:0 0 4px; font-size:22px; }
+  .sub { color:var(--muted); font-size:12px; margin-bottom:14px; }
+  .chips { display:flex; gap:8px; flex-wrap:wrap; padding:0 28px 16px; }
+  .chip { border:1px solid var(--line); background:var(--chip); color:var(--fg); border-radius:999px; padding:6px 14px; cursor:default; }
+  .chip.is-on { background:var(--chipOn); color:var(--chipOnFg); border-color:var(--chipOn); }
+  .wall { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; padding:0 28px 28px; }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:14px; overflow:hidden; }
+  .cover { height:140px; background:linear-gradient(135deg,var(--cover),#a1a1aa33); }
+  .meta { padding:10px 12px 12px; }
+  .title { font-weight:600; font-size:13px; margin-bottom:4px; }
+  .desc { color:var(--muted); font-size:11px; margin-bottom:8px; min-height:2.6em; }
+  .cat { display:inline-block; font-size:10px; padding:2px 8px; border-radius:999px; border:1px solid var(--line); color:var(--muted); }
+  .badge { position:fixed; right:16px; bottom:12px; font-size:11px; color:var(--muted); }
+</style>
+</head>
+<body>
+<header>
+  <h1>技能</h1>
+  <div class="sub">#634 Phase2-S1 · 14 个新技能 + social 升级</div>
+</header>
+<div class="chips" data-testid="skills-chips"><button class="chip" data-testid="skills-chip-forYou">为你推荐</button><button class="chip" data-testid="skills-chip-ecommerce">电商</button><button class="chip" data-testid="skills-chip-branding">品牌</button><button class="chip" data-testid="skills-chip-social">社交媒体</button><button class="chip is-on" data-testid="skills-chip-website">网站</button><button class="chip" data-testid="skills-chip-ads">广告创意</button></div>
+<div class="wall" data-testid="skills-wall"><article class="card" data-id="flash-cut-video" data-cat="ads" data-testid="skills-wall-card"><div class="cover" data-testid="skills-card-kind"></div><div class="meta"><div class="title">截图闪剪视频</div><div class="desc">截图多风格静帧后闪剪短视频</div><div class="cat">广告创意</div></div></article>
+<article class="card" data-id="style-transfer" data-cat="branding" data-testid="skills-wall-card"><div class="cover" data-testid="skills-card-kind"></div><div class="meta"><div class="title">自适应风格迁移导演</div><div class="desc">参考风格可控迁移到主体并锁定身份</div><div class="cat">品牌</div></div></article>
+<article class="card" data-id="person-swap" data-cat="ecommerce" data-testid="skills-wall-card"><div class="cover" data-testid="skills-card-kind"></div><div class="meta"><div class="title">电商三图换人</div><div class="desc">场景姿势不变，三图换人换装</div><div class="cat">电商</div></div></article>
+<article class="card" data-id="commerce-strategist" data-cat="ecommerce" data-testid="skills-wall-card"><div class="cover" data-testid="skills-card-kind"></div><div class="meta"><div class="title">电商视觉策略师</div><div class="desc">卖点确认后的视觉策略板再成片</div><div class="cat">电商</div></div></article>
+<article class="card" data-id="lifestyle-scene" data-cat="ecommerce" data-testid="skills-wall-card"><div class="cover" data-testid="skills-card-kind"></div><div class="meta"><div class="title">电商生活场景设计师</div><div class="desc">无字沉浸生活场景融品大片</div><div class="cat">电商</div></div></article>
+<article class="card" data-id="naive-illustration" data-cat="social" data-testid="skills-wall-card"><div class="cover" data-testid="skills-card-kind"></div><div class="meta"><div class="title">稚拙手绘插画</div><div class="desc">巨物小人稚拙手绘插画</div><div class="cat">社媒</div></div></article>
+<article class="card" data-id="logo-abstract" data-cat="branding" data-testid="skills-wall-card"><div class="cover" data-testid="skills-card-kind"></div><div class="meta"><div class="title">极简几何抽象 Logo</div><div class="desc">照片提炼极简几何单标</div><div class="cat">品牌</div></div></article>
+<article class="card" data-id="photo-split-poster" data-cat="ads" data-testid="skills-wall-card"><div class="cover" data-testid="skills-card-kind"></div><div class="meta"><div class="title">照片对半抽象海报</div><div class="desc">上半原图下半抽象几何海报</div><div class="cat">广告创意</div></div></article>
+<article class="card" data-id="ppt-visual" data-cat="website" data-testid="skills-wall-card"><div class="cover" data-testid="skills-card-kind"></div><div class="meta"><div class="title">高级感 PPT 视觉</div><div class="desc">模块化演示稿视觉与风格库</div><div class="cat">网站</div></div></article>
+<article class="card" data-id="promo-ecommerce" data-cat="ecommerce" data-testid="skills-wall-card"><div class="cover" data-testid="skills-card-kind"></div><div class="meta"><div class="title">电商促销主视觉</div><div class="desc">大促 KV 与促销组件</div><div class="cat">电商</div></div></article>
+<article class="card" data-id="yingzao" data-cat="social" data-testid="skills-wall-card"><div class="cover" data-testid="skills-card-kind"></div><div class="meta"><div class="title">营造·在地编辑海报</div><div class="desc">真实在地照片的中文编辑海报</div><div class="cat">社媒</div></div></article>
+<article class="card" data-id="crt-interface" data-cat="social" data-testid="skills-wall-card"><div class="cover" data-testid="skills-card-kind"></div><div class="meta"><div class="title">CRT 复古界面</div><div class="desc">主题化 CRT 复古界面插画</div><div class="cat">社媒</div></div></article>
+<article class="card" data-id="crayon-sketch" data-cat="social" data-testid="skills-wall-card"><div class="cover" data-testid="skills-card-kind"></div><div class="meta"><div class="title">潦草蜡笔画风</div><div class="desc">写实转儿童绘本蜡笔风</div><div class="cat">社媒</div></div></article>
+<article class="card" data-id="fabric-collage" data-cat="social" data-testid="skills-wall-card"><div class="cover" data-testid="skills-card-kind"></div><div class="meta"><div class="title">布艺拼贴画</div><div class="desc">多纺织材质拼贴与针脚质感</div><div class="cat">社媒</div></div></article></div>
+<div class="badge">docs/design/634/78 · mock Explore (S1 empty covers)</div>
+</body></html>

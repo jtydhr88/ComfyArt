@@ -16,6 +16,9 @@ EN = json.loads((ROOT / "src/locales/en.json").read_text())
 COVERS = ROOT / "public/skills"
 REAL = ["poster", "social", "brand", "packaging", "thumbnail", "banner", "character", "product", "motion",
         "multi-angle", "logo-material", "meta-ads", "mobile-ui", "web-product", "marketing-campaign",
+        "flash-cut-video", "style-transfer", "person-swap", "commerce-strategist", "lifestyle-scene",
+        "naive-illustration", "logo-abstract", "photo-split-poster", "ppt-visual", "promo-ecommerce",
+        "yingzao", "crt-interface", "crayon-sketch", "fabric-collage",
         "interior", "custom-workflow"]
 PHASE1_HOT = ["brand", "packaging", "poster", "product", "character", "social", "motion", "banner", "thumbnail",
               "multi-angle", "logo-material", "meta-ads", "mobile-ui", "web-product", "marketing-campaign"]
@@ -25,6 +28,11 @@ CATEGORY = {"poster": "ads", "social": "social", "brand": "branding", "packaging
             "banner": "ads", "character": None, "product": "ecommerce", "motion": "ads",
             "multi-angle": "ecommerce", "logo-material": "branding", "meta-ads": "ads",
             "mobile-ui": "website", "web-product": "website", "marketing-campaign": "ads",
+            "flash-cut-video": "ads", "style-transfer": "branding", "person-swap": "ecommerce",
+            "commerce-strategist": "ecommerce", "lifestyle-scene": "ecommerce",
+            "naive-illustration": "social", "logo-abstract": "branding", "photo-split-poster": "ads",
+            "ppt-visual": "website", "promo-ecommerce": "ecommerce",
+            "yingzao": "social", "crt-interface": "social", "crayon-sketch": "social", "fabric-collage": "social",
             "interior": None, "custom-workflow": None}
 
 
@@ -39,7 +47,7 @@ def _entries() -> dict[str, str]:
     return {p.split("'", 1)[0]: p for p in parts}
 
 
-def test_builtins_are_exactly_the_17_real_skills():
+def test_builtins_are_exactly_the_real_skills():
     assert list(_entries()) == REAL
     assert set(PHASE1_HOT) <= set(REAL)
     assert len(PHASE1_HOT) == 15
@@ -69,7 +77,7 @@ def test_fake_wall_meta_gone():
 
 def test_presets_and_inputs_schema():
     for sid, e in _entries().items():
-        assert len(re.findall(r"\bP\('", e)) == {"product": 6, "brand": 6, "packaging": 5, "character": 8, "motion": 2, "multi-angle": 4, "logo-material": 4, "meta-ads": 4, "mobile-ui": 4, "web-product": 4, "marketing-campaign": 4}.get(sid, 0), sid  # #541/#569 + #593 new-6 presets
+        assert len(re.findall(r"\bP\('", e)) == {"product": 6, "brand": 6, "packaging": 5, "character": 8, "motion": 2, "multi-angle": 4, "logo-material": 4, "meta-ads": 4, "mobile-ui": 4, "web-product": 4, "marketing-campaign": 4, "flash-cut-video": 3, "style-transfer": 3, "person-swap": 3, "commerce-strategist": 3, "lifestyle-scene": 3, "naive-illustration": 2, "logo-abstract": 2, "photo-split-poster": 2, "ppt-visual": 3, "promo-ecommerce": 2, "yingzao": 2, "crt-interface": 3, "crayon-sketch": 2, "fabric-collage": 2}.get(sid, 0), sid  # #541/#569 + #593 + #634 Phase2-S1
         # #494-2: required inputs now also carry a zh/en placeholder after the flag → ", true" (was ", true)").
         # #569: effect skills share EFFECT_INPUTS (upload + note, none required); character's Lovart fields are optional too.
         if sid in ("poster", "social", "thumbnail", "banner", "interior"):
@@ -85,7 +93,7 @@ def test_presets_and_inputs_schema():
         assert len(re.findall(r"\bwashPreset\(", e)) == 0, sid  # #569: 494 preset washes retired
         assert len(re.findall(r"\bwash569\(", e)) == {"character": 8, "motion": 2}.get(sid, 0), sid  # #569 manifest washes
         assert len(re.findall(r"\bwashProduct541\(", e)) == (6 if sid == "product" else 0), sid  # #541 product 6
-        assert len(re.findall(r"Style: |Focus on |Motion: |Template: ", e)) == {"product": 6, "brand": 6, "packaging": 5, "character": 8, "motion": 2, "multi-angle": 4, "logo-material": 4, "meta-ads": 4, "mobile-ui": 4, "web-product": 4, "marketing-campaign": 4}.get(sid, 0), sid  # en prompt body (#593 new-6)
+        assert len(re.findall(r"Style: |Focus on |Motion: |Template: ", e)) == {"product": 6, "brand": 6, "packaging": 5, "character": 8, "motion": 2, "multi-angle": 4, "logo-material": 4, "meta-ads": 4, "mobile-ui": 4, "web-product": 4, "marketing-campaign": 4, "flash-cut-video": 3, "style-transfer": 3, "person-swap": 3, "commerce-strategist": 3, "lifestyle-scene": 3, "naive-illustration": 2, "logo-abstract": 2, "photo-split-poster": 2, "ppt-visual": 3, "promo-ecommerce": 2, "yingzao": 2, "crt-interface": 3, "crayon-sketch": 2, "fabric-collage": 2}.get(sid, 0), sid  # en prompt body (#593 + #634)
     # names/descriptions keep coming from locale keys (AC 1)
     for e in _entries().values():
         assert re.match(r"[\w-]+', name: t\('skills\.\w+'\)", e)
