@@ -59,6 +59,9 @@ def test_dual_column_dialog_start_making_and_numbered_filmstrip():
     assert 'data-testid="skill-run-go"' in DLG
     assert ZH["skillRun.start"] == "开始制作"
     assert EN["skillRun.start"] == "Start making"
+    # #601: header key distinct from CTA; filmstrip zero-padded
+    assert ZH["skillRun.header"] == "开始创作" and EN["skillRun.header"] == "Start Creating"
+    assert "skillRun.header" in DLG and "filmstripIndexLabel" in EXAMPLES and "filmstripIndexLabel" in SKILLS_TS
     assert "ca-skillrun__thumbnum" in EXAMPLES and "data-index" in EXAMPLES
     assert ".ca-skillrun__thumbnum" in CSS
     assert "Lovart" not in SKILLS_TS and "lovart" not in SKILLS_TS

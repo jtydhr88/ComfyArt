@@ -154,13 +154,14 @@ def test_page_wiring():
 def test_copy_and_dialog_style():
     assert ZH["home.skillsTryThis"] == "试用此技能" and EN["home.skillsTryThis"] == "Try this skill"
     assert ZH["skillRun.start"] == "开始制作" and EN["skillRun.start"] == "Start making"  # #593 dual-column CTA gold
+    assert ZH["skillRun.header"] == "开始创作" and EN["skillRun.header"] == "Start Creating"  # #601 header ≠ CTA
     assert ZH["skillRun.select"] == "选择" and EN["skillRun.select"] == "Select"
     assert (ZH["home.skillsCreatedByYou"], ZH["home.skillsCreatedByLoomi"]) == ("你创建的", "Loomi 创建的")
     assert (EN["home.skillsCreatedByYou"], EN["home.skillsCreatedByLoomi"]) == ("Created by you", "Created by Loomi")
     assert "暂无自动总结的技能" in ZH["home.skillsEmptyLoomi"] and "No auto-summarized skills yet" in EN["home.skillsEmptyLoomi"]
     assert "Loomi" in ZH["home.skillsEmptyLoomi"] and "Loomi" in EN["home.skillsEmptyLoomi"]
     for k in ("home.skillsTryThis", "home.skillsCreatedByYou", "home.skillsCreatedByLoomi", "home.skillsEmptyLoomi",
-              "skillRun.start", "skillRun.templates", "skillRun.currentTemplate", "skillRun.pickLeft", "skillRun.detail",
+              "skillRun.header", "skillRun.start", "skillRun.templates", "skillRun.currentTemplate", "skillRun.pickLeft", "skillRun.detail",
               "skillRun.select"):
         assert k in ZH and k in EN, k
     assert "skillDetail." not in " ".join(k for k in ZH if k.startswith("skillDetail"))

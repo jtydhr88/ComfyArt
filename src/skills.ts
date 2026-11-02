@@ -587,6 +587,11 @@ export function recordSkillUse(id: string): number {
 }
 
 /** #581 — stable deep link (`?skill=<id>`) matching handoff.ts. */
+/** #601 — examples filmstrip index label matching gold `01`…`10`. */
+export function filmstripIndexLabel(oneBased: number): string {
+  return String(oneBased).padStart(2, '0')
+}
+
 export function skillShareUrl(id: string, href = typeof location !== 'undefined' ? location.href : ''): string {
   const url = new URL(href || 'http://localhost/')
   for (const k of ['ask', 'mode', 'ref', 'tool', 'createSkill', 'editSkill', 'preset']) url.searchParams.delete(k)

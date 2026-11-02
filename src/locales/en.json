@@ -1596,6 +1596,7 @@
   "home.skillsCreatedByYou": "Created by you",
   "home.skillsCreatedByLoomi": "Created by Loomi",
   "home.skillsEmptyLoomi": "No auto-summarized skills yet. Turn on auto-summarizing and Loomi will turn the flows you repeat into skills you can reuse next time.",
+  "skillRun.header": "Start Creating",
   "skillRun.start": "Start making",
   "skillRun.templates": "Templates",
   "skillRun.currentTemplate": "Current template",
