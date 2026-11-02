@@ -1,7 +1,8 @@
 /** #494-2 — a skill's OWN in-page dialog (card / title / hover 「试用此技能」 all open this). Left: title, author,
- *  description + a 2-column template grid from presets[]. Right: header 「开始创作」 / CTA 「开始制作」 (#601) with the current template and
- *  that skill's inputs[] (labels / placeholders / defaults / required from data). No skill ids are named here.
- *  New because main had no form that renders a data schema. 「详情」 keeps main's #484 edit page (openSkillEditor). */
+ *  description + data-driven media: examples[] → SkillExamples (single / carousel / video); presets[] template grid
+ *  only when a preset carries its own image/video (#637 — no cover-fallback 「模板」 inventing Examples-only gold).
+ *  Right: header 「开始创作」 / CTA 「开始制作」 (#601) with the current template and that skill's inputs[].
+ *  No skill ids are named here. 「详情」 keeps main's #484 edit page (openSkillEditor). */
 import { useRef, useState } from 'react'
 
 import { uploadSkillImage, isSkillMediaVideo, loc, loadFavourites, missingInputs, presetImage, presetVideo, recordSkillUse, skillAuthor, skillCoverVideoHover, skillMeta, skillMetaLabel, skillDefaults, skillDescription, skillPreset, skillRunParams, skillShareUrl, toggleFavourite, type Skill, type SkillPreset } from '../skills'
@@ -122,20 +123,28 @@ export function SkillRunDialog({ skill, presetId, onClose, run = newProject }: {
             {desc && <p className="ca-skillrun__desc" data-testid="skill-run-desc">{desc}</p>}
             {meta && <p className="ca-skillrun__meta" data-testid="skill-run-meta">{skillMetaLabel(meta)}</p>}
           </header>
-          {(!!skill.presets?.length || !!skill.examples?.length) && (
-            <div className="ca-skillrun__templates">
-              <SkillExamples examples={skill.examples} />
-              {!!skill.presets?.length && <div role="radiogroup" data-testid="skill-run-presets">
-              <div className="ca-skillrun__section">{t('skillRun.templates')}</div>
-              <div className="ca-skillrun__grid">
-                {skill.presets.map((p) => (
-                  <PresetTile key={p.id} skill={skill} preset={p} on={preset === p.id}
-                    onPick={() => setPreset(p.id)} onZoom={setZoom} />
-                ))}
+          {(() => {
+            const examples = skill.examples ?? []
+            const presetTiles = (skill.presets ?? []).filter((p) => !!(p.image || p.video))
+            // #637: Examples-only left when examples drive the gold shape; 「模板」 grid only for real preset media (not cover fallback).
+            if (!examples.length && !presetTiles.length) return null
+            return (
+              <div className="ca-skillrun__templates" data-left={examples.length ? (presetTiles.length ? 'both' : 'examples') : 'templates'}>
+                <SkillExamples examples={skill.examples} />
+                {!!presetTiles.length && (
+                  <div role="radiogroup" data-testid="skill-run-presets">
+                    <div className="ca-skillrun__section">{t('skillRun.templates')}</div>
+                    <div className="ca-skillrun__grid">
+                      {presetTiles.map((p) => (
+                        <PresetTile key={p.id} skill={skill} preset={p} on={preset === p.id}
+                          onPick={() => setPreset(p.id)} onZoom={setZoom} />
+                      ))}
+                    </div>
+                  </div>
+                )}
               </div>
-              </div>}
-            </div>
-          )}
+            )
+          })()}
         </div>
         <div className="ca-skillrun__right">
           <div className="ca-skillrun__righthead">
@@ -143,18 +152,37 @@ export function SkillRunDialog({ skill, presetId, onClose, run = newProject }: {
             <button type="button" className="ca-panel__icon" title={t('common.close')} onClick={onClose}>{Icons.close}</button>
           </div>
           <div className="ca-skillrun__body">
-            {chosen && (
+            {chosen && (() => {
+              const presetTiles = (skill.presets ?? []).filter((p) => !!(p.image || p.video))
+              const pickOnLeft = presetTiles.length > 0
+              return (
               <div className="ca-skillrun__current" data-testid="skill-run-current">
                 <span className="ca-skillrun__currentlabel">{t('skillRun.currentTemplate')}</span>
                 <div className="ca-skillrun__currentrow">
                   <span className="ca-skillrun__currentthumb">
                     {presetImage(skill, chosen) ? <img src={presetImage(skill, chosen)!} alt="" /> : <span className="ca-icon">{Icons.skill}</span>}
                   </span>
-                  <span className="ca-skillrun__currentname">{loc(chosen.name)}</span>
-                  <span className="ca-skillrun__currenthint">{t('skillRun.pickLeft')}</span>
+                  {pickOnLeft
+                    ? <span className="ca-skillrun__currentname">{loc(chosen.name)}</span>
+                    : (
+                      <select
+                        className="ca-panel__input ca-skillrun__presetselect"
+                        data-testid="skill-run-preset-select"
+                        value={chosen.id}
+                        onChange={(e) => setPreset(e.target.value)}
+                        onKeyDown={stop}
+                        aria-label={t('skillRun.currentTemplate')}
+                      >
+                        {(skill.presets ?? []).map((p) => (
+                          <option key={p.id} value={p.id}>{loc(p.name)}</option>
+                        ))}
+                      </select>
+                    )}
+                  {pickOnLeft && <span className="ca-skillrun__currenthint">{t('skillRun.pickLeft')}</span>}
                 </div>
               </div>
-            )}
+              )
+            })()}
             {/* join existing ca-skillform system; field column mirrors Loomic template-dialog .fields/.field */}
             <div className="ca-skillform" data-testid="skill-run-form">
             {(skill.inputs ?? []).map((f) => {

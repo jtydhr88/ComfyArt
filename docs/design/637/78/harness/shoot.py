@@ -51,7 +51,12 @@ async def _open_skill(pg, app_url: str, sid: str, lang: str, theme: str) -> None
     dlg = pg.get_by_test_id("skill-run-dialog")
     await dlg.wait_for(timeout=10_000)
     assert await dlg.get_attribute("data-skill") == sid
-    await pg.get_by_test_id("skill-run-preset").first.wait_for(timeout=10_000)
+    await pg.get_by_test_id("skill-run-examples").wait_for(timeout=10_000)
+    # right preset select (Examples-only) or left preset tiles
+    if await pg.get_by_test_id("skill-run-preset-select").count():
+        await pg.get_by_test_id("skill-run-preset-select").wait_for(timeout=5_000)
+    elif await pg.get_by_test_id("skill-run-preset").count():
+        await pg.get_by_test_id("skill-run-preset").first.wait_for(timeout=5_000)
     # wait for left-column media (remote raw.githubusercontent.com wash pins)
     stage = dlg.locator('[data-testid="skill-examples"], [data-testid="skill-run-examples"], .skill-examples, img, video').first
     try:
@@ -87,9 +92,26 @@ async def capture(app_url: str) -> None:
                 await _open_skill(pg, app_url, sid, lang, theme)
                 dlg = pg.get_by_test_id("skill-run-dialog")
                 await dlg.screenshot(path=str(OUT / name))
-                n = await pg.get_by_test_id("skill-run-preset").count()
-                print("wrote", OUT / name, "presets=", n, "size=", (OUT / name).stat().st_size)
-                assert n >= 3, (sid, n)
+                # #637 Examples-only left: B5 has no skill-run-preset tiles; preset select lives on the right
+                n_left = await pg.get_by_test_id("skill-run-preset").count()
+                n_sel = await pg.get_by_test_id("skill-run-preset-select").count()
+                ex = pg.get_by_test_id("skill-run-examples")
+                await ex.wait_for(timeout=10_000)
+                count = await ex.get_attribute("data-count")
+                # hardMax from Product AC
+                want = {"flash-cut-video": "1", "style-transfer": "4", "person-swap": "1",
+                        "commerce-strategist": "1", "lifestyle-scene": "2"}[sid]
+                assert count == want, (sid, count, want)
+                assert n_left == 0, (sid, "left presets must be hidden for Examples-only gold", n_left)
+                assert n_sel == 1, (sid, "right preset select expected", n_sel)
+                # no 「模板」 preset grid on left (Examples heading uses same .ca-skillrun__section class; header meta may say "N 个模板")
+                assert await pg.get_by_test_id("skill-run-presets").count() == 0, (sid, "presets radiogroup must be absent")
+                left_attr = await pg.locator('.ca-skillrun__templates').get_attribute('data-left')
+                assert left_attr == 'examples', (sid, left_attr)
+                # templates grid heading is only rendered inside skill-run-presets; Examples heading alone is OK
+                tmpl_heading = await pg.locator('[data-testid="skill-run-presets"] .ca-skillrun__section').count()
+                assert tmpl_heading == 0, (sid, tmpl_heading)
+                print("wrote", OUT / name, "examples=", count, "leftPresets=", n_left, "size=", (OUT / name).stat().st_size)
                 await ctx.close()
         await browser.close()
 

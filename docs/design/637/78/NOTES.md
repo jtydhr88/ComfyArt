@@ -4,7 +4,7 @@ Tip-pin via PR body `raw.githubusercontent.com` URLs (absolute, tip SHA). Produc
 
 ## AFTER (`after/`)
 
-All 5 × zh-light + en-dark SkillRunDialog shots (no gray placeholders; left column data-driven).
+All 5 × zh-light + en-dark SkillRunDialog shots (no gray placeholders). Left = **Examples-only** (gold isomorphic; no 「模板」/presets grid; hardMax counts). Right preset `<select>` when presets lack own image/video.
 
 | File | Skill | Layout |
 |------|-------|--------|
