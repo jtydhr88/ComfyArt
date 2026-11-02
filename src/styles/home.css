@@ -1109,11 +1109,11 @@ body { background: var(--ca-float); }
 }
 
 /* #539 我的素材 page — left = existing LibraryPanel (kitsOnly), right = existing KitEditor (embedded).
-   #497 soft visual 1:1 tip: list divider ≈12.5vw (~159@1280 / ~240@1920), list bg #f5f5f5, compress
-   embedded title/upload/sections/CTA; dashed 新建 without yellow plus; hide extract via JSX when embedded.
+   #632 restore list width 380px fixed (void #497 12.5vw+159 / max-width:180 crush); keep #631 list bg #f5f5f5,
+   compress embedded title/upload/sections/CTA; dashed 新建 without yellow plus; hide extract via JSX when embedded.
    Scoped to .ca-assets-page / .ca-kit[data-embedded] so canvas LibraryPanel/KitEditor are unchanged. */
 .ca-assets-page { display: flex; height: 100%; min-height: 0; background: var(--ca-float); }
-.ca-assets-page__left { width: calc(12.5vw - var(--ca-rail-w-collapsed)); min-width: 88px; max-width: 180px; flex-shrink: 0; overflow-y: auto; background: var(--ca-rail-bg); border-right: 1px solid var(--ca-border); padding-top: 16px; box-sizing: border-box; }
+.ca-assets-page__left { width: 380px; flex-shrink: 0; overflow-y: auto; background: var(--ca-rail-bg); border-right: 1px solid var(--ca-border); padding-top: 16px; box-sizing: border-box; }
 .ca-assets-page__title { margin: 0 8px 12px; font: 600 15px/22px var(--ca-font); color: var(--ca-text); }
 .ca-assets-page__right { flex: 1; min-width: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; color: var(--ca-muted); font: 14px/20px var(--ca-font); }
 .ca-assets-page__new { height: 32px; padding: 0 16px; border: var(--ca-border-w) solid var(--ca-border); border-radius: 8px; background: none; color: var(--ca-text); font: inherit; cursor: pointer; }
