@@ -190,131 +190,141 @@ export function Skills() {
 
   return (
     <div className="ca-skillspage" data-testid="skills-page">
-      <div className="ca-skills__head">
-        <h1>{t('home.skills')}</h1>
-        <div className="ca-skills__headacts">
-          <button
-            type="button"
-            className="ca-skills__iconbtn"
-            title={t('composer.manageSkills')}
-            onClick={() => skillsOpenAtom.set(true)}
-          >
-            <span className="ca-icon">{Icons.search}</span>
-          </button>
-          <div className="ca-skills__createwrap" ref={menuRef}>
-            <button type="button" className="ca-skills__create" data-testid="skills-create" onClick={createConversational}>
-              {t('home.skillsCreate')}<span className="ca-icon">{Icons.plus}</span>
-            </button>
-            <button
-              type="button"
-              className="ca-skills__create ca-skills__createmore"
-              data-testid="skills-create-menu"
-              aria-haspopup="menu"
-              aria-expanded={menu}
-              title={t('skillsImport.title')}
-              onClick={() => setMenu(!menu)}
-            >
-              <span className="ca-icon">{Icons.chevron}</span>
-            </button>
-            {menu && (
-              <div className="ca-menu ca-skills__createmenu" role="menu">
-                <button type="button" role="menuitem" className="ca-menu__item" data-testid="skills-import" onClick={() => { setMenu(false); setImporting(true) }}>
-                  <span className="ca-icon">{Icons.upload}</span>{t('skillsImport.menu')}
-                </button>
-              </div>
-            )}
-          </div>
-        </div>
-      </div>
-
-      <div className="ca-skills__tabs" role="tablist" data-testid="skills-tabs">
-        {([
-          ['explore', 'home.skillsExplore'],
-          ['favourites', 'home.skillsFavourites'],
-          ['personal', 'home.skillsPersonal'],
-        ] as const).map(([id, key]) => (
-          <button
-            key={id}
-            type="button"
-            role="tab"
-            className="ca-skills__tab"
-            aria-selected={tab === id}
-            data-on={tab === id || undefined}
-            data-testid={`skills-tab-${id}`}
-            onClick={() => setTab(id)}
-          >
-            {t(key)}
-          </button>
-        ))}
-      </div>
-
-      {tab === 'explore' && (
-        <div className="ca-skills__chips" data-testid="skills-chips">
-          {chips.map((c) => (
-            <button
-              key={c}
-              type="button"
-              className="ca-skills__chip"
-              data-on={chip === c || undefined}
-              data-testid={`skills-chip-${c}`}
-              onClick={() => setChip(c)}
-            >
-              {t(CHIP_LABEL[c])}
-            </button>
-          ))}
-        </div>
-      )}
-
-      {tab === 'personal' ? (
-        <div className="ca-skills__personal" data-testid="skills-personal">
-          <section className="ca-skills__group" data-testid="skills-group-yours">
-            <h2 className="ca-skills__grouptitle">{t('home.skillsCreatedByYou')}</h2>
-            {yours.length === 0
-              ? <div className="ca-skills__empty" data-testid="skills-empty-yours">{t('home.skillsEmptyPersonal')}</div>
-              : (
-                <div className="ca-swall ca-swall--rows" data-testid="skills-wall-yours">
-                  {yours.map((s) => (
-                    <SkillWallCard key={s.id} skill={s} fav={favs.includes(s.id)} onFav={() => onFav(s.id)}
-                      onTry={() => (hasSkillDialog(s) ? tryCard(s) : newProject({ skill: s.id }))} layout="row" />
-                  ))}
+      {/* #583 — chrome (title/tabs/chips) pinned; list scrolls in .ca-skills__scroll (gold header lock). */}
+      <div className="ca-skills__chrome" data-testid="skills-chrome">
+        <div className="ca-skills__head">
+          <h1>{t('home.skills')}</h1>
+          <div className="ca-skills__headacts">
+            <div className="ca-skills__createwrap" ref={menuRef}>
+              <button type="button" className="ca-skills__create" data-testid="skills-create" onClick={createConversational}>
+                {t('home.skillsCreate')}
+              </button>
+              <button
+                type="button"
+                className="ca-skills__create ca-skills__createmore"
+                data-testid="skills-create-menu"
+                aria-haspopup="menu"
+                aria-expanded={menu}
+                title={t('skillsImport.title')}
+                onClick={() => setMenu(!menu)}
+              >
+                <span className="ca-icon">{Icons.chevron}</span>
+              </button>
+              {menu && (
+                <div className="ca-menu ca-skills__createmenu" role="menu">
+                  <button type="button" role="menuitem" className="ca-menu__item" data-testid="skills-import" onClick={() => { setMenu(false); setImporting(true) }}>
+                    <span className="ca-icon">{Icons.upload}</span>{t('skillsImport.menu')}
+                  </button>
                 </div>
               )}
-          </section>
-          <section className="ca-skills__group" data-testid="skills-group-loomi">
-            <h2 className="ca-skills__grouptitle">{t('home.skillsCreatedByLoomi')}</h2>
-            {loomi.length === 0
-              ? <div className="ca-skills__empty ca-skills__empty--loomi" data-testid="skills-empty-loomi">{t('home.skillsEmptyLoomi')}</div>
-              : (
-                <div className="ca-swall ca-swall--rows" data-testid="skills-wall-loomi">
-                  {loomi.map((s) => (
-                    <SkillWallCard key={s.id} skill={s} fav={favs.includes(s.id)} onFav={() => onFav(s.id)}
-                      onTry={() => (hasSkillDialog(s) ? tryCard(s) : newProject({ skill: s.id }))} layout="row" />
-                  ))}
-                </div>
-              )}
-          </section>
-          <div className="ca-skills__fallback">
-            <button type="button" className="ca-landing__link" onClick={() => skillsOpenAtom.set(true)}>
-              {t('composer.manageSkills')} · {t('composer.skillCreatorForm')}
-            </button>
+            </div>
           </div>
         </div>
-      ) : (
-        <>
-          {wall.length === 0 && <div className="ca-skills__empty" data-testid="skills-empty">{t(emptyKey)}</div>}
-          <div className="ca-swall" data-testid="skills-wall">
-            {wall.map((s) => (
-              <SkillWallCard
-                key={s.id}
-                skill={s}
-                fav={favs.includes(s.id)}
-                onFav={() => onFav(s.id)}
-                onTry={() => (hasSkillDialog(s) ? tryCard(s) : newProject({ skill: s.id }))}
-              />
+
+        <div className="ca-skills__tabs" data-testid="skills-tabs">
+          <div className="ca-skills__tablist" role="tablist">
+            {([
+              ['explore', 'home.skillsExplore'],
+              ['favourites', 'home.skillsFavourites'],
+              ['personal', 'home.skillsPersonal'],
+            ] as const).map(([id, key]) => (
+              <button
+                key={id}
+                type="button"
+                role="tab"
+                className="ca-skills__tab"
+                aria-selected={tab === id}
+                data-on={tab === id || undefined}
+                data-testid={`skills-tab-${id}`}
+                onClick={() => setTab(id)}
+              >
+                {t(key)}
+              </button>
             ))}
           </div>
-        </>
-      )}
+          <div className="ca-skills__tabacts">
+            <button
+              type="button"
+              className="ca-skills__iconbtn"
+              data-testid="skills-search"
+              title={t('composer.manageSkills')}
+              onClick={() => skillsOpenAtom.set(true)}
+            >
+              <span className="ca-icon">{Icons.search}</span>
+            </button>
+          </div>
+        </div>
+
+        {tab === 'explore' && (
+          <div className="ca-skills__chips" data-testid="skills-chips">
+            {chips.map((c) => (
+              <button
+                key={c}
+                type="button"
+                className="ca-skills__chip"
+                data-on={chip === c || undefined}
+                data-testid={`skills-chip-${c}`}
+                onClick={() => setChip(c)}
+              >
+                {t(CHIP_LABEL[c])}
+              </button>
+            ))}
+          </div>
+        )}
+      </div>
+
+      <div className="ca-skills__scroll" data-testid="skills-scroll">
+        {tab === 'personal' ? (
+          <div className="ca-skills__personal" data-testid="skills-personal">
+            <section className="ca-skills__group" data-testid="skills-group-yours">
+              <h2 className="ca-skills__grouptitle">{t('home.skillsCreatedByYou')}</h2>
+              {yours.length === 0
+                ? <div className="ca-skills__empty" data-testid="skills-empty-yours">{t('home.skillsEmptyPersonal')}</div>
+                : (
+                  <div className="ca-swall ca-swall--rows" data-testid="skills-wall-yours">
+                    {yours.map((s) => (
+                      <SkillWallCard key={s.id} skill={s} fav={favs.includes(s.id)} onFav={() => onFav(s.id)}
+                        onTry={() => (hasSkillDialog(s) ? tryCard(s) : newProject({ skill: s.id }))} layout="row" />
+                    ))}
+                  </div>
+                )}
+            </section>
+            <section className="ca-skills__group" data-testid="skills-group-loomi">
+              <h2 className="ca-skills__grouptitle">{t('home.skillsCreatedByLoomi')}</h2>
+              {loomi.length === 0
+                ? <div className="ca-skills__empty ca-skills__empty--loomi" data-testid="skills-empty-loomi">{t('home.skillsEmptyLoomi')}</div>
+                : (
+                  <div className="ca-swall ca-swall--rows" data-testid="skills-wall-loomi">
+                    {loomi.map((s) => (
+                      <SkillWallCard key={s.id} skill={s} fav={favs.includes(s.id)} onFav={() => onFav(s.id)}
+                        onTry={() => (hasSkillDialog(s) ? tryCard(s) : newProject({ skill: s.id }))} layout="row" />
+                    ))}
+                  </div>
+                )}
+            </section>
+            <div className="ca-skills__fallback">
+              <button type="button" className="ca-landing__link" onClick={() => skillsOpenAtom.set(true)}>
+                {t('composer.manageSkills')} · {t('composer.skillCreatorForm')}
+              </button>
+            </div>
+          </div>
+        ) : (
+          <>
+            {wall.length === 0 && <div className="ca-skills__empty" data-testid="skills-empty">{t(emptyKey)}</div>}
+            <div className="ca-swall" data-testid="skills-wall">
+              {wall.map((s) => (
+                <SkillWallCard
+                  key={s.id}
+                  skill={s}
+                  fav={favs.includes(s.id)}
+                  onFav={() => onFav(s.id)}
+                  onTry={() => (hasSkillDialog(s) ? tryCard(s) : newProject({ skill: s.id }))}
+                />
+              ))}
+            </div>
+          </>
+        )}
+      </div>
 
       {runDialog}
       {importing && (
