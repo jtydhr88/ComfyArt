@@ -196,7 +196,7 @@ export const PHASE1_SKILL_IDS = [
 ] as const
 export const PHASE1_SKILL_ID_SET: ReadonlySet<string> = new Set(PHASE1_SKILL_IDS)
 export const UNTOUCHED_SKILL_IDS = ['interior', 'custom-workflow'] as const
-/** #634 Phase2-S1 — 14 NEW ids (upgrade `social` is not listed here). Homepage mount is S5; orderBuiltins keeps these in rest after Phase1. */
+/** #634 Phase2-S1 — 14 NEW ids (upgrade `social` is not listed here). */
 export const PHASE2_NEW_SKILL_IDS = [
   'flash-cut-video', 'style-transfer', 'person-swap', 'commerce-strategist', 'lifestyle-scene',
   'naive-illustration', 'logo-abstract', 'photo-split-poster', 'ppt-visual', 'promo-ecommerce',
@@ -204,24 +204,49 @@ export const PHASE2_NEW_SKILL_IDS = [
 ] as const
 export const PHASE2_NEW_SKILL_ID_SET: ReadonlySet<string> = new Set(PHASE2_NEW_SKILL_IDS)
 
-/** Put Phase1 in hot order, then untouched / any other builtins in their relative order. */
+/** #638 Phase2-S5 Soft mount — PRODUCT-LOCK-PHASE2 Soft order slots 1–6 production-ready (A social upgrade + B NEW5 washed).
+ *  `social` also lives in PHASE1_SKILL_IDS (upgrade, no dup card). C deferred5 + D style4 stay unmounted as production (#653/#636-C HOLD; D out of scope). #490 HOLD. */
+export const PHASE2_SKILL_IDS = [
+  'flash-cut-video', 'style-transfer', 'person-swap', 'social', 'commerce-strategist', 'lifestyle-scene',
+] as const
+export const PHASE2_SKILL_ID_SET: ReadonlySet<string> = new Set(PHASE2_SKILL_IDS)
+/** #638 — C deferred .art5 + D style4: data-contract only; do not treat as washed production mount. */
+export const PHASE2_DEFERRED_SKILL_IDS = [
+  'naive-illustration', 'logo-abstract', 'photo-split-poster', 'ppt-visual', 'promo-ecommerce',
+  'yingzao', 'crt-interface', 'crayon-sketch', 'fabric-collage',
+] as const
+export const PHASE2_DEFERRED_SKILL_ID_SET: ReadonlySet<string> = new Set(PHASE2_DEFERRED_SKILL_IDS)
+
+/** Phase1 hot order → Phase2 Soft mount NEW (B) → deferred C/D → untouched / other. */
 function orderBuiltins(skills: Skill[]): Skill[] {
-  const rank = new Map<string, number>(PHASE1_SKILL_IDS.map((id, i) => [id, i]))
+  const phase1Rank = new Map<string, number>(PHASE1_SKILL_IDS.map((id, i) => [id, i]))
+  // Soft mount NEW only (exclude `social` — already ranked in Phase1)
+  const phase2MountIds = PHASE2_SKILL_IDS.filter((id) => !phase1Rank.has(id))
+  const phase2Rank = new Map<string, number>(phase2MountIds.map((id, i) => [id, i]))
+  const deferredRank = new Map<string, number>(PHASE2_DEFERRED_SKILL_IDS.map((id, i) => [id, i]))
   const phase1: Skill[] = []
+  const phase2: Skill[] = []
+  const deferred: Skill[] = []
   const rest: Skill[] = []
   for (const s of skills) {
-    if (rank.has(s.id)) phase1.push(s)
+    if (phase1Rank.has(s.id)) phase1.push(s)
+    else if (phase2Rank.has(s.id)) phase2.push(s)
+    else if (deferredRank.has(s.id)) deferred.push(s)
     else rest.push(s)
   }
-  phase1.sort((a, b) => (rank.get(a.id)! - rank.get(b.id)!))
-  return [...phase1, ...rest]
+  phase1.sort((a, b) => (phase1Rank.get(a.id)! - phase1Rank.get(b.id)!))
+  phase2.sort((a, b) => (phase2Rank.get(a.id)! - phase2Rank.get(b.id)!))
+  deferred.sort((a, b) => (deferredRank.get(a.id)! - deferredRank.get(b.id)!))
+  return [...phase1, ...phase2, ...deferred, ...rest]
 }
 
 /** #591 Phase1-S1 data contract + #592 Phase1-S2 upgrade-9 + #593 new-6 instructions/presets + #594 wash pins + #595 hot mount order.
  *  Upgrade 9: brand packaging poster product character social motion banner thumbnail.
  *  New 6 media: covers-v4 + featured-v2 + 594/wash examples @ WASH_594; dual-fit contain (#602); hover video @ WASH_623_NEW6_VIDEO (#623).
- *  #634 Phase2-S1 — PRODUCT-LOCK-PHASE2: 14 NEW ids (B .ai5 + C deferred.art5 + D style4). Empty assets OK; S3–S4 wash; S5 homepage mount.
+ *  #634 Phase2-S1 — PRODUCT-LOCK-PHASE2: 14 NEW ids (B .ai5 + C deferred.art5 + D style4).
  *  #635 Phase2-S2 — deepen `social` Fashion UGC production instructions/presets/inputs (keep RedNote; no fashion-ugc id).
+ *  #636/#637 Phase2-S3/S4 — B NEW5 production + soft wash; C5 HOLD / D out of scope for Soft mount.
+ *  #638 Phase2-S5 — Soft mount A+B via PHASE2_SKILL_IDS + orderBuiltins (home + Skills Explore same BUILTIN_SKILLS); C/D deferred; #490 HOLD.
  *  Skill Creator Out. `interior` / `custom-workflow` untouched. Gold UX site external — never name it in src.
  */
 export const BUILTIN_SKILLS: Skill[] = orderBuiltins([
