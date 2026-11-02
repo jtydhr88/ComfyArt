@@ -79,7 +79,7 @@ def test_presets_and_inputs_schema():
     # AC 11 was "preset prompts and input en copy are step 2"; #494-2 lands them: every preset has an en prompt and
     # every input label has zh + en (updated, not removed).
     assert "prompt?: string" in SKILLS_TS
-    assert "SkillPreset =>" in SKILLS_TS and "prompt, ...(image ? { image } : {})" in SKILLS_TS  # #520 wash image
+    assert "SkillPreset =>" in SKILLS_TS and "prompt, ...(image ? { image } : {}), ...(video ? { video } : {})" in SKILLS_TS  # #520 wash image + #622 video
     assert "label: { zh, en }," in SKILLS_TS and "label: { zh }," not in SKILLS_TS
     for sid, e in _entries().items():
         assert len(re.findall(r"\bwashPreset\(", e)) == 0, sid  # #569: 494 preset washes retired
