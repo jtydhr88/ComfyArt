@@ -9,7 +9,9 @@ import {
   hasSkillDialog,
   importLanding,
   loadFavourites,
+  loadSkillUsage,
   loadSkills,
+  recordSkillUse,
   skillDescription,
   skillAuthor,
   skillChips,
@@ -38,16 +40,18 @@ export const CHIP_LABEL: Record<SkillChipId, string> = {
   ads: 'home.skillsChipAds',
 }
 
-/** #494 — Explore/Favourites card: 231:173 cover, image badge, title, description, author (no counts).
+/** #494/#581 — Explore/Favourites card: 231:173 cover, image badge, title, description, author + real usage when >0.
  *  #494-2: cover / title / hover 「试用此技能」 all call onTry (the skill's own dialog, or main's direct start).
+ *  Favorite **count** is never shown (membership-only store); cover bookmark toggle stays.
  *  Personal tab reuses this with layout="row": square cover left, title + one-line description right, no author. */
 function SkillWallCard({
-  skill, fav, onFav, onTry, layout = 'wall',
+  skill, fav, onFav, onTry, usage = 0, layout = 'wall',
 }: {
   skill: Skill
   fav: boolean
   onFav: () => void
   onTry: () => void
+  usage?: number
   layout?: 'wall' | 'row'
 }) {
   const cover = skillCover(skill)
@@ -128,7 +132,13 @@ function SkillWallCard({
             {author.kind === 'builtin'
               ? <img className="ca-swall__avatar" src={BRAND.logoPath} alt="" aria-hidden="true" />
               : <span className="ca-swall__avatar" aria-hidden="true"><span className="ca-icon">{Icons.user}</span></span>}
-            {author.label}
+            <span className="ca-swall__author-name">{author.label}</span>
+            {usage > 0 && (
+              <span className="ca-swall__stat" data-testid="skills-card-usage" title={t('home.skillsUsage', usage)}>
+                <span className="ca-icon" aria-hidden="true">{Icons.play}</span>
+                {t('home.skillsUsageShort', usage)}
+              </span>
+            )}
           </div>
         )}
       </div>
@@ -141,13 +151,16 @@ export function Skills() {
   const [chip, setChip] = useState<SkillChipId>('forYou')
   const [skills, setSkills] = useState<Skill[]>([])
   const [favs, setFavs] = useState<string[]>(() => loadFavourites())
+  const [usageMap, setUsageMap] = useState<Record<string, number>>(() => loadSkillUsage())
 
   const [menu, setMenu] = useState(false)
   const [importing, setImporting] = useState(false)
   const menuRef = useRef<HTMLDivElement>(null)
   const [running, setRunning] = useState<{ id: string; preset: string | null } | null>(null)
   /** #494-2 — a card opens the skill's OWN dialog when its data has inputs[]; legacy skills keep main's direct start. */
-  const tryCard = (s: Skill) => (hasSkillDialog(s) ? setRunning({ id: s.id, preset: null }) : newProject({ skill: s.id }))
+  /** #581 — direct (no-dialog) starts also record a real local usage bump. */
+  const startDirect = (s: Skill) => { recordSkillUse(s.id); setUsageMap(loadSkillUsage()); newProject({ skill: s.id }) }
+  const tryCard = (s: Skill) => (hasSkillDialog(s) ? setRunning({ id: s.id, preset: null }) : startDirect(s))
 
   useEffect(() => { void loadSkills().then(setSkills) }, [])
   useEffect(() => {
@@ -284,7 +297,7 @@ export function Skills() {
                   <div className="ca-swall ca-swall--rows" data-testid="skills-wall-yours">
                     {yours.map((s) => (
                       <SkillWallCard key={s.id} skill={s} fav={favs.includes(s.id)} onFav={() => onFav(s.id)}
-                        onTry={() => (hasSkillDialog(s) ? tryCard(s) : newProject({ skill: s.id }))} layout="row" />
+                        usage={usageMap[s.id] ?? 0} onTry={() => tryCard(s)} layout="row" />
                     ))}
                   </div>
                 )}
@@ -297,7 +310,7 @@ export function Skills() {
                   <div className="ca-swall ca-swall--rows" data-testid="skills-wall-loomi">
                     {loomi.map((s) => (
                       <SkillWallCard key={s.id} skill={s} fav={favs.includes(s.id)} onFav={() => onFav(s.id)}
-                        onTry={() => (hasSkillDialog(s) ? tryCard(s) : newProject({ skill: s.id }))} layout="row" />
+                        usage={usageMap[s.id] ?? 0} onTry={() => tryCard(s)} layout="row" />
                     ))}
                   </div>
                 )}
@@ -318,7 +331,8 @@ export function Skills() {
                   skill={s}
                   fav={favs.includes(s.id)}
                   onFav={() => onFav(s.id)}
-                  onTry={() => (hasSkillDialog(s) ? tryCard(s) : newProject({ skill: s.id }))}
+                  usage={usageMap[s.id] ?? 0}
+                  onTry={() => tryCard(s)}
                 />
               ))}
             </div>

@@ -1,3 +1,9 @@
+// #541 harness (+ #581 usage store needs localStorage in node)
+;(globalThis as any).localStorage ??= (() => {
+  const ls: Record<string, string> = {}
+  return { getItem: (k: string) => (k in ls ? ls[k] : null), setItem: (k: string, v: string) => { ls[k] = String(v) }, removeItem: (k: string) => { delete ls[k] } }
+})()
+
 // #541 harness: Lovart meta line is real data only (template count from presets[]; no usage counter).
 import { BUILTIN_SKILLS, isSkillMediaVideo, presetImage, skillMeta } from '../../src/skills'
 import { createElement } from 'react'

@@ -1,3 +1,8 @@
+;(globalThis as any).localStorage ??= (() => {
+  const ls: Record<string, string> = {}
+  return { getItem: (k: string) => (k in ls ? ls[k] : null), setItem: (k: string, v: string) => { ls[k] = String(v) }, removeItem: (k: string) => { delete ls[k] } }
+})()
+
 // #569 harness: per-skill data through the real src/skills.ts. No network, $0.
 import { BUILTIN_SKILLS, hasSkillDialog, skillMeta } from '../../src/skills'
 const old = { id: 'old-skill', name: 'Old', instructions: 'Old rules.', custom: true }

@@ -11,7 +11,8 @@ import { Assets } from './Assets'
 import { CHIP_LABEL } from './Skills'
 import { toolCover } from './toolCovers'
 import { showMemoryToast } from '../memory'
-import { BUILTIN_SKILLS, hasSkillDialog, importLanding, loadSkills, matchesSkillChip, skillChips, skillCoverVideoHover, skillFeaturedCases, skillQuickStartCover, skillQuickStartCoverFit, skillVideo, FEED_SPECIAL_COLLAGE, type Skill, type SkillChipId } from '../skills'
+import { BUILTIN_SKILLS, hasSkillDialog,
+  recordSkillUse, importLanding, loadSkills, matchesSkillChip, skillChips, skillCoverVideoHover, skillFeaturedCases, skillQuickStartCover, skillQuickStartCoverFit, skillVideo, FEED_SPECIAL_COLLAGE, type Skill, type SkillChipId } from '../skills'
 import { SkillChip, chipBackspace } from '../ui/SkillChip'
 import { SkillImportDialog } from '../ui/SkillImportDialog'
 import { SkillRunDialog } from '../ui/SkillRunDialog'
@@ -282,9 +283,11 @@ export function Home() {
   }
   const modeInfo = modeOf(mode)
   /** #494-3 — Skills-page rule: dialog when inputs[] exist; else main's direct start. Featured passes a preset id. */
-  const trySkill = (s: Skill, preset: string | null = null) => (
-    hasSkillDialog(s) ? setRunning({ id: s.id, preset }) : newProject({ skill: s.id })
-  )
+  const trySkill = (s: Skill, preset: string | null = null) => {
+    if (hasSkillDialog(s)) { setRunning({ id: s.id, preset }); return }
+    recordSkillUse(s.id)
+    newProject({ skill: s.id })
+  }
   const chips = useMemo(() => skillChips(skills), [skills])
   const shown = useMemo(() => skills.filter((s) => matchesSkillChip(s, chip)), [skills, chip])
   const featured = useMemo(() => skillFeaturedCases(shown), [shown])
