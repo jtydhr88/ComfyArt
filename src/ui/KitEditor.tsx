@@ -244,7 +244,7 @@ export function KitEditor({ onError, embedded }: { onError: (msg: string) => voi
             </div>
           )}
           <input ref={files} type="file" accept={embedded ? '.png,.jpg,.jpeg,.pdf' : 'image/*,.pdf'} multiple hidden onChange={(e) => picked(e.target, dropFiles)} />
-          {brand && (
+          {brand && !embedded && (
             <button type="button" className="ca-kit__link" disabled={busy} onClick={() => guide.current?.click()}>
               <span className="ca-icon">{Icons.agent}</span>{busy ? t('libraryPanel.extracting') : t('libraryPanel.extractFromFileBrandGuide')}
             </button>
