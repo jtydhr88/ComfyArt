@@ -246,6 +246,9 @@ export function RunStop({ b, latest }: { b: BotBlock; latest: boolean }) {
   const [closed, setClosed] = useState(false)
   const [error, setError] = useState('')
   const reason = b.stop?.reason ?? 'error'
+  // #492: normal-complete (reason=done) stop card is never shown — product AC #492; backend still emits.
+  // Filter here so ChatMessage path, reloaded chats, and the #393 RunStop harness all stay empty.
+  if (reason === 'done') return null
   const lk = lang === 'zh' ? 'zh' : 'en'
   const copy = b.copy?.[lk]
   const title = copy?.title ?? t(`runStop.reason.${reason}`)
@@ -1107,7 +1110,12 @@ export function AssistantBlocks({ editor, m }: { editor: Editor; m: BotMessage }
       if (b.type === 'retry') items.push(<Retry key={i} b={b} live={!done && !m.blocks.slice(i + 1).some((x) => x.type === 'retry')} />)
       if (b.type === 'ask') items.push(renderAsk(b, b.ask_id ?? i))
       if (b.type === 'task') items.push(<Task key={i} editor={editor} b={b} />)
-      if (b.type === 'run_stop') items.push(<RunStop key={i} b={b} latest={!m.blocks.slice(i + 1).some((x) => x.type === 'run_stop')} />)
+      if (b.type === 'run_stop') {
+        // #492: skip reason=done in AssistantBlocks render (reloaded old chats included). latest-card scan unchanged.
+        if ((b.stop?.reason ?? '') !== 'done') {
+          items.push(<RunStop key={i} b={b} latest={!m.blocks.slice(i + 1).some((x) => x.type === 'run_stop')} />)
+        }
+      }
       if (b.type === 'notice') items.push(<div key={i} className="ca-chat__notice" data-level={b.level}>{b.text}</div>)
     }
   })
