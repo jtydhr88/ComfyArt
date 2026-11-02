@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { atom, useValue } from 'tldraw'
 
 import { BUILTIN_AGENT, chatIdAtom, chatsAtom, defaultProvider, lostProvider, NO_KEY_DETAIL, providerLabel, messagesAtom, newProviderAtom, openChat, providersAtom, providersStateAtom, saveSettings, settingsAtom, updateChat, type ProviderInfo } from '../bot'
@@ -12,11 +13,60 @@ export const botSettingsOpenAtom = atom('bot settings open', false)
 // #247: which tool card the Agent settings should scroll to when opened from 去配置
 export const agentSetupFocusAtom = atom<string | null>('agent setup focus', null)
 
+// #585: last resolved agent pill (id + display shortLabel) so /bot/status loading can reuse icon+label
+export const AGENT_LABEL_CACHE_KEY = 'comfyart.lastAgentLabel'
+type AgentLabelCache = { id: string; shortLabel: string }
+
+/** #585: humanize an agent id when no product/server short label exists — never show raw id (e.g. claude-code). */
+export function safeAgentDisplayName(id: string): string {
+  const parts = id.split(/[-_]/).filter(Boolean)
+  if (!parts.length) return t('agentPicker.builtinAgentShort')
+  return parts.map((w) => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')
+}
+
+export function readAgentLabelCache(): AgentLabelCache | null {
+  try {
+    const raw = localStorage.getItem(AGENT_LABEL_CACHE_KEY)
+    if (!raw) return null
+    const o = JSON.parse(raw) as unknown
+    if (!o || typeof o !== 'object' || Array.isArray(o)) return null
+    const id = (o as { id?: unknown }).id
+    const short = (o as { shortLabel?: unknown }).shortLabel
+    if (typeof id !== 'string' || !id.trim()) return null
+    if (typeof short !== 'string' || !short.trim()) return null
+    const trimmedId = id.trim()
+    const trimmedShort = short.trim()
+    // refuse a cached label that is just the raw id
+    return { id: trimmedId, shortLabel: trimmedShort === trimmedId ? safeAgentDisplayName(trimmedId) : trimmedShort }
+  } catch {
+    return null
+  }
+}
+
+export function writeAgentLabelCache(entry: AgentLabelCache) {
+  try {
+    const id = entry.id.trim()
+    const shortLabel = entry.shortLabel.trim()
+    if (!id || !shortLabel) return
+    localStorage.setItem(AGENT_LABEL_CACHE_KEY, JSON.stringify({
+      id,
+      shortLabel: shortLabel === id ? safeAgentDisplayName(id) : shortLabel,
+    }))
+  } catch { /* private mode / quota */ }
+}
+
 // #219: the composer bar shows a short name; the full name stays in the list and on hover
 const SHORT_LABELS: Record<string, string> = { 'deepseek-harness': 'DeepSeek' }
 // built-in first, then detected tools, then undetected ones
 const rank = (p: ProviderInfo) => (p.id === BUILTIN_AGENT ? 0 : p.available ? 1 : 2)
-export const shortLabel = (p: ProviderInfo) => (p.id === BUILTIN_AGENT ? t('agentPicker.builtinAgentShort') : SHORT_LABELS[p.id] ?? providerLabel(p))
+export const shortLabel = (p: ProviderInfo) => {
+  if (p.id === BUILTIN_AGENT) return t('agentPicker.builtinAgentShort')
+  if (SHORT_LABELS[p.id]) return SHORT_LABELS[p.id]
+  const L = (p.label || '').trim()
+  // #585: never fall through to a raw id even when server/product shortLabel is missing
+  if (L && L !== p.id) return L
+  return safeAgentDisplayName(p.id)
+}
 
 // #324: off-row title prefers provider.detail; empty → docs「未检测到 · 去配置」
 export function offRowTitle(p: ProviderInfo) {
@@ -39,9 +89,18 @@ export function useCurrentAgent() {
   const providerId = chat?.provider ?? (pending || defaultProvider())
   const loading = useValue('agent list loading', () => providersStateAtom.get().state === 'loading', [])
   const found = providers.find((p) => p.id === providerId) ?? null
-  // #557: while the provider list is still loading, show the agent the list will resolve to (the built-in one unless the
-  // chat already names another) instead of the generic mode fallback, so the pill / reference button never flash.
-  if (!found && loading) return { ...LOADING_AGENT, id: providerId || BUILTIN_AGENT, label: providerId }
+  // #585: persist last resolved label+icon when /bot/status succeeds so the next load can paint it immediately
+  useEffect(() => {
+    if (!found) return
+    writeAgentLabelCache({ id: found.id, shortLabel: shortLabel(found) })
+  }, [found?.id, found?.label])
+  // #557/#585: while the provider list is still loading, show the last cached agent (or Loomi on first open)
+  // instead of the generic mode fallback / raw id, so the pill never flashes.
+  if (!found && loading) {
+    const cached = readAgentLabelCache()
+    if (cached) return { ...LOADING_AGENT, id: cached.id, label: cached.shortLabel }
+    return { ...LOADING_AGENT, id: BUILTIN_AGENT, label: '' }
+  }
   return found
 }
 
