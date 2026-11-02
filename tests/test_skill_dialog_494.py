@@ -31,12 +31,13 @@ def got(tmp_path_factory) -> dict:
     return json.loads(subprocess.run(["node", str(out)], check=True, capture_output=True, text=True).stdout)
 
 
-EFFECT = ("poster", "social", "thumbnail", "banner", "interior")
+EFFECT = ("poster", "thumbnail", "banner", "interior")  # #635 social Fashion UGC
 COUNTS = {"product": 6, "brand": 6, "packaging": 5, "character": 8, "motion": 2,  # #569 template counts
           "multi-angle": 4, "logo-material": 4, "meta-ads": 4, "mobile-ui": 4, "web-product": 4, "marketing-campaign": 4,  # #593 new-6
           "flash-cut-video": 3, "style-transfer": 3, "person-swap": 3, "commerce-strategist": 3, "lifestyle-scene": 3,
           "naive-illustration": 2, "logo-abstract": 2, "photo-split-poster": 2, "ppt-visual": 3, "promo-ecommerce": 2,
-          "yingzao": 2, "crt-interface": 3, "crayon-sketch": 2, "fabric-collage": 2}  # #634 Phase2-S1
+          "yingzao": 2, "crt-interface": 3, "crayon-sketch": 2, "fabric-collage": 2,  # #634 Phase2-S1
+          "social": 2}  # #635 Phase2-S2 Fashion UGC feed+story
 
 
 @needs_node
@@ -45,7 +46,7 @@ def test_every_field_is_bilingual_data(got):
     for sid, fields in got["fields"].items():
         assert fields, sid
         # #569: effect skills (upload + note) and character carry no required field, like the reference.
-        assert any(req for _, _, req, *_ in fields) == (sid not in EFFECT and sid != "character"), sid
+        assert any(req for _, _, req, *_ in fields) == (sid not in EFFECT and sid not in {"character", "social"}), sid  # #635 social optional refs
         for key, typ, req, zh, en, ph in fields:
             assert typ in {"text", "textarea", "select", "image"} and zh and en, (sid, key)
             if req and typ in {"text", "textarea"}:
