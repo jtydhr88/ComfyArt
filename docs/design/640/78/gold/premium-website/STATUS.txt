@@ -1,0 +1,4 @@
+id=premium-website
+wash=ready
+source=ComfyArt-review-assets/phase3/bc-refs/premium-website/
+S1 tip-pin: cover+dialog only (examples deferred; thin6 wash → S4)

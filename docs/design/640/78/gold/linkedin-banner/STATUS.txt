@@ -1,0 +1,4 @@
+id=linkedin-banner
+wash=needWash
+source=ComfyArt-review-assets/phase3/bc-refs/linkedin-banner/
+S1 tip-pin: cover+dialog only (examples deferred; thin6 wash → S4)

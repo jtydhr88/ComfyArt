@@ -1,0 +1,4 @@
+id=product-website
+wash=needWash
+source=ComfyArt-review-assets/phase3/bc-refs/product-website/
+S1 tip-pin: cover+dialog only (examples deferred; thin6 wash → S4)

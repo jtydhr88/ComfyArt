@@ -1,0 +1,4 @@
+id=youtube-channel-banner
+wash=ready
+source=ComfyArt-review-assets/phase3/bc-refs/youtube-channel-banner/
+S1 tip-pin: cover+dialog only (examples deferred; thin6 wash → S4)
