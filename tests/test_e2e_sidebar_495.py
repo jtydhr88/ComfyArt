@@ -223,13 +223,13 @@ async def _assets_page(p, lang, theme):
 
 @pytest.mark.parametrize("lang,theme", [("zh", "light"), ("en", "dark")])
 async def test_assets_detail_539b(app_url, lang, theme):  # noqa: F811
-    """#539 PR-B / #497 tip: list ~100@1280 / dashed 新建; empty state; create → default-select → rename → reload persists."""
+    """#539 PR-B / #632: list 380@1280 / dashed 新建; empty state; create → default-select → rename → reload persists."""
     async with pw.async_playwright() as p:
         browser, pg = await _assets_page(p, lang, theme)
         await pg.goto(app_url + "?view=assets")
         await pg.get_by_test_id("assets-page").wait_for()
         left = await pg.locator(".ca-assets-page__left").bounding_box()
-        assert round(left["width"]) == 100, left  # #497: 12.5vw - 60 @1280 → divider ~160
+        assert abs(round(left["width"]) - 380) <= 8, left  # #632: fixed 380px (±8); void 12.5vw crush
         new = pg.get_by_test_id("assets-new")
         assert await new.evaluate("e => getComputedStyle(e).borderTopStyle") == "dashed"
         assert await pg.locator(".ca-assets-page__title").evaluate("e => getComputedStyle(e).fontSize") == "15px"

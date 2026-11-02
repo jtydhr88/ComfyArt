@@ -116,7 +116,8 @@ def test_assets_detail_539b() -> None:
     assert kit.count("fetch(") == 1 and "{ method: 'HEAD' }" in kit
     # list column measurements, scoped to the page (canvas .ca-lib untouched)
     rules = css.split("/* #539 我的素材 page")[1]
-    assert "calc(12.5vw - var(--ca-rail-w-collapsed))" in rules and "border-right: 1px solid var(--ca-border)" in rules
+    assert "width: 380px" in rules and "border-right: 1px solid var(--ca-border)" in rules  # #632 restore; void 12.5vw crush
+    assert "calc(12.5vw" not in rules and "max-width: 180px" not in rules
     assert "background: var(--ca-rail-bg)" in rules  # #497 list column bg
     assert "font: 600 15px/22px" in rules  # #497 compact list title
     assert ".ca-assets-page .ca-lib__new { border: 1.5px dashed" in rules  # #497 soft dashed 新建
