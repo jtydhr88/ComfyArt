@@ -1109,29 +1109,36 @@ body { background: var(--ca-float); }
 }
 
 /* #539 我的素材 page — left = existing LibraryPanel (kitsOnly), right = existing KitEditor (embedded).
-   Measured on review-assets refs (5799a30 539/sbs-a, 50726f3 539 reference shots): list 380 white + 1px divider, title 18/26 600,
-   detail content 800 centred, full-width bottom bar. Scoped to .ca-assets-page so canvas LibraryPanel/KitEditor are unchanged. */
+   #497 soft visual 1:1 tip: list divider ≈12.5vw (~159@1280 / ~240@1920), list bg #f5f5f5, compress
+   embedded title/upload/sections/CTA; dashed 新建 without yellow plus; hide extract via JSX when embedded.
+   Scoped to .ca-assets-page / .ca-kit[data-embedded] so canvas LibraryPanel/KitEditor are unchanged. */
 .ca-assets-page { display: flex; height: 100%; min-height: 0; background: var(--ca-float); }
-.ca-assets-page__left { width: 380px; flex-shrink: 0; overflow-y: auto; background: var(--ca-float); border-right: 1px solid var(--ca-border); padding-top: 24px; box-sizing: border-box; }
-.ca-assets-page__title { margin: 0 16px 16px; font: 600 18px/26px var(--ca-font); color: var(--ca-text); }
+.ca-assets-page__left { width: calc(12.5vw - var(--ca-rail-w-collapsed)); min-width: 88px; max-width: 180px; flex-shrink: 0; overflow-y: auto; background: var(--ca-rail-bg); border-right: 1px solid var(--ca-border); padding-top: 16px; box-sizing: border-box; }
+.ca-assets-page__title { margin: 0 8px 12px; font: 600 15px/22px var(--ca-font); color: var(--ca-text); }
 .ca-assets-page__right { flex: 1; min-width: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; color: var(--ca-muted); font: 14px/20px var(--ca-font); }
 .ca-assets-page__new { height: 32px; padding: 0 16px; border: var(--ca-border-w) solid var(--ca-border); border-radius: 8px; background: none; color: var(--ca-text); font: inherit; cursor: pointer; }
 .ca-assets-page__new:hover { background: var(--ca-hover); }
-.ca-assets-page__detail { flex: 1; min-width: 0; display: flex; }
-.ca-assets-page .ca-lib__new { border-style: dashed; color: var(--ca-text-2); }
-.ca-assets-page .ca-lib__plus { display: inline-flex; align-items: center; justify-content: center; width: 14px; height: 14px; border-radius: 50%; background: var(--ca-assets-new-dot); color: #000; font: 600 11px/1 var(--ca-font); }
+.ca-assets-page__detail { flex: 1; min-width: 0; display: flex; background: var(--ca-float); }
+.ca-assets-page .ca-lib { padding: 0 8px 16px; gap: 8px; }
+.ca-assets-page .ca-lib__new { border: 1.5px dashed var(--ca-border); border-radius: 10px; height: 40px; background: transparent; color: var(--ca-text-2); }
+.ca-assets-page .ca-lib__plus { display: inline-flex; align-items: center; justify-content: center; width: auto; height: auto; border-radius: 0; background: none; color: var(--ca-text-2); font: 500 14px/1 var(--ca-font); }
+.ca-assets-page .ca-lib__card { padding: 8px; gap: 6px; border-radius: 10px; }
+.ca-assets-page .ca-lib__cover { width: 48px; height: 48px; }
 /* selected kit card: persistent (not hover); values = tokens in base.css, adjust there */
 .ca-assets-page .ca-lib__card[data-on] { background: var(--ca-assets-card-on-bg); border-color: var(--ca-assets-card-on-border); }
 .ca-kit[data-embedded] { position: static; inset: auto; z-index: auto; flex: 1; min-width: 0; height: 100%; }
-.ca-kit[data-embedded] .ca-kit__page { max-width: 800px; padding: 32px 0 120px; }
-.ca-kit[data-embedded] .ca-kit__titlerow { display: flex; align-items: center; gap: 8px; margin-bottom: 24px; }
-.ca-kit[data-embedded] .ca-kit__titlerow .ca-kit__title { flex: 1; margin-bottom: 0; }
+.ca-kit[data-embedded] .ca-kit__page { max-width: 800px; padding: 20px 0 100px; }
+.ca-kit[data-embedded] .ca-kit__titlerow { display: flex; align-items: center; gap: 8px; margin-bottom: 16px; }
+.ca-kit[data-embedded] .ca-kit__titlerow .ca-kit__title { flex: 1; margin-bottom: 0; font: 600 22px/28px var(--ca-font); padding: 2px 4px; }
 .ca-kit[data-embedded] .ca-kit__url { margin-left: 4px; padding: 0; border: none; background: none; color: inherit; font: inherit; text-decoration: underline; cursor: default; }
-.ca-kit[data-embedded] .ca-kit__foot { position: static; display: flex; justify-content: center; padding: 12px 0; border-top: 1px solid var(--ca-border); flex: none; }
+.ca-kit[data-embedded] .ca-kit__foot { position: static; display: flex; justify-content: center; padding: 8px 0; border-top: 1px solid var(--ca-border); flex: none; }
 .ca-kit[data-embedded] .ca-kit__footin { display: flex; justify-content: flex-end; width: 100%; max-width: 800px; }
-/* #539 PR-C design P2s: arrow icon zone without dashed border; single-line guide (~30); 「…」 on hover only */
-.ca-kit[data-embedded] .ca-kit__drop { border: none; }
+.ca-kit[data-embedded] .ca-kit__cta { height: 36px; padding: 0 16px; border-radius: 8px; font-weight: 500; }
+.ca-kit[data-embedded] .ca-kit__drop { border: none; padding: 20px 24px; border-radius: 12px; }
 .ca-kit[data-embedded] .ca-kit__drop:hover, .ca-kit[data-embedded] .ca-kit__drop[data-on] { background: var(--ca-hover); }
+.ca-kit[data-embedded] .ca-kit__section { padding: 14px 0; margin-top: 14px; }
+.ca-kit[data-embedded] .ca-kit__section + .ca-kit__section { margin-top: 0; }
+.ca-kit[data-embedded] .ca-kit__head { margin-bottom: 8px; }
 .ca-kit[data-embedded] .ca-kit__text { height: 30px; min-height: 30px; padding: 5px 10px; resize: none; overflow: hidden; white-space: nowrap; line-height: 20px; }
 .ca-kit[data-embedded] .ca-kit__url { cursor: pointer; }
 .ca-kit[data-embedded] .ca-kit__err { margin-top: 4px; color: var(--ca-danger, #e5484d); font-size: 12px; }

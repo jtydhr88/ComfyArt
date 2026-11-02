@@ -116,9 +116,10 @@ def test_assets_detail_539b() -> None:
     assert kit.count("fetch(") == 1 and "{ method: 'HEAD' }" in kit
     # list column measurements, scoped to the page (canvas .ca-lib untouched)
     rules = css.split("/* #539 我的素材 page")[1]
-    assert "width: 380px" in rules and "border-right: 1px solid var(--ca-border)" in rules
-    assert "font: 600 18px/26px" in rules
-    assert ".ca-assets-page .ca-lib__new { border-style: dashed" in rules
+    assert "calc(12.5vw - var(--ca-rail-w-collapsed))" in rules and "border-right: 1px solid var(--ca-border)" in rules
+    assert "background: var(--ca-rail-bg)" in rules  # #497 list column bg
+    assert "font: 600 15px/22px" in rules  # #497 compact list title
+    assert ".ca-assets-page .ca-lib__new { border: 1.5px dashed" in rules  # #497 soft dashed 新建
     assert ".ca-kit[data-embedded] .ca-kit__page { max-width: 800px" in rules
     for line in rules.splitlines():
         if line.startswith(".ca-lib") or line.startswith(".ca-kit "):
@@ -210,7 +211,7 @@ def test_assets_c_539() -> None:
     assert "kitsAtom.set([...kitsAtom.get(), other])" in app
     # P2 1: arrow icon + no dashed border (embedded only)
     assert "embedded ? Icons.uploadArrow : Icons.upload" in kit
-    assert ".ca-kit[data-embedded] .ca-kit__drop { border: none; }" in rules
+    assert ".ca-kit[data-embedded] .ca-kit__drop { border: none;" in rules  # #497 also pads/radius
     # P2 2: single-line guide ~30
     assert "rows={embedded ? 1 : undefined}" in kit and "height: 30px" in rules
     # P2 3: 「…」 hover only, scoped to the page
@@ -220,7 +221,7 @@ def test_assets_c_539() -> None:
     assert ".ca-assets-page .ca-lib__card .ca-lib__more[data-open]" in rules
     # P1 1: title = card display name via shared helper, body colour (value, not placeholder)
     lib = (ROOT / "src/library.ts").read_text()
-    assert "export const kitDisplayName = (item: { name: string; kind: LibraryKind }) => item.name || t('kitEditor.untitled', KIND_LABELS[item.kind])" in lib
+    assert "export const kitDisplayName = (item: { name: string; kind: LibraryKind }) => item.name || t('projectHeader.untitled')" in lib
     assert "const name = kitDisplayName(item)" in (ROOT / "src/ui/LibraryPanel.tsx").read_text()
     assert "value={titleDraft ?? kitDisplayName(item)}" in kit
     # P2: upload errors inline only (no toast), stale errors cleared, 「添加」 reuses 「取消」 button class
