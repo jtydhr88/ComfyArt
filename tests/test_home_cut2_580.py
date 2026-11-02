@@ -29,8 +29,8 @@ def test_tokens_and_full_bleed_css():
     assert "Lovart" not in HOME + LAYOUT + SKILLS + CSS
 
 
-def test_featured_v1_and_collages_pinned_588():
-    c = "98a34727037f806895a4baed34dd2a498cb9baa2"
+def test_featured_v1_and_collages_pinned_590():
+    c = "0e92302302de2102ab6f66aa7633a40945a381c7"
     assert f"const FEED_V1 = '{c}'" in SKILLS
     for sid in ("poster", "social", "brand", "packaging", "thumbnail", "banner", "character", "product", "motion", "interior"):
         assert f"{sid}: ['580/featured-v1/{sid}', FEED_V1, ['01.webp', '02.webp', '03.webp', '04.webp']]" in SKILLS
