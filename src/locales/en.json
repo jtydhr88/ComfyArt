@@ -1674,5 +1674,12 @@
   "skills.cat.meta-ads": "Ads & Creative",
   "skills.cat.mobile-ui": "Website",
   "skills.cat.web-product": "Website",
-  "skills.cat.marketing-campaign": "Ads & Creative"
+  "skills.cat.marketing-campaign": "Ads & Creative",
+  "settings.usage": "Usage",
+  "settings.usageDetail": "Details",
+  "settings.usageDate": "Date",
+  "settings.usageCost": "Cost (submit quote)",
+  "settings.usageFootnote": "WaveSpeed balance is authoritative",
+  "settings.usageEmpty": "No spend records yet",
+  "settings.waveSpeedTaskHistory": "WaveSpeed task history"
 }

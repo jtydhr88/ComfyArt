@@ -1674,5 +1674,12 @@
   "skills.cat.meta-ads": "广告创意",
   "skills.cat.mobile-ui": "网站",
   "skills.cat.web-product": "网站",
-  "skills.cat.marketing-campaign": "广告创意"
+  "skills.cat.marketing-campaign": "广告创意",
+  "settings.usage": "用量",
+  "settings.usageDetail": "明细",
+  "settings.usageDate": "日期",
+  "settings.usageCost": "花费（按提交报价）",
+  "settings.usageFootnote": "以 WaveSpeed 余额为准",
+  "settings.usageEmpty": "还没有花费记录",
+  "settings.waveSpeedTaskHistory": "WaveSpeed 任务记录"
 }

@@ -141,9 +141,12 @@ def test_hidden_items_absent() -> None:
 
 
 def test_wavespeed_and_gear_kept() -> None:
-    assert 'testId="rail-ws-history"' in HOME_APP
-    assert "WAVESPEED_HISTORY_URL" in HOME_APP
+    # #498: WaveSpeed history moved into SettingsMenu; gear/settings rail entry stays
+    assert 'testId="rail-ws-history"' not in HOME_APP
     assert "SettingsMenu" in HOME_APP
+    assert 'testId="rail-settings"' in HOME_APP or 'data-testid="rail-settings"' in HOME_APP
+    menu = (ROOT / "src/ui/SettingsMenu.tsx").read_text()
+    assert "settings-ws-history" in menu and "WAVESPEED_HISTORY_URL" in menu
 
 
 def test_recent_max_8_titles_menu() -> None:

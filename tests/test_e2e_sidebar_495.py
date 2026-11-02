@@ -102,7 +102,7 @@ async def test_sidebar_expanded_labels_recent(app_url, lang, theme):  # noqa: F8
         # #539 PR-A: Assets entry now shown (was gated); competitor slots absent
         assert await pg.get_by_test_id("rail-assets").count() == 1
         assert await pg.get_by_test_id("rail-schedules").count() == 1
-        assert await pg.get_by_test_id("rail-ws-history").count() == 1
+        assert await pg.get_by_test_id("rail-ws-history").count() == 0  # #498: moved into SettingsMenu
         assert await pg.get_by_test_id("rail-settings").count() == 1
         rows = pg.get_by_test_id("rail-recent-row")
         assert await rows.count() == 8

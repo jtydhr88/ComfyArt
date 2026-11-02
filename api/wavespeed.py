@@ -1617,6 +1617,7 @@ async def submit(inputs: dict) -> str:
     _jobs[task] = {"model": model, "feature": feature, "started": time.time(), "next_poll": time.time() + POLL_MIN,
                    "inputs": _price_inputs(inputs)}
     log.info("WaveSpeed task %s submitted (%s)", task, model)
+    await _record_submit_usage(task, model, feature, inputs)  # #498 Usage ledger (submit quote)
     return task
 
 
@@ -2272,6 +2273,37 @@ def _respond_error(e: WaveSpeedError) -> web.Response:
     return web.json_response({"error": body}, status=e.status)
 
 
+
+async def _record_submit_usage(task: str, model: str, feature: str, inputs: dict) -> None:
+    """#498: persist submit-quote USD into agent_usage_events for the Usage modal.
+
+    Only records an exact WaveSpeed price quote (source == "quote", amount > 0).
+    Estimates, unpriced tiers, failures, and zeros are skipped — never invented.
+    Metering must never fail the run itself.
+    """
+    try:
+        price, source = await quote(model, inputs)
+        if feature == "structure_control" and price is not None:
+            extra = await _steps_price(inputs)
+            if extra is None:
+                return
+            price = round(float(price) + float(extra), 6)
+        if source != "quote" or price is None or float(price) <= 0:
+            return
+        from .providers import ensure_run_store
+        ensure_run_store().add_usage_event(
+            run_id=f"ws:{task}",
+            kind="paid_call",
+            tool=str(feature or "wavespeed_run"),
+            amount_usd=float(price),
+            reason=str(model),
+            status="done",
+            call_id=f"ws:{task}",
+        )
+    except Exception:  # noqa: BLE001 — ledger is best-effort
+        log.exception("#498: usage log failed for task %s", task)
+
+
 @routes.post("/comfyart/wavespeed/run")
 async def wavespeed_run(request: web.Request) -> web.Response:
     inputs = (await json_body(request)).get("inputs")
@@ -2496,6 +2528,50 @@ def _key_status(balance: float | None = None, err: str | None = None) -> dict:
 
 def _reason(e: WaveSpeedError) -> str:
     return {401: "invalid", 503: "network"}.get(e.status, "error")
+
+
+
+@routes.get("/comfyart/usage")
+async def usage_list(request: web.Request) -> web.Response:
+    """#498: local submit-quote ledger for the Usage modal (10/page, time desc).
+
+    Rows are agent_usage_events paid_call + done + amount_usd > 0 only.
+    Failed / cancelled / zero / missing amounts are never returned.
+    """
+    try:
+        page = max(1, int(request.query.get("page") or 1))
+    except ValueError:
+        page = 1
+    try:
+        page_size = min(50, max(1, int(request.query.get("page_size") or 10)))
+    except ValueError:
+        page_size = 10
+    from ..bot.run_budget import LOCAL_OWNER_ID
+    from .providers import ensure_run_store
+    rows = ensure_run_store().list_usage_events(owner_id=LOCAL_OWNER_ID)
+    items = []
+    for e in rows:
+        if e.get("kind") != "paid_call" or e.get("status") != "done":
+            continue
+        amount = e.get("amount_usd")
+        if not isinstance(amount, (int, float)) or isinstance(amount, bool) or float(amount) <= 0:
+            continue
+        items.append({
+            "id": e.get("id"),
+            "detail": (e.get("reason") or e.get("tool") or "").strip() or (e.get("tool") or ""),
+            "tool": e.get("tool") or "",
+            "amount_usd": float(amount),
+            "created_at": e.get("created_at") or 0,
+        })
+    items.sort(key=lambda r: r["created_at"], reverse=True)
+    total = len(items)
+    start = (page - 1) * page_size
+    return web.json_response({
+        "items": items[start:start + page_size],
+        "total": total,
+        "page": page,
+        "page_size": page_size,
+    })
 
 
 @routes.get("/comfyart/wavespeed/key")

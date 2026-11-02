@@ -1188,3 +1188,13 @@ body { background: var(--ca-float); }
 .ca-hometab-soon__btn { margin-top: 8px; padding: 8px 18px; border: none; border-radius: 999px; background: var(--ca-strong); color: var(--ca-float); font: 500 13px/20px var(--ca-font); cursor: pointer; }
 .ca-hometab-soon__btn[data-variant="outline"] { background: transparent; color: var(--ca-text); border: var(--ca-border-w) solid var(--ca-border); }
 .ca-hometab-assets { margin-top: 16px; }
+
+/* #498: balance chip on expanded settings rail entry */
+.ca-rail__balance {
+  margin-left: auto;
+  flex: none;
+  font: 500 12px/16px var(--ca-font);
+  color: var(--ca-text-2);
+  font-variant-numeric: tabular-nums;
+  padding-right: 2px;
+}
