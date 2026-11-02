@@ -188,6 +188,8 @@ function I(key: string, [zh, en]: L, type: SkillInput['type'], required = false,
 }
 /** #569 effect-example skills: right side is only 上传文件 + 补充描述. */
 const EFFECT_INPUTS: SkillInput[] = [I('file', ['上传文件', 'Upload file'], 'image'), I('note', ['补充描述', 'Additional notes'], 'textarea', false, ['有什么想补充的吗？', 'Anything you want to add?'])]
+/** #636 C5 nearMiss Examples-only: gold isomorphic right rail — Upload Files + single-line Additional Details only. */
+const NEARMISS_INPUTS: SkillInput[] = [I('file', ['上传文件', 'Upload Files'], 'image'), I('note', ['补充描述', 'Additional Details'], 'text', false, ['还有什么想补充的吗？', 'Anything else to add?'])]
 /** #569 template skills: shared third field 视觉呈现方式. */
 const VISUAL = I('visual', ['视觉呈现方式', 'Visual presentation'], 'text', false, ['补充想保留或避开的视觉要求，没有可以留空', 'Visual preferences to keep or avoid; leave blank if none'])
 
@@ -358,27 +360,27 @@ export const BUILTIN_SKILLS: Skill[] = orderBuiltins([
     category: 'social', cover: cover636('naive-illustration'),
     examples: ex636('naive-illustration', [1, 2, 3, 4]), featured: feat636('naive-illustration', [1, 2, 3, 4, 5]),
     presets: [P('line', '黑白线稿', 'B/W line', 'Style: naive B/W line illustration, giant object vs tiny person, witty cafe/worker energy, clean strokes.'), P('object', '实物互动', 'Object play', 'Style: naive soft flat-color illustration with interactive oversized object play, friendly limited palette.')],
-    inputs: [I('brief', ['主题说明', 'Theme brief'], 'text', true, ['巨物主题与场景', 'Giant-object theme and scene']), I('refs', ['参考图', 'References'], 'image'), VISUAL] },
+    inputs: NEARMISS_INPUTS },
   { id: 'logo-abstract', name: t('skills.logoAbstract'), instructions: 'You are a production minimal geometric logo designer. Distill a photo into one scalable geometric mark. Not a 3D material study and not a full brand VI kit.\n1) Intake: require the reference photo; lock the subject traits called out in markNotes when present.\n2) Distill: reduce to a single geometric symbol on a plain ground — two-color preference, strict grid, silhouette that survives tiny sizes.\n3) Scope: one mark only; no stationery system, no packaging, no multi-asset VI board (leave those to brand); distinct from logo-material finish studies.\n4) Presentation: plain ground, optional tiny construction notes; put any on-art words in quotes.\n5) Refs: pass the photo shape id in refs (ref_modes content) on every generate_image call.',
     category: 'branding', cover: cover636('logo-abstract'),
     examples: ex636('logo-abstract', [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]), featured: feat636('logo-abstract', [1, 2, 3, 4, 5]),
     presets: [P('circle', '圆形几何', 'Circle geometry', 'Style: minimal circular geometric logo mark distilled from the photo, two-color, scalable silhouette.'), P('angular', '折线几何', 'Angular geometry', 'Style: angular geometric logo mark from the photo, strict grid, plain ground, single-mark discipline.')],
-    inputs: [I('photo', ['参考照片', 'Reference photo'], 'image', true), I('markNotes', ['标志说明', 'Mark notes'], 'text', false, ['品牌名或要保留的特征', 'Brand name or traits to keep']), VISUAL] },
+    inputs: NEARMISS_INPUTS },
   { id: 'photo-split-poster', name: t('skills.photoSplitPoster'), instructions: 'You are a production photo-split abstract poster designer. Keep the exact layout: top half original photo, bottom half abstract geometry sampled from its colors. Not a generic flat poster without the photo half.\n1) Intake: require the photo; sample palette strictly from it.\n2) Layout lock: horizontal split — photo above, geometric abstract below; hard or soft edge per preset; never drop the photo half.\n3) Craft: sparse typography if any; every on-art phrase in quotes; prefer portrait/poster ratios suited to ads.\n4) Guardrails: do not morph into a full campaign KV system or a lifestyle scene without the split grammar.\n5) Refs: pass the photo shape id in refs (ref_modes content) on every generate_image call.',
     category: 'ads', cover: cover636('photo-split-poster'),
     examples: ex636('photo-split-poster', [1]), featured: feat636('photo-split-poster', [1, 2, 3]),
     presets: [P('hard', '硬切对半', 'Hard split', 'Style: hard horizontal split poster, photo above, geometric abstract below, palette sampled from the photo.'), P('soft', '柔边对半', 'Soft split', 'Style: soft-edge split poster, photo above, abstract geometry below, shared palette from the photo.')],
-    inputs: [I('photo', ['照片', 'Photo'], 'image', true), I('posterNotes', ['海报说明', 'Poster notes'], 'text', false, ['标题或主题，可留空', 'Title or theme; optional']), VISUAL] },
+    inputs: NEARMISS_INPUTS },
   { id: 'ppt-visual', name: t('skills.pptVisual'), instructions: 'You are a production premium PPT / deck visual designer. Ship modular presentation pages with a shared style library — not print posters and not marketing campaign KVs.\n1) Brief: read deckBrief for topic, page types and style; optional refs set the look library.\n2) Page types: cover, section divider, comparison (and closing when asked) as coherent 16:9 deck frames with one type scale and module system.\n3) Website-chip intent: this lights the website category; keep product-deck language, not printable poster art.\n4) Copy: short on-slide lines in quotes; clear hierarchy; generous margins for projection.\n5) Refs: when refs are uploaded, pass shape ids in refs (ref_modes content) on every generate_image call.',
     category: 'website', cover: cover636('ppt-visual'),
     examples: ex636('ppt-visual', [1]), featured: feat636('ppt-visual', [1, 2, 3]),
     presets: [P('cover', '封面页', 'Cover slide', 'Style: premium deck cover slide 16:9, strong hierarchy, short title in quotes, shared module system.'), P('section', '章节页', 'Section slide', 'Style: section divider slide, modular system coherent with cover, 16:9 projection-safe.'), P('compare', '对比页', 'Comparison slide', 'Style: comparison module slide, clear columns, premium deck language, shared style library.')],
-    inputs: [I('deckBrief', ['演示主题', 'Deck brief'], 'text', true, ['主题、页类型与风格偏好', 'Topic, page types and style']), I('refs', ['参考', 'References'], 'image'), VISUAL] },
+    inputs: NEARMISS_INPUTS },
   { id: 'promo-ecommerce', name: t('skills.promoEcommerce'), instructions: 'You are a production e-commerce promo key-visual designer. Ship big-sale KV plus reusable promo chrome (ribbons, frames, badges). Not a white-bg listing main image and not a full multi-platform marketing-campaign system.\n1) Intake: require productImage and promoBrief (sale theme, offer, dates); lock product identity from the ref.\n2) KV: bold promo hierarchy with product hero, clear claim ladder; put price/claim words in quotes; keep legal honesty.\n3) Chrome: deliver matching reusable promo components (corner badges, borders, ribbons) consistent with the KV.\n4) Division of labor: leave white-bg / A+ listing sets to product; leave brand-wide campaign systems to marketing-campaign.\n5) Refs: pass product shape ids in refs (ref_modes content) on every generate_image call.',
     category: 'ecommerce', cover: cover636('promo-ecommerce'),
     examples: ex636('promo-ecommerce', [1, 2, 3, 4]), featured: feat636('promo-ecommerce', [1, 2, 3, 4, 5]),
     presets: [P('kv', '大促主视觉', 'Promo KV', 'Style: ecommerce promo key visual, bold sale hierarchy, product hero locked from ref, claims in quotes.'), P('badge', '促销组件', 'Promo chrome', 'Style: matching promo badges, ribbons and frames for the same sale system, reusable chrome.')],
-    inputs: [I('productImage', ['商品图片', 'Product images'], 'image', true), I('promoBrief', ['促销信息', 'Promo brief'], 'text', true, ['大促主题、利益点与期限', 'Sale theme, offer and dates']), VISUAL] },
+    inputs: NEARMISS_INPUTS },
   // D style4 (KEEP for full 15)
   { id: 'yingzao', name: t('skills.yingzao'), instructions: 'Yingzao local editorial poster: real heritage streets / local food travel photos into Chinese display-type edit posters.\n1) Never invent architecture without a photo basis.\n2) Pair the photo with careful Chinese display typography in quotes.\n3) Editorial poster mood; keep place honesty.\n4) Prefer 3:4 or 4:5 social crops.\n5) Refs: pass photo shape ids in refs on every generate_image call.',
     category: 'social', examples: [], featured: [],

@@ -62,11 +62,12 @@ B_REQUIRED_INPUTS = {
     "lifestyle-scene": ["productImage"],
 }
 C_REQUIRED_INPUTS = {
-    "naive-illustration": ["brief"],
-    "logo-abstract": ["photo"],
-    "photo-split-poster": ["photo"],
-    "ppt-visual": ["deckBrief"],
-    "promo-ecommerce": ["productImage", "promoBrief"],
+    # #636 product lock: C5 Examples-only right rail = NEARMISS_INPUTS (Upload Files + Additional Details); no required topic fields
+    "naive-illustration": [],
+    "logo-abstract": [],
+    "photo-split-poster": [],
+    "ppt-visual": [],
+    "promo-ecommerce": [],
 }
 TITLE_KEY_B = {
     "flash-cut-video": "skills.flashCutVideo",
@@ -119,7 +120,10 @@ def _assert_production(sid: str, cat: str, preset_min: int, required: list[str],
     assert body.count("Style: ") >= preset_min, sid
     for key in required:
         assert f"I('{key}'" in e, (sid, key)
-    assert "inputs:" in e and "I(" in e.split("inputs:", 1)[1]
+    assert "inputs:" in e
+    # C5 Examples-only uses shared NEARMISS_INPUTS; others keep inline I(...)
+    tail = e.split("inputs:", 1)[1]
+    assert ("NEARMISS_INPUTS" in tail) or ("I(" in tail), sid
 
 
 def test_b5_production_instructions_presets_inputs_dialog():
@@ -155,6 +159,9 @@ def test_c5_production_instructions_presets_inputs_dialog():
     assert set(PHASE2_C) <= set(entries)
     for sid, cat in C_CATEGORY.items():
         _assert_production(sid, cat, C_PRESET_MIN[sid], C_REQUIRED_INPUTS[sid], entries)
+    for sid in PHASE2_C:
+        assert "inputs: NEARMISS_INPUTS" in entries[sid], sid
+        assert "VISUAL" not in entries[sid].split("inputs:", 1)[1], sid
 
 
 def test_b5_lock_specific_guards():

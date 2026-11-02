@@ -199,7 +199,7 @@ export function SkillRunDialog({ skill, presetId, onClose, run = newProject }: {
                   <div className="ca-gen__refs ca-skillrun__uploadwrap" {...common}>
                     {values[f.key]
                       ? <span className="ca-gen__ref"><img src={values[f.key]} alt="" /><button type="button" title={t('common.remove')} onClick={() => set(f.key, '')}>{Icons.close}</button></span>
-                      : <label className="ca-skillrun__upload" data-testid="skill-run-upload"><span className="ca-icon">{Icons.image}</span><span>{uploading === f.key ? t('skillRun.uploading') : t('skillRun.uploadHint')}</span>
+                      : <label className="ca-skillrun__upload" data-testid="skill-run-upload"><span className="ca-icon">{Icons.uploadArrow}</span><span>{uploading === f.key ? t('skillRun.uploading') : t('skillRun.uploadHint')}</span>
                           <input id={id} type="file" accept="image/*" hidden onChange={(e) => {
                             const file = e.target.files?.[0]; e.target.value = ''
                             if (!file) return

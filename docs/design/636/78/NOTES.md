@@ -3,7 +3,7 @@
 **Branch:** `feat/636-skills-phase2-s3-c-deferred5` · **Asia/Shanghai** · Issue #636 / draft PR #653  
 **Scope:** C only — `naive-illustration` `logo-abstract` `photo-split-poster` `ppt-visual` `promo-ecommerce`.  
 **Wash:** nearMiss remap Examples-only (`WASH_636=5ccfdf0f` on `assets/636-wash-c-deferred5`; ppt example tall sheet 768×1360 (nearMiss 2n7npu8pocu8, not cover)). naive=`2qapfgd34fsw`.  
-**UI:** SkillRunDialog left = Examples-only (isomorphic #637). **No 「当前模板」 row** when presets lack media (Examples-only C5). FieldSelect+custom chevron only when left has real preset media tiles. D style4 untouched. #490 HOLD.
+**UI:** SkillRunDialog left = Examples-only. **No 「当前模板」**. Right rail = **NEARMISS_INPUTS** (Upload Files + single-line Additional Details; uploadArrow + click/drag hint; dark CTA). D style4 untouched. #490 HOLD.
 
 ## AC (Ashley + product — same tip)
 
