@@ -54,8 +54,9 @@ def test_lovart_sizes_and_theme_vars():
     assert "height: 86px" in CSS and "width: 36px; height: 36px" in CSS  # current card + thumb
     assert "1px dashed" in CSS and "height: 108px" in CSS  # upload
     assert "margin-top: auto" in CSS  # pinned submit
-    assert ".ca-skillrun__preset[data-on]::after" in CSS  # ring wraps whole tile
-    assert ".ca-skillrun__preset[data-on] .ca-skillrun__presetimg" not in CSS
+    # #576: ring on image only (title outside frame)
+    assert ".ca-skillrun__preset[data-on] .ca-skillrun__presetimg::after" in CSS
+    assert ".ca-skillrun__preset[data-on]::after" not in CSS
 
 
 def test_tiles_from_presets_and_zoom_is_sibling_button():
@@ -95,7 +96,8 @@ def test_rev2_cells_pinned(got):
 
 @needs_node
 def test_examples_carousel_is_data_driven(got):
-    want = {"poster": 5, "thumbnail": 7, "social": 10, "banner": 2, "interior": 4}  # #575: thumbnail/banner lead with wash mp4
+    want = {"poster": 5, "thumbnail": 7, "social": 10, "banner": 2, "interior": 4,  # #575: thumbnail/banner lead with wash mp4
+            "multi-angle": 4, "logo-material": 4, "meta-ads": 4, "mobile-ui": 4, "web-product": 4, "marketing-campaign": 4}  # #593 new-6 examples
     assert {k: v for k, v in got["examples"].items() if v} == want
     for sid in ("product", "brand", "packaging", "motion", "character", "custom-workflow"):
         assert got["examples"][sid] == 0, sid

@@ -1,4 +1,4 @@
-"""#541 e2e (mock only, $0): skill modal geometry to Lovart (1112×820, 752|360, tiles 344×288, 22px zoom, 312 controls),
+"""#541 e2e (mock only, $0): skill modal geometry (1112×820, 752|360, tiles 344×288, image ring 344×258, 22px zoom, 312 controls),
 real meta line, zoom view, dashed upload, pinned submit gating."""
 from __future__ import annotations
 
@@ -74,10 +74,16 @@ async def test_zoom_select_and_gating(app_url):  # noqa: F811
         await tile.get_by_test_id("skill-run-preset").click()
         assert await tile.get_by_test_id("skill-run-preset").get_attribute("aria-checked") == "true"
         assert await tile.locator(".ca-skillrun__check").count() == 1
-        ring = await tile.get_by_test_id("skill-run-preset").evaluate(
+        # #576: selection ring on image only (344×258); title outside below
+        ring = await tile.locator(".ca-skillrun__presetimg").evaluate(
             "el => { const a = getComputedStyle(el, '::after'); const r = el.getBoundingClientRect();"
             " return [a.boxShadow, Math.round(r.width), Math.round(r.height)] }")
-        assert "1px" in ring[0] and ring[1:] == [344, 288]  # ring spans image + label
+        assert "1px" in ring[0] and ring[1:] == [344, 258]
+        btn_shadow = await tile.get_by_test_id("skill-run-preset").evaluate(
+            "el => getComputedStyle(el, '::after').boxShadow")
+        assert btn_shadow in ("none", "")
+        btn_h = (await tile.get_by_test_id("skill-run-preset").evaluate(BOX))[1]
+        assert btn_h == 288  # image 258 + gap 8 + title 22
 
         assert await pg.get_by_test_id("skill-run-go").is_disabled()  # productImage required, empty
         await browser.close()
