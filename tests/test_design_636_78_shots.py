@@ -1,4 +1,4 @@
-"""#636 #78 AFTER tip-pin — B NEW5 dialog shots. Opt-in DESIGN_636_78_SHOOT=1."""
+"""#636 #78 AFTER tip-pin — C deferred5 dialog shots. Opt-in DESIGN_636_78_SHOOT=1."""
 from __future__ import annotations
 
 import importlib.util
