@@ -1,5 +1,5 @@
 /** #494-2 — a skill's OWN in-page dialog (card / title / hover 「试用此技能」 all open this). Left: title, author,
- *  description + a 2-column template grid from presets[]. Right: 「开始制作」 panel with the current template and
+ *  description + a 2-column template grid from presets[]. Right: header 「开始创作」 / CTA 「开始制作」 (#601) with the current template and
  *  that skill's inputs[] (labels / placeholders / defaults / required from data). No skill ids are named here.
  *  New because main had no form that renders a data schema. 「详情」 keeps main's #484 edit page (openSkillEditor). */
 import { useState } from 'react'
@@ -107,7 +107,7 @@ export function SkillRunDialog({ skill, presetId, onClose, run = newProject }: {
         </div>
         <div className="ca-skillrun__right">
           <div className="ca-skillrun__righthead">
-            <span>{t('skillRun.start')}</span>
+            <span data-testid="skill-run-header">{t('skillRun.header')}</span>
             <button type="button" className="ca-panel__icon" title={t('common.close')} onClick={onClose}>{Icons.close}</button>
           </div>
           <div className="ca-skillrun__body">

@@ -1596,6 +1596,7 @@
   "home.skillsCreatedByYou": "你创建的",
   "home.skillsCreatedByLoomi": "Loomi 创建的",
   "home.skillsEmptyLoomi": "暂无自动总结的技能。开启自动总结技能后，Loomi 会从你的创作任务中总结常用流程，方便下次直接使用",
+  "skillRun.header": "开始创作",
   "skillRun.start": "开始制作",
   "skillRun.templates": "模板",
   "skillRun.currentTemplate": "当前模板",
