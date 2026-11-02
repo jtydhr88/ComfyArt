@@ -1,4 +1,4 @@
-"""#575 residual: cover focus mask/lift + hover video contract. Soft P1; motion×2 / new6 video wait design."""
+"""#575 residual: Explore cover scale + flat scrim; #605 home scale intact. Soft P1; motion×2 / new6 wait design."""
 from __future__ import annotations
 
 from pathlib import Path
@@ -62,19 +62,26 @@ def test_skill_examples_plays_mp4():
     assert ".ca-skillrun__stage img, .ca-skillrun__stage video" in CSS
 
 
-def test_residual_focus_mask_and_lift_css():
-    """Focus/hover: scale + slight translateY lift + soft gradient mask on home + explore."""
-    assert "scale(1.05) translateY(-2px)" in CSS
-    assert ".ca-skillcard__cover::after" in CSS
-    assert "linear-gradient(to top, rgba(0,0,0,.28)" in CSS
+def test_residual_explore_scale_and_flat_scrim():
+    """Design gold: Explore scale(1.05) @ 300ms; flat rgba(0,0,0,.3) scrim @ 150ms. No invent translateY/gradient."""
+    assert "translateY(-2px)" not in CSS
+    assert "linear-gradient(to top, rgba(0,0,0,.28)" not in CSS
+    assert ".ca-skillcard__cover::after" not in CSS
+    # Explore flat scrim kept
     assert ".ca-swall__cover::after" in CSS
-    # no-video stills still animate (wall img transform rule present)
+    assert "background: rgba(0,0,0,.3)" in CSS
+    assert "transition: opacity .15s" in CSS
+    # Explore scale on stills + video
     assert ".ca-swall__card:hover .ca-swall__cover img" in CSS
+    assert "transform: scale(1.05)" in CSS
+    assert "transition: transform 300ms ease" in CSS
+    # Home #605 scale left intact (no residual invent)
     assert ".ca-skillcard:hover .ca-skillcard__cover img" in CSS
+    assert CSS.count("transform: scale(1.05)") >= 3  # home img, home video, explore img/video block
 
 
 def test_forbid_ken_burns_fake_video():
-    """No continuous pan/zoom fake-video on skill covers — stills use scale/mask only."""
+    """No continuous pan/zoom fake-video on skill covers — stills use scale + flat scrim only."""
     lower = CSS.lower()
     assert "kenburns" not in lower and "ken-burns" not in lower
     assert "no continuous pan/zoom fake-video" in CSS
@@ -106,4 +113,4 @@ def _keyframes_body(css: str) -> str:
             p += 1
         else:
             break
-    return "\n".join(out)
+    return chr(10).join(out)

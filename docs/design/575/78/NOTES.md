@@ -1,35 +1,35 @@
-# #575 residual → #78 tip-pin — cover focus mask / lift (Closes)
+# #575 residual → #78 tip-pin — Explore scale + flat scrim (Closes)
 
 **Branch:** `feat/575-cover-focus-residual`  
 **Base:** main@`b2811cd501fc24ad94fb55378c08e8f4fd54ed17` (after #620/#573)  
-**Prior:** #605 tip `046e9874` delivered `Skill.video` + muted hover loop + scale (Refs, not Closes)  
+**Prior:** #605 tip `046e9874` delivered `Skill.video` + muted hover loop + Home scale (Refs, not Closes)  
+**Design gold lock:** Explore flat scrim `rgba(0,0,0,.3)` @ 150ms KEEP; Explore ADD `scale(1.05)` @ 300ms ease; NO `translateY(-2px)` / soft bottom gradient  
 **Zone:** Asia/Shanghai
 
 ## Verdict
-soft **PASS** candidate — residual CSS focus polish shipped; design motion×2 pin still open (TODO, non-blocking).
+soft **PASS** candidate — residual Explore scale + flat scrim aligned to design gold; motion×2 / new6 still TODO (non-blocking).
 
 ## What this tip ships
-1. **Focus mask/gradient** — soft bottom `linear-gradient` overlay on home `.ca-skillcard__cover::after` and explore `.ca-swall__cover::after` (hover / focus-visible / focus-within). Reversible; tune when design gold samples land.
-2. **Focus scale + slight lift** — `scale(1.05) translateY(-2px)` on home + explore cover stills **and** video overlays. No-video cards keep dual-fit + focus motion.
-3. **No fake video** — no continuous pan/zoom on stills (explicit CSS comments + pytest).
-4. **Video hover** — unchanged contract from #605 (`skillCoverVideoHover` muted loop; leave → pause + seek 0). Verified helpers + CSS still present.
+1. **Explore scale** — `.ca-swall__cover img` / `.ca-swall__video` → `scale(1.05)` on hover / `:focus-within` @ `transform 300ms ease` (Explore was transform:none).
+2. **Explore scrim** — KEEP flat `.ca-swall__cover::after` → `rgba(0,0,0,.3)` @ 150ms. Not edge/bottom linear-gradient.
+3. **Home** — #605 `scale(1.05)` left intact; no invented lift/mask on home.
+4. **No-video stills** — scale + flat scrim + bookmark/try chrome OK; no continuous pan/zoom fake-video.
+5. **Video hover** — #605 contract unchanged (`skillCoverVideoHover` muted loop).
 
 ## Gaps / blockers (do not invent assets)
 | Item | Status |
 |---|---|
-| **new6 hover mp4** (multi-angle, logo-material, meta-ads, mobile-ui, web-product, marketing-campaign) | **MISSING** — no `594/wash/videos/<id>.mp4` / public mp4s. `SKILL_VIDEO_PENDING_NEW6` keeps `video` unset. Gray-note: wire when Batch A-video lands. |
-| **motion×2 wash wiring** | **WAIT design pin** — source `569/wash/motion/templates/` @ `bd043d4c` (`01-poster-animation.mp4` P2 de-shake, `02-first-to-last-frame-animation.mp4` P2 de-blur). TODO in `src/skills.ts`; follow-up commit on this branch when pin lands. |
-| Design gold L/R sample for mask strength | Soft — current 28%/8% gradient is a tasteful stub. |
+| **new6 hover mp4** (multi-angle, logo-material, meta-ads, mobile-ui, web-product, marketing-campaign) | **MISSING** — `SKILL_VIDEO_PENDING_NEW6` keeps `video` unset. Gray-note; wire when assets land. |
+| **motion×2 wash wiring** | **WAIT design pin** — `569/wash/motion/templates/` @ `bd043d4c` (01 de-shake, 02 de-blur). TODO in `src/skills.ts`. |
 
-## #78 embeds (absolute raw @ tip SHA — fill after push)
-See PR body. Local paths:
+## #78 embeds (absolute raw @ tip SHA — see PR body)
 - `before/home-explore-still-idle.png`
-- `after/home-explore-still-focus-mask.png`
-- `after/focus-mask-pair-full.png`
-- `after/explore-poster-product-hover-cycle.webm` (carry-forward from #605 hover contract)
+- `after/explore-still-scale-scrim.png`
+- `after/explore-scale-scrim-pair.png`
+- `after/explore-poster-product-hover-cycle.webm` (carry-forward from #605)
 
 ## Tests
-- `tests/test_skill_cover_video_575.py` — helpers, hover wiring, residual mask/lift CSS, no continuous pan/zoom fake-video, no Lovart in src.
+- `tests/test_skill_cover_video_575.py` — Explore scale + flat scrim, forbid invent translateY/gradient, no continuous pan/zoom, helpers, no Lovart.
 
 ## @design
-Please soft-sign focus mask + lift on no-video stills (home + explore). Motion×2 template video pin remains a follow-up on this branch after wash PASS.
+Please soft-sign Explore `scale(1.05)` + flat `.3` scrim. Motion×2 / new6 remain follow-up.

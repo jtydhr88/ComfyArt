@@ -216,24 +216,15 @@ body { background: var(--ca-float); }
 /* #602 — dual media-fit: default cover full-bleed; data-fit=contain → letterbox on --ca-field plate */
 .ca-skillcard__cover img, .ca-skillcard__cover video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 300ms ease; }
 .ca-skillcard__cover[data-fit="contain"] img, .ca-skillcard__cover[data-fit="contain"] video { object-fit: contain; }
-/* #575 residual — focus/hover scale + slight lift on stills AND video; no continuous pan/zoom fake-video on stills. */
-.ca-skillcard:hover .ca-skillcard__cover img, .ca-skillcard:focus-visible .ca-skillcard__cover img { transform: scale(1.05) translateY(-2px); }
+.ca-skillcard:hover .ca-skillcard__cover img, .ca-skillcard:focus-visible .ca-skillcard__cover img { transform: scale(1.05); }
 /* #575 — muted loop overlays still on hover/focus when skill.video is set; leave → opacity 0 + seek 0 under. */
 .ca-skillcard__video {
   opacity: 0; pointer-events: none; z-index: 1;
   transition: opacity 150ms ease, transform 300ms ease;
 }
 .ca-skillcard:hover .ca-skillcard__video,
-.ca-skillcard:focus-visible .ca-skillcard__video { opacity: 1; transform: scale(1.05) translateY(-2px); }
+.ca-skillcard:focus-visible .ca-skillcard__video { opacity: 1; transform: scale(1.05); }
 .ca-skillcard[data-has-video] .ca-skillcard__cover img { /* still stays under video */ }
-/* #575 residual — reversible focus mask (soft bottom gradient); tune when design gold samples land. */
-.ca-skillcard__cover::after {
-  content: ""; position: absolute; inset: 0; z-index: 2; pointer-events: none;
-  background: linear-gradient(to top, rgba(0,0,0,.28) 0%, rgba(0,0,0,.08) 42%, transparent 70%);
-  opacity: 0; transition: opacity 150ms ease;
-}
-.ca-skillcard:hover .ca-skillcard__cover::after,
-.ca-skillcard:focus-visible .ca-skillcard__cover::after { opacity: 1; }
 
 .ca-skillcard__name {
   display: flex; align-items: center; gap: 2px; min-width: 0; padding: 0 4px;
@@ -792,16 +783,14 @@ body { background: var(--ca-float); }
 }
 .ca-swall__card:hover .ca-swall__video,
 .ca-swall__card:focus-within .ca-swall__video { opacity: 1; }
-/* #575 residual — no-video stills still get focus scale/lift (no continuous pan/zoom fake-video). */
+/* #575 residual — Explore cover scale on hover/focus-within (stills + video); keep flat scrim; no continuous pan/zoom fake-video. */
 .ca-swall__card:hover .ca-swall__cover img, .ca-swall__card:focus-within .ca-swall__cover img,
 .ca-swall__card:hover .ca-swall__video, .ca-swall__card:focus-within .ca-swall__video {
-  transform: scale(1.05) translateY(-2px);
+  transform: scale(1.05);
 }
-/* #575 residual — soft gradient focus mask (was flat 30%; reversible until design gold samples). */
+/* #575 — Explore scrim stays flat rgba(0,0,0,.3) @ 150ms (design gold); not edge/bottom gradient. */
 .ca-swall__cover::after {
-  content: ""; position: absolute; inset: 0; z-index: 2; pointer-events: none;
-  background: linear-gradient(to top, rgba(0,0,0,.28) 0%, rgba(0,0,0,.08) 42%, transparent 70%);
-  opacity: 0; transition: opacity .15s;
+  content: ""; position: absolute; inset: 0; background: rgba(0,0,0,.3); opacity: 0; transition: opacity .15s;
 }
 .ca-swall__card:hover .ca-swall__cover::after, .ca-swall__card:focus-within .ca-swall__cover::after { opacity: 1; }
 .ca-swall__placeholder {
