@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="zh" data-theme="light" class="ca-root">
+<meta charset="utf-8"/>
+<title>#492 before — done stop card shown</title>
+<link rel="stylesheet" href="tip.css"/>
+<style>
+  html,body{margin:0;background:#f0f0f0;}
+  .frame{width:380px;margin:20px;padding:16px 14px;border-radius:16px;
+    background:var(--ca-float);color:var(--ca-text);box-shadow:var(--ca-shadow);}
+  .tag{font:500 11px/16px Inter,system-ui,sans-serif;color:var(--ca-muted);margin:0 0 10px;}
+  .ca-run{margin-top:12px;padding:12px;border-radius:12px;background:var(--ca-panel,#f7f7f7);border:1px solid var(--ca-line,#e8e8e8);}
+  .ca-run__head{display:flex;align-items:center;gap:8px;font-weight:600;}
+  .ca-run__body{margin-top:6px;color:var(--ca-text-2,#666);font-size:13px;}
+  .ca-run__details{margin-top:8px;font-size:12px;color:var(--ca-text-2,#666);}
+</style>
+<body>
+<div class="frame" id="shot">
+  <div class="tag">#492 before · zh light — BUG:「已完成 / 已完成 / 详情」stop card after normal complete</div>
+  <div class="ca-chat__done">
+    <div class="ca-md"><p><strong>已生成完成：</strong>一张红色草莓静物图。</p></div>
+    <div class="ca-chat__feedback"><button type="button" class="ca-chat__fb" aria-label="赞">👍</button><button type="button" class="ca-chat__fb" aria-label="踩">👎</button></div>
+  </div>
+  <div class="ca-run" data-reason="done" data-key="done" data-tone="ok">
+    <div class="ca-run__head"><span class="ca-run__title">已完成</span></div>
+    <div class="ca-run__body">已完成</div>
+    <details class="ca-run__details"><summary>详情</summary><div>步数 42</div></details>
+  </div>
+</div>
+</body></html>

@@ -2,9 +2,9 @@
  *  description + a 2-column template grid from presets[]. Right: header 「开始创作」 / CTA 「开始制作」 (#601) with the current template and
  *  that skill's inputs[] (labels / placeholders / defaults / required from data). No skill ids are named here.
  *  New because main had no form that renders a data schema. 「详情」 keeps main's #484 edit page (openSkillEditor). */
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 
-import { uploadSkillImage, loc, loadFavourites, missingInputs, presetImage, recordSkillUse, skillAuthor, skillMeta, skillMetaLabel, skillDefaults, skillDescription, skillPreset, skillRunParams, skillShareUrl, toggleFavourite, type Skill } from '../skills'
+import { uploadSkillImage, isSkillMediaVideo, loc, loadFavourites, missingInputs, presetImage, presetVideo, recordSkillUse, skillAuthor, skillCoverVideoHover, skillMeta, skillMetaLabel, skillDefaults, skillDescription, skillPreset, skillRunParams, skillShareUrl, toggleFavourite, type Skill, type SkillPreset } from '../skills'
 import { newProject } from '../projects'
 import { BRAND } from '../brand'
 import { copyText } from '../clipboard'
@@ -13,6 +13,53 @@ import { useEscape } from './escape'
 import { Icons } from './icons'
 import { openSkillEditor } from './SkillsDialog'
 import { SkillExamples } from './SkillExamples'
+
+/** #622 — template tile: still thumb + optional preset.video muted hover/focus loop (no-video unchanged). */
+function PresetTile({ skill, preset: p, on, onPick, onZoom }: {
+  skill: Skill; preset: SkillPreset; on: boolean
+  onPick: () => void; onZoom: (src: string) => void
+}) {
+  const img = presetImage(skill, p)
+  const videoSrc = presetVideo(skill, p)
+  const videoRef = useRef<HTMLVideoElement>(null)
+  const play = () => skillCoverVideoHover(videoRef.current, 'enter')
+  const stop = () => skillCoverVideoHover(videoRef.current, 'leave')
+  const zoomSrc = videoSrc || img
+  return (
+    <div className="ca-skillrun__tile" data-on={on || undefined} data-has-video={videoSrc ? '1' : undefined}>
+      <button type="button" role="radio" aria-checked={on} data-on={on || undefined}
+        className="ca-skillrun__preset" data-testid="skill-run-preset" data-preset={p.id}
+        onClick={onPick}
+        onMouseEnter={videoSrc ? play : undefined}
+        onMouseLeave={videoSrc ? stop : undefined}
+        onFocus={videoSrc ? play : undefined}
+        onBlur={videoSrc ? stop : undefined}
+      >
+        <span className="ca-skillrun__presetimg">
+          {img ? <img src={img} alt="" /> : <span className="ca-icon">{Icons.skill}</span>}
+          {videoSrc && (
+            <video
+              ref={videoRef}
+              className="ca-skillrun__preset-video"
+              src={videoSrc}
+              muted
+              loop
+              playsInline
+              preload="metadata"
+              data-testid="skill-run-preset-video"
+              aria-hidden="true"
+            />
+          )}
+          <span className="ca-skillrun__pick">{t('skillRun.select')}</span>
+          {on && <span className="ca-skillrun__check" aria-hidden="true"><span className="ca-icon">{Icons.check}</span></span>}
+        </span>
+        <span className="ca-skillrun__presetname">{loc(p.name)}</span>
+      </button>
+      {zoomSrc && <button type="button" className="ca-skillrun__zoom" data-testid="skill-run-zoom" title={t('skillRun.zoom')} aria-label={t('skillRun.zoom')}
+        onClick={() => onZoom(zoomSrc)}><span className="ca-icon">{Icons.expand}</span></button>}
+    </div>
+  )
+}
 
 export function SkillRunDialog({ skill, presetId, onClose, run = newProject }: {
   skill: Skill; presetId?: string | null; onClose: () => void
@@ -81,25 +128,10 @@ export function SkillRunDialog({ skill, presetId, onClose, run = newProject }: {
               {!!skill.presets?.length && <div role="radiogroup" data-testid="skill-run-presets">
               <div className="ca-skillrun__section">{t('skillRun.templates')}</div>
               <div className="ca-skillrun__grid">
-                {skill.presets.map((p) => {
-                  const img = presetImage(skill, p)
-                  const on = preset === p.id
-                  return (
-                    <div key={p.id} className="ca-skillrun__tile" data-on={on || undefined}>
-                      <button type="button" role="radio" aria-checked={on} data-on={on || undefined}
-                        className="ca-skillrun__preset" data-testid="skill-run-preset" data-preset={p.id} onClick={() => setPreset(p.id)}>
-                        <span className="ca-skillrun__presetimg">
-                          {img ? <img src={img} alt="" /> : <span className="ca-icon">{Icons.skill}</span>}
-                          <span className="ca-skillrun__pick">{t('skillRun.select')}</span>
-                          {on && <span className="ca-skillrun__check" aria-hidden="true"><span className="ca-icon">{Icons.check}</span></span>}
-                        </span>
-                        <span className="ca-skillrun__presetname">{loc(p.name)}</span>
-                      </button>
-                      {img && <button type="button" className="ca-skillrun__zoom" data-testid="skill-run-zoom" title={t('skillRun.zoom')} aria-label={t('skillRun.zoom')}
-                        onClick={() => setZoom(img)}><span className="ca-icon">{Icons.expand}</span></button>}
-                    </div>
-                  )
-                })}
+                {skill.presets.map((p) => (
+                  <PresetTile key={p.id} skill={skill} preset={p} on={preset === p.id}
+                    onPick={() => setPreset(p.id)} onZoom={setZoom} />
+                ))}
               </div>
               </div>}
             </div>
@@ -176,7 +208,9 @@ export function SkillRunDialog({ skill, presetId, onClose, run = newProject }: {
         </div>
         {zoom && (
           <button type="button" className="ca-skillrun__zoomview" data-testid="skill-run-zoomview" title={t('common.close')} onClick={() => setZoom(null)}>
-            <img src={zoom} alt="" />
+            {isSkillMediaVideo(zoom)
+              ? <video src={zoom} muted loop playsInline autoPlay controls data-testid="skill-run-zoomview-video" />
+              : <img src={zoom} alt="" />}
           </button>
         )}
       </div>

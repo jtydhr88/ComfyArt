@@ -1,6 +1,7 @@
 # #623 → #78 tip-pin — new6 Skill.video hover (Home + Skills wall)
 
 **Tip:** `feat/623-new6-hover-video` (src+dist+#78 same tip; see PR tip SHA) · **Asia/Shanghai**
+**Base:** main@`1e251da34b491cb74696537f5d893a1b2136d132` (after #624/#622/#625/#492)
 **Design pin:** `d03ea7938877d084c201a94ef51f943dd0e061b9` (`assets/623-new6-hover-v1`)  
 **Issue:** Closes #623
 
@@ -33,7 +34,7 @@ soft **PASS** — muted hover loop on new6 Home quick-start + Skills wall; leave
 ## Notes
 - No Lovart / competitor names in `src/`
 - src + dist + #78 same tip; Node 22.20+
-- Do not touch motion (#622) or Explore scale/scrim
+- Coexists with #622 motion×2 wash-v1 preset.video already on main; Explore scale/scrim untouched
 
 ## @design
 Please re-sign soft PASS on tip (new6 hover muted loop + leave→first frame) for Home multi-angle + Skills wall new6.

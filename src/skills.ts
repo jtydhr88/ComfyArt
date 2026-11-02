@@ -112,11 +112,15 @@ export const SKILL_VIDEO_PENDING_NEW6 = [] as const
 const WASH_623_NEW6_VIDEO = 'd03ea7938877d084c201a94ef51f943dd0e061b9'
 const video594 = (id: string) =>
   `https://raw.githubusercontent.com/ganjmeng/ComfyArt/${WASH_623_NEW6_VIDEO}/594/wash/videos/${id}.mp4`
-/** #575 residual TODO(design pin): motion×2 wash wiring WAIT — do not invent URLs.
- *  Source once design PASS/pins: 569/wash/motion/templates/ @ bd043d4c
- *    01-poster-animation.mp4 (P2: de-shake)
- *    02-first-to-last-frame-animation.mp4 (P2: de-blur)
- *  Then set preset.video on motion presets; until then motion card keeps upgrade9 `video('motion')` only. */
+/** #622 — motion×2 wash-v1 template mp4s (design soft PASS pin `assets/575-motion-wash-v1`).
+ *  Still thumbs stay wash569 @ bd043d4c; old 569/wash/motion/templates/ kept on review-assets.
+ *  Convention: raw.githubusercontent commit-pin (same as FEED / #605 skill videos) — not public/. */
+const WASH_575_MOTION_VIDEO = '5a8d22ed88f732d38f8709a2c0740f074a400a89'
+/** Literal repo-relative paths so tip embeds + mutation asserts stay absolute/pin-visible. */
+const WASH_575_MOTION_POSTER = '575/wash/templates/01-poster-animation.mp4'
+const WASH_575_MOTION_FIRSTLAST = '575/wash/templates/02-first-to-last-frame-animation.mp4'
+const wash575MotionVideo = (rel: string) =>
+  `https://raw.githubusercontent.com/ganjmeng/ComfyArt/${WASH_575_MOTION_VIDEO}/${rel}`
 /** #541 AC rev 2 washes on review-assets (541/wash/<skill>/<skill>__<preset>.webp; each pinned to its own commit). */
 const WASH_541 = {
   product: '688a702a1f322082cde4e5ed46200c3593db9c43', // 1:1, Amazon 商品主图
@@ -158,8 +162,8 @@ const wash569 = (skillId: keyof typeof WASH_569, n: number) => {
   const [name, dir, commit] = typeof e === 'string' ? [e, '569/wash', WASH_569_COMMIT] : e
   return `https://raw.githubusercontent.com/ganjmeng/ComfyArt/${commit}/${dir}/${skillId}/templates/${name}@thumb.webp`
 }
-const P = (id: string, zh: string, en: string, prompt: string, image?: string): SkillPreset =>
-  ({ id, name: { zh, en }, prompt, ...(image ? { image } : {}) })
+const P = (id: string, zh: string, en: string, prompt: string, image?: string, video?: string): SkillPreset =>
+  ({ id, name: { zh, en }, prompt, ...(image ? { image } : {}), ...(video ? { video } : {}) })
 type L = [zh: string, en: string]
 function I(key: string, [zh, en]: L, type: SkillInput['type'], required = false, ph?: L): SkillInput {
   return { key, label: { zh, en }, type, ...(required ? { required } : {}), ...(ph ? { placeholder: { zh: ph[0], en: ph[1] } } : {}) }
@@ -227,7 +231,7 @@ export const BUILTIN_SKILLS: Skill[] = orderBuiltins([
     category: 'ecommerce', cover: cover('product'), quickStartCover: quickStartCover('product'), featured: feedCovers('product'), video: video('product'), presets: [P('white', '白底主图', 'White background hero', 'Focus on the white-background hero shot: pure white seamless background, soft shadow, product centered; listing-ready 1:1 main image.', washProduct541('white')), P('lifestyle', '生活场景', 'Lifestyle scene', 'Focus on the lifestyle scene: product in use in a realistic home setting, natural light; keep product identity locked to the hero.', washProduct541('lifestyle')), P('detail', '细节特写', 'Detail close-up', 'Focus on the detail close-up: macro view of material and craftsmanship, shallow depth of field; useful as A+ or PDP inset.', washProduct541('detail')), P('electronics', '数码电子', 'Electronics', 'Focus on the electronics hero: earbuds and their charging case on a clean studio backdrop, crisp reflections, precise edges.', washProduct541('electronics')), P('food', '美食', 'Food', 'Focus on the food hero: appetizing close shot, fresh ingredients as props, warm natural light, rich texture.', washProduct541('food')), P('beauty', '美妆个护', 'Beauty', 'Focus on the beauty hero: skincare or cosmetic product on soft pastel surfaces, gentle diffused light, clean premium mood.', washProduct541('beauty'))],
     inputs: [I('productImage', ['商品图片', 'Product images'], 'image', true), I('productInfo', ['商品资料', 'Product details'], 'text', false, ['补充商品名称、真实卖点和使用场景', 'Product name, real selling points and use cases']), VISUAL] },
   { id: 'motion', name: t('skills.motionPoster'), instructions: 'You are a production motion designer for UGC ads, product TVC stills-to-video and poster animation.\n1) Still first: if stillArt is missing, generate a strong 3:4 or 9:16 key still with generate_image and wait for it.\n2) Animate: drive animate_image from that image shape with subtle, readable motion (loop on); keep titles sharp.\n3) Preset focus: Poster Animation keeps text locked while the scene breathes; First-to-Last Frame Animation morphs cleanly between two planned frames.\n4) Ad intent: prefer product-hero or UGC-style energy over abstract noise; CTA text in quotes when present.\n5) Refs: pass the still shape id into animate_image; never invent motion on a missing frame.',
-    category: 'ads', cover: cover('motion'), quickStartCover: quickStartCover('motion'), featured: feedCovers('motion'), video: video('motion'), /* #575 residual: preset.video TODO until design pin 569/wash/motion/templates @bd043d4c */ presets: [P('poster', '海报动画', 'Poster Animation', 'Template: poster animation for ads — lock the still, then subtle looping motion; show static vs animated pair; text stays sharp and readable.', wash569('motion', 0)), P('firstlast', '首帧到末帧动画', 'First-to-Last Frame Animation', 'Template: first-to-last frame animation for product TVC beats — plan first and last frames that share layout and transition smoothly.', wash569('motion', 1))],
+    category: 'ads', cover: cover('motion'), quickStartCover: quickStartCover('motion'), featured: feedCovers('motion'), video: video('motion'), /* #622: preset.video ← wash-v1 @5a8d22ed */ presets: [P('poster', '海报动画', 'Poster Animation', 'Template: poster animation for ads — lock the still, then subtle looping motion; show static vs animated pair; text stays sharp and readable.', wash569('motion', 0), wash575MotionVideo(WASH_575_MOTION_POSTER)), P('firstlast', '首帧到末帧动画', 'First-to-Last Frame Animation', 'Template: first-to-last frame animation for product TVC beats — plan first and last frames that share layout and transition smoothly.', wash569('motion', 1), wash575MotionVideo(WASH_575_MOTION_FIRSTLAST))],
     inputs: [I('stillArt', ['静态原稿', 'Static artwork'], 'image', true), I('motionNotes', ['动态要求', 'Motion requirements'], 'text', false, ['说明希望怎么动，哪些部分保持不动', 'How it should move and what should stay still']), VISUAL] },
   // #593 Phase1-S3 new 6 instructions+presets; #594 wash pins; dual-fit contain; #623 hover video @ 594/wash/videos.
   { id: 'multi-angle', name: t('skills.multiAngleImageGenerator'), instructions: 'You are a production multi-angle catalog photographer. Deliver a locked identity set, not random variants.\n1) Lock: read subjectImage; keep identity, materials, proportions and palette identical across every frame.\n2) Set: default front, 3/4, side and one detail/macro on clean matching backgrounds unless angleBrief says otherwise.\n3) Use: PDP and ads prefer neutral seamless; lifestyle only when the brief asks.\n4) Consistency: same lens height and lighting family; no costume or finish drift between angles.\n5) Refs: pass the subject shape id in refs (ref_modes content) on every generate_image call.',

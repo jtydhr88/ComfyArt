@@ -1,4 +1,4 @@
-"""#575 residual + #623: Explore scale/scrim intact; new6 hover video wired @ WASH_623_NEW6_VIDEO; motion×2 still waits (#622)."""
+"""#575 residual + #623/#622: Explore scale/scrim intact; new6 hover @ WASH_623_NEW6_VIDEO; motion×2 wash-v1 preset.video wired."""
 from __future__ import annotations
 
 from pathlib import Path
@@ -27,9 +27,6 @@ def test_video_helpers_and_pending_scaffold():
     assert "export function skillCoverVideoHover" in SKILLS
     assert "export function presetVideo" in SKILLS
     assert "SKILL_VIDEO_PENDING_NEW6" in SKILLS
-    assert "TODO(design pin): motion" in SKILLS
-    assert "569/wash/motion/templates" in SKILLS
-    assert "bd043d4c" in SKILLS
     assert "video?: string" in SKILLS  # SkillPreset.video
     # #623 new6 hover wired — pending list empty; pin + helper present (mutation surface)
     assert "WASH_623_NEW6_VIDEO" in SKILLS
@@ -37,6 +34,12 @@ def test_video_helpers_and_pending_scaffold():
     assert "video594" in SKILLS and "594/wash/videos/" in SKILLS
     block = SKILL_VIDEO_PENDING_BLOCK()
     assert "SKILL_VIDEO_PENDING_NEW6 = [] as const" in block or "SKILL_VIDEO_PENDING_NEW6 = []" in block
+    # #622 motion×2 wash-v1 pin (coexists with #623)
+    assert "WASH_575_MOTION_VIDEO" in SKILLS
+    assert "5a8d22ed88f732d38f8709a2c0740f074a400a89" in SKILLS
+    assert "575/wash/templates/01-poster-animation.mp4" in SKILLS
+    assert "575/wash/templates/02-first-to-last-frame-animation.mp4" in SKILLS
+    assert "TODO(design pin): motion" not in SKILLS
     for sid in (
         "multi-angle",
         "logo-material",
@@ -47,6 +50,16 @@ def test_video_helpers_and_pending_scaffold():
     ):
         assert f"video: video594('{sid}')" in SKILLS, sid
         assert sid not in block.split("=", 1)[-1].split("as const")[0] or "[]" in block
+
+
+def test_motion_preset_video_wired_in_dialog():
+    """Detail/template cards play when preset.video set; no-video fallback unchanged."""
+    dlg = (ROOT / "src/ui/SkillRunDialog.tsx").read_text()
+    assert "presetVideo" in dlg and "skillCoverVideoHover" in dlg
+    assert "skill-run-preset-video" in dlg
+    assert "ca-skillrun__preset-video" in CSS
+    # mutation surface: helpers still return null when video omitted
+    assert "return preset.video || null" in SKILLS
 
 
 def SKILL_VIDEO_PENDING_BLOCK() -> str:
