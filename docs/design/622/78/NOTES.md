@@ -1,7 +1,7 @@
 # #622 → #78 tip-pin — motion×2 wash-v1 `preset.video` (Closes #622)
 
 **Branch:** `feat/622-motion-preset-video`  
-**Base:** main@`e488f1a5a1871036238f22f852321acb1d175ffb`  
+**Base:** main@`4fb5f3f026408aec2a9ce2cf3ee21b7c496047ad` (#625 merged; #492 coexistence)  
 **Design pin:** `5a8d22ed88f732d38f8709a2c0740f074a400a89` (`assets/575-motion-wash-v1`)  
 **Zone:** Asia/Shanghai  
 **Node:** 22.20+

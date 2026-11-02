@@ -19,7 +19,8 @@ pytestmark = pytest.mark.skipif(not (ROOT / "node_modules" / ".bin" / "rolldown"
 SHOT = os.environ.get("SHOT_DIR")
 DETAILS = {lk: [f"{lab} {v}" for lab, v in zip(al._DETAIL_LABEL[lk], ("42", "21.4k", "32", "1:14"))] for lk in ("zh", "en")}
 TONE = {"done": "ok", "budget": "warn", "hard_cap": "warn", "stuck": "warn", "stuck:self_check_failed": "warn",
-        "user_stop": "neutral", "user_stop:quote_declined": "neutral", "error:network": "error", "error": "error"}
+        "user_stop": "neutral", "user_stop:quote_declined": "neutral", "error:network": "error", "error": "error",
+        "awaiting_confirm:not_approved": "warn"}
 # (copy key, body args): the same 11 cards as the #78 sheet
 CARDS = [("done", dict(n=4, m=4, x=None, kind="image")), ("done", dict(n=0, m=None, x=None, kind="")),
          ("budget", dict(n=3, m=4, x=40, kind="image")), ("hard_cap", dict(n=3, m=4, x=None, kind="image")),
@@ -44,6 +45,9 @@ def block(key, kw, i):
 
 BLOCKS = [block(k, kw, i) for i, (k, kw) in enumerate(CARDS)]
 NEUTRAL = ("user_stop", "user_stop:quote_declined")
+# #492: reason=done is filtered in RunStop — visible sheet excludes the two done cards.
+VISIBLE_BLOCKS = [b for b in BLOCKS if b["stop"]["reason"] != "done"]
+DONE_BLOCKS = [b for b in BLOCKS if b["stop"]["reason"] == "done"]
 
 # effective colour of text: its colour alpha-composited over the card, the card over the panel
 CONTRAST = """(sel) => {
@@ -84,7 +88,11 @@ def page(tmp_path_factory):
 
 def render(page, lang="zh", theme="light", blocks=BLOCKS):
     page.evaluate("([b, l, t]) => { window.__calls = []; window.__render(b, l, t) }", [blocks, lang, theme])
-    page.wait_for_selector(".ca-run")
+    page.wait_for_selector("#wrap")
+    if any((b.get("stop") or {}).get("reason") != "done" for b in blocks):
+        page.wait_for_selector(".ca-run")
+    else:
+        page.wait_for_function("() => document.getElementById('wrap') && !document.querySelector('.ca-run')")
     return page
 
 
@@ -95,7 +103,7 @@ def run(page, key):
 @pytest.mark.parametrize("lang", ["zh", "en"])
 def test_details_collapsed_by_default(page, lang):
     render(page, lang)
-    assert page.evaluate("[...document.querySelectorAll('.ca-run details')].map(d => d.open)") == [False] * len(BLOCKS)
+    assert page.evaluate("[...document.querySelectorAll('.ca-run details')].map(d => d.open)") == [False] * len(VISIBLE_BLOCKS)
 
 
 def test_no_progress_bar_or_meter(page):
@@ -182,6 +190,85 @@ def test_cancelled_continue_only_asks_the_server_to_resume(page):
     assert [(c["method"], c["url"]) for c in calls] == [("POST", f"/api/comfyart/bot/runs/run{i}/continue")]
     assert json.loads(calls[0]["body"]) == {"lang": "zh"}
 
+
+
+
+# --- #492: hide reason=done stop card (product AC 6519682583 / 6526218598) ---
+
+def test_done_reason_not_rendered_in_sheet(page):
+    """#492 flip: the two done cards in BLOCKS must NOT render (was: they rendered). Backend payload unchanged."""
+    assert len(DONE_BLOCKS) == 2
+    render(page)
+    assert page.locator('.ca-run[data-reason="done"]').count() == 0
+    assert page.locator(".ca-run").count() == len(VISIBLE_BLOCKS)
+
+
+def test_done_only_blocks_leave_empty_dom(page):
+    """#492: even a chat that only has reason=done run_stop blocks paints zero .ca-run nodes."""
+    render(page, blocks=DONE_BLOCKS)
+    assert page.locator(".ca-run").count() == 0
+    assert page.locator('.ca-run[data-reason="done"]').count() == 0
+
+
+@pytest.mark.parametrize("key", [
+    "budget", "hard_cap", "stuck", "stuck:self_check_failed",
+    "user_stop", "user_stop:quote_declined", "error:network", "error",
+])
+@pytest.mark.parametrize("lang", ["zh", "en"])
+def test_non_done_reasons_still_render(page, key, lang):
+    """#492: every non-done stop reason keeps title/body/详情 on main behavior."""
+    b = next(x for x in BLOCKS if x["copy"]["key"] == key)
+    render(page, lang, blocks=[b])
+    card = run(page, key)
+    assert card.count() == 1
+    assert card.get_attribute("data-reason") == key.split(":")[0]
+    assert card.locator(".ca-run__title").inner_text() == al.CARD_COPY[key][lang][0]
+    body = al.CARD_COPY[key][lang][1]
+    # body templates may format; rendered body comes from block copy
+    assert card.locator(".ca-run__body").inner_text() == b["copy"][lang]["body"]
+    assert card.locator("details.ca-run__details").count() == 1
+    assert card.locator("details.ca-run__details summary").inner_text() in ("详情", "Details")
+
+
+@pytest.mark.parametrize("lang", ["zh", "en"])
+def test_awaiting_confirm_still_renders(page, lang):
+    """#492: awaiting_confirm unchanged — one assert (not in the #393 11-card sheet)."""
+    key = "awaiting_confirm:not_approved"
+    b = block(key, dict(n=0, m=None, x=None, kind=""), 99)
+    # reason for awaiting_confirm keys: split gives awaiting_confirm
+    assert b["stop"]["reason"] == "awaiting_confirm"
+    render(page, lang, blocks=[b])
+    card = run(page, key)
+    assert card.count() == 1
+    assert card.get_attribute("data-reason") == "awaiting_confirm"
+    assert card.locator(".ca-run__title").inner_text() == al.CARD_COPY[key][lang][0]
+    assert card.locator("button").count() >= 1  # Continue
+
+
+def test_continue_on_non_done_latest_unchanged(page):
+    """#492: Continue on non-done latest card still POSTs /continue; done stays buttonless."""
+    budget = next(b for b in BLOCKS if b["copy"]["key"] == "budget")
+    render(page, "zh", blocks=[budget])
+    run(page, "budget").locator("button.ca-panel__primary").click()
+    page.wait_for_function("window.__calls.length > 0")
+    calls = page.evaluate("window.__calls")
+    assert calls[0]["method"] == "POST" and calls[0]["url"].endswith("/continue")
+    # done alone: no buttons in DOM
+    render(page, "zh", blocks=DONE_BLOCKS[:1])
+    assert page.locator(".ca-run button").count() == 0
+
+
+def test_chatmessage_source_filters_done():
+    """#492 source lock: AssistantBlocks skips done; RunStop returns null; stoppedSubmitted/latest scan untouched."""
+    chat = (ROOT / "src/ui/ChatMessage.tsx").read_text()
+    assert "if (reason === 'done') return null" in chat
+    assert "if ((b.stop?.reason ?? '') !== 'done')" in chat
+    # stoppedSubmitted still counts every run_stop (incl done) — do not narrow it
+    ss = chat.split("export function stoppedSubmitted")[1].split("export function ")[0]
+    assert "b.type === 'run_stop'" in ss
+    assert "done" not in ss.split("return")[0]  # no done filter inside stoppedSubmitted
+    # latest-card scan still looks at all run_stop siblings (string locked next to the filter)
+    assert "latest={!m.blocks.slice(i + 1).some((x) => x.type === 'run_stop')}" in chat
 
 @pytest.mark.skipif(not SHOT, reason="SHOT_DIR not set")
 @pytest.mark.parametrize("theme", ["light", "dark"])
