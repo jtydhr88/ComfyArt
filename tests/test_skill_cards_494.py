@@ -155,11 +155,12 @@ def test_title_and_create_zh_494():
     # 「+」由图标渲染，文案里不带「+」，避免重复
     assert (ZH["home.skills"], ZH["home.skillsCreate"]) == ("技能", "创建")
     assert (EN["home.skills"], EN["home.skillsCreate"]) == ("Skills", "Create")
-    assert "{t('home.skillsCreate')}<span className=\"ca-icon\">{Icons.plus}</span>" in SKILLS
+    assert "{t('home.skillsCreate')}" in SKILLS and "Icons.plus" not in SKILLS.split("skills-create", 1)[1].split("skills-create-menu", 1)[0]
 
 
 def test_card_layout_css():
-    assert "grid-template-columns: repeat(5, minmax(0, 1fr));\n  gap: 16px 24px;" in HOME_CSS
+    assert "grid-template-columns: repeat(auto-fill, minmax(min(100%, 296px), 1fr));" in HOME_CSS
+    assert "gap: 24px 16px;" in HOME_CSS.split(".ca-swall {", 1)[1].split("}", 1)[0]
     assert "aspect-ratio: 231 / 173" in HOME_CSS and "border-radius: 12px" in HOME_CSS
     assert "inset: -4px -4px -8px -4px; border-radius: 16px" in HOME_CSS
     for cls in (".ca-swall__title", ".ca-swall__desc"):

@@ -8,7 +8,7 @@
   --ca-tabs-gap: 24px; --ca-tabs-py: 11px; --ca-tabs-font: 400 14px/22px var(--ca-font); --ca-tabs-on-weight: 600; --ca-tabs-top: 0px;
   --ca-tabs-fg: rgba(0, 0, 0, .55); --ca-tabs-on-fg: var(--ca-text); --ca-tabs-indicator: transparent; --ca-tabs-indicator-h: 0px;
   /* #583 Skills header tabs (defined here, consumed by #583's PR): 13px, gap 20, 1px underline = text width */
-  --ca-skilltabs-gap: 20px; --ca-skilltabs-font: 400 13px/20px var(--ca-font); --ca-skilltabs-on-weight: 600;
+  --ca-skilltabs-gap: 20px; --ca-skilltabs-font: 400 13px/20px var(--ca-font); --ca-skilltabs-on-weight: 500;
   --ca-skilltabs-fg: rgba(0, 0, 0, .55); --ca-skilltabs-on-fg: var(--ca-text); --ca-skilltabs-indicator: var(--ca-text); --ca-skilltabs-indicator-h: 1px;
   --ca-tabs-rule: var(--ca-border-w) solid var(--ca-border);
   --ca-chip-gap: 8px; --ca-chip-h: 30px; --ca-chip-py: 5px; --ca-chip-px: 12px; --ca-chip-radius: 999px; --ca-chip-font: 400 13px/20px var(--ca-font);
@@ -677,36 +677,73 @@ body { background: var(--ca-float); }
 .ca-mem-empty__title { font: 600 13px/20px var(--ca-font); color: var(--ca-strong); }
 .ca-mem-empty__desc { max-width: 260px; font: 400 13px/20px var(--ca-font); color: var(--ca-muted); }
 
-/* #460 G1 — Skills Explore / Favourites / Personal shell */
-.ca-skillspage { width: auto; max-width: 1600px; max-height: none; margin: 0 auto; padding: 32px 48px 96px; box-sizing: border-box; overflow: visible; }
-.ca-skills__head { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
-.ca-skills__head h1 { margin: 0; flex: 1; font: 500 28px/36px var(--ca-font); }
-.ca-skills__headacts { display: flex; align-items: center; gap: 8px; }
+/* #460 G1 — Skills Explore / Favourites / Personal shell
+ * #583 — header 1:1 gold lock (pad 24 60 12, title 18/26 w600, tabs 13 gap20 1px underline,
+ * create 80×36 r8, search 28 on tab row right, chips h30, chrome pinned + list scroll;
+ * wall auto-fill ~296 @1280 → 3 cols, gap 24 row / 16 col). */
+.ca-skillspage {
+  display: flex; flex-direction: column; height: 100%;
+  width: auto; max-width: none; margin: 0; padding: 0;
+  box-sizing: border-box; overflow: hidden;
+}
+.ca-skills__chrome {
+  flex: none; padding: 24px 60px 12px; box-sizing: border-box;
+  background: var(--ca-float); z-index: 4;
+}
+.ca-skills__scroll {
+  flex: 1; min-height: 0; overflow-y: auto;
+  padding: 8px 60px 96px; box-sizing: border-box;
+}
+.ca-skills__head {
+  display: flex; align-items: center; gap: 12px;
+  height: 36px; margin: 0 0 12px; padding: 0 0 0 4px; box-sizing: border-box;
+}
+.ca-skills__head h1 {
+  margin: 0; flex: 1; min-width: 0;
+  font: 600 18px/26px var(--ca-font); color: var(--ca-text);
+}
+.ca-skills__headacts { display: flex; align-items: center; gap: 8px; flex: none; }
+/* Search only on tab row (#583); no border, 28×28, icon 16, fg .55 */
 .ca-skills__iconbtn {
   display: inline-flex; align-items: center; justify-content: center;
-  width: 36px; height: 36px; border: var(--ca-border-w) solid var(--ca-border);
-  border-radius: 10px; background: transparent; color: inherit; cursor: pointer;
+  width: 28px; height: 28px; padding: 0; border: none;
+  border-radius: 8px; background: transparent; color: var(--ca-skilltabs-fg); cursor: pointer;
 }
 .ca-skills__iconbtn:hover { background: var(--ca-hover); }
-.ca-skills__iconbtn .ca-icon { width: 18px; height: 18px; }
+.ca-skills__iconbtn .ca-icon { width: 16px; height: 16px; }
 .ca-skills__create {
-  display: inline-flex; align-items: center; gap: 4px; height: 36px; padding: 0 14px 0 16px;
-  border: none; border-radius: 999px; background: var(--ca-strong); color: var(--ca-float);
-  font: 500 14px/20px var(--ca-font); cursor: pointer;
+  display: inline-flex; align-items: center; justify-content: center;
+  box-sizing: border-box; height: 36px; min-width: 52px; padding: 7px 6px 7px 16px;
+  border: none; border-radius: 8px; background: var(--ca-strong); color: var(--ca-float);
+  font: 400 14px/22px var(--ca-font); cursor: pointer;
 }
 .ca-skills__create:hover { filter: brightness(1.05); }
 .ca-skills__create .ca-icon { width: 16px; height: 16px; }
-.ca-skills__tabs { display: flex; gap: 4px; margin-bottom: 16px; border-bottom: var(--ca-border-w) solid var(--ca-border); }
+.ca-skills__tabs {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  height: 36px; margin: 0; padding: 8px 4px 0; box-sizing: border-box;
+  border-bottom: var(--ca-border-w) solid var(--ca-border);
+}
+.ca-skills__tablist { display: flex; align-items: flex-end; gap: var(--ca-skilltabs-gap); min-width: 0; }
+.ca-skills__tabacts {
+  display: flex; align-items: center; gap: 8px; flex: none;
+  padding: 0 0 8px; box-sizing: border-box;
+}
 .ca-skills__tab {
-  position: relative; height: 40px; padding: 0 14px; border: none; background: none;
-  color: var(--ca-muted); font: 500 14px/20px var(--ca-font); cursor: pointer;
+  position: relative; height: auto; margin: 0; padding: 0 0 8px; border: none; background: none;
+  color: var(--ca-skilltabs-fg); font: var(--ca-skilltabs-font); cursor: pointer;
 }
-.ca-skills__tab[data-on] { color: var(--ca-text); }
+.ca-skills__tab[data-on] {
+  font-weight: var(--ca-skilltabs-on-weight); color: var(--ca-skilltabs-on-fg);
+}
 .ca-skills__tab[data-on]::after {
-  content: ""; position: absolute; left: 12px; right: 12px; bottom: -1px; height: 2px;
-  border-radius: 1px; background: var(--ca-strong);
+  content: ""; position: absolute; left: 0; right: 0; bottom: -1px;
+  height: var(--ca-skilltabs-indicator-h); background: var(--ca-skilltabs-indicator);
 }
-.ca-skills__chips { display: flex; flex-wrap: wrap; gap: var(--ca-chip-gap); margin-bottom: 20px; }
+.ca-skills__chips {
+  display: flex; flex-wrap: wrap; gap: var(--ca-chip-gap);
+  margin: 12px 0 0; padding: 8px 0 0; box-sizing: border-box;
+}
 .ca-skills__chip {
   height: var(--ca-chip-h); padding: var(--ca-chip-py) var(--ca-chip-px); box-sizing: border-box; border: var(--ca-chip-border);
   border-radius: var(--ca-chip-radius); background: var(--ca-chip-bg); color: var(--ca-chip-fg);
@@ -717,12 +754,11 @@ body { background: var(--ca-float); }
 .ca-skills__empty { color: var(--ca-muted); padding: 48px 0; text-align: center; }
 .ca-skills__fallback { margin-top: 24px; }
 
-/* #494 — skill cards: 5 columns (24px column / 16px row gap, product 23:20), 231:173 cover r12, card itself square; hover backdrop r16
-   bleeding 4/4/4/8, dimmed cover, bookmark top-left; image badge bottom-left; author row, no counts. */
+/* #494 / #583 — width-adaptive wall: ~3×296 @ content 920 (1280 expanded); gap 24 row / 16 col */
 .ca-swall {
   display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
-  gap: 16px 24px;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 296px), 1fr));
+  gap: 24px 16px;
 }
 .ca-swall__card { position: relative; display: flex; flex-direction: column; min-width: 0; cursor: pointer; }
 .ca-swall__card::before {
@@ -785,11 +821,9 @@ body { background: var(--ca-float); }
 }
 .ca-swall__avatar .ca-icon { width: 10px; height: 10px; }
 
-@media (max-width: 1200px) { .ca-swall { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
-@media (max-width: 960px) { .ca-swall { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
 @media (max-width: 720px) {
-  .ca-skillspage { padding: 24px 16px 96px; }
-  .ca-swall { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px 12px; }
+  .ca-skills__chrome { padding: 20px 16px 8px; }
+  .ca-skills__scroll { padding: 8px 16px 96px; }
 }
 
 /* #491 home + → 技能 panel: title row with the create/import icon at top-right.
