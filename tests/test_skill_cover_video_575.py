@@ -1,4 +1,4 @@
-"""#575 residual + #622: Explore scale/scrim; motion×2 wash-v1 preset.video wired; new6 still pending."""
+"""#575 residual + #623/#622: Explore scale/scrim intact; new6 hover @ WASH_623_NEW6_VIDEO; motion×2 wash-v1 preset.video wired."""
 from __future__ import annotations
 
 from pathlib import Path
@@ -28,13 +28,18 @@ def test_video_helpers_and_pending_scaffold():
     assert "export function presetVideo" in SKILLS
     assert "SKILL_VIDEO_PENDING_NEW6" in SKILLS
     assert "video?: string" in SKILLS  # SkillPreset.video
-    # #622 motion×2 wash-v1 pin (do not invent; new6 stays pending)
+    # #623 new6 hover wired — pending list empty; pin + helper present (mutation surface)
+    assert "WASH_623_NEW6_VIDEO" in SKILLS
+    assert "d03ea7938877d084c201a94ef51f943dd0e061b9" in SKILLS
+    assert "video594" in SKILLS and "594/wash/videos/" in SKILLS
+    block = SKILL_VIDEO_PENDING_BLOCK()
+    assert "SKILL_VIDEO_PENDING_NEW6 = [] as const" in block or "SKILL_VIDEO_PENDING_NEW6 = []" in block
+    # #622 motion×2 wash-v1 pin (coexists with #623)
     assert "WASH_575_MOTION_VIDEO" in SKILLS
     assert "5a8d22ed88f732d38f8709a2c0740f074a400a89" in SKILLS
     assert "575/wash/templates/01-poster-animation.mp4" in SKILLS
     assert "575/wash/templates/02-first-to-last-frame-animation.mp4" in SKILLS
     assert "TODO(design pin): motion" not in SKILLS
-    # new6 skills stay without video field until assets exist (#623)
     for sid in (
         "multi-angle",
         "logo-material",
@@ -43,7 +48,8 @@ def test_video_helpers_and_pending_scaffold():
         "web-product",
         "marketing-campaign",
     ):
-        assert sid in SKILL_VIDEO_PENDING_BLOCK()
+        assert f"video: video594('{sid}')" in SKILLS, sid
+        assert sid not in block.split("=", 1)[-1].split("as const")[0] or "[]" in block
 
 
 def test_motion_preset_video_wired_in_dialog():
@@ -127,3 +133,18 @@ def _keyframes_body(css: str) -> str:
         else:
             break
     return chr(10).join(out)
+
+
+def test_mutation_new6_video_pin_must_stay():
+    """Must-red mutation: drop WASH_623 pin / video594 / any new6 video: → red."""
+    assert "WASH_623_NEW6_VIDEO" in SKILLS
+    assert "d03ea7938877d084c201a94ef51f943dd0e061b9" in SKILLS
+    for sid in (
+        "multi-angle",
+        "logo-material",
+        "meta-ads",
+        "mobile-ui",
+        "web-product",
+        "marketing-campaign",
+    ):
+        assert f"video: video594('{sid}')" in SKILLS, sid
