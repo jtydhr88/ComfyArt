@@ -3,13 +3,13 @@
 **Branch:** `feat/636-skills-phase2-s3-c-deferred5` · **Asia/Shanghai** · Issue #636 / draft PR #653  
 **Scope:** C only — `naive-illustration` `logo-abstract` `photo-split-poster` `ppt-visual` `promo-ecommerce`.  
 **Wash:** nearMiss remap Examples-only (`WASH_636=5ccfdf0f` on `assets/636-wash-c-deferred5`; ppt example tall sheet 768×1360 (nearMiss 2n7npu8pocu8, not cover)). naive=`2qapfgd34fsw`.  
-**UI:** SkillRunDialog left = Examples-only. **No 「当前模板」**. Right rail = **NEARMISS_INPUTS** (Upload Files + single-line Additional Details; uploadArrow + click/drag hint; dark CTA). D style4 untouched. #490 HOLD.
+**UI:** SkillRunDialog left = Examples-only. **No 「当前模板」**. Right rail = **NEARMISS_INPUTS** (Upload Files + single-line Additional Details; uploadArrow + click/drag hint; dark CTA). ppt LEFT stage-fill (no 3-slot gray flanks). D style4 untouched. #490 HOLD.
 
 ## AC (Ashley + product — same tip)
 
 1. C5 Examples-only: REMOVE entire 「当前模板」 row (right) for logo/photo/ppt/promo/naive — presets as defaults only, no select.
 2. LEFT column L|R matches lovart gold Examples layout/slots/media (hardMax remap).
-3. ppt hardMax1 — tall deck sheet (contain); no multi-slot empty gray.
+3. ppt hardMax1 — tall deck sheet stage-fill (object-fit:cover on data-count=1); NO gray side-slot flanks.
 4. logo filmstrip exactly ×11 filled/visible (data-count=11 thumbs 56×42).
 5. #78 tip-pin absolute raw Markdown image embeds for all AFTER + L|R pairs.
 
@@ -21,7 +21,7 @@ All 5 × zh-light + en-dark SkillRunDialog shots. Left = **Examples-only**; righ
 |------|-------|--------|
 | `after-logo-abstract-dialog-{zh-light,en-dark}.png` | logo-abstract | examples-carousel hardMax**11** |
 | `after-photo-split-poster-dialog-{zh-light,en-dark}.png` | photo-split-poster | examples-single-still **1** |
-| `after-ppt-visual-dialog-{zh-light,en-dark}.png` | ppt-visual | examples-single-still **1** tall sheet |
+| `after-ppt-visual-dialog-{zh-light,en-dark}.png` | ppt-visual | examples-single-still **1** tall sheet stage-fill (no gray flanks) |
 | `after-promo-ecommerce-dialog-{zh-light,en-dark}.png` | promo-ecommerce | examples-carousel **4** |
 | `after-naive-illustration-dialog-{zh-light,en-dark}.png` | naive-illustration | examples-carousel **4** (near=`2qapfgd34fsw`) |
 
