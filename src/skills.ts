@@ -68,7 +68,7 @@ const cover = (id: string) => {
 /** #580 cut 2 — home-feed image sets, parallel to COVERS_581 / WASH_569: skill id → [dir, commit, files[]] on
  *  review-assets (commit-pinned). Empty until design delivers the washed home sets; skills absent here fall back. */
 const QUICK_START_COVERS: Record<string, readonly [string, string, string]> = {}
-const FEED_V1 = '98a34727037f806895a4baed34dd2a498cb9baa2'  // #588 PASS, manifest review-assets 580/featured-v1/manifest.json
+const FEED_V1 = '0e92302302de2102ab6f66aa7633a40945a381c7'  // #590 wash-v2 PASS (supersedes #588 pin / wash-v1 b85f38cd)
 const FEED_V2 = WASH_594  // #594 new6 featured-v2
 const FEED_COVERS: Record<string, readonly [string, string, readonly string[]]> = {
   poster: ['580/featured-v1/poster', FEED_V1, ['01.webp', '02.webp', '03.webp', '04.webp']],
