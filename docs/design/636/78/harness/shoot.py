@@ -1,5 +1,5 @@
-"""#636 #78 AFTER — C deferred5 SkillRunDialog shots (zh-light + en-dark).
-Post-#637: C skills have examples:[] + text-only presets → right-side preset select (no left tiles).
+"""#636 #78 AFTER — C deferred5 soft wash SkillRunDialog shots (zh-light + en-dark).
+Examples-only left (gold isomorphic); hardMax counts; right preset <select>.
 Run: DESIGN_636_78_SHOOT=1 PYTHONPATH=tests:. /workspace/.venv-589/bin/pytest -q docs/design/636/78/harness/shoot.py -s
 """
 from __future__ import annotations
@@ -10,15 +10,15 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[5]
 OUT = Path(__file__).resolve().parents[1] / "after"
 
-# C deferred5 reps (4 of 5 × zh-light + en-dark); ppt-visual included (website chip)
-SKILLS = ["naive-illustration", "logo-abstract", "photo-split-poster", "ppt-visual"]
+# All C5 × zh-light + en-dark
+SKILLS = ["naive-illustration", "logo-abstract", "photo-split-poster", "ppt-visual", "promo-ecommerce"]
 COMBOS = [("zh", "light"), ("en", "dark")]
-PRESET_MIN = {
-    "naive-illustration": 2,
-    "logo-abstract": 2,
-    "photo-split-poster": 2,
-    "ppt-visual": 3,
-    "promo-ecommerce": 2,
+HARD_MAX = {
+    "naive-illustration": "4",
+    "logo-abstract": "11",
+    "photo-split-poster": "1",
+    "ppt-visual": "1",
+    "promo-ecommerce": "4",
 }
 CAT = {
     "naive-illustration": "social",
@@ -56,15 +56,11 @@ async def _open_skill(pg, app_url: str, sid: str, lang: str, theme: str) -> None
     dlg = pg.get_by_test_id("skill-run-dialog")
     await dlg.wait_for(timeout=10_000)
     assert await dlg.get_attribute("data-skill") == sid
-    # #637 wash UI: C has no left examples/preset tiles → right preset <select>
     sel = pg.get_by_test_id("skill-run-preset-select")
     if await sel.count():
         await sel.wait_for(timeout=10_000)
-    elif await pg.get_by_test_id("skill-run-preset").count():
-        await pg.get_by_test_id("skill-run-preset").first.wait_for(timeout=10_000)
-    else:
-        await pg.get_by_test_id("skill-run-form").wait_for(timeout=10_000)
-    await pg.wait_for_timeout(400)
+    await pg.get_by_test_id("skill-run-examples").wait_for(timeout=15_000)
+    await pg.wait_for_timeout(600)
 
 
 async def capture(app_url: str) -> None:
@@ -83,14 +79,16 @@ async def capture(app_url: str) -> None:
                 await dlg.screenshot(path=str(OUT / name))
                 n_left = await pg.get_by_test_id("skill-run-preset").count()
                 n_sel = await pg.get_by_test_id("skill-run-preset-select").count()
-                if n_sel:
-                    n = await pg.locator('[data-testid="skill-run-preset-select"] option').count()
-                else:
-                    n = n_left
-                print("wrote", OUT / name, "presets=", n, "leftTiles=", n_left, "select=", n_sel)
-                assert n >= PRESET_MIN.get(sid, 2), (sid, n)
-                # C unwash: no left examples media column expected
-                assert await pg.get_by_test_id("skill-run-presets").count() == 0, (sid, "no left preset radiogroup for C")
+                ex = pg.get_by_test_id("skill-run-examples")
+                count = await ex.get_attribute("data-count")
+                want = HARD_MAX[sid]
+                assert count == want, (sid, count, want)
+                assert n_left == 0, (sid, "left presets must be hidden for Examples-only gold", n_left)
+                assert n_sel == 1, (sid, "right preset select expected", n_sel)
+                assert await pg.get_by_test_id("skill-run-presets").count() == 0, (sid, "presets radiogroup must be absent")
+                left_attr = await pg.locator('.ca-skillrun__templates').get_attribute('data-left')
+                assert left_attr == 'examples', (sid, left_attr)
+                print("wrote", OUT / name, "examples=", count, "leftPresets=", n_left, "size=", (OUT / name).stat().st_size)
                 await ctx.close()
         await browser.close()
 

@@ -100,9 +100,12 @@ def _instructions(entry: str) -> str:
 def _assert_production(sid: str, cat: str, preset_min: int, required: list[str], entries: dict[str, str]):
     e = entries[sid]
     assert f"category: '{cat}'" in e, sid
-    assert "examples: []" in e and "featured: []" in e, sid  # C still unwash; B wash = #637
+    # #636 C soft wash: cover + examples/featured filled (hardMax layouts)
     head = e.split("inputs:", 1)[0]
-    assert "cover:" not in head and "video:" not in head, sid
+    assert "cover: cover636(" in head, sid
+    assert "examples: []" not in e and "featured: []" not in e, sid
+    assert "feat636(" in e or "ex636(" in e, sid
+    assert "video:" not in head, sid  # C stills only
     instr = _instructions(e)
     assert r"\n1)" in instr and r"\n5)" in instr, sid
     assert "You are a production" in instr, sid
@@ -125,7 +128,7 @@ def test_b5_production_instructions_presets_inputs_dialog():
     for sid, cat in B_CATEGORY.items():
         e = entries[sid]
         assert f"category: '{cat}'" in e, sid
-        # #637 soft wash: cover + examples/featured filled (hardMax layouts); C tip still empty
+        # #637 soft wash: cover + examples/featured filled (hardMax layouts)
         head = e.split("inputs:", 1)[0]
         assert "cover: cover637(" in head, sid
         assert "examples: []" not in e and "featured: []" not in e, sid

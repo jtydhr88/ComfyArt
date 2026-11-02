@@ -1,29 +1,35 @@
-# #636 → #78 tip-pin — Phase2-S3 C deferred .art5
+# #636 → #78 tip-pin — Phase2-S3 C deferred5 soft wash
 
-**Branch:** `feat/636-skills-phase2-s3-c-deferred5` · **Asia/Shanghai** · Issue #636  
-**Scope this tip:** C only — `naive-illustration` `logo-abstract` `photo-split-poster` `ppt-visual` `promo-ecommerce`.  
-**Prior:** B .ai NEW5 merged via #652. **Follow-up:** D style4 (may be cut). Wash cover/video/examples → **#637 S4** (B NEW5 wash first per PM).  
-**Tip-pin:** absolute `raw.githubusercontent.com` URLs in the draft PR body (exact tip SHA).  
-**Merge:** absorbed `main@42f59675` (#654/#637 wash) into tip (merge, not rebase). C still `examples:[]`; B wash from main. Re-shoot AFTER after merge (right preset-select UI).
+**Branch:** `feat/636-skills-phase2-s3-c-deferred5` · **Asia/Shanghai** · Issue #636 / draft PR #653  
+**Scope:** C only — `naive-illustration` `logo-abstract` `photo-split-poster` `ppt-visual` `promo-ecommerce`.  
+**Wash:** nearMiss remap Examples-only (`WASH_636=f11f2a6a` on `assets/636-wash-c-deferred5`). naive=`2qapfgd34fsw`.  
+**UI:** SkillRunDialog left = Examples-only (isomorphic #637); right preset `<select>`. D style4 untouched. #490 HOLD.
 
-**Merge hold:** draft — Refs #636 (not Closes). D style4 still not in this tip.
+## AFTER (`after/`)
 
-## AFTER shots (C)
+All 5 × zh-light + en-dark SkillRunDialog shots. Left = **Examples-only** (gold isomorphic; no 「模板」/presets grid; hardMax counts).
 
-Harness: `harness/shoot.py` + `tests/test_design_636_78_shots.py` (opt-in `DESIGN_636_78_SHOOT=1`). Opens `?view=skills` → wall card → SkillRunDialog. Playwright chromium 1280×900.
+| File | Skill | Layout |
+|------|-------|--------|
+| `after-logo-abstract-dialog-{zh-light,en-dark}.png` | logo-abstract | examples-carousel hardMax**11** |
+| `after-photo-split-poster-dialog-{zh-light,en-dark}.png` | photo-split-poster | examples-single-still **1** |
+| `after-ppt-visual-dialog-{zh-light,en-dark}.png` | ppt-visual | examples-single-still **1** |
+| `after-promo-ecommerce-dialog-{zh-light,en-dark}.png` | promo-ecommerce | examples-carousel **4** |
+| `after-naive-illustration-dialog-{zh-light,en-dark}.png` | naive-illustration | examples-carousel **4** (near=`2qapfgd34fsw`) |
 
-| File | Shows |
-|------|-------|
-| `after/after-naive-illustration-dialog-zh-light.png` | zh light — brief + line/object presets |
-| `after/after-naive-illustration-dialog-en-dark.png` | en dark |
-| `after/after-logo-abstract-dialog-zh-light.png` | zh light — photo → geometric mark |
-| `after/after-logo-abstract-dialog-en-dark.png` | en dark |
-| `after/after-photo-split-poster-dialog-zh-light.png` | zh light — hard/soft split |
-| `after/after-photo-split-poster-dialog-en-dark.png` | en dark |
-| `after/after-ppt-visual-dialog-zh-light.png` | zh light — website chip / cover·section·compare |
-| `after/after-ppt-visual-dialog-en-dark.png` | en dark |
+## L|R composites (`lr-pairs/`)
 
-B AFTER shots from #652 remain under the same folder for history.
+L = `phase2/bc-refs/c5-nearmiss/<near>/dialog.png`. R = AFTER wash dialog.
 
-## Scope note
-S3 C = production self-written instructions/inputs/presets for deferred .art5. `examples:[]` / no cover-video pins until #637. D skeletons untouched. No Lovart under src/. No `fashion-ugc` id.
+| File | Pair |
+|------|------|
+| `LR-<skill>-zh-light.png` | gold \| AFTER zh-light |
+| `LR-<skill>-en-dark.png` | gold \| AFTER en-dark |
+
+## Wash pin
+
+`WASH_636 = f11f2a6a65687cff7b3f71a5c1e4515ab6ae7009` → `636/wash/<id>/{cover,examples,featured}`.
+
+## Harness
+
+`DESIGN_636_78_SHOOT=1 PYTHONPATH=tests:. pytest -q tests/test_design_636_78_shots.py -s`

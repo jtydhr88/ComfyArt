@@ -22,7 +22,7 @@ REAL = ["poster", "social", "brand", "packaging", "thumbnail", "banner", "charac
         "interior", "custom-workflow"]
 PHASE1_HOT = ["brand", "packaging", "poster", "product", "character", "social", "motion", "banner", "thumbnail",
               "multi-angle", "logo-material", "meta-ads", "mobile-ui", "web-product", "marketing-campaign"]
-COVERED = ["poster", "social", "brand", "packaging", "thumbnail", "banner", "character", "product", "motion", "interior", "custom-workflow"]  # local public/skills; phase1_new=#594 cover(); phase2_b=#637 cover637()
+COVERED = ["poster", "social", "brand", "packaging", "thumbnail", "banner", "character", "product", "motion", "interior", "custom-workflow"]  # local public/skills; phase1_new=#594 cover(); phase2_b=#637 cover637(); phase2_c=#636 cover636()
 # Product ruling (#494 18:26 + AC comment 23:15): 3 skills have no category and appear only under 为你推荐.
 CATEGORY = {"poster": "ads", "social": "social", "brand": "branding", "packaging": "ecommerce", "thumbnail": "social",
             "banner": "ads", "character": None, "product": "ecommerce", "motion": "ads",
@@ -118,12 +118,15 @@ def test_covers_ten_webps_with_source_manifest():
     phase1_new = ["multi-angle", "logo-material", "meta-ads", "mobile-ui", "web-product", "marketing-campaign"]
     # #637 Phase2-S4 B NEW5: remote cover637 wash pins (not local public/skills COVERED)
     phase2_b = ["flash-cut-video", "style-transfer", "person-swap", "commerce-strategist", "lifestyle-scene"]
+    phase2_c = ["naive-illustration", "logo-abstract", "photo-split-poster", "ppt-visual", "promo-ecommerce"]
     for sid, e in _entries().items():
         head = e.split("inputs:", 1)[0]
         if sid in COVERED or sid in phase1_new:
             assert f"cover: cover('{sid}')" in head, sid  # #581 + #594 covers-v4 pins
         elif sid in phase2_b:
             assert f"cover: cover637('{sid}')" in head, sid  # #637 soft wash intentional covers
+        elif sid in phase2_c:
+            assert f"cover: cover636('{sid}')" in head, sid  # #636 C soft wash intentional covers
         else:
             assert "cover:" not in head, sid
 
