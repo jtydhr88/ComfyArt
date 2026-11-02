@@ -1,0 +1,4 @@
+id=studio-model
+wash=needWash
+source=ComfyArt-review-assets/phase3/bc-refs/studio-model/
+S1 tip-pin: cover+dialog only (examples deferred; thin6 wash → S4)

@@ -63,7 +63,7 @@ def test_phase2_ids_present_social_kept_untouched_and_no_skill_creator():
     assert set(PHASE2_NEW) <= set(ids)
     assert "social" in ids
     assert all(u in ids for u in UNTOUCHED)
-    assert len(ids) == 31  # 17 Phase1+untouched + 14 NEW
+    assert len(ids) == 50  # #640 Phase3-S1: 31 prior + 19 NEW
     assert "skill-creator" not in ids and "fashion-ugc" not in ids
     assert "PHASE2_NEW_SKILL_IDS" in SKILLS_TS
     assert "#634" in SKILLS_TS and "PRODUCT-LOCK-PHASE2" in SKILLS_TS

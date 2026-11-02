@@ -1,0 +1,4 @@
+id=live-promo-decor
+wash=ready
+source=ComfyArt-review-assets/phase3/bc-refs/live-promo-decor/
+S1 tip-pin: cover+dialog only (examples deferred; thin6 wash → S4)

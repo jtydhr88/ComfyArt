@@ -1,0 +1,4 @@
+id=anim-2d
+wash=ready
+source=ComfyArt-review-assets/phase3/bc-refs/anim-2d/
+S1 tip-pin: cover+dialog only (examples deferred; thin6 wash → S4)

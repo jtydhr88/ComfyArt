@@ -68,7 +68,7 @@ def test_order_builtins_phase1_then_phase2_b_then_deferred():
     assert set(PHASE2_B) <= set(ids)
     assert set(PHASE2_DEFERRED_C + PHASE2_DEFERRED_D) <= set(ids)
     assert all(u in ids for u in UNTOUCHED)
-    assert len(ids) == 31
+    assert len(ids) == 50  # #640 Phase3-S1
     # Runtime order is orderBuiltins output — assert the exported const lists encode Soft order
     assert _const_ids("PHASE1_SKILL_IDS") == PHASE1
     assert _const_ids("PHASE2_SKILL_IDS") == PHASE2_MOUNT

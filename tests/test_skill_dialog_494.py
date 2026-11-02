@@ -37,12 +37,17 @@ COUNTS = {"product": 6, "brand": 6, "packaging": 5, "character": 8, "motion": 2,
           "flash-cut-video": 3, "style-transfer": 3, "person-swap": 3, "commerce-strategist": 3, "lifestyle-scene": 3,
           "naive-illustration": 2, "logo-abstract": 2, "photo-split-poster": 2, "ppt-visual": 3, "promo-ecommerce": 2,
           "yingzao": 2, "crt-interface": 3, "crayon-sketch": 2, "fabric-collage": 2,  # #634 Phase2-S1
-          "social": 2}  # #635 Phase2-S2 Fashion UGC feed+story
+          "social": 2,  # #635 Phase2-S2 Fashion UGC feed+story
+          # #640 Phase3-S1 NEW19
+          "taobao-product": 3, "before-after": 3, "anim-2d": 2, "creator-identity": 3, "product-website": 2,
+          "studio-model": 3, "youtube-channel-banner": 2, "ai-model": 3, "product-to-packaging": 3,
+          "game-art": 3, "portrait-studio": 2, "premium-website": 2, "animated-poster": 2, "pose-fission": 3,
+          "live-promo-decor": 3, "linkedin-banner": 2, "logo-animation": 2, "restaurant-website": 2, "clothing-swap": 3}
 
 
 @needs_node
 def test_every_field_is_bilingual_data(got):
-    assert len(got["fields"]) == 31  # #591 + #634 Phase2-S1
+    assert len(got["fields"]) == 50  # #591 + #634 + #640 Phase3-S1
     for sid, fields in got["fields"].items():
         assert fields, sid
         # #569: effect skills (upload + note) and character carry no required field, like the reference.

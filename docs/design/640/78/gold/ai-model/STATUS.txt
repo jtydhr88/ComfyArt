@@ -1,0 +1,4 @@
+id=ai-model
+wash=ready
+source=ComfyArt-review-assets/phase3/bc-refs/ai-model/
+S1 tip-pin: cover+dialog only (examples deferred; thin6 wash → S4)

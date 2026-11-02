@@ -1,0 +1,4 @@
+id=animated-poster
+wash=needWash
+source=ComfyArt-review-assets/phase3/bc-refs/animated-poster/
+S1 tip-pin: cover+dialog only (examples deferred; thin6 wash → S4)

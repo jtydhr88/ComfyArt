@@ -45,7 +45,7 @@ def test_builtin_covers(got):
         "character": ("494/covers-v3.2", "dc335056e81e0350e2f98487fb680e22ffb14bb9"),
     }
     v4 = "cc76d743d416c3d9a9a6852d811a7a80caf40319"
-    assert len(covers) == 31 and "custom-workflow" in covers  # #634 +14 NEW (null covers)
+    assert len(covers) == 50 and "custom-workflow" in covers  # #640 Phase3-S1 +19 NEW (null covers)
     assert {k: covers[k] for k in washed} == {
         k: "https://raw.githubusercontent.com/ganjmeng/ComfyArt/{1}/{0}/{2}.webp".format(*pin.get(k, ("494/covers-v3", v3)), k)
         for k in washed
@@ -59,14 +59,14 @@ def test_builtin_covers(got):
 def test_chips_from_data(got):
     assert got["chips"] == ["forYou", "ecommerce", "branding", "social", "website", "ads"]  # #591 website lit
     by = got["byChip"]
-    assert len(by["forYou"]) == 31  # #634 Phase2-S1
+    assert len(by["forYou"]) == 50  # #640 Phase3-S1
     # #595: within-chip order follows PHASE1 hot mount (orderBuiltins)
     assert by == {"forYou": by["forYou"],
-                  "ecommerce": ["product", "multi-angle", "packaging", "person-swap", "commerce-strategist", "lifestyle-scene", "promo-ecommerce"],
-                  "branding": ["brand", "logo-material", "style-transfer", "logo-abstract"],
-                  "social": ["thumbnail", "social", "naive-illustration", "yingzao", "crt-interface", "crayon-sketch", "fabric-collage"],
-                  "website": ["mobile-ui", "web-product", "ppt-visual"],
-                  "ads": ["motion", "meta-ads", "poster", "marketing-campaign", "banner", "flash-cut-video", "photo-split-poster"]}
+                  "ecommerce": ["product", "multi-angle", "packaging", "person-swap", "commerce-strategist", "lifestyle-scene", "promo-ecommerce", "taobao-product", "studio-model", "ai-model", "product-to-packaging", "pose-fission", "live-promo-decor", "clothing-swap"],
+                  "branding": ["brand", "logo-material", "style-transfer", "logo-abstract", "creator-identity", "logo-animation"],
+                  "social": ["thumbnail", "social", "naive-illustration", "yingzao", "crt-interface", "crayon-sketch", "fabric-collage", "youtube-channel-banner", "portrait-studio", "linkedin-banner"],
+                  "website": ["mobile-ui", "web-product", "ppt-visual", "product-website", "premium-website", "restaurant-website"],
+                  "ads": ["motion", "meta-ads", "poster", "marketing-campaign", "banner", "flash-cut-video", "photo-split-poster", "before-after", "anim-2d", "game-art", "animated-poster"]}
     assert by["forYou"][:15] == [
         "product", "multi-angle", "brand", "character", "logo-material", "packaging",
         "motion", "meta-ads", "poster", "thumbnail", "mobile-ui", "social",
@@ -94,6 +94,14 @@ def test_builtin_videos_unique(got):
               "yingzao", "crt-interface", "crayon-sketch", "fabric-collage")
     for sid in phase2_null:
         assert vids.pop(sid) is None  # C/D + still-only B remain null
+    phase3_null = (
+        "taobao-product", "before-after", "anim-2d", "creator-identity", "product-website",
+        "studio-model", "youtube-channel-banner", "ai-model", "product-to-packaging",
+        "game-art", "portrait-studio", "premium-website", "animated-poster", "pose-fission",
+        "live-promo-decor", "linkedin-banner", "logo-animation", "restaurant-website", "clothing-swap",
+    )
+    for sid in phase3_null:
+        assert vids.pop(sid) is None  # #640 Phase3-S1 empty video until S4
     assert len(vids) == 10
     assert vids == {
         k: f"https://raw.githubusercontent.com/ganjmeng/ComfyArt/{tip}/494/wash/videos/{k}.mp4"

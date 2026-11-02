@@ -1,0 +1,4 @@
+id=before-after
+wash=ready
+source=ComfyArt-review-assets/phase3/bc-refs/before-after/
+S1 tip-pin: cover+dialog only (examples deferred; thin6 wash → S4)
