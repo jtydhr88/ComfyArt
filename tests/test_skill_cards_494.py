@@ -19,6 +19,11 @@ REAL = ["poster", "social", "brand", "packaging", "thumbnail", "banner", "charac
         "flash-cut-video", "style-transfer", "person-swap", "commerce-strategist", "lifestyle-scene",
         "naive-illustration", "logo-abstract", "photo-split-poster", "ppt-visual", "promo-ecommerce",
         "yingzao", "crt-interface", "crayon-sketch", "fabric-collage",
+        # #640 Phase3-S1 — 19 NEW (upgrade thumbnail already above)
+        "taobao-product", "before-after", "anim-2d", "creator-identity", "product-website",
+        "studio-model", "youtube-channel-banner", "ai-model", "product-to-packaging",
+        "game-art", "portrait-studio", "premium-website", "animated-poster", "pose-fission",
+        "live-promo-decor", "linkedin-banner", "logo-animation", "restaurant-website", "clothing-swap",
         "interior", "custom-workflow"]
 PHASE1_HOT = ["brand", "packaging", "poster", "product", "character", "social", "motion", "banner", "thumbnail",
               "multi-angle", "logo-material", "meta-ads", "mobile-ui", "web-product", "marketing-campaign"]
@@ -33,6 +38,13 @@ CATEGORY = {"poster": "ads", "social": "social", "brand": "branding", "packaging
             "naive-illustration": "social", "logo-abstract": "branding", "photo-split-poster": "ads",
             "ppt-visual": "website", "promo-ecommerce": "ecommerce",
             "yingzao": "social", "crt-interface": "social", "crayon-sketch": "social", "fabric-collage": "social",
+            # #640 Phase3-S1 NEW19 (+ thumbnail upgrade already mapped)
+            "taobao-product": "ecommerce", "before-after": "ads", "anim-2d": "ads", "creator-identity": "branding",
+            "product-website": "website", "studio-model": "ecommerce", "youtube-channel-banner": "social",
+            "ai-model": "ecommerce", "product-to-packaging": "ecommerce", "game-art": "ads",
+            "portrait-studio": "social", "premium-website": "website", "animated-poster": "ads",
+            "pose-fission": "ecommerce", "live-promo-decor": "ecommerce", "linkedin-banner": "social",
+            "logo-animation": "branding", "restaurant-website": "website", "clothing-swap": "ecommerce",
             "interior": None, "custom-workflow": None}
 
 
@@ -77,7 +89,7 @@ def test_fake_wall_meta_gone():
 
 def test_presets_and_inputs_schema():
     for sid, e in _entries().items():
-        assert len(re.findall(r"\bP\('", e)) == {"product": 6, "brand": 6, "packaging": 5, "character": 8, "motion": 2, "multi-angle": 4, "logo-material": 4, "meta-ads": 4, "mobile-ui": 4, "web-product": 4, "marketing-campaign": 4, "flash-cut-video": 3, "style-transfer": 3, "person-swap": 3, "commerce-strategist": 3, "lifestyle-scene": 3, "naive-illustration": 2, "logo-abstract": 2, "photo-split-poster": 2, "ppt-visual": 3, "promo-ecommerce": 2, "yingzao": 2, "crt-interface": 3, "crayon-sketch": 2, "fabric-collage": 2, "social": 2}.get(sid, 0), sid  # #541/#569 + #593 + #634 + #635 social
+        assert len(re.findall(r"\bP\('", e)) == {"product": 6, "brand": 6, "packaging": 5, "character": 8, "motion": 2, "multi-angle": 4, "logo-material": 4, "meta-ads": 4, "mobile-ui": 4, "web-product": 4, "marketing-campaign": 4, "flash-cut-video": 3, "style-transfer": 3, "person-swap": 3, "commerce-strategist": 3, "lifestyle-scene": 3, "naive-illustration": 2, "logo-abstract": 2, "photo-split-poster": 2, "ppt-visual": 3, "promo-ecommerce": 2, "yingzao": 2, "crt-interface": 3, "crayon-sketch": 2, "fabric-collage": 2, "social": 2, "taobao-product": 3, "before-after": 3, "anim-2d": 2, "creator-identity": 3, "product-website": 2, "studio-model": 3, "youtube-channel-banner": 2, "ai-model": 3, "product-to-packaging": 3, "game-art": 3, "portrait-studio": 2, "premium-website": 2, "animated-poster": 2, "pose-fission": 3, "live-promo-decor": 3, "linkedin-banner": 2, "logo-animation": 2, "restaurant-website": 2, "clothing-swap": 3}.get(sid, 0), sid  # #541/#569 + #593 + #634 + #635 + #640 Phase3
         # #494-2: required inputs now also carry a zh/en placeholder after the flag → ", true" (was ", true)").
         # #569: effect skills share EFFECT_INPUTS (upload + note, none required); character's Lovart fields are optional too.
         if sid in ("poster", "thumbnail", "banner", "interior"):
@@ -97,7 +109,7 @@ def test_presets_and_inputs_schema():
         assert len(re.findall(r"\bwashPreset\(", e)) == 0, sid  # #569: 494 preset washes retired
         assert len(re.findall(r"\bwash569\(", e)) == {"character": 8, "motion": 2}.get(sid, 0), sid  # #569 manifest washes
         assert len(re.findall(r"\bwashProduct541\(", e)) == (6 if sid == "product" else 0), sid  # #541 product 6
-        assert len(re.findall(r"Style: |Focus on |Motion: |Template: ", e)) == {"product": 6, "brand": 6, "packaging": 5, "character": 8, "motion": 2, "multi-angle": 4, "logo-material": 4, "meta-ads": 4, "mobile-ui": 4, "web-product": 4, "marketing-campaign": 4, "flash-cut-video": 3, "style-transfer": 3, "person-swap": 3, "commerce-strategist": 3, "lifestyle-scene": 3, "naive-illustration": 2, "logo-abstract": 2, "photo-split-poster": 2, "ppt-visual": 3, "promo-ecommerce": 2, "yingzao": 2, "crt-interface": 3, "crayon-sketch": 2, "fabric-collage": 2, "social": 2}.get(sid, 0), sid  # en prompt body (#593 + #634 + #635)
+        assert len(re.findall(r"Style: |Focus on |Motion: |Template: ", e)) == {"product": 6, "brand": 6, "packaging": 5, "character": 8, "motion": 2, "multi-angle": 4, "logo-material": 4, "meta-ads": 4, "mobile-ui": 4, "web-product": 4, "marketing-campaign": 4, "flash-cut-video": 3, "style-transfer": 3, "person-swap": 3, "commerce-strategist": 3, "lifestyle-scene": 3, "naive-illustration": 2, "logo-abstract": 2, "photo-split-poster": 2, "ppt-visual": 3, "promo-ecommerce": 2, "yingzao": 2, "crt-interface": 3, "crayon-sketch": 2, "fabric-collage": 2, "social": 2, "taobao-product": 3, "before-after": 3, "anim-2d": 2, "creator-identity": 3, "product-website": 2, "studio-model": 3, "youtube-channel-banner": 2, "ai-model": 3, "product-to-packaging": 3, "game-art": 3, "portrait-studio": 2, "premium-website": 2, "animated-poster": 2, "pose-fission": 3, "live-promo-decor": 3, "linkedin-banner": 2, "logo-animation": 2, "restaurant-website": 2, "clothing-swap": 3}.get(sid, 0), sid  # en prompt body (#593 + #634 + #635 + #640)
     # names/descriptions keep coming from locale keys (AC 1)
     for e in _entries().values():
         assert re.match(r"[\w-]+', name: t\('skills\.\w+'\)", e)

@@ -72,7 +72,7 @@ async def test_cards_chips_bookmark(app_url, lang, theme):  # noqa: F811
         assert chips == (zh_chips if lang == "zh" else en_chips)
         assert await pg.get_by_test_id("skills-chip-website").count() == 1  # #591 mobile-ui/web-product
         await pg.get_by_test_id("skills-chip-ecommerce").click()
-        assert sorted(await cards.evaluate_all("cs => cs.map(c => c.dataset.skill)")) == ["commerce-strategist", "lifestyle-scene", "multi-angle", "packaging", "person-swap", "product", "promo-ecommerce"]  # #634 Phase2 ecommerce builtins
+        assert sorted(await cards.evaluate_all("cs => cs.map(c => c.dataset.skill)")) == ["ai-model", "clothing-swap", "commerce-strategist", "lifestyle-scene", "live-promo-decor", "multi-angle", "packaging", "person-swap", "pose-fission", "product", "product-to-packaging", "promo-ecommerce", "studio-model", "taobao-product"]  # #634 + #640 Phase3 ecommerce builtins
         await _shot(pg, f"chip-ecommerce-{lang}-{theme}")
         await pg.get_by_test_id("skills-chip-forYou").click()
         cw = pg.locator('[data-skill="custom-workflow"]')
