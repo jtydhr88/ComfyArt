@@ -154,7 +154,7 @@ const feat637 = (id: string, ids: number[]) =>
 const video637 = (id: string) => pinned(`637/wash/${id}`, WASH_637, 'example.mp4')
 // #636 Phase2-S3 C deferred5 soft wash — nearMiss remap Examples-only (hardMax layouts).
 // logo carousel11; photo-split/ppt still1; promo/naive carousel4; featured 3–5 cycle.
-const WASH_636 = 'a6c679b3f21766a34169de9feabf47ecfbebc172'
+const WASH_636 = '5ccfdf0f481bbcbb3392516dba75f1ec3bda3ab6'
 const cover636 = (id: string) => pinned(`636/wash/${id}`, WASH_636, 'cover.webp')
 const ex636 = (id: string, ids: number[]) =>
   ids.map((n) => pinned(`636/wash/${id}/examples`, WASH_636, `${String(n).padStart(2, '0')}.webp`))

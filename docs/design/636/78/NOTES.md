@@ -2,14 +2,14 @@
 
 **Branch:** `feat/636-skills-phase2-s3-c-deferred5` · **Asia/Shanghai** · Issue #636 / draft PR #653  
 **Scope:** C only — `naive-illustration` `logo-abstract` `photo-split-poster` `ppt-visual` `promo-ecommerce`.  
-**Wash:** nearMiss remap Examples-only (`WASH_636=a6c679b3` on `assets/636-wash-c-deferred5`; ppt example stage-fill 1408×1012). naive=`2qapfgd34fsw`.  
+**Wash:** nearMiss remap Examples-only (`WASH_636=5ccfdf0f` on `assets/636-wash-c-deferred5`; ppt example tall sheet 768×1360 (nearMiss 2n7npu8pocu8, not cover)). naive=`2qapfgd34fsw`.  
 **UI:** SkillRunDialog left = Examples-only (isomorphic #637). **No 「当前模板」 row** when presets lack media (Examples-only C5). FieldSelect+custom chevron only when left has real preset media tiles. D style4 untouched. #490 HOLD.
 
 ## AC (Ashley + product — same tip)
 
 1. C5 Examples-only: REMOVE entire 「当前模板」 row (right) for logo/photo/ppt/promo/naive — presets as defaults only, no select.
 2. LEFT column L|R matches lovart gold Examples layout/slots/media (hardMax remap).
-3. ppt hardMax1 — no gray empty slots (stage-fill cover + data-count=1 object-fit:cover).
+3. ppt hardMax1 — tall deck sheet (contain); no multi-slot empty gray.
 4. logo filmstrip exactly ×11 filled/visible (data-count=11 thumbs 56×42).
 5. #78 tip-pin absolute raw Markdown image embeds for all AFTER + L|R pairs.
 
@@ -21,7 +21,7 @@ All 5 × zh-light + en-dark SkillRunDialog shots. Left = **Examples-only**; righ
 |------|-------|--------|
 | `after-logo-abstract-dialog-{zh-light,en-dark}.png` | logo-abstract | examples-carousel hardMax**11** |
 | `after-photo-split-poster-dialog-{zh-light,en-dark}.png` | photo-split-poster | examples-single-still **1** |
-| `after-ppt-visual-dialog-{zh-light,en-dark}.png` | ppt-visual | examples-single-still **1** (no gray flanks) |
+| `after-ppt-visual-dialog-{zh-light,en-dark}.png` | ppt-visual | examples-single-still **1** tall sheet |
 | `after-promo-ecommerce-dialog-{zh-light,en-dark}.png` | promo-ecommerce | examples-carousel **4** |
 | `after-naive-illustration-dialog-{zh-light,en-dark}.png` | naive-illustration | examples-carousel **4** (near=`2qapfgd34fsw`) |
 
@@ -38,7 +38,7 @@ nearMiss map: logo=`2ns5q6jxbyf4`×11 · photo=`2pg3z0ftueww`×1 · ppt=`2n7npu8
 
 ## Wash pin
 
-`WASH_636 = a6c679b3f21766a34169de9feabf47ecfbebc172` → `636/wash/<id>/{cover,examples,featured}`.
+`WASH_636 = 5ccfdf0f481bbcbb3392516dba75f1ec3bda3ab6` → `636/wash/<id>/{cover,examples,featured}`.
 
 ## Harness
 

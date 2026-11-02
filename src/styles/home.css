@@ -930,11 +930,6 @@ body { background: var(--ca-float); }
 }
 /* absolute fill: % height doesn't resolve on a grid item of an aspect-ratio box, which let portrait images overflow (crop) */
 .ca-skillrun__stage img, .ca-skillrun__stage video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; object-position: center; }
-/* #636 C5: single-still hardMax1 — fill stage (no gray empty-slot flanks) */
-.ca-skillrun__examples[data-count="1"] .ca-skillrun__stage img,
-.ca-skillrun__examples[data-count="1"] .ca-skillrun__stage video {
-  object-fit: cover;
-}
 .ca-skillrun__strip { display: flex; gap: 8px; margin-top: 8px; overflow-x: auto; }
 .ca-skillrun__thumb {
   flex: none; width: 64px; height: 48px; padding: 0; border: 0; border-radius: 8px; overflow: hidden; cursor: pointer;
