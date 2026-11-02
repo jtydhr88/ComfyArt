@@ -54,8 +54,9 @@ def test_lovart_sizes_and_theme_vars():
     assert "height: 86px" in CSS and "width: 36px; height: 36px" in CSS  # current card + thumb
     assert "1px dashed" in CSS and "height: 108px" in CSS  # upload
     assert "margin-top: auto" in CSS  # pinned submit
-    assert ".ca-skillrun__preset[data-on]::after" in CSS  # ring wraps whole tile
-    assert ".ca-skillrun__preset[data-on] .ca-skillrun__presetimg" not in CSS
+    # #576: ring on image only (title outside frame)
+    assert ".ca-skillrun__preset[data-on] .ca-skillrun__presetimg::after" in CSS
+    assert ".ca-skillrun__preset[data-on]::after" not in CSS
 
 
 def test_tiles_from_presets_and_zoom_is_sibling_button():
