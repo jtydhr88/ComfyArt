@@ -40,7 +40,7 @@ def test_new6_production_instructions_and_presets():
         assert f"category: '{cat}'" in e, sid
         head, _, rest = e.partition("inputs:")
         assert "cover: cover(" in head and "featured: feedCovers(" in head, sid
-        assert "video:" not in head, sid  # #575 hover video out
+        assert f"video: video594('{sid}')" in head, sid  # #623 hover video wired
         assert "quickStartCoverFit: 'contain'" in head and "examples: ex594(" in head, sid
         assert "presets:" in head, sid
         body = head.split("presets:", 1)[1]
