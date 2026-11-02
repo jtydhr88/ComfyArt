@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8"/>
+<title>Skills Explore #634</title>
+<style>
+  :root { --bg:#f4f4f5; --fg:#18181b; --muted:#71717a; --card:#fff; --line:#e4e4e7; --chip:#fff; --chipOn:#18181b; --chipOnFg:#fff; --cover:#d4d4d8; }
+  html[data-theme=dark] { --bg:#09090b; --fg:#fafafa; --muted:#a1a1aa; --card:#18181b; --line:#27272a; --chip:#27272a; --chipOn:#fafafa; --chipOnFg:#09090b; --cover:#3f3f46; }
+  * { box-sizing:border-box; }
+  body { margin:0; font:14px/1.4 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; background:var(--bg); color:var(--fg); }
+  header { padding:20px 28px 8px; }
+  h1 { margin:0 0 4px; font-size:22px; }
+  .sub { color:var(--muted); font-size:12px; margin-bottom:14px; }
+  .chips { display:flex; gap:8px; flex-wrap:wrap; padding:0 28px 16px; }
+  .chip { border:1px solid var(--line); background:var(--chip); color:var(--fg); border-radius:999px; padding:6px 14px; cursor:default; }
+  .chip.is-on { background:var(--chipOn); color:var(--chipOnFg); border-color:var(--chipOn); }
+  .wall { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; padding:0 28px 28px; }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:14px; overflow:hidden; }
+  .cover { height:140px; background:linear-gradient(135deg,var(--cover),#a1a1aa33); }
+  .meta { padding:10px 12px 12px; }
+  .title { font-weight:600; font-size:13px; margin-bottom:4px; }
+  .desc { color:var(--muted); font-size:11px; margin-bottom:8px; min-height:2.6em; }
+  .cat { display:inline-block; font-size:10px; padding:2px 8px; border-radius:999px; border:1px solid var(--line); color:var(--muted); }
+  .badge { position:fixed; right:16px; bottom:12px; font-size:11px; color:var(--muted); }
+</style>
+</head>
+<body>
+<header>
+  <h1>Skills</h1>
+  <div class="sub">#634 Phase2-S1 · 14 NEW + social upgrade</div>
+</header>
+<div class="chips" data-testid="skills-chips"><button class="chip is-on" data-testid="skills-chip-forYou">For You</button><button class="chip" data-testid="skills-chip-ecommerce">E-commerce</button><button class="chip" data-testid="skills-chip-branding">Branding</button><button class="chip" data-testid="skills-chip-social">Social Media</button><button class="chip" data-testid="skills-chip-website">Website</button><button class="chip" data-testid="skills-chip-ads">Ads & Creative</button></div>
+<div class="wall" data-testid="skills-wall"><article class="card" data-id="flash-cut-video" data-cat="ads" data-testid="skills-wall-card"><div class="cover" data-testid="skills-card-kind"></div><div class="meta"><div class="title">Screenshot Flash-Cut Video</div><div class="desc">Screenshot stills then a short flash-cut video</div><div class="cat">Ads & Creative</div></div></article>
+<article class="card" data-id="style-transfer" data-cat="branding" data-testid="skills-wall-card"><div class="cover" data-testid="skills-card-kind"></div><div class="meta"><div class="title">Adaptive Style Transfer Director</div><div class="desc">Controllable style transfer that locks subject identity</div><div class="cat">Branding</div></div></article>
+<article class="card" data-id="person-swap" data-cat="ecommerce" data-testid="skills-wall-card"><div class="cover" data-testid="skills-card-kind"></div><div class="meta"><div class="title">E-commerce 3-Image Person Swap</div><div class="desc">Keep pose/scene; swap person and outfit from three refs</div><div class="cat">E-commerce</div></div></article>
+<article class="card" data-id="commerce-strategist" data-cat="ecommerce" data-testid="skills-wall-card"><div class="cover" data-testid="skills-card-kind"></div><div class="meta"><div class="title">Commerce Visual Strategist</div><div class="desc">Strategy board from selling points, then frames</div><div class="cat">E-commerce</div></div></article>
+<article class="card" data-id="lifestyle-scene" data-cat="ecommerce" data-testid="skills-wall-card"><div class="cover" data-testid="skills-card-kind"></div><div class="meta"><div class="title">E-commerce Lifestyle Scene Designer</div><div class="desc">Textless immersive lifestyle scenes with the product</div><div class="cat">E-commerce</div></div></article>
+<article class="card" data-id="naive-illustration" data-cat="social" data-testid="skills-wall-card"><div class="cover" data-testid="skills-card-kind"></div><div class="meta"><div class="title">Naive Illustration</div><div class="desc">Giant-object vs tiny-person naive illustration</div><div class="cat">Social Media</div></div></article>
+<article class="card" data-id="logo-abstract" data-cat="branding" data-testid="skills-wall-card"><div class="cover" data-testid="skills-card-kind"></div><div class="meta"><div class="title">Minimal Geometric Abstract Logo</div><div class="desc">Photo distilled into one minimal geometric mark</div><div class="cat">Branding</div></div></article>
+<article class="card" data-id="photo-split-poster" data-cat="ads" data-testid="skills-wall-card"><div class="cover" data-testid="skills-card-kind"></div><div class="meta"><div class="title">Photo Split Abstract Poster</div><div class="desc">Photo above, abstract geometry below</div><div class="cat">Ads & Creative</div></div></article>
+<article class="card" data-id="ppt-visual" data-cat="website" data-testid="skills-wall-card"><div class="cover" data-testid="skills-card-kind"></div><div class="meta"><div class="title">Premium PPT Visual</div><div class="desc">Modular deck visuals with a shared style library</div><div class="cat">Website</div></div></article>
+<article class="card" data-id="promo-ecommerce" data-cat="ecommerce" data-testid="skills-wall-card"><div class="cover" data-testid="skills-card-kind"></div><div class="meta"><div class="title">E-commerce Promo Key Visual</div><div class="desc">Promo KV plus reusable sale chrome</div><div class="cat">E-commerce</div></div></article>
+<article class="card" data-id="yingzao" data-cat="social" data-testid="skills-wall-card"><div class="cover" data-testid="skills-card-kind"></div><div class="meta"><div class="title">Yingzao Local Editorial Poster</div><div class="desc">Chinese editorial posters from real place photos</div><div class="cat">Social Media</div></div></article>
+<article class="card" data-id="crt-interface" data-cat="social" data-testid="skills-wall-card"><div class="cover" data-testid="skills-card-kind"></div><div class="meta"><div class="title">CRT Retro Interface</div><div class="desc">Theme-driven CRT retro interface illustrations</div><div class="cat">Social Media</div></div></article>
+<article class="card" data-id="crayon-sketch" data-cat="social" data-testid="skills-wall-card"><div class="cover" data-testid="skills-card-kind"></div><div class="meta"><div class="title">Rough Crayon Sketch</div><div class="desc">Realistic subject as child-book crayon energy</div><div class="cat">Social Media</div></div></article>
+<article class="card" data-id="fabric-collage" data-cat="social" data-testid="skills-wall-card"><div class="cover" data-testid="skills-card-kind"></div><div class="meta"><div class="title">Fabric Collage</div><div class="desc">Multi-textile collage with stitch and fray</div><div class="cat">Social Media</div></div></article></div>
+<div class="badge">docs/design/634/78 · mock Explore (S1 empty covers)</div>
+</body></html>

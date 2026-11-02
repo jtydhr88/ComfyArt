@@ -64,7 +64,7 @@ async def test_cards_chips_bookmark(app_url, lang, theme):  # noqa: F811
     async with pw.async_playwright() as p:
         browser, pg = await _open(p, app_url, lang, theme)
         cards = pg.get_by_test_id("skills-wall-card")
-        assert await cards.count() == 17  # #591: +6 Phase1 new builtins
+        assert await cards.count() == 31  # #591 + #634 Phase2-S1
         await pg.locator('[data-skill="custom-workflow"]').scroll_into_view_if_needed()  # #581: last card now has its own cover
         await _shot(pg, f"list-{lang}-{theme}")
         chips = await pg.get_by_test_id("skills-chips").locator("button").all_inner_texts()
@@ -72,7 +72,7 @@ async def test_cards_chips_bookmark(app_url, lang, theme):  # noqa: F811
         assert chips == (zh_chips if lang == "zh" else en_chips)
         assert await pg.get_by_test_id("skills-chip-website").count() == 1  # #591 mobile-ui/web-product
         await pg.get_by_test_id("skills-chip-ecommerce").click()
-        assert sorted(await cards.evaluate_all("cs => cs.map(c => c.dataset.skill)")) == ["multi-angle", "packaging", "product"]
+        assert sorted(await cards.evaluate_all("cs => cs.map(c => c.dataset.skill)")) == ["commerce-strategist", "lifestyle-scene", "multi-angle", "packaging", "person-swap", "product", "promo-ecommerce"]  # #634 Phase2 ecommerce builtins
         await _shot(pg, f"chip-ecommerce-{lang}-{theme}")
         await pg.get_by_test_id("skills-chip-forYou").click()
         cw = pg.locator('[data-skill="custom-workflow"]')
@@ -81,7 +81,7 @@ async def test_cards_chips_bookmark(app_url, lang, theme):  # noqa: F811
         assert "494/covers-v3/custom-workflow.webp" in (await cw.get_by_test_id("skills-card-cover").get_attribute("src") or "")
         # #494/#529 — kind badge on every Explore card (bottom-left). Built-ins with `video` → data-kind=video;
         # custom-workflow (no video) stays image. Never invent a video badge without data.
-        assert await cards.locator(".ca-swall__cover [data-testid=skills-card-kind]").count() == 17
+        assert await cards.locator(".ca-swall__cover [data-testid=skills-card-kind]").count() == 31
         box, badge = await cw.locator(".ca-swall__cover").bounding_box(), await cw.get_by_test_id("skills-card-kind").bounding_box()
         assert badge["x"] - box["x"] < 16 and (box["y"] + box["height"]) - (badge["y"] + badge["height"]) < 16
         assert await cw.get_by_test_id("skills-card-kind").get_attribute("data-kind") == "image"

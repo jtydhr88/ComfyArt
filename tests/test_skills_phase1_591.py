@@ -44,11 +44,8 @@ def test_phase1_ids_present_and_untouched_kept():
     ids = list(_entries())
     assert set(PHASE1) <= set(ids)
     assert all(u in ids for u in UNTOUCHED)
-    assert len(ids) == 17
-    # Forbidden near-duplicates from voided .art lock
-    for bad in ("logo-abstract", "naive-illustration", "photo-split-poster", "ppt-visual", "promo-ecommerce"):
-        assert bad not in ids
-        assert f"id: '{bad}'" not in SKILLS_TS
+    assert len(ids) >= 17
+    # #634 Phase2 reclaims the deferred .art ids — no longer voided
 
 
 def test_new_skills_cut2_skeleton_and_website_categories():
