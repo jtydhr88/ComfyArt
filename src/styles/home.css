@@ -771,7 +771,7 @@ body { background: var(--ca-float); }
   position: relative; display: block; width: 100%; aspect-ratio: 231 / 173;
   border-radius: 12px; overflow: hidden; background: var(--ca-hover);
 }
-.ca-swall__cover img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.ca-swall__cover img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 300ms ease; }
 /* #594/#602 — dual media-fit on Skills wall: contain + light-gray plate for Phase1 new6 boards */
 .ca-swall__cover[data-fit="contain"] { background: var(--ca-field); }
 .ca-swall__cover[data-fit="contain"] img { object-fit: contain; }
@@ -779,10 +779,16 @@ body { background: var(--ca-float); }
 /* #529 — cover video overlays the still on hover/focus; badge switches to video when data has video. */
 .ca-swall__video {
   position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block;
-  opacity: 0; transition: opacity .15s; pointer-events: none; z-index: 1;
+  opacity: 0; transition: opacity .15s, transform 300ms ease; pointer-events: none; z-index: 1;
 }
 .ca-swall__card:hover .ca-swall__video,
 .ca-swall__card:focus-within .ca-swall__video { opacity: 1; }
+/* #575 residual — Explore cover scale on hover/focus-within (stills + video); keep flat scrim; no continuous pan/zoom fake-video. */
+.ca-swall__card:hover .ca-swall__cover img, .ca-swall__card:focus-within .ca-swall__cover img,
+.ca-swall__card:hover .ca-swall__video, .ca-swall__card:focus-within .ca-swall__video {
+  transform: scale(1.05);
+}
+/* #575 — Explore scrim stays flat rgba(0,0,0,.3) @ 150ms (design gold); not edge/bottom gradient. */
 .ca-swall__cover::after {
   content: ""; position: absolute; inset: 0; background: rgba(0,0,0,.3); opacity: 0; transition: opacity .15s;
 }
