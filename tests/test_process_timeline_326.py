@@ -23,19 +23,17 @@ def test_design_lock_v34_present() -> None:
 
 
 def test_lucide_process_icons() -> None:
-    assert "scrollText:" in ICONS
+    assert "scrollText:" in ICONS  # SkillChip still; rail uses files (#627)
     assert "globe:" in ICONS
     assert "imageLine:" in ICONS
     assert "videoLine:" in ICONS
-    assert "strokeWidth={2}" in ICONS
-    # Brain stays on Icons.think (timeline + #325)
+    assert "strokeWidth={" in ICONS
+    # #627: think = top-down double-leaf brain (not Lucide Brain / not bulb)
     block = ICONS.split("think:")[1].split(",\n")[0]
-    assert 'd="M12 18V5"' in block
-    scroll = ICONS.split("scrollText:")[1].split(",\n")[0]
-    assert "M15 12h-5" in scroll
-    globe = ICONS.split("globe:")[1].split(",\n")[0]
-    assert 'r="10"' in globe
-
+    assert "M12 4c-1.8 0-3.2.9-3.9 2.2" in block
+    assert 'd="M12 18V5"' not in block
+    assert "ScrollText" in ICONS.split("scrollText:")[1].split(",\n")[0]
+    assert "Globe" in ICONS.split("globe:")[1].split(",\n")[0]
 
 def test_process_timeline_component() -> None:
     assert "function ProcessTimeline" in CHAT
@@ -43,7 +41,7 @@ def test_process_timeline_component() -> None:
     assert "ca-process__status" in CHAT
     assert "ca-process__label--active" in CHAT
     assert "PROCESS_ICONS" in CHAT
-    assert "Icons.scrollText" in CHAT
+    assert "Icons.files" in CHAT  # #627 skill rail = stacked docs
     assert "Icons.globe" in CHAT
     assert "Icons.sparkleImage" in CHAT  # #437/#442: model-name row icon (designer v5)
     assert "Icons.videoLine" in CHAT

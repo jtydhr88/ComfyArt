@@ -355,6 +355,8 @@
   "chatMessage.submit": "提交",
   "chatMessage.thinking": "思考中…",
   "chatMessage.thought": "思考完成",
+  "chatMessage.referenceAnalysisDone": "参考素材分析结束",
+  "chatMessage.referenceAnalysisLive": "参考素材分析中…",
   "chatMessage.memoryUpdated": "记忆已更新",
   "chatMessage.memoryUpdating": "记忆更新中",
   "chatMessage.memorySavedCount": "已保存 {0} 条",

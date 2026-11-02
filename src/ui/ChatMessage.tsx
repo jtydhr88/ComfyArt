@@ -24,6 +24,7 @@ const GEN_TOOLS = new Set(['generate_image', 'generate_video', 'edit_image', 'an
 type ProcessKind =
   | 'thought' | 'outputting' | 'skill' | 'skill_file_read' | 'search' | 'search_pages'
   | 'image' | 'video'
+  | 'ref_analysis'
   | 'code' | 'code_generated' | 'code_updated' | 'design_validated' | 'preview_artifact'
   | 'memory_retrieved' | 'memory_updating' | 'memory_updated'
   | 'tool'
@@ -45,12 +46,15 @@ const CODE_SUB_KINDS = new Set<ProcessKind>(['code_generated', 'code_updated', '
 const PROCESS_ICONS: Record<ProcessKind, ReactNode> = {
   thought: Icons.think,
   outputting: Icons.think,
-  skill: Icons.scrollText,
+  // #627: stacked docs (live CN step-rail); was scrollText
+  skill: Icons.files,
   skill_file_read: Icons.fileSearch,
   search: Icons.globe,
   search_pages: Icons.globe,
   image: Icons.sparkleImage,
   video: Icons.videoLine,
+  // #627: ref card; chevron sits on the label like memory_updated
+  ref_analysis: Icons.refAnalysis,
   code: Icons.squareCode,
   code_generated: Icons.fileCode,
   code_updated: Icons.filePenLine,
@@ -152,6 +156,8 @@ function processLabel(
   opts?: { fallback?: string; model?: string; pages?: number },
 ): string {
   if (kind === 'thought') return live ? liveThoughtLabel() : t('chatMessage.thought')
+  // #627: post-image rail = 参考素材分析结束 / Reference analysis done (not a second 思考完成)
+  if (kind === 'ref_analysis') return live ? t('chatMessage.referenceAnalysisLive') : t('chatMessage.referenceAnalysisDone')
   if (kind === 'outputting') return live ? t('chatMessage.outputting') : t('chatMessage.thought')
   if (kind === 'skill') return t('chatMessage.skillReady')
   if (kind === 'skill_file_read') return live ? t('chatMessage.skillFileReadLive') : t('chatMessage.skillFileRead')
@@ -761,10 +767,12 @@ function ProcessTimeline({ steps: rawSteps }: { steps: ProcessStep[] }) {
       <div className="ca-process__steps">
         {steps.map((s) => {
           const isMemory = s.kind === 'memory_updated'
+          const isRefAnalysis = s.kind === 'ref_analysis'
           const memKind = s.kind === 'memory_retrieved' || s.kind === 'memory_updating' || s.kind === 'memory_updated'
           const shine = s.live && !memKind
           // #382 fix: memory row uses the same row structure as the thought row (one rowbtn, same classes)
-          const canOpen = (s.kind === 'thought' && !!s.text?.trim()) || isMemory
+          // #627: ref_analysis expands like thought; chevron on the label matches live CN step-rail
+          const canOpen = ((s.kind === 'thought' || isRefAnalysis) && !!s.text?.trim()) || isMemory
           const open = openKey === s.key
           const row = (
             <>
@@ -782,6 +790,7 @@ function ProcessTimeline({ steps: rawSteps }: { steps: ProcessStep[] }) {
                   {s.favicon && <Favicon src={s.favicon} />}
                   {s.label}
                   {isMemory && <span className="ca-process__memchev ca-icon" data-testid="memory-updated-chev">{Icons.memoryChev}</span>}
+                  {isRefAnalysis && <span className="ca-process__memchev ca-icon" data-testid="ref-analysis-chev">{Icons.memoryChev}</span>}
                 </span>
               )}
             </>
@@ -982,6 +991,8 @@ export function AssistantBlocks({ editor, m }: { editor: Editor; m: BotMessage }
   const hideMemCall = (b: BotBlock) => (b.type === 'tool_use' || b.type === 'tool_result') && toolName(b.name) === 'memory' && !!b.id
     && (memCalls.has(b.id) || memAddIds.has(b.id))
   let planShown = false
+    // #627: thinking after an image/video gen row → ref_analysis (参考素材分析结束), not a second 思考完成
+  let sawMediaGen = false
   m.blocks.forEach((b, i) => {
     if (hideMemCall(b)) {
       // #437: memory write in flight → 记忆更新中 (no ›); becomes 记忆已更新 › when memory_updated lands
@@ -1021,7 +1032,10 @@ export function AssistantBlocks({ editor, m }: { editor: Editor; m: BotMessage }
       i === m.blocks.length - 1
       || (b.type === 'tool_use' && !result && !m.blocks.slice(i + 1).some((x) => processKindOf(x)))
     )
-    const kindResolved = processKindOf(b, { result, live: stepLiveProbe })
+    let kindResolved = processKindOf(b, { result, live: stepLiveProbe })
+    // #627: post-image/video thinking paints as 参考素材分析结束 (live pin), never a visible second 思考完成
+    if (kindResolved === 'thought' && b.type === 'thinking' && sawMediaGen) kindResolved = 'ref_analysis'
+    if (kindResolved === 'image' || kindResolved === 'video') sawMediaGen = true
     if (kindResolved && (b.type === 'thinking' ? !!b.text?.trim() : true) && b.type !== 'tool_result') {
       // When done, process tool_use still rails (muted); do not also fold into StepGroup
       if (b.type === 'tool_use' || b.type === 'thinking' || b.type === 'memory_updated') {

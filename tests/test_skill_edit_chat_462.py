@@ -65,7 +65,7 @@ def test_chip_is_name_only_icon_left_truncated_no_close() -> None:
     use = bubble[bubble.index("<SkillChip"):bubble.index("/>", bubble.index("<SkillChip"))]
     assert "onRemove" not in use  # chat bubble chip has no ×
     # icon left (the process-line skill icon), then name only; no 编辑 · / Edit · prefix
-    assert "  skill: Icons.scrollText," in CHAT[CHAT.index("const PROCESS_ICONS"):]
+    assert "  skill: Icons.files," in CHAT[CHAT.index("const PROCESS_ICONS"):]
     assert '<span className="ca-icon">{Icons.scrollText}</span><span className="ca-chip__name">{name}</span>' in CHIP
     assert "<button" not in CHIP and "Icons.close" not in CHIP  # #502 product: chips have no × anywhere (Backspace removes)
     assert "text-overflow: ellipsis" in CSS[CSS.index(".ca-chip__name"):]
@@ -76,8 +76,8 @@ def test_chip_is_name_only_icon_left_truncated_no_close() -> None:
 
 
 def test_chip_icon_is_the_process_line_skill_icon() -> None:
-    # same component as the 技能加载完成 row: PROCESS_ICONS.skill (Icons.scrollText), not the file-shaped Icons.skill
-    assert "  skill: Icons.scrollText," in CHAT[CHAT.index("const PROCESS_ICONS"):]
+    # #627: 技能加载完成 rail uses PROCESS_ICONS.skill (Icons.files stacked docs); SkillChip keeps scrollText
+    assert "  skill: Icons.files," in CHAT[CHAT.index("const PROCESS_ICONS"):]
     assert "{Icons.skill}" not in _bubble()
 
 

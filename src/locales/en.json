@@ -355,6 +355,8 @@
   "chatMessage.submit": "Submit",
   "chatMessage.thinking": "Thinking…",
   "chatMessage.thought": "Thought",
+  "chatMessage.referenceAnalysisDone": "Reference analysis done",
+  "chatMessage.referenceAnalysisLive": "Analyzing references…",
   "chatMessage.memoryUpdated": "Memory updated",
   "chatMessage.memoryUpdating": "Updating memory",
   "chatMessage.memorySavedCount": "Saved {0}",

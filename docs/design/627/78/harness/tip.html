@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="zh">
+<meta charset="utf-8"/>
+<title>#627 tip — agent step-rail CN live align</title>
+<style>
+  body{margin:0;font:14px/1.45 Inter,system-ui,sans-serif;background:#f5f5f5;color:#111;padding:24px;}
+  h1{font-size:18px;margin:0 0 8px;}
+  h2{font-size:15px;margin:24px 0 8px;}
+  .meta{color:#666;margin:0 0 16px;}
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;}
+  figure{margin:0;background:#fff;border-radius:12px;padding:12px;box-shadow:0 4px 16px rgba(0,0,0,.06);}
+  figure img{width:100%;height:auto;border-radius:8px;border:1px solid #eee;}
+  figcaption{font-size:12px;color:#555;margin-top:8px;}
+  table{border-collapse:collapse;width:100%;background:#fff;border-radius:12px;overflow:hidden;}
+  th,td{border:1px solid #e5e5e5;padding:8px 10px;text-align:left;vertical-align:top;font-size:13px;}
+  th{background:#fafafa;}
+  .ok{color:#15803d;font-weight:600;}
+  .out{color:#a16207;}
+  code{font:12px/1.3 ui-monospace,SFMono-Regular,Menlo,monospace;background:#f0f0f0;padding:1px 4px;border-radius:4px;}
+</style>
+<body>
+<h1>#627 tip — agent step-rail align CN live</h1>
+<p class="meta">Honest source: real <code>AssistantBlocks</code> via <code>tests/js/process627</code> + product CSS — NOT full Electron / NOT live LLM. Design gold: product lock comment + assets pin <code>9a316552</code>. Media row = <strong>runtime model name</strong> (example in shots: GPT Image 2.5 Flare).</p>
+
+<h2>AFTER (this tip)</h2>
+<div class="grid">
+  <figure>
+    <img src="../after/full-rail-zh-light.png" alt="full rail zh light"/>
+    <figcaption>full-rail-zh-light — 思考完成 → 技能 → N个网页 → <strong>GPT Image 2.5 Flare</strong> → 参考素材分析结束 → prose + 👍</figcaption>
+  </figure>
+  <figure>
+    <img src="../after/full-rail-en-dark.png" alt="full rail en dark"/>
+    <figcaption>full-rail-en-dark — Thought → Skill ready → web pages → model name → Reference analysis done → prose + 👍</figcaption>
+  </figure>
+  <figure>
+    <img src="../after/simple-turn-zh-light.png" alt="simple turn zh"/>
+    <figcaption>simple-turn-zh-light — no think rail; model name + prose + 👍</figcaption>
+  </figure>
+  <figure>
+    <img src="../after/simple-turn-en-dark.png" alt="simple turn en"/>
+    <figcaption>simple-turn-en-dark — simple turn EN dark</figcaption>
+  </figure>
+</div>
+
+<h2>BEFORE (forbidden labels — not shipped)</h2>
+<div class="grid">
+  <figure>
+    <img src="../before/wrong-labels-zh-light.png" alt="before wrong labels"/>
+    <figcaption>before/wrong-labels-zh-light — 思考 / 已生成图片 / second 思考完成 (forbidden)</figcaption>
+  </figure>
+</div>
+
+<h2>对照表</h2>
+<table>
+  <tr><th>Row</th><th>CN live (gold)</th><th>This tip AFTER</th><th>FORBIDDEN</th></tr>
+  <tr><td>Think done</td><td>思考完成</td><td class="ok">思考完成 / Thought</td><td>思考 · Thought+Generated images combo as image</td></tr>
+  <tr><td>Skill</td><td>技能加载完成 · stacked docs</td><td class="ok">技能加载完成 · Icons.files</td><td>—</td></tr>
+  <tr><td>Web</td><td>N 个网页 · globe(+favicon)</td><td class="ok">N 个网页 (already live)</td><td>—</td></tr>
+  <tr><td>Image / media</td><td>runtime model (e.g. Flare / 2.5 Sunburst / GPT Image 2)</td><td class="ok">opts.model slot</td><td>已生成图片 · Generated images · 图片模型</td></tr>
+  <tr><td>Post-image</td><td>参考素材分析结束</td><td class="ok">ref_analysis remap when sawMediaGen</td><td>second 思考完成</td></tr>
+  <tr><td>End</td><td>prose + 👍/👎</td><td class="ok">DoneFeedback</td><td>—</td></tr>
+  <tr><td>Video</td><td>Seedance 2.0 视频生成 / GIF 生成完成 (optional)</td><td class="out">Out-of-scope-or-optional — same model slot if payload; not invented</td><td>invented video copy</td></tr>
+  <tr><td>Music / PPT</td><td>—</td><td class="out">OUT this tip</td><td>invented Music/PPT rail copy</td></tr>
+</table>
+
+<p class="meta">Regenerate AFTER: <code>SHOT_DIR=docs/design/627/78/after pytest tests/test_e2e_process_rail_627.py -q</code></p>
+</body></html>
