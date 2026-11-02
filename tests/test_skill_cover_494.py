@@ -98,12 +98,18 @@ def test_video_field_data_driven(got):
 
 
 def test_575_video_contract(got):
-    """#575 — detector, hover play/pause+seek0, new6 pending, thumbnail/banner lead mp4, motion preset.video unset."""
+    """#575/#622 — detector, hover play/pause+seek0, new6 pending, thumbnail/banner lead mp4, motion preset.video wash-v1."""
     assert got["isVideo"] == {"mp4": True, "webm": True, "mov": True, "webp": False, "empty": False, "undef": False}
     assert got["pendingNew6"] == ["multi-angle", "logo-material", "meta-ads", "mobile-ui", "web-product", "marketing-campaign"]
     tip = "1bbb3f208f18b26ef95c8d9f16efeea111c43ac7"
     assert got["thumbEx"][0] == f"https://raw.githubusercontent.com/ganjmeng/ComfyArt/{tip}/494/wash/videos/thumbnail.mp4"
     assert got["bannerEx"][0] == f"https://raw.githubusercontent.com/ganjmeng/ComfyArt/{tip}/494/wash/videos/banner.mp4"
     assert len(got["thumbEx"]) == 7 and len(got["bannerEx"]) == 2
-    assert got["motionPresetVideos"] == [None, None]  # design motion-01/02 mp4 TODO
+    motion_tip = "5a8d22ed88f732d38f8709a2c0740f074a400a89"
+    assert got["motionPresetVideos"] == [
+        f"https://raw.githubusercontent.com/ganjmeng/ComfyArt/{motion_tip}/575/wash/templates/01-poster-animation.mp4",
+        f"https://raw.githubusercontent.com/ganjmeng/ComfyArt/{motion_tip}/575/wash/templates/02-first-to-last-frame-animation.mp4",
+    ]
+    # mutation: drop preset.video → null (red if wired URLs vanish)
+    assert all(v and v.endswith(".mp4") for v in got["motionPresetVideos"])
     assert got["hoverCalls"] == ["play", "pause"] and got["hoverSeek"] == 0
