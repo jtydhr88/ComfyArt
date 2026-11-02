@@ -77,12 +77,14 @@ def test_chips_from_data(got):
 
 
 def test_builtin_videos_unique(got):
-    """#529 — 10 distinct washed videos; custom-workflow + #591 new 6 stay null (no fake badge)."""
+    """#529/#623 — 10 upgrade9 @ WASH_VIDEO + 6 new6 @ WASH_623; custom-workflow stays null."""
     vids = got["builtinVideos"]
     assert vids.pop("custom-workflow") is None
-    for sid in ("multi-angle", "logo-material", "meta-ads", "mobile-ui", "web-product", "marketing-campaign"):
-        assert vids.pop(sid) is None
     tip = "1bbb3f208f18b26ef95c8d9f16efeea111c43ac7"
+    pin623 = "d03ea7938877d084c201a94ef51f943dd0e061b9"
+    new6 = ("multi-angle", "logo-material", "meta-ads", "mobile-ui", "web-product", "marketing-campaign")
+    for sid in new6:
+        assert vids.pop(sid) == f"https://raw.githubusercontent.com/ganjmeng/ComfyArt/{pin623}/594/wash/videos/{sid}.mp4"
     assert len(vids) == 10
     assert vids == {
         k: f"https://raw.githubusercontent.com/ganjmeng/ComfyArt/{tip}/494/wash/videos/{k}.mp4"
@@ -98,12 +100,12 @@ def test_video_field_data_driven(got):
 
 
 def test_575_video_contract(got):
-    """#575 — detector, hover play/pause+seek0, new6 pending, thumbnail/banner lead mp4, motion preset.video unset."""
+    """#575/#623 — detector, hover play/pause+seek0, new6 pending empty (wired), thumbnail/banner lead mp4, motion preset.video unset."""
     assert got["isVideo"] == {"mp4": True, "webm": True, "mov": True, "webp": False, "empty": False, "undef": False}
-    assert got["pendingNew6"] == ["multi-angle", "logo-material", "meta-ads", "mobile-ui", "web-product", "marketing-campaign"]
+    assert got["pendingNew6"] == []  # #623 wired → empty pending
     tip = "1bbb3f208f18b26ef95c8d9f16efeea111c43ac7"
     assert got["thumbEx"][0] == f"https://raw.githubusercontent.com/ganjmeng/ComfyArt/{tip}/494/wash/videos/thumbnail.mp4"
     assert got["bannerEx"][0] == f"https://raw.githubusercontent.com/ganjmeng/ComfyArt/{tip}/494/wash/videos/banner.mp4"
     assert len(got["thumbEx"]) == 7 and len(got["bannerEx"]) == 2
-    assert got["motionPresetVideos"] == [None, None]  # design motion-01/02 mp4 TODO
+    assert got["motionPresetVideos"] == [None, None]  # design motion-01/02 mp4 TODO (#622)
     assert got["hoverCalls"] == ["play", "pause"] and got["hoverSeek"] == 0

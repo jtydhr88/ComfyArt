@@ -1,4 +1,4 @@
-"""#594 Phase1 wash static: new6 cover/featured/examples pins + dual-fit contain; no hover video; no competitor CDN.
+"""#594 Phase1 wash static: new6 cover/featured/examples pins + dual-fit contain; #623 hover video; no competitor CDN.
 $0 static reads; no network."""
 from __future__ import annotations
 
@@ -25,6 +25,9 @@ def test_wash_594_pin_and_paths():
     assert f"const WASH_594 = '{WASH_594}'" in SKILLS_TS
     assert "494/covers-v4" in SKILLS_TS and "580/featured-v2" in SKILLS_TS
     assert "594/wash/" in SKILLS_TS and "ex594" in SKILLS_TS
+    assert "WASH_623_NEW6_VIDEO" in SKILLS_TS
+    assert "d03ea7938877d084c201a94ef51f943dd0e061b9" in SKILLS_TS
+    assert "video594" in SKILLS_TS and "594/wash/videos/" in SKILLS_TS
     for sid in PHASE1_NEW:
         e = _entries()[sid]
         head = e.split("inputs:", 1)[0]
@@ -32,7 +35,7 @@ def test_wash_594_pin_and_paths():
         assert f"featured: feedCovers('{sid}')" in head
         assert f"examples: ex594('{sid}', [1, 2, 3, 4])" in head
         assert "quickStartCoverFit: 'contain'" in head
-        assert "video:" not in head
+        assert f"video: video594('{sid}')" in head  # #623
         assert "lovart" not in head.lower()
 
 
