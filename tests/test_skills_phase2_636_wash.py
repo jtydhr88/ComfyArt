@@ -8,7 +8,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 SKILLS_TS = (ROOT / "src/skills.ts").read_text()
 
-WASH_636 = "f11f2a6a65687cff7b3f71a5c1e4515ab6ae7009"
+WASH_636 = "a6c679b3f21766a34169de9feabf47ecfbebc172"
 PHASE2_C = [
     "naive-illustration",
     "logo-abstract",

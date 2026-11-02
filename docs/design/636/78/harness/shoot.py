@@ -84,7 +84,7 @@ async def capture(app_url: str) -> None:
                 want = HARD_MAX[sid]
                 assert count == want, (sid, count, want)
                 assert n_left == 0, (sid, "left presets must be hidden for Examples-only gold", n_left)
-                assert n_sel == 1, (sid, "right preset select expected", n_sel)
+                assert n_sel == 0, (sid, "Examples-only: no 「当前模板」 select", n_sel)
                 assert await pg.get_by_test_id("skill-run-presets").count() == 0, (sid, "presets radiogroup must be absent")
                 left_attr = await pg.locator('.ca-skillrun__templates').get_attribute('data-left')
                 assert left_attr == 'examples', (sid, left_attr)

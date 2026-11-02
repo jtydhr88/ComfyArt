@@ -155,6 +155,10 @@ export function SkillRunDialog({ skill, presetId, onClose, run = newProject }: {
             {chosen && (() => {
               const presetTiles = (skill.presets ?? []).filter((p) => !!(p.image || p.video))
               const pickOnLeft = presetTiles.length > 0
+              // #636 PRODUCT HARD LOCK: C5 nearMiss Examples-only → remove entire 「当前模板」 row.
+              // Presets are default params only; never expose as select. FieldSelect+custom chevron
+              // only when left has real preset media tiles (template switch). Never native system arrow.
+              if (!pickOnLeft) return null
               return (
               <div className="ca-skillrun__current" data-testid="skill-run-current">
                 <span className="ca-skillrun__currentlabel">{t('skillRun.currentTemplate')}</span>
@@ -162,23 +166,8 @@ export function SkillRunDialog({ skill, presetId, onClose, run = newProject }: {
                   <span className="ca-skillrun__currentthumb">
                     {presetImage(skill, chosen) ? <img src={presetImage(skill, chosen)!} alt="" /> : <span className="ca-icon">{Icons.skill}</span>}
                   </span>
-                  {pickOnLeft
-                    ? <span className="ca-skillrun__currentname">{loc(chosen.name)}</span>
-                    : (
-                      <select
-                        className="ca-panel__input ca-skillrun__presetselect"
-                        data-testid="skill-run-preset-select"
-                        value={chosen.id}
-                        onChange={(e) => setPreset(e.target.value)}
-                        onKeyDown={stop}
-                        aria-label={t('skillRun.currentTemplate')}
-                      >
-                        {(skill.presets ?? []).map((p) => (
-                          <option key={p.id} value={p.id}>{loc(p.name)}</option>
-                        ))}
-                      </select>
-                    )}
-                  {pickOnLeft && <span className="ca-skillrun__currenthint">{t('skillRun.pickLeft')}</span>}
+                  <span className="ca-skillrun__currentname">{loc(chosen.name)}</span>
+                  <span className="ca-skillrun__currenthint">{t('skillRun.pickLeft')}</span>
                 </div>
               </div>
               )

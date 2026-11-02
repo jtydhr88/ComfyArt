@@ -90,11 +90,9 @@ async def test_commerce_strategist_dialog_to_agent_and_social_ugc(app_url):  # n
         await pg.locator('[data-testid="skills-wall-card"][data-skill="social"]').click()
         await dlg.wait_for()
         assert await dlg.get_attribute("data-skill") == "social"
-        # social presets lack own media → right-side select (#637 Examples-only left)
-        sel = pg.get_by_test_id("skill-run-preset-select")
-        await sel.wait_for()
-        opts = await sel.locator("option").evaluate_all("els => els.map(e => ((e.value || '') + ' ' + (e.textContent || '')).toLowerCase())")
-        blob = " ".join(opts)
-        assert "ugc-feed" in blob and "ugc-story" in blob
-        assert "fashion" in blob or "ugc" in blob
+        # #636 product lock: Examples-only (presets lack media) → no 「当前模板」 select
+        assert await pg.get_by_test_id("skill-run-preset-select").count() == 0
+        assert await pg.get_by_test_id("skill-run-current").count() == 0
+        left = await pg.get_by_test_id("skill-run-examples").get_attribute("data-count")
+        assert left is not None and int(left) >= 1
         await browser.close()
