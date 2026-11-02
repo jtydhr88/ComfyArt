@@ -85,11 +85,15 @@ def test_builtin_videos_unique(got):
     new6 = ("multi-angle", "logo-material", "meta-ads", "mobile-ui", "web-product", "marketing-campaign")
     for sid in new6:
         assert vids.pop(sid) == f"https://raw.githubusercontent.com/ganjmeng/ComfyArt/{pin623}/594/wash/videos/{sid}.mp4"
-    phase2 = ("flash-cut-video", "style-transfer", "person-swap", "commerce-strategist", "lifestyle-scene",
+    pin637 = "2109c085aa74c617cd34517f99626f357062c81c"
+    # #637: flash-cut + commerce get single-video example.mp4 as skill.video; other phase2 still null
+    for sid in ("flash-cut-video", "commerce-strategist"):
+        assert vids.pop(sid) == f"https://raw.githubusercontent.com/ganjmeng/ComfyArt/{pin637}/637/wash/{sid}/example.mp4"
+    phase2_null = ("style-transfer", "person-swap", "lifestyle-scene",
               "naive-illustration", "logo-abstract", "photo-split-poster", "ppt-visual", "promo-ecommerce",
               "yingzao", "crt-interface", "crayon-sketch", "fabric-collage")
-    for sid in phase2:
-        assert vids.pop(sid) is None  # #634 S1: no video wash yet
+    for sid in phase2_null:
+        assert vids.pop(sid) is None  # C/D + still-only B remain null
     assert len(vids) == 10
     assert vids == {
         k: f"https://raw.githubusercontent.com/ganjmeng/ComfyArt/{tip}/494/wash/videos/{k}.mp4"

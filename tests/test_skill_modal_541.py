@@ -97,7 +97,8 @@ def test_rev2_cells_pinned(got):
 @needs_node
 def test_examples_carousel_is_data_driven(got):
     want = {"poster": 5, "thumbnail": 7, "social": 10, "banner": 2, "interior": 4,  # #575: thumbnail/banner lead with wash mp4
-            "multi-angle": 4, "logo-material": 4, "meta-ads": 4, "mobile-ui": 4, "web-product": 4, "marketing-campaign": 4}  # #593 new-6 examples
+            "multi-angle": 4, "logo-material": 4, "meta-ads": 4, "mobile-ui": 4, "web-product": 4, "marketing-campaign": 4,  # #593 new-6
+            "flash-cut-video": 1, "style-transfer": 4, "person-swap": 1, "commerce-strategist": 1, "lifestyle-scene": 2}  # #637 B5 hardMax
     assert {k: v for k, v in got["examples"].items() if v} == want
     for sid in ("product", "brand", "packaging", "motion", "character", "custom-workflow"):
         assert got["examples"][sid] == 0, sid

@@ -68,9 +68,11 @@ def test_b5_production_instructions_presets_inputs_dialog():
     for sid, cat in B_CATEGORY.items():
         e = entries[sid]
         assert f"category: '{cat}'" in e, sid
-        assert "examples: []" in e and "featured: []" in e, sid  # wash = #637
+        # #637 soft wash: cover + examples/featured filled (hardMax layouts); C tip still empty
         head = e.split("inputs:", 1)[0]
-        assert "cover:" not in head and "video:" not in head, sid
+        assert "cover: cover637(" in head, sid
+        assert "examples: []" not in e and "featured: []" not in e, sid
+        assert "feat637(" in e or "ex637(" in e or "video637(" in e, sid
         instr = _instructions(e)
         assert r"\n1)" in instr and r"\n5)" in instr, sid
         assert "You are a production" in instr, sid
