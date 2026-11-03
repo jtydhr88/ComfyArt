@@ -33,7 +33,10 @@ def test_create_split_80x36_radius_8() -> None:
     assert "400 14px/22px" in create
     wrap = _rule(".ca-skills__createwrap", OVERLAYS)
     assert "width: 80px" in wrap and "height: 36px" in wrap
-    assert "border-radius: 8px 0 0 8px" in _rule(".ca-skills__createwrap .ca-skills__create", OVERLAYS)
+    inner = _rule(".ca-skills__createwrap .ca-skills__create", OVERLAYS)
+    assert "border-radius: 8px 0 0 8px" in inner
+    # #676: 「创建」 must never wrap to two lines
+    assert "white-space: nowrap" in inner and "min-width: 52px" in inner and "min-width: 0" not in inner
     more = _rule(".ca-skills__createmore", OVERLAYS)
     assert "width: 28px" in more and "border-radius: 0 8px 8px 0" in more
     # create label only — plus moved off the primary face (gold split is text + chevron)

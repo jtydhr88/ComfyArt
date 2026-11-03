@@ -1164,8 +1164,8 @@
 .ca-skimport__notes { margin: 12px 0 0; padding-left: 18px; color: var(--ca-text-2); font: 400 12px/20px var(--ca-font); }
 
 /* #463 / #583 — Create split (80×36 r8: text 52 + chevron 28) → Import a Skill */
-.ca-skills__createwrap { position: relative; display: inline-flex; width: 80px; height: 36px; }
-.ca-skills__createwrap .ca-skills__create { border-radius: 8px 0 0 8px; flex: 1; min-width: 0; padding: 7px 6px 7px 16px; }
+.ca-skills__createwrap { position: relative; display: inline-flex; min-width: 80px; height: 36px; } /* #676: grow, never wrap */
+.ca-skills__createwrap .ca-skills__create { border-radius: 8px 0 0 8px; flex: 1 0 auto; min-width: 52px; white-space: nowrap; padding: 7px 6px 7px 16px; }
 .ca-skills__createmore {
   border-radius: 0 8px 8px 0 !important; width: 28px; min-width: 28px; padding: 9px 8px 9px 2px !important;
   border-left: 1px solid color-mix(in srgb, var(--ca-float) 25%, transparent) !important;
