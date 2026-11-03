@@ -101,8 +101,9 @@ FEED_EXPECTED = frozenset({
     "naive-illustration", "packaging", "person-swap", "photo-split-poster", "portrait-studio", "poster",
     "ppt-visual", "product", "product-website", "promo-ecommerce", "social", "style-transfer",
     "taobao-product", "thumbnail", "web-product", "youtube-channel-banner",
+    "animated-poster",  # #643 per-slot PR (examples wired => in feed)
 })
-FEED_MIN = 35  # +#677 anim-2d, #682 creator-identity, #674 portrait-studio, #678 youtube-channel-banner
+FEED_MIN = 36  # +#677 anim-2d, #682 creator-identity, #674 portrait-studio, #678 youtube-channel-banner, #643 animated-poster
 
 
 FEATURED_DIRS = ("/580/featured-v1/", "/580/featured-v2/", "/637/wash/", "/636/wash/", "/643/wash/")

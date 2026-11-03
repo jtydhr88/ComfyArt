@@ -1,0 +1,21 @@
+{
+ "skill_id": "animated-poster",
+ "note": "#643 animated-poster examples (2): ex01 chat-screenshot true-wash, ex02 video-frame (kicker edit). kie gpt-image i2i, 3 Nov 2026.",
+ "assets": [
+  {
+   "skill_id": "animated-poster",
+   "slot": "examples",
+   "index": 1,
+   "source_path": "<lovart-gold ex-01 chat screenshot, not committed>",
+   "prompt": "Recreate this exact app screenshot layout as a NEW image: same clean white chat UI, left column with the assistant's message and right column with two rounded 'Question' cards, same fonts, sizes, spacing and gray palette. KEEP these functional UI labels exactly: 'Skill ready', 'Thinking...', 'Question', 'Skip', 'Submit', '1 of 3', and the option letters A B C D. REWRITE all the other text with these exact new words. Left column: 'I've studied your poster. Below is a short plan for bringing it to life.' then a divider, then the heading 'Motion Plan Overview', then the paragraph 'Primary motion: The ring of glowing formulas circling the actress is the strongest hook and should lead the animation. Her steady gaze and the warm rim light play a supporting role.' then the heading 'What Can Move:' and the bullets '• Formula ring: slow orbit or soft parallax drift', '• Warm rim light: gentle pulse behind her shoulders', '• Ember backdrop: drifting sparks and haze', '• Title lettering (\"THE TEMPORAL RIFT\"): clean fade-up', '• Cast and date lines: staggered entrance', then 'Layering: the formulas sit on their own plane in front of the embers —'. Top-right card: question 'Which workflow should we use for this motion poster?' with options 'A — Auto Motion', 'B — Guided Keyframes', 'C — Start & End Frame', 'D — Describe something else...'. Bottom-right card: question 'Pick the layers to animate (choose any)' with options 'A — Formula ring', 'B — Rim light', 'C — Ember backdrop', 'D — Title lettering', then 'How strong should the movement be?' and 'A — Subtle & filmic'. No other text, no logos."
+  },
+  {
+   "skill_id": "animated-poster",
+   "slot": "examples",
+   "index": 2,
+   "source_path": "<prior wash (frame), gold ex-02 video frame not committed>",
+   "prompt": "EDIT: keep this entire image identical (the three poster frames on the navy background, the woman, the glowing equation halo, the colors, the layout, and all the other text exactly as it is). Change ONLY the small orange line at the bottom of each of the three posters, which currently reads 'ONLY ON ECLIPSE | NOVEMBER 12'. Replace it in all three posters with exactly 'ECLIPSE · DEC 3', centered, in the same clean sans-serif typeface, size, weight and orange color, with no vertical bar and no other words. All three posters must show identical text. No other changes."
+  }
+ ],
+ "postprocess": "WaveSpeed google/nano-banana-pro/edit (2k) local edit, layout kept: ex01."
+}
