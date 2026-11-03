@@ -92,12 +92,28 @@ def _featured_from_data():
     return out
 
 
+# Fixed expectation (#689 follow-up): pinned id list so a skill silently dropping out of the
+# feed fails here; _featured_from_data() is only a drift guard against src/skills.ts.
+FEED_EXPECTED = frozenset({
+    "anim-2d", "banner", "before-after", "brand", "character", "clothing-swap", "commerce-strategist", "creator-identity",
+    "flash-cut-video", "interior", "lifestyle-scene", "linkedin-banner", "logo-abstract",
+    "logo-material", "marketing-campaign", "meta-ads", "mobile-ui", "motion", "multi-angle",
+    "naive-illustration", "packaging", "person-swap", "photo-split-poster", "portrait-studio", "poster",
+    "ppt-visual", "product", "product-website", "promo-ecommerce", "social", "style-transfer",
+    "taobao-product", "thumbnail", "web-product", "youtube-channel-banner",
+})
+FEED_MIN = 35  # +#677 anim-2d, #682 creator-identity, #674 portrait-studio, #678 youtube-channel-banner
+
+
 FEATURED_DIRS = ("/580/featured-v1/", "/580/featured-v2/", "/637/wash/", "/636/wash/", "/643/wash/")
 
 
 def _check_tiles(tiles):
     skills = [t["skill"] for t in tiles]
-    assert PHASE1_FEATURED - {"thumbnail"} <= set(skills) == _featured_from_data(), set(skills)
+    assert PHASE1_FEATURED <= FEED_EXPECTED
+    assert set(skills) == FEED_EXPECTED, sorted(set(skills) ^ FEED_EXPECTED)
+    assert len(set(skills)) == len(FEED_EXPECTED) == FEED_MIN
+    assert _featured_from_data() == FEED_EXPECTED, "skills.ts feed drifted: update FEED_EXPECTED deliberately"
     # #588/#594 featured-v1/v2; later phases pin their own wash dirs (#637 B5, #636 C5, #643 thumbnail)
     assert all(any(d in t["img"] for d in FEATURED_DIRS) for t in tiles), [t["img"] for t in tiles]
     assert all(a != b for a, b in zip(skills, skills[1:])), skills  # data order: no adjacent duplicates

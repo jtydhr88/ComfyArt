@@ -60,6 +60,7 @@ async def test_multi_angle_carousel_and_brand_dialog_to_agent(app_url):  # noqa:
         fields = pg.get_by_test_id("skill-run-field")
         assert await fields.evaluate_all("fs => fs.map(f => [f.dataset.key, f.dataset.type])") == [["file", "image"], ["note", "textarea"]]
         assert await pg.locator('[data-key="note"]').get_attribute("placeholder") == "Anything you want to add? Uploading a reference image is recommended"
+        assert await dlg.locator('[data-testid="skill-run-current"]').count() == 0  # #691 option 2: no current-template row
         await pg.keyboard.press("Escape")
         await dlg.wait_for(state="hidden")
         # Phase1 upgrade skill: dialog → new Agent project (AC ≥1)
@@ -98,4 +99,22 @@ async def test_multi_angle_upload_reaches_handoff_ref_691(app_url):  # noqa: F81
         u = next(u for u in navs if "skill=multi-angle" in u)
         assert re.search(r"[?&]ref=[^&]*skill-multi-angle-ma_subject_691\.png", u), u
         assert "mode=agent" in u and "PDP" in u
+        await browser.close()
+
+
+async def test_thumbnail_right_pane_upload_then_additional(app_url):  # noqa: F811
+    """#657: thumbnail right pane = Upload + Additional only, no preset UI (#691)."""
+    async with pw.async_playwright() as p:
+        from test_e2e_skill_cards_494 import _open
+        from test_e2e_skill_modal_541 import _modal
+        browser, pg = await _open(p, app_url, "en")  # skills wall (thumbnail is not a home quick-start card)
+        dlg = await _modal(pg, "thumbnail")
+        assert await dlg.get_attribute("data-skill") == "thumbnail"
+        right = dlg.locator(".ca-skillrun__right")
+        await right.locator('[data-testid="skill-run-field"]').first.wait_for()
+        fields = await right.locator('[data-testid="skill-run-field"]').evaluate_all(
+            "els => els.map(e => [e.dataset.key, e.dataset.type])")
+        assert fields == [["file", "image"], ["note", "textarea"]], fields
+        assert await pg.get_by_test_id("skill-run-preset").count() == 0
+        assert await dlg.locator('[data-testid="skill-run-preset-chips"], [data-testid="skill-run-current"]').count() == 0
         await browser.close()
