@@ -7,3 +7,6 @@
 - Scope: **covers only**. examples / featured / video deferred — gold tree only has cover+dialog tip-pins.
 - Dropped: `app-listing-kit` (not washed)
 - `before-after` strong rewash (kitchen reno dual-panel): prior soft Δ≈17 → meanAbsΔ≈87; L/R under `docs/design/643/lr/new19/` (19/19)
+
+## Follow-up: Angela identity feedback hotfix
+See `NOTES-COVER-FEEDBACK.md` — rewashed `taobao-product`, `before-after` (face/skin NOT kitchen), `linkedin-banner`, `clothing-swap` with composition lock.

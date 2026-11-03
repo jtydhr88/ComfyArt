@@ -1,0 +1,32 @@
+{
+  "_comment": "#643 Angela feedback pass2 — 3 soft slots (Δ≈8-11) need stronger pixel diff while LOCKING gold identity. Soft-wash still rejected (target meanAbsΔ roughly >=35, half-screen distinguishable). before-after MUST stay face/skin dual-panel.",
+  "assets": [
+    {
+      "skill_id": "before-after",
+      "slot": "cover",
+      "index": 0,
+      "source_path": "docs/design/640/78/gold/before-after/cover.webp",
+      "prompt": "Create a CLEARLY DIFFERENT original skincare before/after cover that still matches the gold USE and LAYOUT. LOCK: dual-panel close-up FACE/skin comparison on a cream card over dark slate; serif headline above about hydration/smoother skin; BEFORE|AFTER labels under panels; left duller fine lines + under-eye shadow, right dewy glowing cheek. FORCE half-screen difference: new adult woman with clearly different face shape/hair/age (not the same person as the reference, not a celebrity); rewrite headline to a new 2-line claim with different wording; warmer or cooler key light; different cheek highlight shape; slightly tighter or wider crop. FORBIDDEN: kitchens, interiors, renovations, products-only, full body, non-face subjects. No brand marks, watermarks, competitor logos, celebrity likeness.",
+      "aspect_ratio": "4:3",
+      "resolution": "2K"
+    },
+    {
+      "skill_id": "linkedin-banner",
+      "slot": "cover",
+      "index": 0,
+      "source_path": "docs/design/640/78/gold/linkedin-banner/cover.webp",
+      "prompt": "Create a CLEARLY DIFFERENT original LinkedIn-banner skill cover that still matches the gold COMPOSITION. LOCK: dark navy-purple stage + white LinkedIn PROFILE MOCKUP (banner strip, circular avatar placeholder overlapping banner bottom-left, grey skeleton name/bio bars). Banner keeps data/AI theme: left bold headline about turning data into decisions + green specialty line + code snippet; right glowing green network graphic + four icon tiles. FORCE half-screen difference: redesign network as a different topology (e.g. layered graph not sphere), new icon labels/order, rewritten headline synonyms, cyan vs lime accent shift, different skeleton bar pattern, optional secondary mini-profile changed. DO NOT drop the profile chrome. DO NOT leave only a lone banner. No real LinkedIn trademark wordmark required; no watermarks; no celebrity likeness.",
+      "aspect_ratio": "4:3",
+      "resolution": "2K"
+    },
+    {
+      "skill_id": "clothing-swap",
+      "slot": "cover",
+      "index": 0,
+      "source_path": "docs/design/640/78/gold/clothing-swap/cover.webp",
+      "prompt": "Create a CLEARLY DIFFERENT original clothing-swap cover that still matches the gold LOOK. LOCK: SINGLE full-body white-studio fashion portrait (fluted white panel left), East-Asian woman, walking/hands-in-pockets, dusty-blue textured double-breasted pea coat + light blue shirt + brown diagonal-stripe necktie + micro pouch necklace + dark mini skirt + brown lug loafers + mid-calf brown socks. FORCE half-screen difference: new model face and hair length/part (not celebrity, not same face as reference); shift coat hue toward steel-blue or periwinkle; change stride direction or camera height; alter tie stripe spacing; stronger floor shadow. FORBIDDEN: split-screen try-on UI, clothing picker overlays, hanger chrome, dual backgrounds, casual|formal composites. No brand marks, watermarks, competitor logos, celebrity likeness.",
+      "aspect_ratio": "3:4",
+      "resolution": "2K"
+    }
+  ]
+}

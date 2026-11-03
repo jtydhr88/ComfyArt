@@ -156,7 +156,7 @@ const feat637 = (id: string, ids: number[]) =>
   ids.map((n) => pinned(`637/wash/${id}/featured`, WASH_637, `${String(n).padStart(2, '0')}.webp`))
 const video637 = (id: string) => pinned(`637/wash/${id}`, WASH_637, 'example.mp4')
 // #643 Phase3-S4 true wash (kie offline) — thumbnail + NEW19 covers; examples/featured deferred.
-const WASH_643 = '08ad4e4a4609d9a189fe35f0b3610f8a2eba561b'
+const WASH_643 = '675a22202e2debc4f99864c6927c35a1e01b9b57'
 const cover643 = (id: string) => pinned(`643/wash/${id}`, WASH_643, 'cover.webp')
 const ex643 = (id: string, ids: number[]) =>
   ids.map((n) => pinned(`643/wash/${id}/examples`, WASH_643, `${String(n).padStart(2, '0')}.webp`))

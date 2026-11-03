@@ -1,0 +1,41 @@
+{
+  "_comment": "#643 Angela feedback hotfix — rewash 4 covers. Gate: NOT soft-wash (half-screen distinguishable) AND MUST preserve gold subject/composition/use (before-after = face/skin dual-panel NOT kitchen). Source: docs/design/640/78/gold tip pins.",
+  "assets": [
+    {
+      "skill_id": "taobao-product",
+      "slot": "cover",
+      "index": 0,
+      "source_path": "docs/design/640/78/gold/taobao-product/cover.webp",
+      "prompt": "TRUE WASH of this Taobao fashion PDP cover while LOCKING the gold layout identity. KEEP: left multi-thumbnail grid (≈5 product/outfit angles including a flat-lay of white wide-leg trousers + black belt) + large right hero of a woman walking a zebra crosswalk in black sleeveless turtleneck + high-waist white wide-leg barrel trousers + black pointed flats; European stone street backdrop; Chinese headline 廓形之选 with fabric subline about 高腰阔腿 / 棉莫代尔. CHANGE for originality (must be half-screen distinguishable): new model face (not a celebrity), slightly different hair/lighting/time-of-day, rewrite supporting Chinese marketing copy wording, tweak inset crop angles and belt hardware, shift building perspective a few degrees. DO NOT collapse into a single hero with icon callouts; DO NOT remove the left thumbnail grid; DO NOT change the product category away from white wide-leg trousers street lookbook. No brand marks, watermarks, competitor logos, or recognizable celebrity likeness.",
+      "aspect_ratio": "4:3",
+      "resolution": "2K"
+    },
+    {
+      "skill_id": "before-after",
+      "slot": "cover",
+      "index": 0,
+      "source_path": "docs/design/640/78/gold/before-after/cover.webp",
+      "prompt": "TRUE WASH of this before/after skincare cover while LOCKING gold subject + composition. KEEP the same use: close-up human FACE / skin hydration dual-panel (left BEFORE duller fine lines + under-eye shadow, right AFTER smoother glowing cheek), serif headline card above about visible hydration/smoother skin, small BEFORE|AFTER labels under each panel, dark slate outer backdrop, cream card. CHANGE for originality: different adult woman (not celebrity), different ethnicity or age band ok, rewrite headline wording on the same claim, adjust lighting warmth and makeup neutrals so half-screen glance shows a new image. FORBIDDEN: kitchens, interiors, renovations, rooms, products-only still life, full-body fashion, or any non-face subject. Must remain a cosmetic/skin face comparison. No brand marks, watermarks, competitor logos, or recognizable celebrity likeness.",
+      "aspect_ratio": "4:3",
+      "resolution": "2K"
+    },
+    {
+      "skill_id": "linkedin-banner",
+      "slot": "cover",
+      "index": 0,
+      "source_path": "docs/design/640/78/gold/linkedin-banner/cover.webp",
+      "prompt": "TRUE WASH of this LinkedIn banner skill cover while LOCKING gold composition. KEEP the outer dark navy-purple stage AND the white LinkedIn PROFILE MOCKUP chrome (banner on top, large circular avatar placeholder overlapping bottom-left of banner, grey skeleton bars for name/bio/experience). KEEP banner identity: left black text zone 'Turning Data Into Decisions' + green Data Scientist / ML / AI Research line + faint code snippet; right glowing green neural-network graphic with four small icon tiles (Features / Model / Insights / Decisions). Optional small secondary profile peek on the far right is fine. CHANGE for originality: new network geometry, slightly different icon set wording/order, refreshed typography weight, new skeleton bar lengths, subtle color shift of green accents — half-screen distinguishable. DO NOT flatten to a lone banner rectangle without the profile mockup. DO NOT switch topic away from data/AI professional branding. No brand marks beyond generic LinkedIn-like chrome shapes, no watermarks, no competitor logos, no celebrity likeness.",
+      "aspect_ratio": "4:3",
+      "resolution": "2K"
+    },
+    {
+      "skill_id": "clothing-swap",
+      "slot": "cover",
+      "index": 0,
+      "source_path": "docs/design/640/78/gold/clothing-swap/cover.webp",
+      "prompt": "TRUE WASH of this clothing-swap cover while LOCKING gold subject + composition. KEEP a SINGLE full-body studio fashion portrait (NOT a split try-on UI): East-Asian woman walking pose, hands in pockets, bright white studio with fluted white wall panel on the left; outfit family = textured dusty blue double-breasted pea coat + light blue collared shirt + brown diagonally striped necktie + micro pouch necklace + dark mini skirt + brown lug-sole loafers with mid-calf brown socks. CHANGE for originality: new model face (not celebrity), slightly different coat blue/texture, altered stripe rhythm on the tie, subtle pose/stride and camera height shift so half-screen distinguishable. FORBIDDEN: vertical split casual|formal composites, app clothing picker overlays, hanger UI chrome, dual backgrounds. Must read as one clean lookbook still demonstrating garment identity for a swap skill. No brand marks, watermarks, competitor logos, or recognizable celebrity likeness.",
+      "aspect_ratio": "3:4",
+      "resolution": "2K"
+    }
+  ]
+}

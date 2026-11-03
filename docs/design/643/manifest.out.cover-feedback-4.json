@@ -1,0 +1,49 @@
+{
+  "_comment": "#643 Angela feedback rewash final 4 covers",
+  "assets": [
+    {
+      "skill_id": "taobao-product",
+      "slot": "cover",
+      "index": 0,
+      "path": "taobao-product/cover/cover.webp",
+      "sha256": "f546cecfd29f944e89c0e11d030bb110bd957a64965f56853e37b057492d4b68",
+      "model": "gpt-image-2-5-flare-image-to-image",
+      "task_id": "ba95761e976f11103b1578b7eea35d86",
+      "source": "cover.webp",
+      "meanAbs_vs_gold": 39.9597282409668
+    },
+    {
+      "skill_id": "before-after",
+      "slot": "cover",
+      "index": 0,
+      "path": "before-after/cover/cover.webp",
+      "sha256": "196264b7c740a49ca57d392f330205ed0d5925125247012dc20b31ed89365bf9",
+      "model": "gpt-image-2-5-flare-image-to-image",
+      "task_id": "c60979f01dabac69dbef679aad4865ef",
+      "source": "cover.webp",
+      "meanAbs_vs_gold": 19.015487670898438
+    },
+    {
+      "skill_id": "linkedin-banner",
+      "slot": "cover",
+      "index": 0,
+      "path": "linkedin-banner/cover/cover.webp",
+      "sha256": "e098d0183cb6e9f7c52958de12870aaa67ffa25b87fea4fcc20aca830123c2b3",
+      "model": "gpt-image-2-5-flare-image-to-image",
+      "task_id": "a774b0b7cab25db5edf328aed7b40e48",
+      "source": "cover.webp",
+      "meanAbs_vs_gold": 59.75687789916992
+    },
+    {
+      "skill_id": "clothing-swap",
+      "slot": "cover",
+      "index": 0,
+      "path": "clothing-swap/cover/cover.webp",
+      "sha256": "a962a7ebb109bd1d7d2b5ab813e7e23817e4071509cffc060ea587804c3c4c41",
+      "model": "gpt-image-2-5-flare-image-to-image",
+      "task_id": "7dc8a302ddf1a6a87592dfb798d33360",
+      "source": "cover.webp",
+      "meanAbs_vs_gold": 20.580080032348633
+    }
+  ]
+}

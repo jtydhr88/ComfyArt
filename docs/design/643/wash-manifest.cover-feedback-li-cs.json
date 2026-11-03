@@ -1,0 +1,23 @@
+{
+  "_comment": "#643 Angela feedback pass3 — linkedin-banner + clothing-swap only. Prior pass2 still soft (Δ≈10/14). Keep gold identity; force larger visual rewrite.",
+  "assets": [
+    {
+      "skill_id": "linkedin-banner",
+      "slot": "cover",
+      "index": 0,
+      "source_path": "docs/design/640/78/gold/linkedin-banner/cover.webp",
+      "prompt": "Redraw a NEW LinkedIn-profile mockup cover for a data/AI banner skill. Preserve ONLY the product use: dark stage + white profile card with circular avatar hole overlapping a wide banner, skeleton bars below. Completely redesign the banner art: different headline (e.g. 'Signals to Strategy' or similar data→decision phrasing, not the same words), teal/magenta accent instead of pure lime, abstract circuit-lattice or particle-flow graphic instead of the reference network blobs, four NEW icon tiles with different labels. Change mockup proportions (taller banner, different skeleton). Must look obviously different at half-screen while still reading as LinkedIn banner skill chrome. No kitchen, no fashion, no face close-up. No brand wordmarks, watermarks, celebrity likeness.",
+      "aspect_ratio": "4:3",
+      "resolution": "2K"
+    },
+    {
+      "skill_id": "clothing-swap",
+      "slot": "cover",
+      "index": 0,
+      "source_path": "docs/design/640/78/gold/clothing-swap/cover.webp",
+      "prompt": "Redraw a NEW single full-body studio fashion cover for a clothing-swap skill. Preserve ONLY the outfit family + use: East-Asian woman, white studio with fluted panel, dusty/steel blue double-breasted pea coat, light blue shirt, brown striped necktie, micro pouch necklace, dark mini skirt, brown lug loafers + mid-calf socks, hands in pockets. Make it OBVIOUSLY new: different model face and longer or shorter hair, walk toward camera vs three-quarter, coat dyed more periwinkle, wider stance, cooler key light, stronger floor contact shadow, slightly lower camera. Still ONE frame — never split UI try-on. Half-screen must prove it is not the gold photo. No brand marks, watermarks, celebrity likeness.",
+      "aspect_ratio": "3:4",
+      "resolution": "2K"
+    }
+  ]
+}
