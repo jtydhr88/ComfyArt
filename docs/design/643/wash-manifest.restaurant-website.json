@@ -1,0 +1,56 @@
+{
+ "skill_id": "restaurant-website",
+ "note": "#643 final per-example wash prompts (latest round per index). Gold not committed.",
+ "assets": [
+  {
+   "skill_id": "restaurant-website",
+   "slot": "examples",
+   "index": 1,
+   "source_path": "<lovart-gold, not committed>",
+   "prompt": "TEXT EDIT ONLY (kie flare 3 Nov 2026 ~23:41 UTC+8). Keep layout/photo/logo EMBER & THYME and nav. Replace CTA 'VIEW MENU'→'SEE TONIGHT\\'S CARD' and 'BOOK A TABLE'→'HOLD A SEAT'. Source: prior wash tip a4554b4b ex01."
+  },
+  {
+   "skill_id": "restaurant-website",
+   "slot": "examples",
+   "index": 2,
+   "source_path": "<lovart-gold, not committed>",
+   "prompt": "TEXT EDIT ONLY (kie flare 4 Nov 2026 Asia/Shanghai). Keep layout/photo/logo EMBER & THYME and nav. Replace section title 'Signature Dishes'→ exact 'The Hearth Card' (match ex06 slot title). Source: tip 7f510080 / pin 66ed8536 wash ex02."
+  },
+  {
+   "skill_id": "restaurant-website",
+   "slot": "examples",
+   "index": 3,
+   "source_path": "<lovart-gold, not committed>",
+   "prompt": "TEXT EDIT ONLY (kie flare 3 Nov 2026 ~23:42 UTC+8). Keep layout/photo/logo. Replace every Paris→Boulder and 2009/2008→2014; eyebrow 'SINCE 2014 · BOULDER'. Source: prior wash tip a4554b4b ex03."
+  },
+  {
+   "skill_id": "restaurant-website",
+   "slot": "examples",
+   "index": 4,
+   "source_path": "<lovart-gold, not committed>",
+   "prompt": "TRUE WASH — original artwork, NEW pixels, clearly distinguishable from the reference at half-screen. No brand marks, watermarks or celebrity likeness. Keep a dark fine-dining restaurant website section screenshot with the same section type, layout, nav bar, heading and button positions as the reference. UNIFIED BRAND (this is one of a 7-page set, all pages must share it): the restaurant is named 'EMBER & THYME' everywhere a restaurant name/logo appears, with the same logo: a small copper flame-and-thyme-sprig line icon to the left of the wordmark 'EMBER & THYME' set in a modern serif, all caps. Accent color: warm copper/terracotta (#C46A3C) on near-black charcoal backgrounds, cream body text. New photography (different dishes, chefs, interior), keep it a restaurant website."
+  },
+  {
+   "skill_id": "restaurant-website",
+   "slot": "examples",
+   "index": 5,
+   "source_path": "<lovart-gold, not committed>",
+   "prompt": "TRUE WASH — original artwork, NEW pixels, clearly distinguishable from the reference at half-screen. No brand marks, watermarks or celebrity likeness. Keep a dark fine-dining restaurant website section screenshot with the same section type, layout, nav bar, heading and button positions as the reference. UNIFIED BRAND (this is one of a 7-page set, all pages must share it): the restaurant is named 'EMBER & THYME' everywhere a restaurant name/logo appears, with the same logo: a small copper flame-and-thyme-sprig line icon to the left of the wordmark 'EMBER & THYME' set in a modern serif, all caps. Accent color: warm copper/terracotta (#C46A3C) on near-black charcoal backgrounds, cream body text. New photography (different dishes, chefs, interior), keep it a restaurant website."
+  },
+  {
+   "skill_id": "restaurant-website",
+   "slot": "examples",
+   "index": 6,
+   "source_path": "<lovart-gold, not committed>",
+   "prompt": "TRUE WASH — original artwork, NEW pixels, clearly distinguishable from the reference at half-screen. No brand marks, watermarks or celebrity likeness. Keep a dark fine-dining restaurant website section screenshot with the same section type, layout, nav bar, heading and button positions as the reference. UNIFIED BRAND (this is one of a 7-page set, all pages must share it): the restaurant is named 'EMBER & THYME' everywhere a restaurant name/logo appears, with the same logo: a small copper flame-and-thyme-sprig line icon to the left of the wordmark 'EMBER & THYME' set in a modern serif, all caps. Accent color: warm copper/terracotta (#C46A3C) on near-black charcoal backgrounds, cream body text. New photography (different dishes, chefs, interior), keep it a restaurant website."
+  },
+  {
+   "skill_id": "restaurant-website",
+   "slot": "examples",
+   "index": 7,
+   "source_path": "<lovart-gold, not committed>",
+   "prompt": "TEXT EDIT ONLY (kie flare 3 Nov 2026 ~23:43 UTC+8). Keep layout/form labels/heading 'Save Your Seat'/logo. Replace CTA 'REQUEST RESERVATION'→'CONFIRM YOUR VISIT'. Source: prior wash tip a4554b4b ex07."
+  }
+ ],
+ "postprocess": "kie gpt-image-2-5-flare i2i text-edit: ex02 Signature Dishes→The Hearth Card (slot title consistency with ex06). Credits this round: 10 (1807→1797). Prior tip 7f510080 CTAs + Paris→Boulder retained."
+}
