@@ -38,7 +38,7 @@ NEARMISS = ("naive-illustration", "logo-abstract", "photo-split-poster", "ppt-vi
             "youtube-channel-banner", "ai-model", "product-to-packaging", "game-art", "portrait-studio", "premium-website",
             "animated-poster", "pose-fission", "live-promo-decor", "linkedin-banner", "logo-animation", "restaurant-website", "clothing-swap")  # #641 thumbnail dialog parity → EFFECT_INPUTS
 COUNTS = {"product": 6, "brand": 6, "packaging": 5, "character": 8, "motion": 2,  # #569 template counts
-          "multi-angle": 4, "logo-material": 4, "meta-ads": 4, "mobile-ui": 4, "web-product": 4, "marketing-campaign": 4,  # #593 new-6
+          "multi-angle": 0, "logo-material": 4, "meta-ads": 4, "mobile-ui": 4, "web-product": 4, "marketing-campaign": 4,  # #593 new-6; multi-angle → Upload+Additional (#691)
           "flash-cut-video": 3, "style-transfer": 3, "person-swap": 3, "commerce-strategist": 3, "lifestyle-scene": 3,
           "naive-illustration": 2, "logo-abstract": 2, "photo-split-poster": 2, "ppt-visual": 3, "promo-ecommerce": 2,
           "yingzao": 2, "crt-interface": 3, "crayon-sketch": 2, "fabric-collage": 2,  # #634 Phase2-S1
@@ -56,7 +56,7 @@ def test_every_field_is_bilingual_data(got):
     for sid, fields in got["fields"].items():
         assert fields, sid
         # #569: effect skills (upload + note) and character carry no required field, like the reference.
-        assert any(req for _, _, req, *_ in fields) == (sid not in EFFECT and sid not in NEARMISS and sid not in {"character", "social"}), sid  # #635 social optional refs
+        assert any(req for _, _, req, *_ in fields) == (sid not in EFFECT and sid not in NEARMISS and sid not in {"character", "social", "multi-angle"}), sid  # #635 social optional refs; #691 multi-angle upload optional
         for key, typ, req, zh, en, ph in fields:
             assert typ in {"text", "textarea", "select", "image"} and zh and en, (sid, key)
             if req and typ in {"text", "textarea"}:
@@ -85,8 +85,8 @@ def test_builtin_preset_images_unique(got):
     assert sum("541/wash/product/" in u for u in washed) == 6
     assert sum("541/wash/brand/" in u for u in washed) == 6 and sum("541/wash/packaging/" in u for u in washed) == 5
     assert len(set(washed)) == 27  # no shared cover fallback across washed presets
-    assert len(covers) == 24  # 6 new × 4 presets → cover fallback via presetImage
-    assert len(set(covers)) == 6
+    assert len(covers) == 20  # 5 new × 4 presets → cover fallback (multi-angle has no presets since #691)
+    assert len(set(covers)) == 5
 
 
 @needs_node

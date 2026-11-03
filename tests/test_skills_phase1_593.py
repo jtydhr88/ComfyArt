@@ -42,10 +42,14 @@ def test_new6_production_instructions_and_presets():
         assert "cover: cover(" in head and "featured: feedCovers(" in head, sid
         assert f"video: video594('{sid}')" in head, sid  # #623 hover video wired
         assert "quickStartCoverFit: 'contain'" in head and "examples: ex594(" in head, sid
-        assert "presets:" in head, sid
-        body = head.split("presets:", 1)[1]
-        n = body.count("P(")
-        assert n >= 4, (sid, n)
+        if sid == "multi-angle":
+            # #691/#687: reference-card parity → Upload + Additional only, no presets
+            assert "presets:" not in head and "inputs: MULTI_ANGLE_INPUTS }" in e, sid
+        else:
+            assert "presets:" in head, sid
+            body = head.split("presets:", 1)[1]
+            n = body.count("P(")
+            assert n >= 4, (sid, n)
         instr = re.search(r"instructions: '((?:\\'|[^'])*)'", e)
         assert instr, sid
         steps = instr.group(1)
@@ -72,3 +76,12 @@ def test_website_chip_still_lit():
     assert "category: 'website'" in SKILLS_TS
     for sid in ("mobile-ui", "web-product"):
         assert f"id: '{sid}'" in SKILLS_TS
+
+
+def test_multi_angle_upload_additional_parity_691():
+    # #691/#687: right pane exactly Upload then Additional; prompt defaults live in instructions, notes feed the ask
+    e = _entries()["multi-angle"]
+    assert "inputs: MULTI_ANGLE_INPUTS }" in e and "presets:" not in e and "pure 90° side profile" in e
+    assert "angleBrief" not in e and "subjectImage" not in e and "VISUAL" not in e
+    assert "Additional notes" in e and "neutral seamless" in e
+    assert "examples: ex594('multi-angle', [1, 2, 3, 4])" in e  # example media untouched
