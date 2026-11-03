@@ -27,7 +27,8 @@ NEW19_WASHED_643 = {"taobao-product": [1, 2, 3, 4, 5, 6, 7, 8], "before-after": 
                     "product-to-packaging": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14],  # #643 per-slot PR
                     "game-art": list(range(1, 21)),  # #643 per-slot PR
                     "logo-animation": [1, 2, 3, 4],  # #643 per-slot PR
-                    "live-promo-decor": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]}  # #643 per-slot PR
+                    "live-promo-decor": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],  # #643 per-slot PR
+                    "ai-model": [1, 2, 3, 4, 5, 6]}  # #643 per-slot PR
 
 
 def test_cover_main_preview_hooks():

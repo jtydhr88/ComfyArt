@@ -1,0 +1,61 @@
+{
+ "skill_id": "ai-model",
+ "note": "#643 #679 final per-example wash prompts (round 4: gold-matched head angle first, strong hair/garment/backdrop delta, campaign beauty; identity-lock dropped). Gold not committed.",
+ "assets": [
+  {
+   "skill_id": "ai-model",
+   "slot": "examples",
+   "index": 1,
+   "source_path": "<lovart-gold, not committed>",
+   "prompt": "POSE IS MANDATORY: same as reference — straight-on frontal head, level chin, eyes looking directly into the camera. Subject: a Southern-European (Italian) woman in her mid 20s, olive skin, strong dark brows, hazel eyes; hair: glossy jet-black long hair worn down in big smooth blowout waves over one shoulder (NOT an updo); garment: emerald-green satin square-neck top; backdrop: solid deep teal studio backdrop. Commercial beauty/fashion campaign studio head-and-shoulders photo: polished professional makeup, soft flattering large-softbox light, glowing youthful skin with real fine pores (not aged, not rough), photoreal 85mm, not airbrushed, not CGI, no generic influencer or doll face, natural real-model features. She is a CLEARLY DIFFERENT person from the reference (different face shape, eyes, nose, lips, brows). No text, logos, brands or watermarks.",
+   "aspect_ratio": "3:4",
+   "resolution": "2K"
+  },
+  {
+   "skill_id": "ai-model",
+   "slot": "examples",
+   "index": 2,
+   "source_path": "<lovart-gold, not committed>",
+   "prompt": "POSE IS MANDATORY: same as reference — straight-on frontal head, level chin, eyes looking directly into the camera. Subject: a Scandinavian woman around 25, fair skin, light-blue eyes; hair: platinum-blonde sleek straight lob with a side part, no bangs; garment: cobalt-blue collared silk blouse; backdrop: solid butter-yellow studio backdrop. Commercial beauty/fashion campaign studio head-and-shoulders photo: polished professional makeup, soft flattering large-softbox light, glowing youthful skin with real fine pores (not aged, not rough), photoreal 85mm, not airbrushed, not CGI, no generic influencer or doll face, natural real-model features. She is a CLEARLY DIFFERENT person from the reference (different face shape, eyes, nose, lips, brows). No text, logos, brands or watermarks.",
+   "aspect_ratio": "3:4",
+   "resolution": "2K"
+  },
+  {
+   "skill_id": "ai-model",
+   "slot": "examples",
+   "index": 3,
+   "source_path": "<lovart-gold, not committed>",
+   "prompt": "POSE IS MANDATORY: same as reference — near-frontal head turned only slightly toward the left of frame, chin level, eyes looking directly into the camera. Subject: a Korean woman in her mid 20s, round soft face, monolid eyes, light freckles; hair: dark-brown wavy chin-length bob, no bangs, tucked behind one ear; garment: rust-orange ribbed tank; backdrop: solid dusty sky-blue studio backdrop. Commercial beauty/fashion campaign studio head-and-shoulders photo: polished professional makeup, soft flattering large-softbox light, glowing youthful skin with real fine pores (not aged, not rough), photoreal 85mm, not airbrushed, not CGI, no generic influencer or doll face, natural real-model features. She is a CLEARLY DIFFERENT person from the reference (different face shape, eyes, nose, lips, brows). No text, logos, brands or watermarks.",
+   "aspect_ratio": "3:4",
+   "resolution": "2K"
+  },
+  {
+   "skill_id": "ai-model",
+   "slot": "examples",
+   "index": 4,
+   "source_path": "<lovart-gold, not committed>",
+   "prompt": "POSE IS MANDATORY: same as reference — straight-on frontal head, level chin, eyes looking directly into the camera. Subject: an Eastern-European (Slavic) woman in her late 20s, high wide cheekbones, grey-green eyes, small mole near the lip; hair: copper-red hair in a sleek low bun with center part, no bangs; garment: black off-shoulder fitted knit top; backdrop: solid olive-green studio backdrop. Commercial beauty/fashion campaign studio head-and-shoulders photo: polished professional makeup, soft flattering large-softbox light, glowing youthful skin with real fine pores (not aged, not rough), photoreal 85mm, not airbrushed, not CGI, no generic influencer or doll face, natural real-model features. She is a CLEARLY DIFFERENT person from the reference (different face shape, eyes, nose, lips, brows). No text, logos, brands or watermarks.",
+   "aspect_ratio": "3:4",
+   "resolution": "2K"
+  },
+  {
+   "skill_id": "ai-model",
+   "slot": "examples",
+   "index": 5,
+   "source_path": "<lovart-gold, not committed>",
+   "prompt": "POSE IS MANDATORY: copy the reference's head angle exactly — head turned about 45 degrees toward the LEFT side of the frame (same direction as the reference) in a three-quarter profile, chin slightly lowered, eyes looking OFF-FRAME to the left, NOT looking at the camera, NOT frontal. Commercial beauty campaign studio head-and-shoulders photo of a DIFFERENT Chinese woman in her mid 20s (different face shape, nose, lips, brows from the reference): heart-shaped face, single-fold almond eyes, polished campaign makeup with soft peach blush and satin coral lip, glowing youthful skin with real fine pores (not aged, not rough). Hair: glossy dark-chestnut hair in a high sleek ponytail with face-framing strands. Garment: dusty-lavender athletic racerback tank. Backdrop: solid warm terracotta studio backdrop (not white). Soft flattering large-softbox light. Photoreal 85mm, not airbrushed, not CGI, no generic influencer or doll face, natural real-model features. No text, logos, brands or watermarks.",
+   "aspect_ratio": "3:4",
+   "resolution": "2K"
+  },
+  {
+   "skill_id": "ai-model",
+   "slot": "examples",
+   "index": 6,
+   "source_path": "<lovart-gold, not committed>",
+   "prompt": "POSE IS MANDATORY: copy the reference's head angle — head turned about 30-40 degrees toward the RIGHT side of the frame in three-quarter view, chin level, eyes looking OFF-FRAME to the right, NOT looking at the camera, NOT frontal. Subject: a Japanese woman in her early 20s, narrow face, hooded eyes; hair: bleached ash-blonde short textured crop; garment: olive and black technical windbreaker with high zipped collar; backdrop: solid charcoal-grey studio backdrop. Commercial beauty/fashion campaign studio head-and-shoulders photo: polished professional makeup, soft flattering large-softbox light, glowing youthful skin with real fine pores (not aged, not rough), photoreal 85mm, not airbrushed, not CGI, no generic influencer or doll face, natural real-model features. She is a CLEARLY DIFFERENT person from the reference (different face shape, eyes, nose, lips, brows). No text, logos, brands or watermarks.",
+   "aspect_ratio": "3:4",
+   "resolution": "2K"
+  }
+ ],
+ "postprocess": "kie.ai gpt-image-2-5-flare-image-to-image 2K."
+}
