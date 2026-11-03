@@ -118,10 +118,8 @@ async def test_example_stage_contain_no_crop(app_url, skill, portrait):  # noqa:
         await browser.close()
 
 
-async def test_custom_workflow_no_meta_no_tiles(app_url):  # noqa: F811
+async def test_custom_workflow_card_removed(app_url):  # noqa: F811
     async with pw.async_playwright() as p:
         browser, pg = await _open(p, app_url, "en")
-        await _modal(pg, "custom-workflow")
-        assert await pg.get_by_test_id("skill-run-meta").count() == 0
-        assert await pg.locator(".ca-skillrun__tile").count() == 0
+        assert await pg.locator('[data-skill="custom-workflow"]').count() == 0  # no Lovart card
         await browser.close()

@@ -172,6 +172,8 @@ def test_locales_only_add_memory_retrieved_430():
         "assets.tooLarge", "assets.urlInvalid", "assets.badFormat", "assets.urlFormat",
         # #568: top-bar Saved/Saving label removed (not memory copy)
         "projectHeader.saved", "projectHeader.savedAt", "projectHeader.saving",
+        # #672: builtin custom-workflow card removed (not memory copy)
+        "skills.customWorkflow", "skills.cat.custom-workflow", "skills.desc.custom-workflow",
     }
     for p, v in (("src/locales/zh.json", "记忆已读取"), ("src/locales/en.json", "Memory retrieved")):
         m = _git_main(p)

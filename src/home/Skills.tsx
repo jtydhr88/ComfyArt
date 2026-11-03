@@ -85,7 +85,7 @@ function SkillWallCard({
         onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onTry() } }}>
         {showImg
           ? <img src={src} alt={skill.name} loading="lazy" data-testid="skills-card-cover" onError={() => setFailedSrc(src)} />
-          : <span className="ca-swall__placeholder" data-testid="skills-card-placeholder"><span className="ca-icon">{skill.id === 'custom-workflow' ? Icons.workflow : Icons.skill}</span></span>}
+          : <span className="ca-swall__placeholder" data-testid="skills-card-placeholder"><span className="ca-icon">{Icons.skill}</span></span>}
         {videoSrc && !row && (
           <video
             ref={videoRef}

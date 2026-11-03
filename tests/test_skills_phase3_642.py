@@ -80,7 +80,7 @@ def test_no_dropped_ids_no_skill_creator_slot():
     for d in DROPPED_MUST_ABSENT:
         assert d not in ids, d
     assert "skill-creator" not in ids
-    assert "custom-workflow" in ids  # untouched; not an upgrade target
+    assert "custom-workflow" not in ids  # removed: no Lovart card
 
 
 def test_dialog_shell_hooks_shared():

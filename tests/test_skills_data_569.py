@@ -89,7 +89,7 @@ def test_template_counts(got):
         assert len(s["presets"]) == n, sid
         assert s["meta"] == {"templates": n, "usage": 0}, sid
         assert len({p["id"] for p in s["presets"]}) == n and all(p["prompt"] and p["en"] and p["image"] for p in s["presets"]), sid
-    assert got["skills"]["custom-workflow"]["presets"] is None
+    assert "custom-workflow" not in got["skills"]
 
 
 @needs_node

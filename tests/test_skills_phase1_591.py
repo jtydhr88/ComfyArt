@@ -14,7 +14,7 @@ EN = json.loads((ROOT / "src/locales/en.json").read_text())
 PHASE1_UPGRADE = ["brand", "packaging", "poster", "product", "character", "social", "motion", "banner", "thumbnail"]
 PHASE1_NEW = ["multi-angle", "logo-material", "meta-ads", "mobile-ui", "web-product", "marketing-campaign"]
 PHASE1 = PHASE1_UPGRADE + PHASE1_NEW
-UNTOUCHED = ["interior", "custom-workflow"]
+UNTOUCHED = ["interior"]  # custom-workflow removed (no Lovart card)
 TITLE_KEY = {
     "multi-angle": "skills.multiAngleImageGenerator",
     "logo-material": "skills.logoMaterialExplorer",

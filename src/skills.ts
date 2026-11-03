@@ -2,7 +2,6 @@ import { atom } from 'tldraw'
 import { unzipSync } from 'fflate'
 
 import { deleteUserFile, listUserFiles, readUserText, uploadImage, viewUrl, writeUserText } from './comfy'
-import { rulesText } from './customMarkers'
 import { lang, t } from './i18n'
 import { uuid } from './id'
 import { BRAND } from './brand'
@@ -59,7 +58,6 @@ const COVERS_581: Record<string, readonly [string, string]> = {
   banner: ['494/covers-v3.1', '9b23a3e8e3ca2f6b64dc16c0cf36fbf9c41fcaf4'],
   character: ['494/covers-v3.2', 'dc335056e81e0350e2f98487fb680e22ffb14bb9'],
   product: ['494/covers-v3', COVER_V3], motion: ['494/covers-v3', COVER_V3], interior: ['494/covers-v3', COVER_V3],
-  'custom-workflow': ['494/covers-v3', COVER_V3],
   'multi-angle': ['494/covers-v4', COVER_V4], 'logo-material': ['494/covers-v4', COVER_V4],
   'meta-ads': ['494/covers-v4', COVER_V4], 'mobile-ui': ['494/covers-v4', COVER_V4],
   'web-product': ['494/covers-v4', COVER_V4], 'marketing-campaign': ['494/covers-v4', COVER_V4],
@@ -209,14 +207,14 @@ export const loc = (text: { zh: string; en?: string }) => (lang === 'en' && text
 
 /** #595 — Phase1 15 ids in hot-mapping uses order (product lock TOP15 unique).
  *  Home forYou / Explore forYou / quick-start / featured queues follow this via orderBuiltins.
- *  website chip lit by mobile-ui + web-product. interior / custom-workflow kept after Phase1 (not Phase1 slots). */
+ *  website chip lit by mobile-ui + web-product. interior kept after Phase1 (custom-workflow removed: no gold card) (not Phase1 slots). */
 export const PHASE1_SKILL_IDS = [
   'product', 'multi-angle', 'brand', 'character', 'logo-material', 'packaging',
   'motion', 'meta-ads', 'poster', 'thumbnail', 'mobile-ui', 'social',
   'marketing-campaign', 'web-product', 'banner',
 ] as const
 export const PHASE1_SKILL_ID_SET: ReadonlySet<string> = new Set(PHASE1_SKILL_IDS)
-export const UNTOUCHED_SKILL_IDS = ['interior', 'custom-workflow'] as const
+export const UNTOUCHED_SKILL_IDS = ['interior'] as const
 /** #634 Phase2-S1 — 14 NEW ids (upgrade `social` is not listed here). */
 export const PHASE2_NEW_SKILL_IDS = [
   'flash-cut-video', 'style-transfer', 'person-swap', 'commerce-strategist', 'lifestyle-scene',
@@ -279,7 +277,7 @@ function orderBuiltins(skills: Skill[]): Skill[] {
  *  #636/#637 Phase2-S3/S4 — B NEW5 production + soft wash; C5 HOLD / D out of scope for Soft mount.
  *  #638 Phase2-S5 — Soft mount A+B via PHASE2_SKILL_IDS + orderBuiltins (home + Skills Explore same BUILTIN_SKILLS); C/D deferred; #490 HOLD.
  *  #642 Phase3-S3 — NEW19 NEARMISS_INPUTS field parity (scaffold); assets empty until #643 wash pins.
- *  Skill Creator Out → #650. `interior` / `custom-workflow` untouched. Gold UX site external — never name it in src.
+ *  Skill Creator Out → #650. `interior` untouched. Gold UX site external — never name it in src.
  */
 export const BUILTIN_SKILLS: Skill[] = orderBuiltins([
   { id: 'poster', name: t('skills.posterDesign'), instructions: 'You are a production poster designer. Deliver print-ready compositions, not loose mood sketches.\n1) Brief: pull headline, subject, audience and use (event, promo, editorial) from the upload and notes.\n2) Hierarchy: one hero subject, strong headline typography in quotes, clear subcopy ladder, generous margins.\n3) Ratio: default 3:4; keep safe margins for print crop. Offer 2 distinct art directions when the brief is open.\n4) Finish: high contrast, legible at arm length, no clipped type. Put every on-art phrase in quotes.\n5) Refs: when the user uploaded a file, pass its shape id in refs (ref_modes content) on every generate_image call.',
@@ -502,9 +500,6 @@ export const BUILTIN_SKILLS: Skill[] = orderBuiltins([
   { id: 'interior', name: t('skills.interiorArchitecturalVisualization'), instructions: 'Produce photoreal interior or architecture renders: eye-level wide shot, natural light, accurate materials, 16:9. Add a detail vignette at 4:3.',
     cover: cover('interior'), quickStartCover: quickStartCover('interior'), featured: feedCovers('interior'), video: video('interior'), examples: ex541('interior', [1, 2, 3, 4]),
     inputs: EFFECT_INPUTS },
-  { id: 'custom-workflow', name: t('skills.customWorkflow'), instructions: `${rulesText()}\n\nUse the custom_workflow tool for every step; action rules returns these same rules.`,
-    cover: cover('custom-workflow'),
-    inputs: [I('brief', ['需求描述', 'Brief'], 'textarea', true, ['描述你要用自定义工作流做什么', 'Describe what the custom workflow should make'])] },
 ])
 
 export const skillAtom = atom<Skill | null>('skill', null)

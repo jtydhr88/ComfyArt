@@ -33,7 +33,7 @@ def test_meta_is_template_count_only(got):
     # #581: skillMeta also carries usage (0 when store empty). No presets + no usage → null.
     for sid, n in got["presets"].items():
         assert got["meta"][sid] == ({"templates": n, "usage": 0} if n else None), sid
-    assert got["meta"]["custom-workflow"] is None and got["old"] is None
+    assert "custom-workflow" not in got["meta"] and got["old"] is None
 
 
 def test_meta_copy_has_no_fake_usage():
@@ -101,7 +101,7 @@ def test_examples_carousel_is_data_driven(got):
             "flash-cut-video": 1, "style-transfer": 4, "person-swap": 1, "commerce-strategist": 1, "lifestyle-scene": 2,  # #637 B5 hardMax
             "logo-abstract": 11, "photo-split-poster": 1, "ppt-visual": 1, "promo-ecommerce": 4, "naive-illustration": 4}  # #636 C5 hardMax
     assert {k: v for k, v in got["examples"].items() if v} == want
-    for sid in ("product", "brand", "packaging", "motion", "character", "custom-workflow"):
+    for sid in ("product", "brand", "packaging", "motion", "character"):
         assert got["examples"][sid] == 0, sid
     # Unset examples stay omitted. An explicit empty list is the #641 「暂无示例」 state.
     assert got["exNone"][0] == ""

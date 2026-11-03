@@ -64,8 +64,8 @@ async def test_cards_chips_bookmark(app_url, lang, theme):  # noqa: F811
     async with pw.async_playwright() as p:
         browser, pg = await _open(p, app_url, lang, theme)
         cards = pg.get_by_test_id("skills-wall-card")
-        assert await cards.count() == 50  # #591 + #634 + #640 Phase3-S1
-        await pg.locator('[data-skill="custom-workflow"]').scroll_into_view_if_needed()  # #581: last card now has its own cover
+        assert await cards.count() == 49  # #591 + #634 + #640 Phase3-S1
+        await pg.locator('[data-skill="style-transfer"]').scroll_into_view_if_needed()  # custom-workflow card removed (no Lovart card)
         await _shot(pg, f"list-{lang}-{theme}")
         chips = await pg.get_by_test_id("skills-chips").locator("button").all_inner_texts()
         zh_chips, en_chips = ['为你推荐', '电商', '品牌', '社交媒体', '网站', '广告创意'], ['For you', 'E-commerce', 'Branding', 'Social Media', 'Website', 'Ads & Creative']
@@ -75,13 +75,13 @@ async def test_cards_chips_bookmark(app_url, lang, theme):  # noqa: F811
         assert sorted(await cards.evaluate_all("cs => cs.map(c => c.dataset.skill)")) == ["ai-model", "clothing-swap", "commerce-strategist", "lifestyle-scene", "live-promo-decor", "multi-angle", "packaging", "person-swap", "pose-fission", "product", "product-to-packaging", "promo-ecommerce", "studio-model", "taobao-product"]  # #634 + #640 Phase3 ecommerce builtins
         await _shot(pg, f"chip-ecommerce-{lang}-{theme}")
         await pg.get_by_test_id("skills-chip-forYou").click()
-        cw = pg.locator('[data-skill="custom-workflow"]')
-        # #581 — custom-workflow has a real cover now (manifest 7237c371); placeholder only for cover-less user skills.
+        assert await pg.locator('[data-skill="custom-workflow"]').count() == 0  # removed: no Lovart card
+        cw = pg.locator('[data-skill="style-transfer"]')  # covered builtin without video; placeholder only for cover-less user skills.
         assert await cw.get_by_test_id("skills-card-placeholder").count() == 0
-        assert "494/covers-v3/custom-workflow.webp" in (await cw.get_by_test_id("skills-card-cover").get_attribute("src") or "")
+        assert "637/wash/style-transfer/cover.webp" in (await cw.get_by_test_id("skills-card-cover").get_attribute("src") or "")
         # #494/#529 — kind badge on every Explore card (bottom-left). Built-ins with `video` → data-kind=video;
-        # custom-workflow (no video) stays image. Never invent a video badge without data.
-        assert await cards.locator(".ca-swall__cover [data-testid=skills-card-kind]").count() == 50
+        # style-transfer (no video) stays image. Never invent a video badge without data.
+        assert await cards.locator(".ca-swall__cover [data-testid=skills-card-kind]").count() == 49
         box, badge = await cw.locator(".ca-swall__cover").bounding_box(), await cw.get_by_test_id("skills-card-kind").bounding_box()
         assert badge["x"] - box["x"] < 16 and (box["y"] + box["height"]) - (badge["y"] + badge["height"]) < 16
         assert await cw.get_by_test_id("skills-card-kind").get_attribute("data-kind") == "image"

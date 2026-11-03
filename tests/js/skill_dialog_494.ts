@@ -1,9 +1,9 @@
 // #494-2 behavior harness: the input dialog / preset / handoff helpers through the real src/skills.ts, two different
-// skills (poster, custom-workflow) + an old personal skill without inputs. No network, $0.
+// skills (poster, a synthetic brief-only skill; custom-workflow card removed — no Lovart card) + an old personal skill without inputs. No network, $0.
 // #569: poster is now an effect skill (no presets), so the preset checks run on brand (template skill).
 import { BUILTIN_SKILLS, hasSkillDialog, missingInputs, presetImage, skillDefaults, skillPreset, skillRunParams, withPreset } from '../../src/skills'
 const by = (id: string) => BUILTIN_SKILLS.find((s) => s.id === id)!
-const poster = by('poster'), brand = by('brand'), cw = by('custom-workflow')
+const poster = by('poster'), brand = by('brand'), cw = { id: 'brief-only', name: 'Brief', instructions: 'Brief rules.', inputs: [{ key: 'brief', type: 'textarea' as const, required: true, label: { zh: '需求描述', en: 'Brief' } }] }
 const old = { id: 'old-skill', name: 'Old', instructions: 'Old rules.', custom: true }
 const r: Record<string, unknown> = {}
 r.fields = Object.fromEntries(BUILTIN_SKILLS.map((s) => [s.id, (s.inputs ?? []).map((f) => [f.key, f.type, !!f.required, f.label.zh, f.label.en ?? null, f.placeholder?.en ?? null])]))

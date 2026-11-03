@@ -24,10 +24,10 @@ REAL = ["poster", "social", "brand", "packaging", "thumbnail", "banner", "charac
         "studio-model", "youtube-channel-banner", "ai-model", "product-to-packaging",
         "game-art", "portrait-studio", "premium-website", "animated-poster", "pose-fission",
         "live-promo-decor", "linkedin-banner", "logo-animation", "restaurant-website", "clothing-swap",
-        "interior", "custom-workflow"]
+        "interior"]  # custom-workflow removed (no Lovart card)
 PHASE1_HOT = ["brand", "packaging", "poster", "product", "character", "social", "motion", "banner", "thumbnail",
               "multi-angle", "logo-material", "meta-ads", "mobile-ui", "web-product", "marketing-campaign"]
-COVERED = ["poster", "social", "brand", "packaging", "thumbnail", "banner", "character", "product", "motion", "interior", "custom-workflow"]  # local public/skills; phase1_new=#594 cover(); phase2_b=#637 cover637(); phase2_c=#636 cover636()
+COVERED = ["poster", "social", "brand", "packaging", "thumbnail", "banner", "character", "product", "motion", "interior"]  # local public/skills; phase1_new=#594 cover(); phase2_b=#637 cover637(); phase2_c=#636 cover636()
 # Product ruling (#494 18:26 + AC comment 23:15): 3 skills have no category and appear only under 为你推荐.
 CATEGORY = {"poster": "ads", "social": "social", "brand": "branding", "packaging": "ecommerce", "thumbnail": "social",
             "banner": "ads", "character": None, "product": "ecommerce", "motion": "ads",
@@ -45,7 +45,7 @@ CATEGORY = {"poster": "ads", "social": "social", "brand": "branding", "packaging
             "portrait-studio": "social", "premium-website": "website", "animated-poster": "ads",
             "pose-fission": "ecommerce", "live-promo-decor": "ecommerce", "linkedin-banner": "social",
             "logo-animation": "branding", "restaurant-website": "website", "clothing-swap": "ecommerce",
-            "interior": None, "custom-workflow": None}
+            "interior": None}
 
 
 def _builtin_block() -> str:
@@ -121,7 +121,7 @@ def test_presets_and_inputs_schema():
 def test_covers_ten_webps_with_source_manifest():
     man = json.loads((COVERS / "covers.json").read_text())
     files = sorted(p.relative_to(COVERS).as_posix() for p in COVERS.rglob("*") if p.is_file())
-    local_covered = [s for s in COVERED if s != "custom-workflow"]  # legacy local public/skills; new6 are remote-only
+    local_covered = list(COVERED)  # legacy local public/skills; new6 are remote-only
     assert files == sorted(["covers.json"] + [f"{s}/cover.webp" for s in local_covered])
     assert man["encoder"] == "Pillow==13.0.0" and man["size"] == [462, 346]
     assert set(man["covers"]) == set(local_covered)
@@ -156,7 +156,7 @@ def test_cover_fallback_single_place():
     assert "pool" not in SKILLS_TS.lower() and "hash" not in SKILLS_TS.lower()  # 23:20 ruling: no image pool
     assert "gradient" not in HOME_CSS.split(".ca-swall {", 1)[1].split("@media", 1)[0]
     assert "data-tone" not in SKILLS
-    assert "Icons.workflow" in SKILLS and "workflow:" in ICONS
+    assert "Icons.workflow" not in SKILLS and "workflow:" in ICONS  # custom-workflow card removed; icon kept for WorkflowsDialog
     assert "alt={skill.name}" in SKILLS
 
 

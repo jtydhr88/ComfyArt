@@ -47,7 +47,7 @@ COUNTS = {"product": 6, "brand": 6, "packaging": 5, "character": 8, "motion": 2,
 
 @needs_node
 def test_every_field_is_bilingual_data(got):
-    assert len(got["fields"]) == 50  # #591 + #634 + #640 Phase3-S1
+    assert len(got["fields"]) == 49  # custom-workflow removed; #591 + #634 + #640 Phase3-S1
     for sid, fields in got["fields"].items():
         assert fields, sid
         # #569: effect skills (upload + note) and character carry no required field, like the reference.
@@ -57,7 +57,7 @@ def test_every_field_is_bilingual_data(got):
             if req and typ in {"text", "textarea"}:
                 assert ph, (sid, key)
     keys = {sid: [f[0] for f in fs] for sid, fs in got["fields"].items()}
-    assert keys["poster"] != keys["custom-workflow"]  # each skill its own dialog
+    assert keys["poster"] != keys["brand"]  # each skill its own dialog
 
 
 @needs_node
@@ -115,7 +115,7 @@ def test_run_params(got):
     assert p["ask"].splitlines()[0].endswith(": Autumn launch")
     q = got["posterNoPreset"]
     assert q["skill"] == "poster" and q["ref"] == ["/view?f=a.png"] and "preset" not in q and q["ask"].endswith(": Autumn launch")
-    assert got["cwRun"] == {"skill": "custom-workflow", "mode": "agent", "ask": got["cwRun"]["ask"]}
+    assert got["cwRun"] == {"skill": "brief-only", "mode": "agent", "ask": got["cwRun"]["ask"]}
     assert got["cwRun"]["ask"].endswith(": Upscale my photo")
     assert got["emptyRun"]["ask"] == "Old" and "preset" not in got["emptyRun"]
 

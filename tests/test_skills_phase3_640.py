@@ -28,7 +28,7 @@ DROPPED_MUST_ABSENT = [
     "anime-official-site", "cinematic-snapshot", "zhixian-poster", "cartoon-ip-extend",
     "culture-creative", "new-chinese-mobile", "portfolio-site",
 ]
-UNTOUCHED = ["interior", "custom-workflow"]
+UNTOUCHED = ["interior"]  # custom-workflow removed (no Lovart card)
 NEW_CATEGORY = {
     "taobao-product": "ecommerce",
     "before-after": "ads",
@@ -86,7 +86,7 @@ def test_phase3_ids_match_hard_lock_thumbnail_kept_untouched_no_dropped_no_skill
     assert set(PHASE3_NEW) <= set(ids)
     assert "thumbnail" in ids
     assert all(u in ids for u in UNTOUCHED)
-    assert len(ids) == 50  # 31 prior + 19 NEW
+    assert len(ids) == 49  # 31 prior + 19 NEW
     assert "PHASE3_NEW_SKILL_IDS" in SKILLS_TS
     assert "#640" in SKILLS_TS and "PRODUCT-LOCK-PHASE3" in SKILLS_TS and "PHASE3-HARDEN-DIFF" in SKILLS_TS
     assert "skill-creator" not in ids

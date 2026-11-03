@@ -28,7 +28,7 @@ def got(tmp_path_factory) -> dict:
 
 def test_no_image_falls_back_to_icon(got):
     assert got["noImage"] is None and got["customNoCover"] is None  # null → grey background + Lucide icon
-    assert got["custom"] == {"src": got["builtinCovers"]["custom-workflow"], "own": "bundled"}  # #581 real cover
+    assert got["custom"] == {"src": got["builtinCovers"]["interior"], "own": "bundled"}  # #581 real cover
 
 
 def test_own_image_used(got):
@@ -38,14 +38,14 @@ def test_own_image_used(got):
 def test_builtin_covers(got):
     """#581 washed covers stay pinned; #594 Phase1 new 6 covers-v4 @ WASH_594."""
     covers = got["builtinCovers"]
-    washed = ["poster", "social", "brand", "packaging", "thumbnail", "banner", "character", "product", "motion", "interior", "custom-workflow"]
+    washed = ["poster", "social", "brand", "packaging", "thumbnail", "banner", "character", "product", "motion", "interior"]
     phase1_new = ["multi-angle", "logo-material", "meta-ads", "mobile-ui", "web-product", "marketing-campaign"]
     v3, pin = "3c9b87e7eae72164efdd1fe30e00f576144475f4", {
         "banner": ("494/covers-v3.1", "9b23a3e8e3ca2f6b64dc16c0cf36fbf9c41fcaf4"),
         "character": ("494/covers-v3.2", "dc335056e81e0350e2f98487fb680e22ffb14bb9"),
     }
     v4 = "cc76d743d416c3d9a9a6852d811a7a80caf40319"
-    assert len(covers) == 50 and "custom-workflow" in covers  # #640 Phase3-S1 +19 NEW (null covers)
+    assert len(covers) == 49 and "custom-workflow" not in covers  # #640 Phase3-S1 +19 NEW (null covers)
     assert {k: covers[k] for k in washed} == {
         k: "https://raw.githubusercontent.com/ganjmeng/ComfyArt/{1}/{0}/{2}.webp".format(*pin.get(k, ("494/covers-v3", v3)), k)
         for k in washed
@@ -59,7 +59,7 @@ def test_builtin_covers(got):
 def test_chips_from_data(got):
     assert got["chips"] == ["forYou", "ecommerce", "branding", "social", "website", "ads"]  # #591 website lit
     by = got["byChip"]
-    assert len(by["forYou"]) == 50  # #640 Phase3-S1
+    assert len(by["forYou"]) == 49  # #640 Phase3-S1
     # #595: within-chip order follows PHASE1 hot mount (orderBuiltins)
     assert by == {"forYou": by["forYou"],
                   "ecommerce": ["product", "multi-angle", "packaging", "person-swap", "commerce-strategist", "lifestyle-scene", "promo-ecommerce", "taobao-product", "studio-model", "ai-model", "product-to-packaging", "pose-fission", "live-promo-decor", "clothing-swap"],
@@ -72,14 +72,14 @@ def test_chips_from_data(got):
         "motion", "meta-ads", "poster", "thumbnail", "mobile-ui", "social",
         "marketing-campaign", "web-product", "banner",
     ]
-    for sid in ("character", "interior", "custom-workflow"):
+    for sid in ("character", "interior"):
         assert all(sid not in v for k, v in by.items() if k != "forYou")
 
 
 def test_builtin_videos_unique(got):
-    """#529/#623 — 10 upgrade9 @ WASH_VIDEO + 6 new6 @ WASH_623; custom-workflow stays null."""
+    """#529/#623 — 10 upgrade9 @ WASH_VIDEO + 6 new6 @ WASH_623; custom-workflow card removed."""
     vids = got["builtinVideos"]
-    assert vids.pop("custom-workflow") is None
+    assert "custom-workflow" not in vids
     tip = "1bbb3f208f18b26ef95c8d9f16efeea111c43ac7"
     pin623 = "d03ea7938877d084c201a94ef51f943dd0e061b9"
     new6 = ("multi-angle", "logo-material", "meta-ads", "mobile-ui", "web-product", "marketing-campaign")

@@ -66,9 +66,10 @@ async def test_title_and_hover_try_open_same_dialog(app_url):  # noqa: F811
 async def test_other_skill_has_other_fields(app_url):  # noqa: F811
     async with pw.async_playwright() as p:
         browser, pg = await _open(p, app_url, "en")
-        await pg.locator('[data-skill="custom-workflow"] .ca-swall__cover').click()
+        assert await pg.locator('[data-skill="custom-workflow"]').count() == 0  # card removed (no Lovart card)
+        await pg.locator('[data-skill="brand"] .ca-swall__cover').click()
         keys = await pg.get_by_test_id("skill-run-field").evaluate_all("fs => fs.map(f => f.dataset.key)")
-        assert keys == ["brief"] and await pg.get_by_test_id("skill-run-preset").count() == 0
+        assert keys and "note" not in keys  # brand has its own fields, not poster's
         await browser.close()
 
 

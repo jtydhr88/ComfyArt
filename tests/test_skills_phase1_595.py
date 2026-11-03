@@ -16,7 +16,7 @@ PHASE1 = [
     "motion", "meta-ads", "poster", "thumbnail", "mobile-ui", "social",
     "marketing-campaign", "web-product", "banner",
 ]
-UNTOUCHED = ["interior", "custom-workflow"]
+UNTOUCHED = ["interior"]  # custom-workflow removed (no Lovart card)
 PHASE1_NEW = ["multi-angle", "logo-material", "meta-ads", "mobile-ui", "web-product", "marketing-campaign"]
 
 
