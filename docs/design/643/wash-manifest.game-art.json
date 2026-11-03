@@ -1,0 +1,187 @@
+{
+ "skill_id": "game-art",
+ "note": "#643 game-art examples (20). Full-slot brandlock rewash kie-only 4 Nov 2026 Asia/Shanghai (flare/sunburst). Single brand 「奔秋围棋」 across all 20. Marketing titles/nicks/slogans/promo bars/analysis/numbers replaced (ex05 joseki → 霜叶定式·点方飞镇, no 小飞挂角). Gold not committed.",
+ "assets": [
+  {
+   "skill_id": "game-art",
+   "slot": "examples",
+   "index": 1,
+   "source_path": "<lovart-gold, not committed>",
+   "prompt": "TRUE WASH + BRANDLOCK 「奔秋围棋」 ONLY (奔/秋/围/棋). Maple vermilion + indigo night. Replace ALL marketing titles, nicknames, slogans, promo bars, analysis text, and numbers — near-synonym or drop-one-char fails. Keep Go UI composition family. No 小飞挂角 / 星定式 / 云山棋客 / 以棋会友. Half-screen distinguishable from gold.",
+   "aspect_ratio": "auto",
+   "resolution": "2K"
+  },
+  {
+   "skill_id": "game-art",
+   "slot": "examples",
+   "index": 2,
+   "source_path": "<lovart-gold, not committed>",
+   "prompt": "TRUE WASH + BRANDLOCK 「奔秋围棋」 ONLY (奔/秋/围/棋). Maple vermilion + indigo night. Replace ALL marketing titles, nicknames, slogans, promo bars, analysis text, and numbers — near-synonym or drop-one-char fails. Keep Go UI composition family. No 小飞挂角 / 星定式 / 云山棋客 / 以棋会友. Half-screen distinguishable from gold.",
+   "aspect_ratio": "auto",
+   "resolution": "2K"
+  },
+  {
+   "skill_id": "game-art",
+   "slot": "examples",
+   "index": 3,
+   "source_path": "<lovart-gold, not committed>",
+   "prompt": "TRUE WASH + BRANDLOCK 「奔秋围棋」 ONLY (奔/秋/围/棋). Maple vermilion + indigo night. Replace ALL marketing titles, nicknames, slogans, promo bars, analysis text, and numbers — near-synonym or drop-one-char fails. Keep Go UI composition family. No 小飞挂角 / 星定式 / 云山棋客 / 以棋会友. Half-screen distinguishable from gold.",
+   "aspect_ratio": "auto",
+   "resolution": "2K"
+  },
+  {
+   "skill_id": "game-art",
+   "slot": "examples",
+   "index": 4,
+   "source_path": "<lovart-gold, not committed>",
+   "prompt": "TRUE WASH + BRANDLOCK 「奔秋围棋」 ONLY (奔/秋/围/棋). Maple vermilion + indigo night. Replace ALL marketing titles, nicknames, slogans, promo bars, analysis text, and numbers — near-synonym or drop-one-char fails. Keep Go UI composition family. No 小飞挂角 / 星定式 / 云山棋客 / 以棋会友. Half-screen distinguishable from gold.",
+   "aspect_ratio": "auto",
+   "resolution": "2K"
+  },
+  {
+   "skill_id": "game-art",
+   "slot": "examples",
+   "index": 5,
+   "source_path": "<lovart-gold, not committed>",
+   "prompt": "TRUE WASH + BRANDLOCK 「奔秋围棋」 ONLY (奔/秋/围/棋). Maple vermilion + indigo night. Replace ALL marketing titles, nicknames, slogans, promo bars, analysis text, and numbers — near-synonym or drop-one-char fails. Keep Go UI composition family. No 小飞挂角 / 星定式 / 云山棋客 / 以棋会友. Half-screen distinguishable from gold.",
+   "aspect_ratio": "auto",
+   "resolution": "2K"
+  },
+  {
+   "skill_id": "game-art",
+   "slot": "examples",
+   "index": 6,
+   "source_path": "<lovart-gold, not committed>",
+   "prompt": "TRUE WASH + BRANDLOCK 「奔秋围棋」 ONLY (奔/秋/围/棋). Maple vermilion + indigo night. Replace ALL marketing titles, nicknames, slogans, promo bars, analysis text, and numbers — near-synonym or drop-one-char fails. Keep Go UI composition family. No 小飞挂角 / 星定式 / 云山棋客 / 以棋会友. Half-screen distinguishable from gold.",
+   "aspect_ratio": "auto",
+   "resolution": "2K"
+  },
+  {
+   "skill_id": "game-art",
+   "slot": "examples",
+   "index": 7,
+   "source_path": "<lovart-gold, not committed>",
+   "prompt": "TRUE WASH + BRANDLOCK 「奔秋围棋」 ONLY (奔/秋/围/棋). Maple vermilion + indigo night. Replace ALL marketing titles, nicknames, slogans, promo bars, analysis text, and numbers — near-synonym or drop-one-char fails. Keep Go UI composition family. No 小飞挂角 / 星定式 / 云山棋客 / 以棋会友. Half-screen distinguishable from gold.",
+   "aspect_ratio": "auto",
+   "resolution": "2K"
+  },
+  {
+   "skill_id": "game-art",
+   "slot": "examples",
+   "index": 8,
+   "source_path": "<lovart-gold, not committed>",
+   "prompt": "TRUE WASH + BRANDLOCK 「奔秋围棋」 ONLY (奔/秋/围/棋). Maple vermilion + indigo night. Replace ALL marketing titles, nicknames, slogans, promo bars, analysis text, and numbers — near-synonym or drop-one-char fails. Keep Go UI composition family. No 小飞挂角 / 星定式 / 云山棋客 / 以棋会友. Half-screen distinguishable from gold.",
+   "aspect_ratio": "auto",
+   "resolution": "2K"
+  },
+  {
+   "skill_id": "game-art",
+   "slot": "examples",
+   "index": 9,
+   "source_path": "<lovart-gold, not committed>",
+   "prompt": "TRUE WASH + BRANDLOCK 「奔秋围棋」 ONLY (奔/秋/围/棋). Maple vermilion + indigo night. Replace ALL marketing titles, nicknames, slogans, promo bars, analysis text, and numbers — near-synonym or drop-one-char fails. Keep Go UI composition family. No 小飞挂角 / 星定式 / 云山棋客 / 以棋会友. Half-screen distinguishable from gold.",
+   "aspect_ratio": "auto",
+   "resolution": "2K"
+  },
+  {
+   "skill_id": "game-art",
+   "slot": "examples",
+   "index": 10,
+   "source_path": "<lovart-gold, not committed>",
+   "prompt": "TRUE WASH + BRANDLOCK 「奔秋围棋」 ONLY (奔/秋/围/棋). Maple vermilion + indigo night. Replace ALL marketing titles, nicknames, slogans, promo bars, analysis text, and numbers — near-synonym or drop-one-char fails. Keep Go UI composition family. No 小飞挂角 / 星定式 / 云山棋客 / 以棋会友. Half-screen distinguishable from gold.",
+   "aspect_ratio": "auto",
+   "resolution": "2K"
+  },
+  {
+   "skill_id": "game-art",
+   "slot": "examples",
+   "index": 11,
+   "source_path": "<lovart-gold, not committed>",
+   "prompt": "TRUE WASH + BRANDLOCK 「奔秋围棋」 ONLY (奔/秋/围/棋). Maple vermilion + indigo night. Replace ALL marketing titles, nicknames, slogans, promo bars, analysis text, and numbers — near-synonym or drop-one-char fails. Keep Go UI composition family. No 小飞挂角 / 星定式 / 云山棋客 / 以棋会友. Half-screen distinguishable from gold.",
+   "aspect_ratio": "auto",
+   "resolution": "2K"
+  },
+  {
+   "skill_id": "game-art",
+   "slot": "examples",
+   "index": 12,
+   "source_path": "<lovart-gold, not committed>",
+   "prompt": "TRUE WASH + BRANDLOCK 「奔秋围棋」 ONLY (奔/秋/围/棋). Maple vermilion + indigo night. Replace ALL marketing titles, nicknames, slogans, promo bars, analysis text, and numbers — near-synonym or drop-one-char fails. Keep Go UI composition family. No 小飞挂角 / 星定式 / 云山棋客 / 以棋会友. Half-screen distinguishable from gold.",
+   "aspect_ratio": "auto",
+   "resolution": "2K"
+  },
+  {
+   "skill_id": "game-art",
+   "slot": "examples",
+   "index": 13,
+   "source_path": "<lovart-gold, not committed>",
+   "prompt": "TRUE WASH + BRANDLOCK 「奔秋围棋」 ONLY (奔/秋/围/棋). Maple vermilion + indigo night. Replace ALL marketing titles, nicknames, slogans, promo bars, analysis text, and numbers — near-synonym or drop-one-char fails. Keep Go UI composition family. No 小飞挂角 / 星定式 / 云山棋客 / 以棋会友. Half-screen distinguishable from gold.",
+   "aspect_ratio": "auto",
+   "resolution": "2K"
+  },
+  {
+   "skill_id": "game-art",
+   "slot": "examples",
+   "index": 14,
+   "source_path": "<lovart-gold, not committed>",
+   "prompt": "TRUE WASH + BRANDLOCK 「奔秋围棋」 ONLY (奔/秋/围/棋). Maple vermilion + indigo night. Replace ALL marketing titles, nicknames, slogans, promo bars, analysis text, and numbers — near-synonym or drop-one-char fails. Keep Go UI composition family. No 小飞挂角 / 星定式 / 云山棋客 / 以棋会友. Half-screen distinguishable from gold.",
+   "aspect_ratio": "auto",
+   "resolution": "2K"
+  },
+  {
+   "skill_id": "game-art",
+   "slot": "examples",
+   "index": 15,
+   "source_path": "<lovart-gold, not committed>",
+   "prompt": "TRUE WASH + BRANDLOCK 「奔秋围棋」 ONLY (奔/秋/围/棋). Maple vermilion + indigo night. Replace ALL marketing titles, nicknames, slogans, promo bars, analysis text, and numbers — near-synonym or drop-one-char fails. Keep Go UI composition family. No 小飞挂角 / 星定式 / 云山棋客 / 以棋会友. Half-screen distinguishable from gold.",
+   "aspect_ratio": "auto",
+   "resolution": "2K"
+  },
+  {
+   "skill_id": "game-art",
+   "slot": "examples",
+   "index": 16,
+   "source_path": "<lovart-gold, not committed>",
+   "prompt": "TRUE WASH + BRANDLOCK 「奔秋围棋」 ONLY (奔/秋/围/棋). Maple vermilion + indigo night. Replace ALL marketing titles, nicknames, slogans, promo bars, analysis text, and numbers — near-synonym or drop-one-char fails. Keep Go UI composition family. No 小飞挂角 / 星定式 / 云山棋客 / 以棋会友. Half-screen distinguishable from gold.",
+   "aspect_ratio": "auto",
+   "resolution": "2K"
+  },
+  {
+   "skill_id": "game-art",
+   "slot": "examples",
+   "index": 17,
+   "source_path": "<lovart-gold, not committed>",
+   "prompt": "TRUE WASH + BRANDLOCK 「奔秋围棋」 ONLY (奔/秋/围/棋). Maple vermilion + indigo night. Replace ALL marketing titles, nicknames, slogans, promo bars, analysis text, and numbers — near-synonym or drop-one-char fails. Keep Go UI composition family. No 小飞挂角 / 星定式 / 云山棋客 / 以棋会友. Half-screen distinguishable from gold.",
+   "aspect_ratio": "auto",
+   "resolution": "2K"
+  },
+  {
+   "skill_id": "game-art",
+   "slot": "examples",
+   "index": 18,
+   "source_path": "<lovart-gold, not committed>",
+   "prompt": "TRUE WASH + BRANDLOCK 「奔秋围棋」 ONLY (奔/秋/围/棋). Maple vermilion + indigo night. Replace ALL marketing titles, nicknames, slogans, promo bars, analysis text, and numbers — near-synonym or drop-one-char fails. Keep Go UI composition family. No 小飞挂角 / 星定式 / 云山棋客 / 以棋会友. Half-screen distinguishable from gold.",
+   "aspect_ratio": "auto",
+   "resolution": "2K"
+  },
+  {
+   "skill_id": "game-art",
+   "slot": "examples",
+   "index": 19,
+   "source_path": "<lovart-gold, not committed>",
+   "prompt": "TRUE WASH + BRANDLOCK 「奔秋围棋」 ONLY (奔/秋/围/棋). Maple vermilion + indigo night. Replace ALL marketing titles, nicknames, slogans, promo bars, analysis text, and numbers — near-synonym or drop-one-char fails. Keep Go UI composition family. No 小飞挂角 / 星定式 / 云山棋客 / 以棋会友. Half-screen distinguishable from gold.",
+   "aspect_ratio": "auto",
+   "resolution": "2K"
+  },
+  {
+   "skill_id": "game-art",
+   "slot": "examples",
+   "index": 20,
+   "source_path": "<lovart-gold, not committed>",
+   "prompt": "TRUE WASH + BRANDLOCK 「奔秋围棋」 ONLY (奔/秋/围/棋). Maple vermilion + indigo night. Replace ALL marketing titles, nicknames, slogans, promo bars, analysis text, and numbers — near-synonym or drop-one-char fails. Keep Go UI composition family. No 小飞挂角 / 星定式 / 云山棋客 / 以棋会友. Half-screen distinguishable from gold.",
+   "aspect_ratio": "auto",
+   "resolution": "2K"
+  }
+ ],
+ "postprocess": "ex14–20 kie gpt-image-2-5-flare i2i true-wash from gold; ex19 additional sunburst chain to maple-leaf emblem. Credits this round ~90 (1817→1717 incl. #671 ex02 + retries). Brand suite 奔秋围棋 / maple+indigo."
+}

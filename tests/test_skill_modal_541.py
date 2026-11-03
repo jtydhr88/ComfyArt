@@ -108,7 +108,8 @@ def test_examples_carousel_is_data_driven(got):
             "premium-website": 7,  # #643 per-slot PR
             "studio-model": 2,  # #643 per-slot PR
             "restaurant-website": 7,  # #643 per-slot PR
-            "product-to-packaging": 14}  # #643 per-slot PR
+            "product-to-packaging": 14,  # #643 per-slot PR
+            "game-art": 20}  # #643 per-slot PR
     assert {k: v for k, v in got["examples"].items() if v} == want
     for sid in ("product", "brand", "packaging", "motion", "character"):
         assert got["examples"][sid] == 0, sid
