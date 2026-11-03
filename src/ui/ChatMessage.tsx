@@ -17,12 +17,14 @@ import { lang, t } from '../i18n'
 import { openMemoryDialog } from './MemoryDialog'
 import { stepState } from './stepState'
 import { readLocal, writeLocal } from '../localPrefs'
+import { loadSkills, skillAtom, skillCreatorAtom } from '../skills'
+import { openSkillEditor } from './SkillsDialog'
 
 const GEN_TOOLS = new Set(['generate_image', 'generate_video', 'edit_image', 'animate_image', 'upscale_image', 'remove_background', 'expand_image', 'split_layers', 'change_angle', 'replace_text', 'edit_region', 'erase_region', 'move_object', 'style_transfer', 'extend_video', 'upscale_video', 'remove_video_background', 'generate_music', 'generate_sound_effect', 'text_to_speech', 'image_to_3d', 'edit_elements', 'create_mockup', 'create_slides'])
 
 /** #326/#348/#420 process-timeline kinds (multi-step process rail). */
 type ProcessKind =
-  | 'thought' | 'outputting' | 'skill' | 'skill_file_read' | 'search' | 'search_pages'
+  | 'thought' | 'outputting' | 'skill' | 'skill_created' | 'skill_file_read' | 'search' | 'search_pages'
   | 'image' | 'video'
   | 'ref_analysis'
   | 'code' | 'code_generated' | 'code_updated' | 'design_validated' | 'preview_artifact'
@@ -48,6 +50,8 @@ const PROCESS_ICONS: Record<ProcessKind, ReactNode> = {
   outputting: Icons.think,
   // #627: stacked docs (live CN step-rail); was scrollText
   skill: Icons.files,
+  // #650 follow-up: 「Skill Created」 row after a successful skill save
+  skill_created: Icons.files,
   skill_file_read: Icons.fileSearch,
   search: Icons.globe,
   search_pages: Icons.globe,
@@ -118,6 +122,7 @@ function processKindOf(b: BotBlock, opts?: { result?: BotBlock; live?: boolean }
   if (b.type === 'memory_updated') return 'memory_updated'
   if (b.type !== 'tool_use') return null
   const n = toolName(b.name)
+  if ((n === 'skill' || n === 'Skill') && skillCreatedOf(b, opts?.result)) return 'skill_created'
   if (n === 'skill' || n === 'Skill') return skillActionIsFileRead(b.input) ? 'skill_file_read' : 'skill'
   if (SEARCH_TOOLS.has(n) || (/search|fetch/i.test(n) && /web/i.test(n))) {
     if (!opts?.live) {
@@ -140,6 +145,37 @@ function processKindOf(b: BotBlock, opts?: { result?: BotBlock; live?: boolean }
   return 'tool'
 }
 
+/** #650 follow-up: a finished `skill` save (action="save") returns { saved, id, description } → the reference-design
+ *  creation-complete card (Skill ready / Skill Created rows + card with Preview / Try this skill). */
+export type CreatedSkill = { id: string; name: string; description: string }
+export function skillCreatedOf(b: BotBlock, result?: BotBlock): CreatedSkill | null {
+  if (b.type !== 'tool_use' || (b.input as { action?: string } | undefined)?.action !== 'save' || !result || stepState(result) !== 'done') return null
+  try {
+    const r = JSON.parse(result.text ?? '') as { saved?: string; id?: string; description?: string }
+    return r.id && r.saved ? { id: r.id, name: r.saved, description: r.description ?? '' } : null
+  } catch { return null }
+}
+
+export function SkillCreatedCard({ skill }: { skill: CreatedSkill }) {
+  const tryIt = () => void loadSkills().then((all) => {
+    const s = all.find((x) => x.id === skill.id)
+    if (!s) return
+    skillCreatorAtom.set({ on: false })
+    skillAtom.set(s)
+  })
+  return (
+    <div className="ca-chat__skillcard" data-testid="skill-created-card" data-skill={skill.id}>
+      <span className="ca-chat__skillcard-thumb" aria-hidden><span className="ca-icon">{Icons.files}</span></span>
+      <span className="ca-chat__skillcard-meta">
+        <span className="ca-chat__skillcard-name" data-testid="skill-created-name">{skill.name}</span>
+        {skill.description && <span className="ca-chat__skillcard-desc" data-testid="skill-created-desc">{skill.description}</span>}
+      </span>
+      <button type="button" className="ca-chat__skillcard-btn" data-testid="skill-created-preview" onClick={() => openSkillEditor(skill.id)}>{t('chatMessage.skillPreview')}</button>
+      <button type="button" className="ca-chat__skillcard-btn" data-variant="primary" data-testid="skill-created-try" onClick={tryIt}>{t('chatMessage.tryThisSkill')}</button>
+    </div>
+  )
+}
+
 /**
  * #437: a reasoning turn in progress reads 思考中 (one key, chatMessage.thinking) until the reference is
  * measured on a memory-writing, tool-calling turn. Set to false to drop it: the row then reads 输出中….
@@ -160,6 +196,7 @@ function processLabel(
   if (kind === 'ref_analysis') return live ? t('chatMessage.referenceAnalysisLive') : t('chatMessage.referenceAnalysisDone')
   if (kind === 'outputting') return live ? t('chatMessage.outputting') : t('chatMessage.thought')
   if (kind === 'skill') return t('chatMessage.skillReady')
+  if (kind === 'skill_created') return t('chatMessage.skillCreated')
   if (kind === 'skill_file_read') return live ? t('chatMessage.skillFileReadLive') : t('chatMessage.skillFileRead')
   if (kind === 'search') return live ? t('chatMessage.searchingWeb') : t('chatMessage.webSearchDone')
   // #437: the done search row keeps the page count (1 web page / N web pages); the card below it carries 联网搜索结果
@@ -964,6 +1001,7 @@ export function AssistantBlocks({ editor, m }: { editor: Editor; m: BotMessage }
     run = []
   }
   let genAt = -1
+  let created: CreatedSkill[] = []
   const flushProc = () => {
     if (!proc.length) return
     const onlyThought = proc.every((s) => s.kind === 'thought')
@@ -976,6 +1014,9 @@ export function AssistantBlocks({ editor, m }: { editor: Editor; m: BotMessage }
     }
     // #437: result images sit right under the rail that holds the generation (model-name) row
     if (genAt < 0 && proc.some((s) => s.kind === 'image' || s.kind === 'video')) genAt = items.length
+    // #650 follow-up: the created-skill card sits right under the rail holding 「Skill Created」
+    created.forEach((c) => items.push(<SkillCreatedCard key={`sc${c.id}`} skill={c} />))
+    created = []
     proc = []
   }
   // #413: an in-loop memory add shows as the 记忆已更新 › row, not as a tool row
@@ -1050,6 +1091,7 @@ export function AssistantBlocks({ editor, m }: { editor: Editor; m: BotMessage }
             live: false,
           })
         }
+        if (kindResolved === 'skill_created') { const c = skillCreatedOf(b, result); if (c) created.push(c) }
         const pages = kindResolved === 'search_pages' ? searchResultCount(b, result) : undefined
         const model = (kindResolved === 'image' || kindResolved === 'video') ? processModelName(b.input) : undefined
         const aspectRatio = (kindResolved === 'image' || kindResolved === 'video') ? processAspectRatio(b.input) : undefined

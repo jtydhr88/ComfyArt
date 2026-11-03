@@ -1242,3 +1242,12 @@
 .ca-usage__pager { display: inline-flex; align-items: center; gap: 8px; }
 .ca-usage__pager .ca-panel__secondary { height: 28px; min-width: 28px; padding: 0 8px; border-radius: 8px; display: inline-flex; align-items: center; justify-content: center; }
 .ca-usage__page { font-variant-numeric: tabular-nums; color: var(--ca-text-2); font-size: 12px; }
+
+/* #650 follow-up: creation-complete skill card (thumb · name/desc · Preview · Try this skill) */
+.ca-chat__skillcard { display: flex; align-items: center; gap: 10px; padding: 6px 8px; border: 1px solid var(--ca-border); border-radius: 10px; background: var(--ca-float); }
+.ca-chat__skillcard-thumb { width: 42px; height: 32px; border-radius: 6px; background: var(--ca-field); display: inline-flex; align-items: center; justify-content: center; color: var(--ca-muted); flex: none; }
+.ca-chat__skillcard-meta { display: flex; flex-direction: column; gap: 2px; min-width: 0; flex: 1; }
+.ca-chat__skillcard-name { font-size: 13px; font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ca-chat__skillcard-desc { font-size: 12px; color: var(--ca-muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ca-chat__skillcard-btn { height: 24px; padding: 0 10px; border-radius: 6px; border: 1px solid var(--ca-border); background: transparent; font-size: 12px; cursor: pointer; flex: none; }
+.ca-chat__skillcard-btn[data-variant="primary"] { background: var(--ca-btn-primary-bg); color: var(--ca-btn-primary-fg); border-color: transparent; }
