@@ -52,6 +52,9 @@ def test_new19_present_production_copy_dialog_inputs():
         assert "lovart" not in low, sid
         assert "demo" not in low, sid
         assert "inputs:" in e, sid
+        # #642 field parity: gold dialogs are Upload Files + Additional Details only
+        assert "inputs: NEARMISS_INPUTS" in e, sid
+        assert "presetChips" not in e, sid
         assert "presets:" in e, sid
         assert len(re.findall(r"\bP\('", e)) >= 2, sid
         # #643 cover pins; examples/featured still empty until fuller gold

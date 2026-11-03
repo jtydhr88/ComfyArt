@@ -1,7 +1,5 @@
 id=pose-fission
-issue=#642
-phase=Phase3-S3
-copy=pending-deepen
-dialog=pending-parity-map
-media=wait-#643
-lr=pending
+phase=S3-field-parity
+inputs=NEARMISS_INPUTS
+gold_dialog=docs/design/640/78/gold/pose-fission/dialog.webp
+note=Upload Files + Additional Details only; no chips; media wash deferred to #643
