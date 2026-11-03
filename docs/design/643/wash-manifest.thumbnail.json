@@ -1,0 +1,104 @@
+{
+  "_comment": "Operator manifest for #643 thumbnail true wash (local gold tip copies). Do not commit source CDN URLs. Generated for kie_wash_phase3.py.",
+  "assets": [
+    {
+      "skill_id": "thumbnail",
+      "slot": "cover",
+      "index": 0,
+      "source_path": "docs/design/641/78/gold/cover.webp",
+      "prompt": "Recreate this YouTube thumbnail cover as original artwork for a 16:9 click-rate design skill. Keep expressive face energy, bold three-word title feel, and high contrast. No brand marks, watermarks, competitor logos, or recognizable celebrity likeness.",
+      "aspect_ratio": "16:9",
+      "resolution": "2K"
+    },
+    {
+      "skill_id": "thumbnail",
+      "slot": "examples",
+      "index": 1,
+      "source_path": "docs/design/641/78/examples/01.webp",
+      "prompt": "Recreate this YouTube thumbnail example as original artwork. 16:9 CTR frame with expressive subject, bold short title energy, high contrast. No brand marks, watermarks, competitor logos, or recognizable celebrity likeness.",
+      "aspect_ratio": "16:9",
+      "resolution": "2K"
+    },
+    {
+      "skill_id": "thumbnail",
+      "slot": "examples",
+      "index": 2,
+      "source_path": "docs/design/641/78/examples/02.webp",
+      "prompt": "Recreate this YouTube thumbnail example as original artwork. 16:9 CTR frame with expressive subject, bold short title energy, high contrast. No brand marks, watermarks, competitor logos, or recognizable celebrity likeness.",
+      "aspect_ratio": "16:9",
+      "resolution": "2K"
+    },
+    {
+      "skill_id": "thumbnail",
+      "slot": "examples",
+      "index": 3,
+      "source_path": "docs/design/641/78/examples/03.webp",
+      "prompt": "Recreate this YouTube thumbnail example as original artwork. 16:9 CTR frame with expressive subject, bold short title energy, high contrast. No brand marks, watermarks, competitor logos, or recognizable celebrity likeness.",
+      "aspect_ratio": "16:9",
+      "resolution": "2K"
+    },
+    {
+      "skill_id": "thumbnail",
+      "slot": "examples",
+      "index": 4,
+      "source_path": "docs/design/641/78/examples/04.webp",
+      "prompt": "Recreate this YouTube thumbnail example as original artwork. 16:9 CTR frame with expressive subject, bold short title energy, high contrast. No brand marks, watermarks, competitor logos, or recognizable celebrity likeness.",
+      "aspect_ratio": "16:9",
+      "resolution": "2K"
+    },
+    {
+      "skill_id": "thumbnail",
+      "slot": "examples",
+      "index": 5,
+      "source_path": "docs/design/641/78/examples/05.webp",
+      "prompt": "Recreate this YouTube thumbnail example as original artwork. 16:9 CTR frame with expressive subject, bold short title energy, high contrast. No brand marks, watermarks, competitor logos, or recognizable celebrity likeness.",
+      "aspect_ratio": "16:9",
+      "resolution": "2K"
+    },
+    {
+      "skill_id": "thumbnail",
+      "slot": "examples",
+      "index": 6,
+      "source_path": "docs/design/641/78/examples/06.webp",
+      "prompt": "Recreate this YouTube thumbnail example as original artwork. 16:9 CTR frame with expressive subject, bold short title energy, high contrast. No brand marks, watermarks, competitor logos, or recognizable celebrity likeness.",
+      "aspect_ratio": "16:9",
+      "resolution": "2K"
+    },
+    {
+      "skill_id": "thumbnail",
+      "slot": "featured",
+      "index": 1,
+      "source_path": "docs/design/641/78/examples/01.webp",
+      "prompt": "Recreate this YouTube thumbnail featured tile as original artwork. 16:9 CTR energy, bold type feel, high contrast. No brand marks, watermarks, competitor logos, or recognizable celebrity likeness.",
+      "aspect_ratio": "16:9",
+      "resolution": "2K"
+    },
+    {
+      "skill_id": "thumbnail",
+      "slot": "featured",
+      "index": 2,
+      "source_path": "docs/design/641/78/examples/02.webp",
+      "prompt": "Recreate this YouTube thumbnail featured tile as original artwork. 16:9 CTR energy, bold type feel, high contrast. No brand marks, watermarks, competitor logos, or recognizable celebrity likeness.",
+      "aspect_ratio": "16:9",
+      "resolution": "2K"
+    },
+    {
+      "skill_id": "thumbnail",
+      "slot": "featured",
+      "index": 3,
+      "source_path": "docs/design/641/78/examples/03.webp",
+      "prompt": "Recreate this YouTube thumbnail featured tile as original artwork. 16:9 CTR energy, bold type feel, high contrast. No brand marks, watermarks, competitor logos, or recognizable celebrity likeness.",
+      "aspect_ratio": "16:9",
+      "resolution": "2K"
+    },
+    {
+      "skill_id": "thumbnail",
+      "slot": "featured",
+      "index": 4,
+      "source_path": "docs/design/641/78/examples/04.webp",
+      "prompt": "Recreate this YouTube thumbnail featured tile as original artwork. 16:9 CTR energy, bold type feel, high contrast. No brand marks, watermarks, competitor logos, or recognizable celebrity likeness.",
+      "aspect_ratio": "16:9",
+      "resolution": "2K"
+    }
+  ]
+}

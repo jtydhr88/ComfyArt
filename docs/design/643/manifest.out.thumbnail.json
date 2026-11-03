@@ -1,0 +1,118 @@
+{
+  "issue": 643,
+  "tool": "scripts/kie_wash_phase3.py",
+  "model": "gpt-image-2-5-flare-image-to-image",
+  "assets": [
+    {
+      "skill_id": "thumbnail",
+      "slot": "cover",
+      "index": 0,
+      "path": "thumbnail/cover/cover.png",
+      "sha256": "a0913166842132d72024089aac6f725977e7f1c54785f8796b0bdba17b73a53b",
+      "model": "gpt-image-2-5-flare-image-to-image",
+      "task_id": "eaeeb555c45b9fd63b1a20dbc99f7e10",
+      "source": "cover.webp"
+    },
+    {
+      "skill_id": "thumbnail",
+      "slot": "examples",
+      "index": 1,
+      "path": "thumbnail/examples/01.png",
+      "sha256": "64855a8f3ee9d9e10403660d8bd24ef0615020984c499495b82948e31bfd14c2",
+      "model": "gpt-image-2-5-flare-image-to-image",
+      "task_id": "4e942019da07a6b832717219e98c90e1",
+      "source": "01.webp"
+    },
+    {
+      "skill_id": "thumbnail",
+      "slot": "examples",
+      "index": 2,
+      "path": "thumbnail/examples/02.png",
+      "sha256": "f1ac3bc2acd5f32bb55ed0e22edf49712ae05001f5661811928b5c9bdaf6fa7d",
+      "model": "gpt-image-2-5-flare-image-to-image",
+      "task_id": "bf254633ce1a9f55bb58326a60f7a104",
+      "source": "02.webp"
+    },
+    {
+      "skill_id": "thumbnail",
+      "slot": "examples",
+      "index": 3,
+      "path": "thumbnail/examples/03.png",
+      "sha256": "4ac47fb7c3ae0a0e493b1ad1cfb475b7bf34d6511f110e7d45f5ddef1e7e534e",
+      "model": "gpt-image-2-5-flare-image-to-image",
+      "task_id": "6378919e7d0bc604c17c8db337fa6dd1",
+      "source": "03.webp"
+    },
+    {
+      "skill_id": "thumbnail",
+      "slot": "examples",
+      "index": 4,
+      "path": "thumbnail/examples/04.png",
+      "sha256": "8932d492adbaf7e4e63ae22b45eab35db3bed7e41cefc806fcf6a216c57675e0",
+      "model": "gpt-image-2-5-flare-image-to-image",
+      "task_id": "3fb10a57198a7631f86002cc1f194ef7",
+      "source": "04.webp"
+    },
+    {
+      "skill_id": "thumbnail",
+      "slot": "examples",
+      "index": 5,
+      "path": "thumbnail/examples/05.png",
+      "sha256": "6276d5e7225fda62b10d178ed5f084632514c60dad4f507aa76ca336e640cbbc",
+      "model": "gpt-image-2-5-flare-image-to-image",
+      "task_id": "cc93c4982e822c128045dcdfaf6f5f06",
+      "source": "05.webp"
+    },
+    {
+      "skill_id": "thumbnail",
+      "slot": "examples",
+      "index": 6,
+      "path": "thumbnail/examples/06.png",
+      "sha256": "f71acc7d4df085dea6fb541f027ddc97401c589f409a1a68e10cd3d52ab9ea0d",
+      "model": "gpt-image-2-5-flare-image-to-image",
+      "task_id": "321679245aa39a4c35051b48256ccd27",
+      "source": "06.webp"
+    },
+    {
+      "skill_id": "thumbnail",
+      "slot": "featured",
+      "index": 1,
+      "path": "thumbnail/featured/01.png",
+      "sha256": "b2fbb1503d5fe6cc47d8797274bb24b7946b05435f5e734c133b2829f37bc04e",
+      "model": "gpt-image-2-5-flare-image-to-image",
+      "task_id": "bdae430af24618c31d140afd5853c105",
+      "source": "01.webp"
+    },
+    {
+      "skill_id": "thumbnail",
+      "slot": "featured",
+      "index": 2,
+      "path": "thumbnail/featured/02.png",
+      "sha256": "45a6882bb1c63fb2f0fa35c695fda059d6ff75253fc22f229c1941c03e613699",
+      "model": "gpt-image-2-5-flare-image-to-image",
+      "task_id": "17f35919e0c531b1c4c054d5300ea58a",
+      "source": "02.webp"
+    },
+    {
+      "skill_id": "thumbnail",
+      "slot": "featured",
+      "index": 3,
+      "path": "thumbnail/featured/03.png",
+      "sha256": "bd575dccf5865ec33fff71822d3ddbeec06e53b2587aabfb681550a3c12dc7d7",
+      "model": "gpt-image-2-5-flare-image-to-image",
+      "task_id": "cf0e1e238f8573db46db9e34b9b4e7b2",
+      "source": "03.webp"
+    },
+    {
+      "skill_id": "thumbnail",
+      "slot": "featured",
+      "index": 4,
+      "path": "thumbnail/featured/04.png",
+      "sha256": "f871c5a6715e7303eb539a1745a5256369308668d32f7f7d7484fe22c378c890",
+      "model": "gpt-image-2-5-flare-image-to-image",
+      "task_id": "b4e669adf4d261507d98ea0146e714e2",
+      "source": "04.webp"
+    }
+  ],
+  "errors": []
+}

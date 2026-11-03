@@ -137,7 +137,7 @@ def test_covers_ten_webps_with_source_manifest():
     for sid, e in _entries().items():
         head = e.split("inputs:", 1)[0]
         if sid == "thumbnail":
-            assert "cover: cover('thumbnail')" in head, sid  # #641 Phase3-S2: Phase1 cover (no soft-wash)
+            assert "cover: cover643('thumbnail')" in head, sid  # #643 true-wash cover
         elif sid in COVERED or sid in phase1_new:
             assert f"cover: cover('{sid}')" in head, sid  # #581 + #594 covers-v4 pins
         elif sid in phase2_b:

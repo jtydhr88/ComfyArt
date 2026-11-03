@@ -1,0 +1,29 @@
+{
+  "_comment": "Illustrative tip record for scripts/kie_wash_phase3.py. A live run writes manifest.out.json next to --out (parent directory) with these asset fields and no _comment: skill_id, slot, index, path, sha256, model, task_id, source. sha256 here is hashlib.sha256 of the ascii labels 643-example-cover and 643-example-example, not image bytes. source is sha256 of the input source_url. task_id values are placeholders. Source URLs are not stored.",
+  "issue": 643,
+  "tool": "scripts/kie_wash_phase3.py",
+  "model": "gpt-image-2-5-flare-image-to-image",
+  "assets": [
+    {
+      "skill_id": "example-skill",
+      "slot": "cover",
+      "index": 0,
+      "path": "example-skill/cover/cover.png",
+      "sha256": "8ec52cedc3557d3a635e0e2a16abcc1f080933515b75e0bc18eb9b29313165cc",
+      "model": "gpt-image-2-5-flare-image-to-image",
+      "task_id": "task_example_cover",
+      "source": "sha256:f7f3d50626aa25199dd4e6b048d68cb6811b598e71760b6c21e7bde7c6e005c1"
+    },
+    {
+      "skill_id": "example-skill",
+      "slot": "examples",
+      "index": 1,
+      "path": "example-skill/examples/01.png",
+      "sha256": "6910bc2341b433fdc072a337da0cf4e0b428e8dfb87e66b8c5e1c63a3df4fd28",
+      "model": "gpt-image-2-5-flare-image-to-image",
+      "task_id": "task_example_examples",
+      "source": "sha256:c8d7c8c1ca26b21ca8211477e15b5bbf47fabb1bd42e8a2f115adea8dde38828"
+    }
+  ],
+  "errors": []
+}

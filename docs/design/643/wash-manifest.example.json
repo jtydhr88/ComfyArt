@@ -1,0 +1,30 @@
+{
+  "_comment": "Example input for scripts/kie_wash_phase3.py (#643 offline copyright wash only). Copy to wash-manifest.json for a real run. --dry-run validates and prints the plan without fetching these placeholder URLs. Do not commit an operator manifest whose source URLs are not meant to be public. Live output never copies source_url or source_path into manifest.out.json.",
+  "_fields": {
+    "skill_id": "Lowercase slug. First directory under --out.",
+    "slot": "cover, examples, or featured.",
+    "index": "Integer 0-99. Optional for cover (defaults to 0). Required for examples and featured. Saved examples/featured files are NN.png or NN.webp.",
+    "source_url": "http(s) image URL. Sent only as input.input_urls. Exclusive with source_path.",
+    "source_path": "Local png, webp, or jpeg. Exclusive with source_url. A live run uploads it and records the basename only.",
+    "prompt": "Optional. Default: recreate as original artwork, with no brand marks, watermarks, or competitor logos.",
+    "aspect_ratio": "Optional. Default auto. Or a ratio such as 16:9.",
+    "resolution": "Optional. Default 2K. One of 1K, 2K, 4K."
+  },
+  "assets": [
+    {
+      "skill_id": "example-skill",
+      "slot": "cover",
+      "index": 0,
+      "source_url": "https://example.com/643-placeholder-cover.png",
+      "prompt": "Recreate this cover as original artwork. No brand marks, watermarks, or competitor logos."
+    },
+    {
+      "skill_id": "example-skill",
+      "slot": "examples",
+      "index": 1,
+      "source_url": "https://example.com/643-placeholder-example.png",
+      "aspect_ratio": "16:9",
+      "resolution": "2K"
+    }
+  ]
+}

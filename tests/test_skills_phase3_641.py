@@ -60,12 +60,13 @@ def test_thumbnail_inputs_media_and_effect_inputs():
     e = _entries()["thumbnail"]
     assert "titleCopy" not in e
     assert "inputs: EFFECT_INPUTS" in e
-    assert "cover: cover('thumbnail')" in e
-    assert "featured: feedCovers('thumbnail')" in e
-    assert "ex541('thumbnail'" in e
+    assert "cover: cover643('thumbnail')" in e
+    assert "featured: feat643('thumbnail'" in e
+    assert "ex643('thumbnail'" in e
     assert "video: video('thumbnail')" in e
-    assert "examples: [video('thumbnail'), ...ex541(" in e
+    assert "examples: [video('thumbnail'), ...ex643(" in e
     assert "quickStartCover: quickStartCover('thumbnail')" in e
+    assert "WASH_643" in SKILLS_TS and "643/wash" in SKILLS_TS
 
 
 def test_dialog_to_agent_path_still_wired():
