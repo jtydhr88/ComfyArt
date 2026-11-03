@@ -1,0 +1,86 @@
+{
+  "_comment": "#643 batch1 SOFT/FAIL rewash — stronger half-screen Δ, still identity-lock (no topic drift).",
+  "assets": [
+    {
+      "skill_id": "before-after",
+      "slot": "examples",
+      "index": 2,
+      "source_path": "docs/design/643/78/gold/before-after/examples/ex-02.webp",
+      "prompt": "Recreate as ORIGINAL artwork with NEW pixels — half-screen must prove it is not a soft copy. IDENTITY-LOCK the use-slot and composition family from the reference (same layout role, same subject CATEGORY). Change: person identity / product finishes / lighting color temperature / camera distance enough to be obvious. Do NOT invent a new topic (no kitchen if face; no split-UI if single studio). No brand marks, watermarks, competitor logos, or celebrity likeness. Keep dual full-body posture before/after cards on beige: same grey-tee / black-joggers outfit family, left slouch vs right tall. Use a DIFFERENT woman identity and warmer studio light.",
+      "aspect_ratio": "3:4",
+      "resolution": "2K"
+    },
+    {
+      "skill_id": "before-after",
+      "slot": "examples",
+      "index": 3,
+      "source_path": "docs/design/643/78/gold/before-after/examples/ex-03.webp",
+      "prompt": "Recreate as ORIGINAL artwork with NEW pixels — half-screen must prove it is not a soft copy. IDENTITY-LOCK the use-slot and composition family from the reference (same layout role, same subject CATEGORY). Change: person identity / product finishes / lighting color temperature / camera distance enough to be obvious. Do NOT invent a new topic (no kitchen if face; no split-UI if single studio). No brand marks, watermarks, competitor logos, or celebrity likeness. Keep vertical 50/50 chrome faucet cleaning Before|After on tiled sink. Change faucet silhouette slightly (still single-handle chrome), retile color faintly, re-pattern the limescale so Δ is obvious.",
+      "aspect_ratio": "3:4",
+      "resolution": "2K"
+    },
+    {
+      "skill_id": "before-after",
+      "slot": "examples",
+      "index": 4,
+      "source_path": "docs/design/643/78/gold/before-after/examples/ex-04.webp",
+      "prompt": "Recreate as ORIGINAL artwork with NEW pixels — half-screen must prove it is not a soft copy. IDENTITY-LOCK the use-slot and composition family from the reference (same layout role, same subject CATEGORY). Change: person identity / product finishes / lighting color temperature / camera distance enough to be obvious. Do NOT invent a new topic (no kitchen if face; no split-UI if single studio). No brand marks, watermarks, competitor logos, or celebrity likeness. Keep side-by-side Original|Optimized professional headshot in dark blazer. DIFFERENT woman identity; warmer vs cooler grade still readable as retouch before/after.",
+      "aspect_ratio": "3:4",
+      "resolution": "2K"
+    },
+    {
+      "skill_id": "before-after",
+      "slot": "examples",
+      "index": 5,
+      "source_path": "docs/design/643/78/gold/before-after/examples/ex-05.webp",
+      "prompt": "Recreate as ORIGINAL artwork with NEW pixels — half-screen must prove it is not a soft copy. IDENTITY-LOCK the use-slot and composition family from the reference (same layout role, same subject CATEGORY). Change: person identity / product finishes / lighting color temperature / camera distance enough to be obvious. Do NOT invent a new topic (no kitchen if face; no split-UI if single studio). No brand marks, watermarks, competitor logos, or celebrity likeness. Keep window-frame mold Before|After with generic mold-remover bottle on clean sill. Shift window style/plant backdrop and bottle shape; keep household cleaning use-slot.",
+      "aspect_ratio": "3:4",
+      "resolution": "2K"
+    },
+    {
+      "skill_id": "before-after",
+      "slot": "examples",
+      "index": 6,
+      "source_path": "docs/design/643/78/gold/before-after/examples/ex-06.webp",
+      "prompt": "Recreate as ORIGINAL artwork with NEW pixels — half-screen must prove it is not a soft copy. IDENTITY-LOCK the use-slot and composition family from the reference (same layout role, same subject CATEGORY). Change: person identity / product finishes / lighting color temperature / camera distance enough to be obvious. Do NOT invent a new topic (no kitchen if face; no split-UI if single studio). No brand marks, watermarks, competitor logos, or celebrity likeness. Keep dual eye/cheek skin close-up Before|After on cream. DIFFERENT woman identity; exaggerate wrinkle vs glow delta while staying face/skin (never kitchen).",
+      "aspect_ratio": "3:4",
+      "resolution": "2K"
+    },
+    {
+      "skill_id": "before-after",
+      "slot": "examples",
+      "index": 8,
+      "source_path": "docs/design/643/78/gold/before-after/examples/ex-08.webp",
+      "prompt": "Recreate as ORIGINAL artwork with NEW pixels — half-screen must prove it is not a soft copy. IDENTITY-LOCK the use-slot and composition family from the reference (same layout role, same subject CATEGORY). Change: person identity / product finishes / lighting color temperature / camera distance enough to be obvious. Do NOT invent a new topic (no kitchen if face; no split-UI if single studio). No brand marks, watermarks, competitor logos, or celebrity likeness. Keep stacked Before|After three-quarter female face on cream fabric. DIFFERENT woman identity; clearer dewy after-glow while staying beauty face use-slot.",
+      "aspect_ratio": "3:4",
+      "resolution": "2K"
+    },
+    {
+      "skill_id": "clothing-swap",
+      "slot": "examples",
+      "index": 1,
+      "source_path": "docs/design/643/78/gold/clothing-swap/examples/ex-01.webp",
+      "prompt": "Recreate as ORIGINAL artwork with NEW pixels — half-screen must prove it is not a soft copy. IDENTITY-LOCK the use-slot and composition family from the reference (same layout role, same subject CATEGORY). Change: person identity / product finishes / lighting color temperature / camera distance enough to be obvious. Do NOT invent a new topic (no kitchen if face; no split-UI if single studio). No brand marks, watermarks, competitor logos, or celebrity likeness. Keep full-body white-studio try-on: mid-stride hands-in-pockets, light-blue trench + striped tie + mini skirt + loafers + fluted wall. DIFFERENT East-Asian woman face; shift coat to a clearly different blue and change light direction.",
+      "aspect_ratio": "3:4",
+      "resolution": "2K"
+    },
+    {
+      "skill_id": "linkedin-banner",
+      "slot": "examples",
+      "index": 1,
+      "source_path": "docs/design/643/78/gold/linkedin-banner/examples/ex-01-poster.jpg",
+      "prompt": "Recreate as ORIGINAL artwork with NEW pixels — half-screen must prove it is not a soft copy. IDENTITY-LOCK the use-slot and composition family from the reference (same layout role, same subject CATEGORY). Change: person identity / product finishes / lighting color temperature / camera distance enough to be obvious. Do NOT invent a new topic (no kitchen if face; no split-UI if single studio). No brand marks, watermarks, competitor logos, or celebrity likeness. Keep LinkedIn profile mockup card: banner + avatar circle + grey wireframe body on dark backdrop. Rewrite banner headline (still finance/investing tone), restyle chart motif and palette enough for clear Δ; same mockup chrome.",
+      "aspect_ratio": "4:3",
+      "resolution": "2K"
+    },
+    {
+      "skill_id": "taobao-product",
+      "slot": "examples",
+      "index": 8,
+      "source_path": "docs/design/643/78/gold/taobao-product/examples/ex-08.webp",
+      "prompt": "Recreate as ORIGINAL artwork with NEW pixels — half-screen must prove it is not a soft copy. IDENTITY-LOCK the use-slot and composition family from the reference (same layout role, same subject CATEGORY). Change: person identity / product finishes / lighting color temperature / camera distance enough to be obvious. Do NOT invent a new topic (no kitchen if face; no split-UI if single studio). No brand marks, watermarks, competitor logos, or celebrity likeness. Keep a tall black-background Taobao PDP scroll for a generic ring-head hair dryer (hero, icons, cutaway, details, colorways, specs, box). Prefer product-only modules; if a model appears keep modest studio pose. Remove all brand names. Same hair-dryer ecommerce detail use-slot.",
+      "aspect_ratio": "auto",
+      "resolution": "2K"
+    }
+  ]
+}

@@ -155,8 +155,8 @@ const ex637 = (id: string, ids: number[]) =>
 const feat637 = (id: string, ids: number[]) =>
   ids.map((n) => pinned(`637/wash/${id}/featured`, WASH_637, `${String(n).padStart(2, '0')}.webp`))
 const video637 = (id: string) => pinned(`637/wash/${id}`, WASH_637, 'example.mp4')
-// #643 Phase3-S4 true wash (kie offline) — thumbnail + NEW19 covers; examples/featured deferred.
-const WASH_643 = '675a22202e2debc4f99864c6927c35a1e01b9b57'
+// #643 Phase3-S4 true wash (kie offline) — thumbnail + NEW19 covers; batch1 examples wired (featured empty).
+const WASH_643 = '0be4350be224066cccf5e2929bfcb02e0bf8f7a9'
 const cover643 = (id: string) => pinned(`643/wash/${id}`, WASH_643, 'cover.webp')
 const ex643 = (id: string, ids: number[]) =>
   ids.map((n) => pinned(`643/wash/${id}/examples`, WASH_643, `${String(n).padStart(2, '0')}.webp`))
@@ -423,11 +423,11 @@ export const BUILTIN_SKILLS: Skill[] = orderBuiltins([
     inputs: [I('brief', ['主题说明', 'Theme brief'], 'text', true, ['拼贴主题与材质偏好', 'Collage theme and material prefs']), I('refs', ['参考', 'References'], 'image'), VISUAL] },
   // #640/#642/#643 Phase3 — 19 NEW skills; cover643 pins; NEARMISS_INPUTS (Upload+Additional); examples/featured empty until fuller gold; no competitor copy. Dropped-13 out.
   { id: 'taobao-product', name: t('skills.taobaoProduct'), instructions: 'You are a production Taobao listing visual designer. Ship a Chinese PDP set — not an Amazon white-bg catalog set.\n1) Brief: product, selling points and module list from productImage + sellPoints; keep product identity locked.\n2) Modules: main image, carousel frames, lifestyle scene and detail-page benefit blocks with Chinese claim hierarchy.\n3) Division: this is Taobao page system work; leave Amazon/A+ listing grids to the product skill.\n4) Copy: put every on-art Chinese phrase in quotes; mobile-legible.\n5) Refs: pass product shape ids in refs (ref_modes content) on every generate_image call.',
-    category: 'ecommerce', cover: cover643('taobao-product'), examples: [], featured: [],
+    category: 'ecommerce', cover: cover643('taobao-product'), examples: ex643('taobao-product', [1, 2, 3, 4, 5, 6, 7, 8]), featured: [],
     presets: [P('main', '主图', 'Main image', 'Style: Taobao 1:1 main image, clean product hero, Chinese claim space reserved, high thumb-stop contrast.'), P('scene', '场景图', 'Scene', 'Style: Taobao lifestyle scene with product in use, Chinese benefit callout in quotes.'), P('detail', '详情模块', 'Detail module', 'Style: Taobao detail-page benefit module, stacked claims in quotes, product truth locked.')],
     inputs: NEARMISS_INPUTS },
   { id: 'before-after', name: t('skills.beforeAfter'), instructions: 'You are a production before/after visual designer. Ship dual-state comparison frames — not a single hero still.\n1) Lock composition: same camera, crop and subject placement across before and after.\n2) States: clear before vs after (treatment, remodel, makeup or space) with readable split or side-by-side.\n3) Presets: beauty, home remodel, body/fitness as asked.\n4) Copy: short labels in quotes only when needed.\n5) Refs: pass refs in refs on every generate_image call.',
-    category: 'ads', cover: cover643('before-after'), examples: [], featured: [],
+    category: 'ads', cover: cover643('before-after'), examples: ex643('before-after', [1, 2, 3, 4, 5, 6, 7, 8]), featured: [],
     presets: [P('beauty', '美妆对比', 'Beauty', 'Style: beauty before/after, same crop and lighting, clear dual-state split, readable faces.'), P('home', '家装对比', 'Home remodel', 'Style: interior remodel before/after, matched camera, dual-state layout.'), P('fitness', '身材对比', 'Body / fitness', 'Style: fitness before/after, matched pose and crop, dual-state comparison.')],
     inputs: NEARMISS_INPUTS },
   { id: 'anim-2d', name: t('skills.anim2d'), instructions: 'You are a production 2D animation converter. Pipeline: still or layered art → short 2D animated clip. Not UGC/TVC motion and not flash-cut screenshot video.\n1) Intake: require primary visual; optional layers or styleNotes.\n2) Confirm duration and ratio with the user before animating.\n3) Animate with readable 2D motion (loops OK); keep line and color honest to the still.\n4) Scope: short 2D piece only — no long narrative TVC, no flash-cut UI beats.\n5) Refs: pass shape ids in refs on every generate_image / animate call.',
@@ -439,7 +439,7 @@ export const BUILTIN_SKILLS: Skill[] = orderBuiltins([
     presets: [P('youtube', 'YouTube套件', 'YouTube kit', 'Style: creator YouTube identity kit — avatar, banner-safe cover, palette chips, consistent persona.'), P('xhs', '小红书套件', 'RedNote kit', 'Style: creator RedNote identity kit — avatar, cover, palette, feed-ready frames.'), P('podcast', '播客套件', 'Podcast kit', 'Style: creator podcast identity kit — avatar, show cover, palette, simple lockups.')],
     inputs: NEARMISS_INPUTS },
   { id: 'product-website', name: t('skills.productWebsite'), instructions: 'You are a production product-website designer for hardware / consumer electronics. Ship landing modules with hero + specs — not a SaaS component library.\n1) Brief: product, specs and brand cues from siteBrief + refs.\n2) Modules: hero, spec grid and supporting sections that share one visual system.\n3) Division: hardware product site language; leave SaaS UI kits to web-product.\n4) Copy: short on-art lines in quotes.\n5) Refs: pass refs in refs on every generate_image call.',
-    category: 'website', cover: cover643('product-website'), examples: [], featured: [],
+    category: 'website', cover: cover643('product-website'), examples: ex643('product-website', [1, 2, 3]), featured: [],
     presets: [P('hero', '英雄首屏', 'Hero', 'Style: hardware product site hero, strong product shot, short headline in quotes, 16:9.'), P('specs', '规格模块', 'Specs module', 'Style: product specs module, clear grid, hardware truth, coherent with hero.')],
     inputs: NEARMISS_INPUTS },
   { id: 'studio-model', name: t('skills.studioModel'), instructions: 'You are a production studio model apparel photographer. Ship studio-lit lookbook stills — not street Fashion UGC and not lifestyle cinema.\n1) Brief: garment, model cues and shot list from garmentRef + brief.\n2) Lighting: controlled studio; full / half / detail as preset.\n3) Product in frame when asked; keep fabric and fit honest.\n4) Division: studio apparel catalog energy — not candid UGC, not home lifestyle scenes.\n5) Refs: pass shape ids in refs on every generate_image call.',
@@ -483,7 +483,7 @@ export const BUILTIN_SKILLS: Skill[] = orderBuiltins([
     presets: [P('bg', '直播背景', 'Live background', 'Style: live-stream background decor, product-safe center, high contrast edges.'), P('price', '价签贴片', 'Price tag', 'Style: live price-tag overlay, bold numerals in quotes, stream-safe contrast.'), P('badge', '角标装饰', 'Corner badge', 'Style: live corner badge / sticker pack, stackable, readable on video.')],
     inputs: NEARMISS_INPUTS },
   { id: 'linkedin-banner', name: t('skills.linkedinBanner'), instructions: 'You are a production LinkedIn banner designer. Ship 1584×396 professional banners — not YouTube channel art.\n1) Brief: role, company and tone from profileBrief + refs.\n2) Layout: 1584×396; keep face/logo in safe area; B2B restraint.\n3) Division: LinkedIn personal/company banner only — leave 2560×1440 channel art to youtube-channel-banner.\n4) Copy: short professional lines in quotes.\n5) Refs: pass refs in refs on every generate_image call.',
-    category: 'social', cover: cover643('linkedin-banner'), examples: [], featured: [],
+    category: 'social', cover: cover643('linkedin-banner'), examples: ex643('linkedin-banner', [1]), featured: [],
     presets: [P('personal', '个人横幅', 'Personal', 'Style: LinkedIn personal banner 1584×396, face safe area, B2B tone.'), P('company', '公司横幅', 'Company', 'Style: LinkedIn company banner 1584×396, logo safe, professional restraint.')],
     inputs: NEARMISS_INPUTS },
   { id: 'logo-animation', name: t('skills.logoAnimation'), instructions: 'You are a production logo-animation designer. Animate a logo into a short brand intro or loop — not a static material study and not a geometric mark redesign.\n1) Intake: require logoImage; confirm intro vs loop.\n2) Motion: clean entrance or seamless loop; keep geometry identical to the mark.\n3) Division: motion logo — leave material stills to logo-material; leave abstract mark invention to logo-abstract.\n4) Finish: safe margins; no redesign of paths.\n5) Refs: pass logo shape id in refs on every generate_image / animate call.',
@@ -495,7 +495,7 @@ export const BUILTIN_SKILLS: Skill[] = orderBuiltins([
     presets: [P('mood', '氛围首屏', 'Mood hero', 'Style: restaurant site mood hero, hospitality photography, sparse headline in quotes.'), P('menu', '菜单模块', 'Menu module', 'Style: restaurant menu module visual, readable dishes, coherent with hero.')],
     inputs: NEARMISS_INPUTS },
   { id: 'clothing-swap', name: t('skills.clothingSwap'), instructions: 'You are a production AI clothing-swap artist. Keep the person; swap garments from a dual ref (person + clothing) — not a triple-ref person-swap.\n1) Intake: require an uploaded person ref + garment cue in Additional Details when needed.\n2) Lock: face, body and pose from the person; only wardrobe changes.\n3) Deliver: try-on stills with fabric truth and clean edges.\n4) Division: outfit swap on fixed person — leave scene+face+outfit triple swap to person-swap.\n5) Refs: pass both shape ids in refs on every generate_image call.',
-    category: 'ecommerce', cover: cover643('clothing-swap'), examples: [], featured: [],
+    category: 'ecommerce', cover: cover643('clothing-swap'), examples: ex643('clothing-swap', [1, 2]), featured: [],
     presets: [P('casual', '日常换装', 'Casual', 'Style: AI clothing swap casual look, person locked, garment from ref, clean edges.'), P('formal', '正装换装', 'Formal', 'Style: AI clothing swap formal look, person locked, fabric honest.'), P('street', '街头换装', 'Street', 'Style: AI clothing swap streetwear look, person locked, outfit from ref.')],
     inputs: NEARMISS_INPUTS },
   { id: 'interior', name: t('skills.interiorArchitecturalVisualization'), instructions: 'Produce photoreal interior or architecture renders: eye-level wide shot, natural light, accurate materials, 16:9. Add a detail vignette at 4:3.',

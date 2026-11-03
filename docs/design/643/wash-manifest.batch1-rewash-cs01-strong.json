@@ -1,0 +1,14 @@
+{
+  "_comment": "#667 UIUX HOLD: clothing-swap ex01 soft (coat-tint only Δ≈14). Stronger identity-lock wash — same clothing-swap studio try-on composition; FORCE half-screen Δ (new face + non-blue coat family). Do NOT topic-drift.",
+  "assets": [
+    {
+      "skill_id": "clothing-swap",
+      "slot": "examples",
+      "index": 1,
+      "source_path": "docs/design/643/78/gold/clothing-swap/examples/ex-01.webp",
+      "prompt": "TRUE WASH — half-screen must instantly prove this is NOT the reference. IDENTITY-LOCK use-slot ONLY: single full-body white-studio fashion / clothing-swap try-on, fluted white wall panel on the LEFT, model mid-stride walking toward camera-right, hands in coat pockets, mini skirt + mid-calf socks + lug loafers. FORBIDDEN soft remix: do NOT keep the same face, same black shoulder-length bob, or same dusty/teal blue pea-coat. REQUIRED changes: (1) DIFFERENT East-Asian woman — new face, longer wavy hair OR short bob with bangs, clearly not the reference identity; (2) coat MUST leave the blue family — camel, beige, or olive double-breasted wool pea/trench with brown buttons; (3) shirt cream or white (not light-blue); (4) necktie solid navy or fine plaid (not brown diagonal stripe); (5) micro pouch necklace optional but restyle metal/leather; (6) warmer key light from right, stronger floor shadow. Keep dark mini skirt + brown loafers so the outfit-try-on role stays. No brands, watermarks, competitor logos, celebrity likeness. No split UI, no hanger chrome, no dual backgrounds, no kitchen/scene drift.",
+      "aspect_ratio": "3:4",
+      "resolution": "2K"
+    }
+  ]
+}

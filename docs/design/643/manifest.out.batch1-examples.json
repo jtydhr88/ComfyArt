@@ -1,0 +1,418 @@
+{
+  "issue": 643,
+  "tool": "scripts/kie_wash_phase3.py",
+  "model": "gpt-image-2-5-flare-image-to-image",
+  "assets": [
+    {
+      "skill_id": "ai-model",
+      "slot": "cover",
+      "index": 0,
+      "path": "ai-model/cover/cover.png",
+      "sha256": "dbbd55d63b31cd8b9e24eea187fddd65b75047bdbb386cee6384698f3ecf16b8",
+      "model": "gpt-image-2-5-flare-image-to-image",
+      "task_id": "20100c5b7142f638268c6b3f4a1387ec",
+      "source": "cover.webp"
+    },
+    {
+      "skill_id": "anim-2d",
+      "slot": "cover",
+      "index": 0,
+      "path": "anim-2d/cover/cover.png",
+      "sha256": "53be548643cb8a96607b4da1db82b887994740a4d4285d0fe31b1793683f4071",
+      "model": "gpt-image-2-5-flare-image-to-image",
+      "task_id": "94df8018b48aa4863f5140cbbc2b9d11",
+      "source": "cover.webp"
+    },
+    {
+      "skill_id": "animated-poster",
+      "slot": "cover",
+      "index": 0,
+      "path": "animated-poster/cover/cover.png",
+      "sha256": "82b004e9627e1f45c232020f7466c8a7bb5ccaea4cacb4dfddd2a2f3f2d2b687",
+      "model": "gpt-image-2-5-flare-image-to-image",
+      "task_id": "6d8814eba7e44992e751638aff171c8a",
+      "source": "cover.webp"
+    },
+    {
+      "skill_id": "before-after",
+      "slot": "cover",
+      "index": 0,
+      "path": "before-after/cover/cover.png",
+      "sha256": "6264f7da99e7d28bb7b8e8d593cc6c879bd6f8ee3ba577b6248fc9efb3485d1b",
+      "model": "gpt-image-2-5-flare-image-to-image",
+      "task_id": "c60979f01dabac69dbef679aad4865ef",
+      "source": "cover.webp"
+    },
+    {
+      "skill_id": "before-after",
+      "slot": "examples",
+      "index": 1,
+      "path": "before-after/examples/01.png",
+      "sha256": "daa9cdf900ed802777746b713b710e678658b91ea262f49d60f3bc2ef204b8ab",
+      "model": "gpt-image-2-5-flare-image-to-image",
+      "task_id": "a593b23732219ff61d684dc71e62ac53",
+      "source": "ex-01.webp"
+    },
+    {
+      "skill_id": "before-after",
+      "slot": "examples",
+      "index": 2,
+      "path": "before-after/examples/02.png",
+      "sha256": "63e153ba81c9e9dcbfbe8ac69d7637e39649f735893082a186722949ccfa1482",
+      "model": "gpt-image-2-5-flare-image-to-image",
+      "task_id": "c7784ecda652cb451a83e74b663dafc8",
+      "source": "ex-02.webp"
+    },
+    {
+      "skill_id": "before-after",
+      "slot": "examples",
+      "index": 3,
+      "path": "before-after/examples/03.png",
+      "sha256": "83cacefc5a3676d381e117531c408ce0db23ac034d9a56747d02ab0faf65d685",
+      "model": "gpt-image-2-5-flare-image-to-image",
+      "task_id": "22aaf8f5ea237c70bf4f013a24d6279f",
+      "source": "ex-03.webp"
+    },
+    {
+      "skill_id": "before-after",
+      "slot": "examples",
+      "index": 4,
+      "path": "before-after/examples/04.png",
+      "sha256": "2c40a64170a485aab900d2d3329a42d1855b9e43c8516f143c430e3e922b4ed1",
+      "model": "gpt-image-2-5-flare-image-to-image",
+      "task_id": "c8d3d439d62adfd0840e8f346e14454e",
+      "source": "ex-04.webp"
+    },
+    {
+      "skill_id": "before-after",
+      "slot": "examples",
+      "index": 5,
+      "path": "before-after/examples/05.png",
+      "sha256": "5ddf602be245cc8187f71cba5e7c7ff86e990a79026804553e78ea7507134642",
+      "model": "gpt-image-2-5-flare-image-to-image",
+      "task_id": "2a0b19cce7f33af67f5d993a0a31f6c7",
+      "source": "ex-05.webp"
+    },
+    {
+      "skill_id": "before-after",
+      "slot": "examples",
+      "index": 6,
+      "path": "before-after/examples/06.png",
+      "sha256": "bd48fa27ce95d3247bd6862e162c87db70ad24d04ad9a0a14daf431265185d80",
+      "model": "gpt-image-2-5-flare-image-to-image",
+      "task_id": "1207602cfbe72f7373644b9082ac9039",
+      "source": "ex-06.webp"
+    },
+    {
+      "skill_id": "before-after",
+      "slot": "examples",
+      "index": 7,
+      "path": "before-after/examples/07.png",
+      "sha256": "45e68f923c74f91e4f7d82c7515de648586bef3f8f8bbf128f8fb38d691d1dd1",
+      "model": "gpt-image-2-5-flare-image-to-image",
+      "task_id": "1b54bde67e7bfd7ffd03bf254ac9402d",
+      "source": "ex-07.webp"
+    },
+    {
+      "skill_id": "before-after",
+      "slot": "examples",
+      "index": 8,
+      "path": "before-after/examples/08.png",
+      "sha256": "5e28bb02f170cb76a0be20b800601885c01524a3df7b66371c5814eb5390c46c",
+      "model": "gpt-image-2-5-sunburst-image-to-image",
+      "task_id": "e8c00497c8b7ae3f84935659f8434206",
+      "source": "ex-08.webp"
+    },
+    {
+      "skill_id": "clothing-swap",
+      "slot": "cover",
+      "index": 0,
+      "path": "clothing-swap/cover/cover.png",
+      "sha256": "9124481cec5daa196cceea18d2121177ba1ea2f7c45d7e7f00a02b30b4bb1de7",
+      "model": "gpt-image-2-5-flare-image-to-image",
+      "task_id": "7dc8a302ddf1a6a87592dfb798d33360",
+      "source": "cover.webp"
+    },
+    {
+      "skill_id": "clothing-swap",
+      "slot": "examples",
+      "index": 1,
+      "path": "clothing-swap/examples/01.png",
+      "sha256": "c0258be5a5381b8f23ebba633a60f09232e5374ef2101b8a5088eb6fafeb5808",
+      "model": "gpt-image-2-5-sunburst-image-to-image",
+      "task_id": "20e9cba0fbe68e77925132fe70a603ce",
+      "source": "ex-01.webp"
+    },
+    {
+      "skill_id": "clothing-swap",
+      "slot": "examples",
+      "index": 2,
+      "path": "clothing-swap/examples/02.png",
+      "sha256": "27e28789afb7fb51de2841dfa7b488e3a61e90bd942fe2b80fce29bde9bd6dfd",
+      "model": "gpt-image-2-5-flare-image-to-image",
+      "task_id": "3832a669401922cbad3d5ac573e35bac",
+      "source": "ex-02.webp"
+    },
+    {
+      "skill_id": "creator-identity",
+      "slot": "cover",
+      "index": 0,
+      "path": "creator-identity/cover/cover.png",
+      "sha256": "f57daf223f20d1314b2ff99e45585a099a27692e018abf43a4c46a1df2a31720",
+      "model": "gpt-image-2-5-flare-image-to-image",
+      "task_id": "3a352692f8c2664b7ebbdb6fe9762dbb",
+      "source": "cover.webp"
+    },
+    {
+      "skill_id": "game-art",
+      "slot": "cover",
+      "index": 0,
+      "path": "game-art/cover/cover.png",
+      "sha256": "04ce14583acb103c8aa658ad840cf1b3968165024b979a9d44f7f23c1849d883",
+      "model": "gpt-image-2-5-flare-image-to-image",
+      "task_id": "a4d712fdb9646faaffc8f17f5d9c77db",
+      "source": "cover.webp"
+    },
+    {
+      "skill_id": "linkedin-banner",
+      "slot": "cover",
+      "index": 0,
+      "path": "linkedin-banner/cover/cover.png",
+      "sha256": "95cf6b5b29d6d657771465e0da9ad5c983b568ef1b3063e4f841425e024d184b",
+      "model": "gpt-image-2-5-flare-image-to-image",
+      "task_id": "a774b0b7cab25db5edf328aed7b40e48",
+      "source": "cover.webp"
+    },
+    {
+      "skill_id": "linkedin-banner",
+      "slot": "examples",
+      "index": 1,
+      "path": "linkedin-banner/examples/01.png",
+      "sha256": "e8e18dd772c97b09a680d6705ef750f728e6937c8153cb01d1d805cd49e51254",
+      "model": "gpt-image-2-5-sunburst-image-to-image",
+      "task_id": "1356506e24e1eb0b7f97065eef802b4b",
+      "source": "ex-01-poster.jpg"
+    },
+    {
+      "skill_id": "live-promo-decor",
+      "slot": "cover",
+      "index": 0,
+      "path": "live-promo-decor/cover/cover.png",
+      "sha256": "c1ac40b05aa4caeb97b48d8a73708221e957a475dfce61dc6a067beaf95d3162",
+      "model": "gpt-image-2-5-flare-image-to-image",
+      "task_id": "16358f69f7b7730fa0ba90f915a63fd9",
+      "source": "cover.webp"
+    },
+    {
+      "skill_id": "logo-animation",
+      "slot": "cover",
+      "index": 0,
+      "path": "logo-animation/cover/cover.png",
+      "sha256": "eece7861108c15f7d441926fb9c22ddda6f8a861f87da8ce376052ae9f5a4c2f",
+      "model": "gpt-image-2-5-flare-image-to-image",
+      "task_id": "3e8d13389ef33035fa4196f3f10370be",
+      "source": "cover.webp"
+    },
+    {
+      "skill_id": "portrait-studio",
+      "slot": "cover",
+      "index": 0,
+      "path": "portrait-studio/cover/cover.png",
+      "sha256": "97598bc09e637412c831ddfabf642d03010b40454b1a7d51b437ef00182ce9b6",
+      "model": "gpt-image-2-5-flare-image-to-image",
+      "task_id": "db30200d25da197bde9be34c67b3cea7",
+      "source": "cover.webp"
+    },
+    {
+      "skill_id": "pose-fission",
+      "slot": "cover",
+      "index": 0,
+      "path": "pose-fission/cover/cover.png",
+      "sha256": "b8f0390f83836097c3cd182e05eb93141b263887d310be0d7106874636f2d216",
+      "model": "gpt-image-2-5-flare-image-to-image",
+      "task_id": "333978c7794c1dce5c3de64384c565b7",
+      "source": "cover.webp"
+    },
+    {
+      "skill_id": "premium-website",
+      "slot": "cover",
+      "index": 0,
+      "path": "premium-website/cover/cover.png",
+      "sha256": "f3f6ee8c41ccee7a614d33bc349d2844785aa8376171e931a1820c5509d5047b",
+      "model": "gpt-image-2-5-flare-image-to-image",
+      "task_id": "2077e5e14a21b20ab22d2ff0bcf8a73d",
+      "source": "cover.webp"
+    },
+    {
+      "skill_id": "product-to-packaging",
+      "slot": "cover",
+      "index": 0,
+      "path": "product-to-packaging/cover/cover.png",
+      "sha256": "12ad089778882621b7cdab8b7afb8b07471f737032b87ead57be2835c71d653c",
+      "model": "gpt-image-2-5-flare-image-to-image",
+      "task_id": "07ae0bf5ff5129b24b0ae58dd4d08a26",
+      "source": "cover.webp"
+    },
+    {
+      "skill_id": "product-website",
+      "slot": "cover",
+      "index": 0,
+      "path": "product-website/cover/cover.png",
+      "sha256": "6bbadeea3f21981e5587657cd11ada42c439a69b812883f0dae7625ef19bc0b4",
+      "model": "gpt-image-2-5-flare-image-to-image",
+      "task_id": "cca7c182c2d48f38e6b520f731aaf778",
+      "source": "cover.webp"
+    },
+    {
+      "skill_id": "product-website",
+      "slot": "examples",
+      "index": 1,
+      "path": "product-website/examples/01.png",
+      "sha256": "7c5b92b3c7ed0ed45c898842112c11bc414f133d08bd7f66d3a96fb688990d0f",
+      "model": "gpt-image-2-5-flare-image-to-image",
+      "task_id": "56d478e6e157d98bfdf86daa74a0bfd9",
+      "source": "ex-01.png"
+    },
+    {
+      "skill_id": "product-website",
+      "slot": "examples",
+      "index": 2,
+      "path": "product-website/examples/02.png",
+      "sha256": "cb088e508ad4caa7a2a92cc0bb241366b3e3dda94d5e30604a5c7673c2840a84",
+      "model": "gpt-image-2-5-flare-image-to-image",
+      "task_id": "fee6dd26ec26bae12d15be8951019c73",
+      "source": "ex-02.png"
+    },
+    {
+      "skill_id": "product-website",
+      "slot": "examples",
+      "index": 3,
+      "path": "product-website/examples/03.png",
+      "sha256": "9cedcd4df8fe8f67f11cf9cf0497aeadebd31d7d733846d02dc68b4dbad37be9",
+      "model": "gpt-image-2-5-flare-image-to-image",
+      "task_id": "d6f96d88d46283cf62ba531503a5b10e",
+      "source": "ex-03.png"
+    },
+    {
+      "skill_id": "restaurant-website",
+      "slot": "cover",
+      "index": 0,
+      "path": "restaurant-website/cover/cover.png",
+      "sha256": "310a5c22db46f563b96cd66b374d60fa37d8ec961e470ed60442935bf069787d",
+      "model": "gpt-image-2-5-flare-image-to-image",
+      "task_id": "e431a7c06559259096efb3945cb364e8",
+      "source": "cover.webp"
+    },
+    {
+      "skill_id": "studio-model",
+      "slot": "cover",
+      "index": 0,
+      "path": "studio-model/cover/cover.png",
+      "sha256": "1f5f5e5c17f0b6a3305ff98a64af855f5618bf34fe99101ccc16332393cfc40c",
+      "model": "gpt-image-2-5-flare-image-to-image",
+      "task_id": "c2dcdfb67ed1cb63af4c715bbc4526a0",
+      "source": "cover.webp"
+    },
+    {
+      "skill_id": "taobao-product",
+      "slot": "cover",
+      "index": 0,
+      "path": "taobao-product/cover/cover.png",
+      "sha256": "33c7625aeaf85352576bed7e544aec8fb691047dada9bf57e993bd56190acffe",
+      "model": "gpt-image-2-5-flare-image-to-image",
+      "task_id": "ba95761e976f11103b1578b7eea35d86",
+      "source": "cover.webp"
+    },
+    {
+      "skill_id": "taobao-product",
+      "slot": "examples",
+      "index": 1,
+      "path": "taobao-product/examples/01.png",
+      "sha256": "d344faefc283290793cde17a5a41d073a6289b0b64fdf9bd076d047d9ee71bec",
+      "model": "gpt-image-2-5-flare-image-to-image",
+      "task_id": "18c18cd24174bd9aa18b9c2ca3e83b42",
+      "source": "ex-01.webp"
+    },
+    {
+      "skill_id": "taobao-product",
+      "slot": "examples",
+      "index": 2,
+      "path": "taobao-product/examples/02.png",
+      "sha256": "97115df865b556c561a4c0326381ae3f8cbbb21e73ab4354a603be089a70fc49",
+      "model": "gpt-image-2-5-flare-image-to-image",
+      "task_id": "22c613d3424748233fd6a1e39c53ccba",
+      "source": "ex-02.webp"
+    },
+    {
+      "skill_id": "taobao-product",
+      "slot": "examples",
+      "index": 3,
+      "path": "taobao-product/examples/03.png",
+      "sha256": "d61b417c7d60ddb74c65ba479808340186fc306ffb5cc589781b7683267e2340",
+      "model": "gpt-image-2-5-flare-image-to-image",
+      "task_id": "d9884c3b3fcb0eb3d843c02f1c5b32ee",
+      "source": "ex-03.webp"
+    },
+    {
+      "skill_id": "taobao-product",
+      "slot": "examples",
+      "index": 4,
+      "path": "taobao-product/examples/04.png",
+      "sha256": "ea22720123ab55b6419494c4452af97026d39c15fda68855022541522b2a785d",
+      "model": "gpt-image-2-5-flare-image-to-image",
+      "task_id": "03f590551028bedc758c0679d71719a1",
+      "source": "ex-04.webp"
+    },
+    {
+      "skill_id": "taobao-product",
+      "slot": "examples",
+      "index": 5,
+      "path": "taobao-product/examples/05.png",
+      "sha256": "bd08029e5f7ecf9c5a97cd9bd85c3c47ee964851c8b1fefe88e473cbc70ba441",
+      "model": "gpt-image-2-5-flare-image-to-image",
+      "task_id": "63956218d748f4fff0cb446f64700bfb",
+      "source": "ex-05.webp"
+    },
+    {
+      "skill_id": "taobao-product",
+      "slot": "examples",
+      "index": 6,
+      "path": "taobao-product/examples/06.png",
+      "sha256": "c0f3ba3a8739d41155d5096a5d78dce04d3207d77e4dcd50b79701ea2ccc3c51",
+      "model": "gpt-image-2-5-flare-image-to-image",
+      "task_id": "867096fed860b7a7382d206fb2d6e3dd",
+      "source": "ex-06.webp"
+    },
+    {
+      "skill_id": "taobao-product",
+      "slot": "examples",
+      "index": 7,
+      "path": "taobao-product/examples/07.png",
+      "sha256": "b2cc0b83a2d22b1502a5a22e0024b37e808dceb72b29401dc7a6da2cae19819f",
+      "model": "gpt-image-2-5-flare-image-to-image",
+      "task_id": "c43d84b9c6e4a1af29ab3b35e89d23af",
+      "source": "ex-07.webp"
+    },
+    {
+      "skill_id": "taobao-product",
+      "slot": "examples",
+      "index": 8,
+      "path": "taobao-product/examples/08.png",
+      "sha256": "1298661af00565e7fe8b922f94582a185c4358e74f93121194d8fde4ef1fd03a",
+      "model": "gpt-image-2-5-flare-image-to-image",
+      "task_id": "362d6f627532d1ef0a9783efb234c4b2",
+      "source": "ex-08.webp"
+    },
+    {
+      "skill_id": "youtube-channel-banner",
+      "slot": "cover",
+      "index": 0,
+      "path": "youtube-channel-banner/cover/cover.png",
+      "sha256": "712dc6ab9be244b2dfc41e6aaf2e7cd39a1bf236385ecfadfb874dd9aa44d4bd",
+      "model": "gpt-image-2-5-flare-image-to-image",
+      "task_id": "e3668948d014796c3770042e72239ebc",
+      "source": "cover.webp"
+    }
+  ],
+  "errors": []
+}

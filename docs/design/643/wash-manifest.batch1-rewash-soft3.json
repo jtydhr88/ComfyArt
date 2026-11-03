@@ -1,0 +1,23 @@
+{
+  "_comment": "soft3 ba04/06 identity-lock",
+  "assets": [
+    {
+      "skill_id": "before-after",
+      "slot": "examples",
+      "index": 4,
+      "source_path": "docs/design/643/78/gold/before-after/examples/ex-04.webp",
+      "prompt": "Recreate as ORIGINAL artwork: keep the same before/after pair LAYOUT and subject CATEGORY as the reference. New pixels mandatory — half-screen must show an obviously different image. Use a clearly DIFFERENT woman (different age/ethnicity/hair) while staying in beauty/portrait before-after. No brands, watermarks, or celebrity likeness. Dual Original|Optimized headshot of a woman in dark blazer — DIFFERENT face from reference; warmer retouch delta; plain studio.",
+      "aspect_ratio": "3:4",
+      "resolution": "2K"
+    },
+    {
+      "skill_id": "before-after",
+      "slot": "examples",
+      "index": 6,
+      "source_path": "docs/design/643/78/gold/before-after/examples/ex-06.webp",
+      "prompt": "Recreate as ORIGINAL artwork: keep the same before/after pair LAYOUT and subject CATEGORY as the reference. New pixels mandatory — half-screen must show an obviously different image. Use a clearly DIFFERENT woman (different age/ethnicity/hair) while staying in beauty/portrait before-after. No brands, watermarks, or celebrity likeness. Dual Before|After extreme close-up of eye/cheek/skin on cream — DIFFERENT woman; keep beauty skin-retouch slot.",
+      "aspect_ratio": "3:4",
+      "resolution": "2K"
+    }
+  ]
+}

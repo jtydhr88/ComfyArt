@@ -57,11 +57,19 @@ def test_new19_present_production_copy_dialog_inputs():
         assert "presetChips" not in e, sid
         assert "presets:" in e, sid
         assert len(re.findall(r"\bP\('", e)) >= 2, sid
-        # #643 cover pins; examples/featured still empty until fuller gold
-        assert "examples: []" in e and "featured: []" in e, sid
+        # #643 cover pins; batch1 examples wired, featured stays empty; no video
+        BATCH1_EX = {
+            "taobao-product", "before-after", "product-website", "linkedin-banner", "clothing-swap",
+        }
         head = e.split("inputs:", 1)[0]
         assert f"cover: cover643('{sid}')" in head, sid
         assert "video:" not in head, sid
+        assert "featured: []" in e, sid
+        if sid in BATCH1_EX:
+            assert f"examples: ex643('{sid}'" in e, sid
+            assert "examples: []" not in e, sid
+        else:
+            assert "examples: []" in e, sid
 
 
 def test_no_dropped_ids_no_skill_creator_slot():

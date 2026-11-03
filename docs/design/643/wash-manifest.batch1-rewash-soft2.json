@@ -1,0 +1,50 @@
+{
+  "_comment": "second soft rewash",
+  "assets": [
+    {
+      "skill_id": "before-after",
+      "slot": "examples",
+      "index": 4,
+      "source_path": "docs/design/643/78/gold/before-after/examples/ex-04.webp",
+      "prompt": "TRUE wash, not soft copy: at half-screen a reviewer must instantly see different pixels. Keep the SAME use-slot and composition family as the reference. Replace human faces with a clearly DIFFERENT person of the same general demographic; restyle colors/lighting/camera crop aggressively while preserving layout. Never change the topic category. No brands/watermarks/celebrity likeness. Dual Original|Optimized headshot in dark blazer on plain backdrop — DIFFERENT woman, clearer retouch delta.",
+      "aspect_ratio": "3:4",
+      "resolution": "2K"
+    },
+    {
+      "skill_id": "before-after",
+      "slot": "examples",
+      "index": 6,
+      "source_path": "docs/design/643/78/gold/before-after/examples/ex-06.webp",
+      "prompt": "TRUE wash, not soft copy: at half-screen a reviewer must instantly see different pixels. Keep the SAME use-slot and composition family as the reference. Replace human faces with a clearly DIFFERENT person of the same general demographic; restyle colors/lighting/camera crop aggressively while preserving layout. Never change the topic category. No brands/watermarks/celebrity likeness. Dual eye/cheek skin close-up Before|After on cream — DIFFERENT woman; stay face/skin beauty slot.",
+      "aspect_ratio": "3:4",
+      "resolution": "2K"
+    },
+    {
+      "skill_id": "before-after",
+      "slot": "examples",
+      "index": 8,
+      "source_path": "docs/design/643/78/gold/before-after/examples/ex-08.webp",
+      "prompt": "TRUE wash, not soft copy: at half-screen a reviewer must instantly see different pixels. Keep the SAME use-slot and composition family as the reference. Replace human faces with a clearly DIFFERENT person of the same general demographic; restyle colors/lighting/camera crop aggressively while preserving layout. Never change the topic category. No brands/watermarks/celebrity likeness. Stacked Before|After three-quarter face on cream fabric — DIFFERENT woman; beauty face slot only.",
+      "aspect_ratio": "3:4",
+      "resolution": "2K"
+    },
+    {
+      "skill_id": "clothing-swap",
+      "slot": "examples",
+      "index": 1,
+      "source_path": "docs/design/643/78/gold/clothing-swap/examples/ex-01.webp",
+      "prompt": "TRUE wash, not soft copy: at half-screen a reviewer must instantly see different pixels. Keep the SAME use-slot and composition family as the reference. Replace human faces with a clearly DIFFERENT person of the same general demographic; restyle colors/lighting/camera crop aggressively while preserving layout. Never change the topic category. No brands/watermarks/celebrity likeness. Full-body white studio try-on mid-stride: trench + tie + mini + loafers + fluted wall. DIFFERENT East-Asian model face required; change coat to teal-blue and move key light left.",
+      "aspect_ratio": "3:4",
+      "resolution": "2K"
+    },
+    {
+      "skill_id": "linkedin-banner",
+      "slot": "examples",
+      "index": 1,
+      "source_path": "docs/design/643/78/gold/linkedin-banner/examples/ex-01-poster.jpg",
+      "prompt": "TRUE wash, not soft copy: at half-screen a reviewer must instantly see different pixels. Keep the SAME use-slot and composition family as the reference. Replace human faces with a clearly DIFFERENT person of the same general demographic; restyle colors/lighting/camera crop aggressively while preserving layout. Never change the topic category. No brands/watermarks/celebrity likeness. LinkedIn profile mockup with finance banner + avatar circle + grey wireframes. New serif headline, new chart art, different purple/teal palette; keep mockup chrome layout.",
+      "aspect_ratio": "4:3",
+      "resolution": "2K"
+    }
+  ]
+}

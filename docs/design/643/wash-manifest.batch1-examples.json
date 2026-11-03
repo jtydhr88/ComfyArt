@@ -1,0 +1,203 @@
+{
+  "_comment": "#643 batch1 examples TRUE wash — identity-lock to gold subject/composition (Angela gate). NO category-drift prompts. Stills only; gold video mp4/mov not washed (no kie video path). Featured omitted (INDEX: no separate Featured strip).",
+  "assets": [
+    {
+      "skill_id": "before-after",
+      "slot": "examples",
+      "index": 1,
+      "source_path": "docs/design/643/78/gold/before-after/examples/ex-01.webp",
+      "prompt": "Recreate this image as original artwork with NEW pixels so a half-screen glance proves it is not a soft copy. IDENTITY-LOCK: keep the same subject category, composition family, and use-slot as the reference — do NOT change topic. No brand marks, watermarks, competitor logos, or recognizable celebrity likeness. Keep a vertical before/after marketing poster: stressed messy desk vs calm organized desk for the same professional woman, polaroid-style dual panels with BEFORE/AFTER labels and headline+CTA layout. Same office-productivity before/after use-slot.",
+      "aspect_ratio": "3:4",
+      "resolution": "2K"
+    },
+    {
+      "skill_id": "before-after",
+      "slot": "examples",
+      "index": 2,
+      "source_path": "docs/design/643/78/gold/before-after/examples/ex-02.webp",
+      "prompt": "Recreate this image as original artwork with NEW pixels so a half-screen glance proves it is not a soft copy. IDENTITY-LOCK: keep the same subject category, composition family, and use-slot as the reference — do NOT change topic. No brand marks, watermarks, competitor logos, or recognizable celebrity likeness. Keep a dual full-body posture before/after: same woman in grey tee and black joggers, left slouching vs right standing tall, beige studio, Before/After coaching labels. Same fitness/posture comparison use-slot.",
+      "aspect_ratio": "3:4",
+      "resolution": "2K"
+    },
+    {
+      "skill_id": "before-after",
+      "slot": "examples",
+      "index": 3,
+      "source_path": "docs/design/643/78/gold/before-after/examples/ex-03.webp",
+      "prompt": "Recreate this image as original artwork with NEW pixels so a half-screen glance proves it is not a soft copy. IDENTITY-LOCK: keep the same subject category, composition family, and use-slot as the reference — do NOT change topic. No brand marks, watermarks, competitor logos, or recognizable celebrity likeness. Keep a vertical 50/50 split of a chrome bathroom faucet on a white sink: left limescale/dull Before, right polished mirror After, tiled backdrop. Same cleaning/restoration faucet use-slot.",
+      "aspect_ratio": "3:4",
+      "resolution": "2K"
+    },
+    {
+      "skill_id": "before-after",
+      "slot": "examples",
+      "index": 4,
+      "source_path": "docs/design/643/78/gold/before-after/examples/ex-04.webp",
+      "prompt": "Recreate this image as original artwork with NEW pixels so a half-screen glance proves it is not a soft copy. IDENTITY-LOCK: keep the same subject category, composition family, and use-slot as the reference — do NOT change topic. No brand marks, watermarks, competitor logos, or recognizable celebrity likeness. Keep a side-by-side professional headshot Original|Optimized of the same woman in a dark blazer: left natural skin, right retouched warmer glow. Same beauty headshot retouch use-slot.",
+      "aspect_ratio": "3:4",
+      "resolution": "2K"
+    },
+    {
+      "skill_id": "before-after",
+      "slot": "examples",
+      "index": 5,
+      "source_path": "docs/design/643/78/gold/before-after/examples/ex-05.webp",
+      "prompt": "Recreate this image as original artwork with NEW pixels so a half-screen glance proves it is not a soft copy. IDENTITY-LOCK: keep the same subject category, composition family, and use-slot as the reference — do NOT change topic. No brand marks, watermarks, competitor logos, or recognizable celebrity likeness. Keep a vertical window-frame mold Before|After split with a generic mold-remover bottle on the clean sill. Same household cleaning before/after use-slot.",
+      "aspect_ratio": "3:4",
+      "resolution": "2K"
+    },
+    {
+      "skill_id": "before-after",
+      "slot": "examples",
+      "index": 6,
+      "source_path": "docs/design/643/78/gold/before-after/examples/ex-06.webp",
+      "prompt": "Recreate this image as original artwork with NEW pixels so a half-screen glance proves it is not a soft copy. IDENTITY-LOCK: keep the same subject category, composition family, and use-slot as the reference — do NOT change topic. No brand marks, watermarks, competitor logos, or recognizable celebrity likeness. Keep a tight dual-panel eye/cheek skin close-up Before|After on cream backdrop (wrinkles vs smoothed glow). Same skincare face close-up use-slot — stay on face/skin, never kitchen.",
+      "aspect_ratio": "3:4",
+      "resolution": "2K"
+    },
+    {
+      "skill_id": "before-after",
+      "slot": "examples",
+      "index": 7,
+      "source_path": "docs/design/643/78/gold/before-after/examples/ex-07.webp",
+      "prompt": "Recreate this image as original artwork with NEW pixels so a half-screen glance proves it is not a soft copy. IDENTITY-LOCK: keep the same subject category, composition family, and use-slot as the reference — do NOT change topic. No brand marks, watermarks, competitor logos, or recognizable celebrity likeness. Keep a stacked two-card problem/solution poster of a young Black man (frustrated alone vs confident community) on black with lightning accents; generic studio name only. Same coaching/community before-after poster use-slot.",
+      "aspect_ratio": "3:4",
+      "resolution": "2K"
+    },
+    {
+      "skill_id": "before-after",
+      "slot": "examples",
+      "index": 8,
+      "source_path": "docs/design/643/78/gold/before-after/examples/ex-08.webp",
+      "prompt": "Recreate this image as original artwork with NEW pixels so a half-screen glance proves it is not a soft copy. IDENTITY-LOCK: keep the same subject category, composition family, and use-slot as the reference — do NOT change topic. No brand marks, watermarks, competitor logos, or recognizable celebrity likeness. Keep a stacked Before|After three-quarter female face on cream fabric: top natural texture, bottom dewy smoother skin. Same beauty face before/after use-slot.",
+      "aspect_ratio": "3:4",
+      "resolution": "2K"
+    },
+    {
+      "skill_id": "clothing-swap",
+      "slot": "examples",
+      "index": 1,
+      "source_path": "docs/design/643/78/gold/clothing-swap/examples/ex-01.webp",
+      "prompt": "Recreate this image as original artwork with NEW pixels so a half-screen glance proves it is not a soft copy. IDENTITY-LOCK: keep the same subject category, composition family, and use-slot as the reference — do NOT change topic. No brand marks, watermarks, competitor logos, or recognizable celebrity likeness. Keep a full-body studio fashion portrait: East-Asian woman mid-stride, hands in pockets, light-blue trench + striped tie + mini skirt + loafers, white fluted-wall studio. Same clothing try-on / outfit showcase use-slot.",
+      "aspect_ratio": "3:4",
+      "resolution": "2K"
+    },
+    {
+      "skill_id": "clothing-swap",
+      "slot": "examples",
+      "index": 2,
+      "source_path": "docs/design/643/78/gold/clothing-swap/examples/ex-02.webp",
+      "prompt": "Recreate this image as original artwork with NEW pixels so a half-screen glance proves it is not a soft copy. IDENTITY-LOCK: keep the same subject category, composition family, and use-slot as the reference — do NOT change topic. No brand marks, watermarks, competitor logos, or recognizable celebrity likeness. Keep a full-body studio fashion portrait: East-Asian woman, black knit vest over white rib tee, khaki wide-leg trousers, heart pendant, tote, white studio. Same clothing try-on / outfit showcase use-slot.",
+      "aspect_ratio": "3:4",
+      "resolution": "2K"
+    },
+    {
+      "skill_id": "taobao-product",
+      "slot": "examples",
+      "index": 1,
+      "source_path": "docs/design/643/78/gold/taobao-product/examples/ex-01.webp",
+      "prompt": "Recreate this image as original artwork with NEW pixels so a half-screen glance proves it is not a soft copy. IDENTITY-LOCK: keep the same subject category, composition family, and use-slot as the reference — do NOT change topic. No brand marks, watermarks, competitor logos, or recognizable celebrity likeness. Keep a horizontal multi-panel Taobao fashion strip: blonde model in black tank + white wide-leg trousers across lifestyle/studio/street panels ending in flat-lay. Same apparel PDP strip use-slot.",
+      "aspect_ratio": "auto",
+      "resolution": "2K"
+    },
+    {
+      "skill_id": "taobao-product",
+      "slot": "examples",
+      "index": 2,
+      "source_path": "docs/design/643/78/gold/taobao-product/examples/ex-02.webp",
+      "prompt": "Recreate this image as original artwork with NEW pixels so a half-screen glance proves it is not a soft copy. IDENTITY-LOCK: keep the same subject category, composition family, and use-slot as the reference — do NOT change topic. No brand marks, watermarks, competitor logos, or recognizable celebrity likeness. Keep a tall vertical Taobao detail-page strip for white wide-leg trousers: lifestyle grid, fabric close-ups, silhouette, Chinese benefit copy blocks. Same Taobao PDP long-scroll use-slot.",
+      "aspect_ratio": "auto",
+      "resolution": "2K"
+    },
+    {
+      "skill_id": "taobao-product",
+      "slot": "examples",
+      "index": 3,
+      "source_path": "docs/design/643/78/gold/taobao-product/examples/ex-03.webp",
+      "prompt": "Recreate this image as original artwork with NEW pixels so a half-screen glance proves it is not a soft copy. IDENTITY-LOCK: keep the same subject category, composition family, and use-slot as the reference — do NOT change topic. No brand marks, watermarks, competitor logos, or recognizable celebrity likeness. Keep a horizontal 5-panel cream bedding Taobao strip: minimalist bedroom, folded duvet set, fabric macro, woman in bed, soft Chinese overlays. Same home-textile PDP strip use-slot.",
+      "aspect_ratio": "auto",
+      "resolution": "2K"
+    },
+    {
+      "skill_id": "taobao-product",
+      "slot": "examples",
+      "index": 4,
+      "source_path": "docs/design/643/78/gold/taobao-product/examples/ex-04.webp",
+      "prompt": "Recreate this image as original artwork with NEW pixels so a half-screen glance proves it is not a soft copy. IDENTITY-LOCK: keep the same subject category, composition family, and use-slot as the reference — do NOT change topic. No brand marks, watermarks, competitor logos, or recognizable celebrity likeness. Keep a tall vertical Taobao detail-page scroll for cream bedding (lifestyle → fabric → specs with Chinese copy). Same home-textile PDP detail use-slot.",
+      "aspect_ratio": "auto",
+      "resolution": "2K"
+    },
+    {
+      "skill_id": "taobao-product",
+      "slot": "examples",
+      "index": 5,
+      "source_path": "docs/design/643/78/gold/taobao-product/examples/ex-05.webp",
+      "prompt": "Recreate this image as original artwork with NEW pixels so a half-screen glance proves it is not a soft copy. IDENTITY-LOCK: keep the same subject category, composition family, and use-slot as the reference — do NOT change topic. No brand marks, watermarks, competitor logos, or recognizable celebrity likeness. Keep a horizontal 5-panel white smartphone Taobao strip: circular camera close-up, man in blue shirt holding phone, hand-held back view, three-phone lineup, front/back studio. Same phone PDP strip use-slot; remove brand marks.",
+      "aspect_ratio": "auto",
+      "resolution": "2K"
+    },
+    {
+      "skill_id": "taobao-product",
+      "slot": "examples",
+      "index": 6,
+      "source_path": "docs/design/643/78/gold/taobao-product/examples/ex-06.webp",
+      "prompt": "Recreate this image as original artwork with NEW pixels so a half-screen glance proves it is not a soft copy. IDENTITY-LOCK: keep the same subject category, composition family, and use-slot as the reference — do NOT change topic. No brand marks, watermarks, competitor logos, or recognizable celebrity likeness. Keep a tall vertical Taobao detail-page scroll for the white smartphone product (feature modules + Chinese copy). Same phone PDP detail use-slot; remove brand marks.",
+      "aspect_ratio": "auto",
+      "resolution": "2K"
+    },
+    {
+      "skill_id": "taobao-product",
+      "slot": "examples",
+      "index": 7,
+      "source_path": "docs/design/643/78/gold/taobao-product/examples/ex-07.webp",
+      "prompt": "Recreate this image as original artwork with NEW pixels so a half-screen glance proves it is not a soft copy. IDENTITY-LOCK: keep the same subject category, composition family, and use-slot as the reference — do NOT change topic. No brand marks, watermarks, competitor logos, or recognizable celebrity likeness. Keep a wide multi-panel Taobao carousel/module strip matching the reference product category and panel rhythm. Same ecommerce module use-slot.",
+      "aspect_ratio": "auto",
+      "resolution": "2K"
+    },
+    {
+      "skill_id": "taobao-product",
+      "slot": "examples",
+      "index": 8,
+      "source_path": "docs/design/643/78/gold/taobao-product/examples/ex-08.webp",
+      "prompt": "Recreate this image as original artwork with NEW pixels so a half-screen glance proves it is not a soft copy. IDENTITY-LOCK: keep the same subject category, composition family, and use-slot as the reference — do NOT change topic. No brand marks, watermarks, competitor logos, or recognizable celebrity likeness. Keep a tall vertical Taobao detail-page strip matching the reference product category and module stack. Same ecommerce detail use-slot.",
+      "aspect_ratio": "auto",
+      "resolution": "2K"
+    },
+    {
+      "skill_id": "linkedin-banner",
+      "slot": "examples",
+      "index": 1,
+      "source_path": "docs/design/643/78/gold/linkedin-banner/examples/ex-01-poster.jpg",
+      "prompt": "Recreate this image as original artwork with NEW pixels so a half-screen glance proves it is not a soft copy. IDENTITY-LOCK: keep the same subject category, composition family, and use-slot as the reference — do NOT change topic. No brand marks, watermarks, competitor logos, or recognizable celebrity likeness. Keep a LinkedIn profile mockup card on dark backdrop: wide professional banner (finance/investing tone with chart motif + serif headline), circular avatar placeholder, grey wireframe body. Same LinkedIn banner mockup use-slot.",
+      "aspect_ratio": "4:3",
+      "resolution": "2K"
+    },
+    {
+      "skill_id": "product-website",
+      "slot": "examples",
+      "index": 1,
+      "source_path": "docs/design/643/78/gold/product-website/examples/ex-01.png",
+      "prompt": "Recreate this image as original artwork with NEW pixels so a half-screen glance proves it is not a soft copy. IDENTITY-LOCK: keep the same subject category, composition family, and use-slot as the reference — do NOT change topic. No brand marks, watermarks, competitor logos, or recognizable celebrity likeness. Keep a premium resort/hospitality product-website frame: top nav + 2x2 photo tile grid of tropical villa/spa/dining/boat scenes with serif overlays. Same luxury hospitality site use-slot.",
+      "aspect_ratio": "16:9",
+      "resolution": "2K"
+    },
+    {
+      "skill_id": "product-website",
+      "slot": "examples",
+      "index": 2,
+      "source_path": "docs/design/643/78/gold/product-website/examples/ex-02.png",
+      "prompt": "Recreate this image as original artwork with NEW pixels so a half-screen glance proves it is not a soft copy. IDENTITY-LOCK: keep the same subject category, composition family, and use-slot as the reference — do NOT change topic. No brand marks, watermarks, competitor logos, or recognizable celebrity likeness. Keep a minimalist furniture product-website frame: serif brand nav, wide hero of wood coffee table + sofa, charcoal category bar, Living Collection copy. Same furniture brand site use-slot.",
+      "aspect_ratio": "16:9",
+      "resolution": "2K"
+    },
+    {
+      "skill_id": "product-website",
+      "slot": "examples",
+      "index": 3,
+      "source_path": "docs/design/643/78/gold/product-website/examples/ex-03.png",
+      "prompt": "Recreate this image as original artwork with NEW pixels so a half-screen glance proves it is not a soft copy. IDENTITY-LOCK: keep the same subject category, composition family, and use-slot as the reference — do NOT change topic. No brand marks, watermarks, competitor logos, or recognizable celebrity likeness. Keep a dark SaaS product-website hero: left headline+CTA, right floating dashboard mockup with charts/score. Same AI product landing use-slot (generic brand name).",
+      "aspect_ratio": "16:9",
+      "resolution": "2K"
+    }
+  ]
+}
