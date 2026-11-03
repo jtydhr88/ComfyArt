@@ -1,0 +1,15 @@
+{
+ "skill_id": "creator-identity",
+ "note": "#643 final per-example wash prompts (latest round per index). Gold not committed.",
+ "assets": [
+  {
+   "skill_id": "creator-identity",
+   "slot": "examples",
+   "index": 1,
+   "source_path": "<lovart-gold, not committed>",
+   "prompt": "TRUE WASH with NEW pixels — a half-screen glance must instantly prove this is NOT the reference. No brand marks, watermarks, real logos or celebrity likeness. KEEP STRUCTURE: three vertical cards side by side, each card shows the instructor half-body plus a big title; bottom yellow brand bar spanning the width, same positions and proportions. Same topic: language-learning short-video covers. CHANGE: a clearly different instructor (different face, different hairstyle, different clothing colors), different poses on each card, a new invented channel/brand name in the bottom bar, all three card titles rewritten with new invented text (e.g. a different language being taught), and a different main accent color for the cards (e.g. teal or coral instead of the reference accent). Use EXACTLY these new card titles: card 1 'Speak Italian Like a Local', card 2 'Café Words in 60 Seconds', card 3 'Daily Pronunciation Drill'; bottom bar text 'Italiano con Marco'; instructor is a man in his 30s with short dark beard. Accent color teal.",
+   "aspect_ratio": "auto",
+   "resolution": "2K"
+  }
+ ]
+}
