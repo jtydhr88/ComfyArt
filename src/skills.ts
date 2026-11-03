@@ -158,8 +158,9 @@ const video637 = (id: string) => pinned(`637/wash/${id}`, WASH_637, 'example.mp4
 // #643 Phase3-S4 true wash (kie offline) — thumbnail + NEW19 covers; batch1 examples wired (featured empty).
 const WASH_643 = '0be4350be224066cccf5e2929bfcb02e0bf8f7a9'
 const cover643 = (id: string) => pinned(`643/wash/${id}`, WASH_643, 'cover.webp')
-const ex643 = (id: string, ids: number[]) =>
-  ids.map((n) => pinned(`643/wash/${id}/examples`, WASH_643, `${String(n).padStart(2, '0')}.webp`))
+// #643 per-slot PRs: optional per-slot pin so each slot merges independently.
+const ex643 = (id: string, ids: number[], pin: string = WASH_643) =>
+  ids.map((n) => pinned(`643/wash/${id}/examples`, pin, `${String(n).padStart(2, '0')}.webp`))
 const feat643 = (id: string, ids: number[]) =>
   ids.map((n) => pinned(`643/wash/${id}/featured`, WASH_643, `${String(n).padStart(2, '0')}.webp`))
 // #636 Phase2-S3 C deferred5 soft wash — nearMiss remap Examples-only (hardMax layouts).
@@ -431,7 +432,7 @@ export const BUILTIN_SKILLS: Skill[] = orderBuiltins([
     presets: [P('beauty', '美妆对比', 'Beauty', 'Style: beauty before/after, same crop and lighting, clear dual-state split, readable faces.'), P('home', '家装对比', 'Home remodel', 'Style: interior remodel before/after, matched camera, dual-state layout.'), P('fitness', '身材对比', 'Body / fitness', 'Style: fitness before/after, matched pose and crop, dual-state comparison.')],
     inputs: NEARMISS_INPUTS },
   { id: 'anim-2d', name: t('skills.anim2d'), instructions: 'You are a production 2D animation converter. Pipeline: still or layered art → short 2D animated clip. Not UGC/TVC motion and not flash-cut screenshot video.\n1) Intake: require primary visual; optional layers or styleNotes.\n2) Confirm duration and ratio with the user before animating.\n3) Animate with readable 2D motion (loops OK); keep line and color honest to the still.\n4) Scope: short 2D piece only — no long narrative TVC, no flash-cut UI beats.\n5) Refs: pass shape ids in refs on every generate_image / animate call.',
-    category: 'ads', cover: cover643('anim-2d'), examples: [], featured: [],
+    category: 'ads', cover: cover643('anim-2d'), examples: ex643('anim-2d', [1, 2, 3], '51ee77b3dd3979e6c249c0390b931a9a520da1c0'), featured: [],
     presets: [P('clean', '干净动效', 'Clean motion', 'Style: clean 2D animation from the still, short loop, readable motion, locked palette.'), P('punchy', '节奏动效', 'Punchy motion', 'Style: punchy 2D animation beats from the still, short runtime, high energy.')],
     inputs: NEARMISS_INPUTS },
   { id: 'creator-identity', name: t('skills.creatorIdentity'), instructions: 'You are a production creator identity designer for personal channels — not a full corporate VI kit.\n1) Brief: nickname, persona and channels from creatorInfo + refs.\n2) Kit: avatar, channel/cover set, palette and social templates that share one look.\n3) Presets: YouTube, RedNote/Xiaohongshu, podcast as asked.\n4) Scope: personal creator system; do not invent a multi-industry brand bible.\n5) Refs: pass refs in refs on every generate_image call.',

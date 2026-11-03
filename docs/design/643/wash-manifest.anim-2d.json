@@ -1,0 +1,33 @@
+{
+ "skill_id": "anim-2d",
+ "note": "#643 final per-example wash prompts (latest round per index). Gold not committed.",
+ "assets": [
+  {
+   "skill_id": "anim-2d",
+   "slot": "examples",
+   "index": 1,
+   "source_path": "<lovart-gold, not committed>",
+   "prompt": "TRUE WASH — half-screen must instantly prove this is NOT the reference. FORBIDDEN soft remix / near-copy pixels. Recreate as ORIGINAL artwork with NEW pixels. IDENTITY-LOCK: keep the same subject category, composition family, and use-slot as the reference — do NOT change topic. No brand marks, watermarks, competitor logos, or recognizable celebrity likeness. Keep a vertical cel-shaded 2D animation still of a South-Asian spiritual speaker seated cross-legged with mic stand, mustard kurta + red dhoti + patterned yellow stole + deity pendant, orange horizontal tilak with red bindi, colorful stage backdrop. Same 2D-animation converter use-slot — stay on illustrated spiritual speaker, never photo-real or unrelated topics. REQUIRED: change lighting direction, secondary props placement, color temperature, and fine textures enough that a half-screen glance proves new pixels — without changing subject category, composition family, or use-slot.",
+   "aspect_ratio": "9:16",
+   "resolution": "2K"
+  },
+  {
+   "skill_id": "anim-2d",
+   "slot": "examples",
+   "index": 2,
+   "source_path": "<lovart-gold, not committed>",
+   "prompt": "TRUE WASH with NEW pixels. IDENTITY-LOCK: same subject category, composition, layout and use-slot as reference; no topic drift. No brand marks, watermarks, real logos or celebrity likeness. STYLE LOCK: flat 2D cel-shaded cartoon illustration with clean dark outlines and flat color fills, exactly like the reference's flat cartoon style — NO 3D rendering, NO realistic lighting, NO soft volumetric shading. Keep the SAME character: same person, same glasses, same microphone, same plaid shirt, same pose and framing. CHANGE ONLY the background elements (different room props/decor) and the overall color palette (clearly different palette from reference) so a half-screen glance shows it is a different image.",
+   "aspect_ratio": "auto",
+   "resolution": "2K"
+  },
+  {
+   "skill_id": "anim-2d",
+   "slot": "examples",
+   "index": 3,
+   "source_path": "<lovart-gold, not committed>",
+   "prompt": "TRUE WASH — half-screen must instantly prove this is NOT the reference. FORBIDDEN soft remix / near-copy pixels. Recreate as ORIGINAL artwork with NEW pixels. IDENTITY-LOCK: keep the same subject category, composition family, and use-slot as the reference — do NOT change topic. No brand marks, watermarks, competitor logos, or recognizable celebrity likeness. Keep a vertical cel-shaded 2D portrait of a long-haired South-Asian spiritual speaker in yellow patterned kurta with pink floral shawl, bead malas + deity pendant + gold amulet, blue/black mic in foreground, soft vertical color-block backdrop. Same 2D-animation converter use-slot. REQUIRED: change lighting direction, secondary props placement, color temperature, and fine textures enough that a half-screen glance proves new pixels — without changing subject category, composition family, or use-slot.",
+   "aspect_ratio": "9:16",
+   "resolution": "2K"
+  }
+ ]
+}

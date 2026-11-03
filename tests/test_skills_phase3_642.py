@@ -61,6 +61,9 @@ def test_new19_present_production_copy_dialog_inputs():
         BATCH1_EX = {
             "taobao-product", "before-after", "product-website", "linkedin-banner", "clothing-swap",
         }
+        # #643 per-slot PRs: any slot wired via ex643 (own pin) is held to the batch1 rules
+        if f"examples: ex643('{sid}'" in e:
+            BATCH1_EX = BATCH1_EX | {sid}
         head = e.split("inputs:", 1)[0]
         assert f"cover: cover643('{sid}')" in head, sid
         assert "video:" not in head, sid

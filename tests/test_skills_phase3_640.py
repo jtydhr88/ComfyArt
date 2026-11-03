@@ -110,6 +110,9 @@ def test_new_skills_cut2_skeleton_categories_and_website_chip_sources():
         BATCH1_EX = {
             "taobao-product", "before-after", "product-website", "linkedin-banner", "clothing-swap",
         }
+        # #643 per-slot PRs: any slot wired via ex643 (own pin) is held to the batch1 rules
+        if f"examples: ex643('{sid}'" in e:
+            BATCH1_EX = BATCH1_EX | {sid}
         head = e.split("inputs:", 1)[0]
         assert f"cover: cover643('{sid}')" in head, sid  # #643 NEW19 cover pins
         assert "video:" not in head, sid
