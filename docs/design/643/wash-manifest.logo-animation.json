@@ -1,0 +1,35 @@
+{
+ "skill_id": "logo-animation",
+ "note": "#643 final per-example wash prompts (latest round per index). Gold not committed.",
+ "assets": [
+  {
+   "skill_id": "logo-animation",
+   "slot": "examples",
+   "index": 1,
+   "source_path": "<lovart-gold, not committed>",
+   "prompt": "TRUE WASH — original artwork, NEW pixels, clearly distinguishable from the reference at half-screen. Keep a logo-animation keyframe with the same composition: a large circular emblem centered above a Chinese wordmark. REDRAW EMBLEM: instead of an eye inside a play-triangle inside a ring, use a stylized lightbulb-spark whose filament forms a compass star, enclosed in a hexagonal frame of interlocking ribbon lines; deep coral and teal gradients on warm white. Chinese wordmark: '灵犀创意工坊'. TEXT RULE: no text, brand, name, number or price from the reference may survive verbatim — every word and numeral must be newly invented. No watermarks, real brands or celebrity likeness."
+  },
+  {
+   "skill_id": "logo-animation",
+   "slot": "examples",
+   "index": 2,
+   "source_path": "<lovart-gold, not committed>",
+   "prompt": "TRUE WASH — original artwork, NEW pixels, clearly distinguishable from the reference at half-screen. Keep the same horizontal lockup: a round multicolor emblem on the left, a thin vertical divider, a 3-line English name plus a Chinese name on the right. REDRAW EMBLEM: replace the swirling people-ring with a lotus-shaped mandala of overlapping paper-cut petals and lantern shapes, palette indigo, saffron and jade. English: 'GLOBAL FOLK ARTS / & CRAFTS / FESTIVAL'. Chinese: '环球民艺嘉年华'. TEXT RULE: no text, brand, name, number or price from the reference may survive verbatim — every word and numeral must be newly invented. No watermarks, real brands or celebrity likeness."
+  },
+  {
+   "skill_id": "logo-animation",
+   "slot": "examples",
+   "index": 3,
+   "source_path": "<lovart-gold, not committed>",
+   "prompt": "TRUE WASH, original artwork, new pixels. Keep the same logo-lockup composition: a row of 7 vertical emblem elements of descending height left-to-right with the tallest-right element carrying a top accent, English two-line name beneath on the left, large Chinese calligraphic title along the bottom. REDRAW THE EMBLEM MOTIF: instead of flat rounded bars, each element is a tall stylized ink-brush stroke with rough dry-brush edges shaped like bamboo slips / scrolls bound by thin cords, and the rightmost top accent becomes a round red cinnabar seal stamp (not a P-shaped loop). Palette: ink black and jade green strokes on rice-paper texture with one red seal. English text: 'HERITAGE / CULTURAL CRAFT AND TRADITION'. Chinese title: '华夏匠艺博览苑' (NO 非遗 substring). No brand marks or watermarks."
+  },
+  {
+   "skill_id": "logo-animation",
+   "slot": "examples",
+   "index": 4,
+   "source_path": "<lovart-gold, not committed>",
+   "prompt": "TRUE WASH — original artwork, NEW pixels, clearly distinguishable from the reference at half-screen. Keep a playful mascot-logo keyframe with the same composition: cartoon mascot characters peeking over a big bubbly lettering wordmark inside a round badge, small Chinese+English sub-lockup at bottom right. REDRAW: mascots become a cheeky cartoon panda and a red fox (no ox/horse), the big lettering reads 'P&F', badge is tangerine orange on mint background. Small lockup: Chinese '熊狐日常' and English 'P&F DAILY FUN'. TEXT RULE: no text, brand, name, number or price from the reference may survive verbatim — every word and numeral must be newly invented. No watermarks, real brands or celebrity likeness."
+  }
+ ],
+ "postprocess": "WaveSpeed google/nano-banana-pro/edit (2k) local edit, layout kept: ex03 (new emblem + names)."
+}
