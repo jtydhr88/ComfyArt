@@ -1,11 +1,12 @@
 /** #494-2 — a skill's OWN in-page dialog (card / title / hover 「试用此技能」 all open this). Left: title, author,
  *  description + data-driven media: examples[] → SkillExamples (single / carousel / video); presets[] template grid
  *  only when a preset carries its own image/video (#637 — no cover-fallback 「模板」 inventing Examples-only gold).
+ *  When examples/presetTiles are empty but skillCover exists, show a dedicated cover main-preview (not SkillExamples).
  *  Right: header 「开始创作」 / CTA 「开始制作」 (#601) with the current template and that skill's inputs[].
  *  No skill ids are named here. 「详情」 keeps main's #484 edit page (openSkillEditor). */
 import { useRef, useState } from 'react'
 
-import { uploadSkillImage, isSkillMediaVideo, loc, loadFavourites, missingInputs, presetImage, presetVideo, recordSkillUse, skillAuthor, skillCoverVideoHover, skillMeta, skillMetaLabel, skillDefaults, skillDescription, skillPreset, skillRunParams, skillShareUrl, toggleFavourite, type Skill, type SkillPreset } from '../skills'
+import { uploadSkillImage, isSkillMediaVideo, loc, loadFavourites, missingInputs, presetImage, presetVideo, recordSkillUse, skillAuthor, skillCover, skillCoverVideoHover, skillMeta, skillMetaLabel, skillDefaults, skillDescription, skillPreset, skillRunParams, skillShareUrl, toggleFavourite, type Skill, type SkillPreset } from '../skills'
 import { newProject } from '../projects'
 import { BRAND } from '../brand'
 import { copyText } from '../clipboard'
@@ -135,8 +136,23 @@ export function SkillRunDialog({ skill, presetId, onClose, run = newProject }: {
             const presetTiles = (skill.presets ?? []).filter((p) => !!(p.image || p.video))
             // #641: thumbnail (presetChips) with an explicit empty list still shows 「暂无示例」.
             const showEmptyExamples = !!skill.presetChips && Array.isArray(skill.examples) && skill.examples.length === 0
-            // #637: Examples-only left when examples drive the gold shape; 「模板」 grid only for real preset media (not cover fallback).
-            if (!examples.length && !presetTiles.length && !showEmptyExamples) return null
+            const coverSrc = skillCover(skill)?.src ?? null
+            // #637: Examples-only left when examples drive the gold shape; 「模板」 grid only for real preset media
+            // (never invent Examples / 模板 from cover). Cover alone → dedicated main-preview hero.
+            if (!examples.length && !presetTiles.length && !showEmptyExamples) {
+              if (!coverSrc) return null
+              return (
+                <div className="ca-skillrun__templates" data-left="cover" data-testid="skill-run-cover-preview">
+                  <div
+                    className="ca-skillrun__stage ca-skillrun__coverstage"
+                    data-testid="skill-run-cover-stage"
+                    data-media="image"
+                  >
+                    <img src={coverSrc} alt="" data-testid="skill-run-cover-img" />
+                  </div>
+                </div>
+              )
+            }
             return (
               <div className="ca-skillrun__templates" data-left={examples.length ? (presetTiles.length ? 'both' : 'examples') : 'templates'}>
                 <SkillExamples examples={skill.examples} />

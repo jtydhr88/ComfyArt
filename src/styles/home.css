@@ -932,6 +932,10 @@ body { background: var(--ca-float); }
 }
 /* absolute fill: % height doesn't resolve on a grid item of an aspect-ratio box, which let portrait images overflow (crop) */
 .ca-skillrun__stage img, .ca-skillrun__stage video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; object-position: center; }
+/* Cover-only main-preview (examples empty): fill stage like single-example hardMax1, not SkillExamples carousel. */
+.ca-skillrun__templates[data-left="cover"] .ca-skillrun__coverstage img {
+  object-fit: cover;
+}
 /* #641 — stage-local skeleton / error. The dialog and page stay put. */
 .ca-skillrun__skel { position: absolute; inset: 0; background: var(--ca-field); z-index: 1; }
 .ca-skillrun__empty { margin: 0; padding: 24px 0; text-align: center; color: var(--ca-muted); font: 400 13px/20px var(--ca-font); }

@@ -23,3 +23,14 @@ def test_examples_only_left_no_cover_fallback_template_grid():
 def test_skill_examples_data_count_drives_shape():
     assert 'data-count={examples.length}' in EX
     assert "examples.length > 1" in EX  # filmstrip only when carousel
+
+
+def test_cover_alone_is_hero_not_examples_or_templates():
+    """Cover may fill left as dedicated preview; must not fake examples[] or 「模板」 tiles."""
+    assert "skill-run-cover-preview" in DLG
+    assert 'data-left="cover"' in DLG
+    assert "skillCover(skill)" in DLG
+    # Still must not invent Examples from cover
+    assert "<SkillExamples examples={skill.examples} />" in DLG
+    assert "SkillExamples examples={[cover" not in DLG
+    assert "examples: [skill.cover" not in DLG
