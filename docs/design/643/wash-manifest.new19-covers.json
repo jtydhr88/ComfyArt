@@ -1,0 +1,176 @@
+{
+  "_comment": "Operator manifest for #643 NEW19 cover true wash (local tip-pin gold covers). No CDN URLs. Examples/featured deferred until fuller bc-refs gold.",
+  "assets": [
+    {
+      "skill_id": "taobao-product",
+      "slot": "cover",
+      "index": 0,
+      "source_path": "docs/design/640/78/gold/taobao-product/cover.webp",
+      "prompt": "Recreate this Taobao product listing cover as original ecommerce artwork. Chinese PDP main/carousel energy, product truth locked, high thumb-stop contrast. No brand marks, watermarks, competitor logos, or recognizable celebrity likeness.",
+      "aspect_ratio": "4:3",
+      "resolution": "2K"
+    },
+    {
+      "skill_id": "before-after",
+      "slot": "cover",
+      "index": 0,
+      "source_path": "docs/design/640/78/gold/before-after/cover.webp",
+      "prompt": "Recreate this before/after comparison cover as original artwork. Clear dual-state layout, matched camera, readable difference. No brand marks, watermarks, competitor logos, or recognizable celebrity likeness.",
+      "aspect_ratio": "4:3",
+      "resolution": "2K"
+    },
+    {
+      "skill_id": "anim-2d",
+      "slot": "cover",
+      "index": 0,
+      "source_path": "docs/design/640/78/gold/anim-2d/cover.webp",
+      "prompt": "Recreate this 2D animation skill cover as original artwork. Still-to-motion 2D feel, clean lines, short-clip energy. No brand marks, watermarks, competitor logos, or recognizable celebrity likeness.",
+      "aspect_ratio": "16:9",
+      "resolution": "2K"
+    },
+    {
+      "skill_id": "creator-identity",
+      "slot": "cover",
+      "index": 0,
+      "source_path": "docs/design/640/78/gold/creator-identity/cover.webp",
+      "prompt": "Recreate this creator identity kit cover as original artwork. Personal channel avatar/cover system energy, cohesive persona. No brand marks, watermarks, competitor logos, or recognizable celebrity likeness.",
+      "aspect_ratio": "4:3",
+      "resolution": "2K"
+    },
+    {
+      "skill_id": "product-website",
+      "slot": "cover",
+      "index": 0,
+      "source_path": "docs/design/640/78/gold/product-website/cover.webp",
+      "prompt": "Recreate this hardware product website cover as original artwork. Hero product landing energy, clean specs mood. No brand marks, watermarks, competitor logos, or recognizable celebrity likeness.",
+      "aspect_ratio": "3:2",
+      "resolution": "2K"
+    },
+    {
+      "skill_id": "studio-model",
+      "slot": "cover",
+      "index": 0,
+      "source_path": "docs/design/640/78/gold/studio-model/cover.webp",
+      "prompt": "Recreate this studio apparel model cover as original artwork. Controlled studio light, garment truth, lookbook energy. No brand marks, watermarks, competitor logos, or recognizable celebrity likeness.",
+      "aspect_ratio": "4:3",
+      "resolution": "2K"
+    },
+    {
+      "skill_id": "youtube-channel-banner",
+      "slot": "cover",
+      "index": 0,
+      "source_path": "docs/design/640/78/gold/youtube-channel-banner/cover.webp",
+      "prompt": "Recreate this YouTube channel banner cover as original artwork. Wide channel-art energy with safe areas, series identity. No brand marks, watermarks, competitor logos, or recognizable celebrity likeness.",
+      "aspect_ratio": "4:3",
+      "resolution": "2K"
+    },
+    {
+      "skill_id": "ai-model",
+      "slot": "cover",
+      "index": 0,
+      "source_path": "docs/design/640/78/gold/ai-model/cover.webp",
+      "prompt": "Recreate this AI virtual model cover as original artwork. Reusable model identity, catalog-ready, coherent face/body cues. No brand marks, watermarks, competitor logos, or recognizable celebrity likeness.",
+      "aspect_ratio": "3:4",
+      "resolution": "2K"
+    },
+    {
+      "skill_id": "product-to-packaging",
+      "slot": "cover",
+      "index": 0,
+      "source_path": "docs/design/640/78/gold/product-to-packaging/cover.webp",
+      "prompt": "Recreate this product-to-packaging cover as original artwork. Product transforming into pack mockup energy. No brand marks, watermarks, competitor logos, or recognizable celebrity likeness.",
+      "aspect_ratio": "16:9",
+      "resolution": "2K"
+    },
+    {
+      "skill_id": "game-art",
+      "slot": "cover",
+      "index": 0,
+      "source_path": "docs/design/640/78/gold/game-art/cover.webp",
+      "prompt": "Recreate this game art cover as original artwork. Game key-visual / character art energy, strong silhouette. No brand marks, watermarks, competitor logos, or recognizable celebrity likeness.",
+      "aspect_ratio": "1:1",
+      "resolution": "2K"
+    },
+    {
+      "skill_id": "portrait-studio",
+      "slot": "cover",
+      "index": 0,
+      "source_path": "docs/design/640/78/gold/portrait-studio/cover.webp",
+      "prompt": "Recreate this portrait studio cover as original artwork. Professional portrait lighting, clean backdrop. No brand marks, watermarks, competitor logos, or recognizable celebrity likeness.",
+      "aspect_ratio": "4:3",
+      "resolution": "2K"
+    },
+    {
+      "skill_id": "premium-website",
+      "slot": "cover",
+      "index": 0,
+      "source_path": "docs/design/640/78/gold/premium-website/cover.webp",
+      "prompt": "Recreate this premium website cover as original artwork. Luxury brand landing hero mood, sparse type feel. No brand marks, watermarks, competitor logos, or recognizable celebrity likeness.",
+      "aspect_ratio": "16:9",
+      "resolution": "2K"
+    },
+    {
+      "skill_id": "animated-poster",
+      "slot": "cover",
+      "index": 0,
+      "source_path": "docs/design/640/78/gold/animated-poster/cover.webp",
+      "prompt": "Recreate this animated poster cover as original artwork. Strong poster hierarchy ready for short loop motion. No brand marks, watermarks, competitor logos, or recognizable celebrity likeness.",
+      "aspect_ratio": "3:4",
+      "resolution": "2K"
+    },
+    {
+      "skill_id": "pose-fission",
+      "slot": "cover",
+      "index": 0,
+      "source_path": "docs/design/640/78/gold/pose-fission/cover.webp",
+      "prompt": "Recreate this pose-fission cover as original artwork. Same-scene multi-pose ecommerce energy, identity locked. No brand marks, watermarks, competitor logos, or recognizable celebrity likeness.",
+      "aspect_ratio": "4:3",
+      "resolution": "2K"
+    },
+    {
+      "skill_id": "live-promo-decor",
+      "slot": "cover",
+      "index": 0,
+      "source_path": "docs/design/640/78/gold/live-promo-decor/cover.webp",
+      "prompt": "Recreate this live-commerce decor cover as original artwork. Overlay pack / stream badge energy, high contrast. No brand marks, watermarks, competitor logos, or recognizable celebrity likeness.",
+      "aspect_ratio": "4:3",
+      "resolution": "2K"
+    },
+    {
+      "skill_id": "linkedin-banner",
+      "slot": "cover",
+      "index": 0,
+      "source_path": "docs/design/640/78/gold/linkedin-banner/cover.webp",
+      "prompt": "Recreate this LinkedIn banner cover as original artwork. Wide professional banner energy, B2B restraint, safe areas. No brand marks, watermarks, competitor logos, or recognizable celebrity likeness.",
+      "aspect_ratio": "4:3",
+      "resolution": "2K"
+    },
+    {
+      "skill_id": "logo-animation",
+      "slot": "cover",
+      "index": 0,
+      "source_path": "docs/design/640/78/gold/logo-animation/cover.webp",
+      "prompt": "Recreate this logo animation cover as original artwork. Motion logo intro energy, mark geometry clear. No brand marks, watermarks, competitor logos, or recognizable celebrity likeness.",
+      "aspect_ratio": "16:9",
+      "resolution": "2K"
+    },
+    {
+      "skill_id": "restaurant-website",
+      "slot": "cover",
+      "index": 0,
+      "source_path": "docs/design/640/78/gold/restaurant-website/cover.webp",
+      "prompt": "Recreate this restaurant website cover as original artwork. Hospitality mood hero, menu/reserve energy. No brand marks, watermarks, competitor logos, or recognizable celebrity likeness.",
+      "aspect_ratio": "4:3",
+      "resolution": "2K"
+    },
+    {
+      "skill_id": "clothing-swap",
+      "slot": "cover",
+      "index": 0,
+      "source_path": "docs/design/640/78/gold/clothing-swap/cover.webp",
+      "prompt": "Recreate this AI clothing-swap cover as original artwork. Person locked, garment try-on energy, clean edges. No brand marks, watermarks, competitor logos, or recognizable celebrity likeness.",
+      "aspect_ratio": "3:4",
+      "resolution": "2K"
+    }
+  ]
+}

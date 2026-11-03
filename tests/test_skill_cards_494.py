@@ -144,6 +144,8 @@ def test_covers_ten_webps_with_source_manifest():
             assert f"cover: cover637('{sid}')" in head, sid  # #637 soft wash intentional covers
         elif sid in phase2_c:
             assert f"cover: cover636('{sid}')" in head, sid  # #636 C soft wash intentional covers
+        elif sid in {"taobao-product", "before-after", "anim-2d", "creator-identity", "product-website", "studio-model", "youtube-channel-banner", "ai-model", "product-to-packaging", "game-art", "portrait-studio", "premium-website", "animated-poster", "pose-fission", "live-promo-decor", "linkedin-banner", "logo-animation", "restaurant-website", "clothing-swap"}:
+            assert f"cover: cover643('{sid}')" in head, sid  # #643 NEW19 true-wash covers
         else:
             assert "cover:" not in head, sid
 

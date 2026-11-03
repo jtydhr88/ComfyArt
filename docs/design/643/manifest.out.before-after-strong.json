@@ -1,0 +1,198 @@
+{
+  "issue": 643,
+  "tool": "scripts/kie_wash_phase3.py",
+  "model": "gpt-image-2-5-flare-image-to-image",
+  "assets": [
+    {
+      "skill_id": "ai-model",
+      "slot": "cover",
+      "index": 0,
+      "path": "ai-model/cover/cover.png",
+      "sha256": "dbbd55d63b31cd8b9e24eea187fddd65b75047bdbb386cee6384698f3ecf16b8",
+      "model": "gpt-image-2-5-flare-image-to-image",
+      "task_id": "20100c5b7142f638268c6b3f4a1387ec",
+      "source": "cover.webp"
+    },
+    {
+      "skill_id": "anim-2d",
+      "slot": "cover",
+      "index": 0,
+      "path": "anim-2d/cover/cover.png",
+      "sha256": "53be548643cb8a96607b4da1db82b887994740a4d4285d0fe31b1793683f4071",
+      "model": "gpt-image-2-5-flare-image-to-image",
+      "task_id": "94df8018b48aa4863f5140cbbc2b9d11",
+      "source": "cover.webp"
+    },
+    {
+      "skill_id": "animated-poster",
+      "slot": "cover",
+      "index": 0,
+      "path": "animated-poster/cover/cover.png",
+      "sha256": "82b004e9627e1f45c232020f7466c8a7bb5ccaea4cacb4dfddd2a2f3f2d2b687",
+      "model": "gpt-image-2-5-flare-image-to-image",
+      "task_id": "6d8814eba7e44992e751638aff171c8a",
+      "source": "cover.webp"
+    },
+    {
+      "skill_id": "before-after",
+      "slot": "cover",
+      "index": 0,
+      "path": "before-after/cover/cover.png",
+      "sha256": "e1c82d0bbc4cbfed5a90ba64bce25e20fbbff322a594f148c559f34a6f9e6ffd",
+      "model": "gpt-image-2-5-flare-image-to-image",
+      "task_id": "36376e45b7daf90af5b3ff8e0fecbb50",
+      "source": "cover.webp"
+    },
+    {
+      "skill_id": "clothing-swap",
+      "slot": "cover",
+      "index": 0,
+      "path": "clothing-swap/cover/cover.png",
+      "sha256": "b596110ed433f0955c16835b4793d5fcbdcd16ae0389db4b898d1fdf7bda2d05",
+      "model": "gpt-image-2-5-flare-image-to-image",
+      "task_id": "1c893e86278631ad3866ab76551b9519",
+      "source": "cover.webp"
+    },
+    {
+      "skill_id": "creator-identity",
+      "slot": "cover",
+      "index": 0,
+      "path": "creator-identity/cover/cover.png",
+      "sha256": "f57daf223f20d1314b2ff99e45585a099a27692e018abf43a4c46a1df2a31720",
+      "model": "gpt-image-2-5-flare-image-to-image",
+      "task_id": "3a352692f8c2664b7ebbdb6fe9762dbb",
+      "source": "cover.webp"
+    },
+    {
+      "skill_id": "game-art",
+      "slot": "cover",
+      "index": 0,
+      "path": "game-art/cover/cover.png",
+      "sha256": "04ce14583acb103c8aa658ad840cf1b3968165024b979a9d44f7f23c1849d883",
+      "model": "gpt-image-2-5-flare-image-to-image",
+      "task_id": "a4d712fdb9646faaffc8f17f5d9c77db",
+      "source": "cover.webp"
+    },
+    {
+      "skill_id": "linkedin-banner",
+      "slot": "cover",
+      "index": 0,
+      "path": "linkedin-banner/cover/cover.png",
+      "sha256": "045d76d0c73d35a6049d1350be88b42e8f8c96740135fd71f3034ea0a5d91db9",
+      "model": "gpt-image-2-5-flare-image-to-image",
+      "task_id": "a42c0569e2fc9b8db0fde59200c02800",
+      "source": "cover.webp"
+    },
+    {
+      "skill_id": "live-promo-decor",
+      "slot": "cover",
+      "index": 0,
+      "path": "live-promo-decor/cover/cover.png",
+      "sha256": "c1ac40b05aa4caeb97b48d8a73708221e957a475dfce61dc6a067beaf95d3162",
+      "model": "gpt-image-2-5-flare-image-to-image",
+      "task_id": "16358f69f7b7730fa0ba90f915a63fd9",
+      "source": "cover.webp"
+    },
+    {
+      "skill_id": "logo-animation",
+      "slot": "cover",
+      "index": 0,
+      "path": "logo-animation/cover/cover.png",
+      "sha256": "eece7861108c15f7d441926fb9c22ddda6f8a861f87da8ce376052ae9f5a4c2f",
+      "model": "gpt-image-2-5-flare-image-to-image",
+      "task_id": "3e8d13389ef33035fa4196f3f10370be",
+      "source": "cover.webp"
+    },
+    {
+      "skill_id": "portrait-studio",
+      "slot": "cover",
+      "index": 0,
+      "path": "portrait-studio/cover/cover.png",
+      "sha256": "97598bc09e637412c831ddfabf642d03010b40454b1a7d51b437ef00182ce9b6",
+      "model": "gpt-image-2-5-flare-image-to-image",
+      "task_id": "db30200d25da197bde9be34c67b3cea7",
+      "source": "cover.webp"
+    },
+    {
+      "skill_id": "pose-fission",
+      "slot": "cover",
+      "index": 0,
+      "path": "pose-fission/cover/cover.png",
+      "sha256": "b8f0390f83836097c3cd182e05eb93141b263887d310be0d7106874636f2d216",
+      "model": "gpt-image-2-5-flare-image-to-image",
+      "task_id": "333978c7794c1dce5c3de64384c565b7",
+      "source": "cover.webp"
+    },
+    {
+      "skill_id": "premium-website",
+      "slot": "cover",
+      "index": 0,
+      "path": "premium-website/cover/cover.png",
+      "sha256": "f3f6ee8c41ccee7a614d33bc349d2844785aa8376171e931a1820c5509d5047b",
+      "model": "gpt-image-2-5-flare-image-to-image",
+      "task_id": "2077e5e14a21b20ab22d2ff0bcf8a73d",
+      "source": "cover.webp"
+    },
+    {
+      "skill_id": "product-to-packaging",
+      "slot": "cover",
+      "index": 0,
+      "path": "product-to-packaging/cover/cover.png",
+      "sha256": "12ad089778882621b7cdab8b7afb8b07471f737032b87ead57be2835c71d653c",
+      "model": "gpt-image-2-5-flare-image-to-image",
+      "task_id": "07ae0bf5ff5129b24b0ae58dd4d08a26",
+      "source": "cover.webp"
+    },
+    {
+      "skill_id": "product-website",
+      "slot": "cover",
+      "index": 0,
+      "path": "product-website/cover/cover.png",
+      "sha256": "6bbadeea3f21981e5587657cd11ada42c439a69b812883f0dae7625ef19bc0b4",
+      "model": "gpt-image-2-5-flare-image-to-image",
+      "task_id": "cca7c182c2d48f38e6b520f731aaf778",
+      "source": "cover.webp"
+    },
+    {
+      "skill_id": "restaurant-website",
+      "slot": "cover",
+      "index": 0,
+      "path": "restaurant-website/cover/cover.png",
+      "sha256": "310a5c22db46f563b96cd66b374d60fa37d8ec961e470ed60442935bf069787d",
+      "model": "gpt-image-2-5-flare-image-to-image",
+      "task_id": "e431a7c06559259096efb3945cb364e8",
+      "source": "cover.webp"
+    },
+    {
+      "skill_id": "studio-model",
+      "slot": "cover",
+      "index": 0,
+      "path": "studio-model/cover/cover.png",
+      "sha256": "1f5f5e5c17f0b6a3305ff98a64af855f5618bf34fe99101ccc16332393cfc40c",
+      "model": "gpt-image-2-5-flare-image-to-image",
+      "task_id": "c2dcdfb67ed1cb63af4c715bbc4526a0",
+      "source": "cover.webp"
+    },
+    {
+      "skill_id": "taobao-product",
+      "slot": "cover",
+      "index": 0,
+      "path": "taobao-product/cover/cover.png",
+      "sha256": "4f03c5433c384b5fc419b1d0bde4ccd041127feb3fb30787ba2eb90cd96e98f6",
+      "model": "gpt-image-2-5-flare-image-to-image",
+      "task_id": "0c313f45221a3c4cdcd7ae632ab98396",
+      "source": "cover.webp"
+    },
+    {
+      "skill_id": "youtube-channel-banner",
+      "slot": "cover",
+      "index": 0,
+      "path": "youtube-channel-banner/cover/cover.png",
+      "sha256": "712dc6ab9be244b2dfc41e6aaf2e7cd39a1bf236385ecfadfb874dd9aa44d4bd",
+      "model": "gpt-image-2-5-flare-image-to-image",
+      "task_id": "e3668948d014796c3770042e72239ebc",
+      "source": "cover.webp"
+    }
+  ],
+  "errors": []
+}

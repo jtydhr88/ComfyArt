@@ -109,7 +109,8 @@ def test_new_skills_cut2_skeleton_categories_and_website_chip_sources():
         assert "presets:" in e, sid
         assert "examples: []" in e and "featured: []" in e, sid
         head = e.split("inputs:", 1)[0]
-        assert "cover:" not in head and "video:" not in head, sid
+        assert f"cover: cover643('{sid}')" in head, sid  # #643 NEW19 cover pins
+        assert "video:" not in head, sid
         assert "demo" not in e.lower() and "placeholder.webp" not in e, sid
     for sid in WEBSITE_NEW:
         assert "category: 'website'" in entries[sid]

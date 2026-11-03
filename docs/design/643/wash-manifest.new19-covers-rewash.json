@@ -1,0 +1,86 @@
+{
+  "_comment": "#643 NEW19 cover REWASH pass \u2014 stronger differentiation for soft-wash risk slots (meanAbs\u0394<35). Still tip-pin gold sources; no CDN.",
+  "assets": [
+    {
+      "skill_id": "ai-model",
+      "slot": "cover",
+      "index": 0,
+      "source_path": "docs/design/640/78/gold/ai-model/cover.webp",
+      "prompt": "Create a NEW original cover for an AI virtual-model identity skill. Same category (reusable fashion model identity) but DIFFERENT person, outfit, pose, background, and color grade from the reference. Half-screen glance must show it is not the same photo. Studio catalog energy. No brand marks, watermarks, competitor logos, or celebrity likeness.",
+      "aspect_ratio": "3:4",
+      "resolution": "2K"
+    },
+    {
+      "skill_id": "clothing-swap",
+      "slot": "cover",
+      "index": 0,
+      "source_path": "docs/design/640/78/gold/clothing-swap/cover.webp",
+      "prompt": "Create a NEW original cover for an AI clothing-swap / virtual try-on skill. Keep the try-on concept but use a DIFFERENT model identity, DIFFERENT garment, DIFFERENT pose and backdrop than the reference. Half-screen must look obviously different \u2014 not a soft remix. Clean studio edges. No brand marks, watermarks, competitor logos, or celebrity likeness.",
+      "aspect_ratio": "3:4",
+      "resolution": "2K"
+    },
+    {
+      "skill_id": "pose-fission",
+      "slot": "cover",
+      "index": 0,
+      "source_path": "docs/design/640/78/gold/pose-fission/cover.webp",
+      "prompt": "Create a NEW original cover for an ecommerce pose-fission skill (multi-pose same scene). Invent a DIFFERENT character, room, lighting, and pose grid than the reference \u2014 same product idea, not the same image. Half-screen distinguishable. No brand marks, watermarks, competitor logos, or celebrity likeness.",
+      "aspect_ratio": "3:4",
+      "resolution": "2K"
+    },
+    {
+      "skill_id": "anim-2d",
+      "slot": "cover",
+      "index": 0,
+      "source_path": "docs/design/640/78/gold/anim-2d/cover.webp",
+      "prompt": "Create a NEW original cover for a still-to-2D-animation skill. Keep still\u2192motion story energy but redesign layout, character, palette, and UI chrome so it is obviously not the reference. Half-screen distinguishable. Clean 2D line art. No brand marks, watermarks, competitor logos, or celebrity likeness.",
+      "aspect_ratio": "16:9",
+      "resolution": "2K"
+    },
+    {
+      "skill_id": "studio-model",
+      "slot": "cover",
+      "index": 0,
+      "source_path": "docs/design/640/78/gold/studio-model/cover.webp",
+      "prompt": "Create a NEW original cover for a studio apparel lookbook skill. DIFFERENT model, garment, pose, and studio backdrop than the reference; keep controlled studio catalog energy. Half-screen must show it is not the same photo. No brand marks, watermarks, competitor logos, or celebrity likeness.",
+      "aspect_ratio": "4:3",
+      "resolution": "2K"
+    },
+    {
+      "skill_id": "product-website",
+      "slot": "cover",
+      "index": 0,
+      "source_path": "docs/design/640/78/gold/product-website/cover.webp",
+      "prompt": "Create a NEW original cover for a hardware product website / landing skill. Redesign hero product, layout, and palette \u2014 same category, not a near-copy of the reference. Half-screen distinguishable. No brand marks, watermarks, competitor logos, or celebrity likeness.",
+      "aspect_ratio": "3:2",
+      "resolution": "2K"
+    },
+    {
+      "skill_id": "premium-website",
+      "slot": "cover",
+      "index": 0,
+      "source_path": "docs/design/640/78/gold/premium-website/cover.webp",
+      "prompt": "Create a NEW original cover for a premium luxury brand website skill. New art direction, photography subject, and typography mood \u2014 not a near-duplicate of the reference. Half-screen distinguishable. No brand marks, watermarks, competitor logos, or celebrity likeness.",
+      "aspect_ratio": "16:9",
+      "resolution": "2K"
+    },
+    {
+      "skill_id": "before-after",
+      "slot": "cover",
+      "index": 0,
+      "source_path": "docs/design/640/78/gold/before-after/cover.webp",
+      "prompt": "Create a NEW original cover for a before/after comparison skill. Keep dual-state readable layout but invent DIFFERENT subject, treatment, and framing than the reference. Half-screen distinguishable. No brand marks, watermarks, competitor logos, or celebrity likeness.",
+      "aspect_ratio": "4:3",
+      "resolution": "2K"
+    },
+    {
+      "skill_id": "portrait-studio",
+      "slot": "cover",
+      "index": 0,
+      "source_path": "docs/design/640/78/gold/portrait-studio/cover.webp",
+      "prompt": "Create a NEW original cover for a portrait-studio photography skill. DIFFERENT subject, lighting, and lens feel than the reference; keep single-subject portrait craft. Half-screen distinguishable. No brand marks, watermarks, competitor logos, or celebrity likeness.",
+      "aspect_ratio": "3:4",
+      "resolution": "2K"
+    }
+  ]
+}

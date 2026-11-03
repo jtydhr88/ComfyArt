@@ -1,0 +1,14 @@
+{
+  "_comment": "#643 before-after STRONG rewash — prior rewash still soft (meanAbsΔ≈17, same face split). Force DIFFERENT subject/category.",
+  "assets": [
+    {
+      "skill_id": "before-after",
+      "slot": "cover",
+      "index": 0,
+      "source_path": "docs/design/640/78/gold/before-after/cover.webp",
+      "prompt": "Invent a COMPLETELY NEW original cover for a before/after comparison skill. DO NOT reuse the beauty face, skin close-up, serif headline card, or dark-slate backdrop from the reference. Instead show a bright modern kitchen RENOVATION split: left BEFORE (dated oak cabinets, yellowed laminate, cluttered counters) vs right AFTER (matte white shaker cabinets, marble island, soft daylight). Keep a clear dual-panel BEFORE|AFTER layout with readable labels, but change subject, palette, camera distance, and typography so a half-screen glance proves it is not the same image. No brand marks, watermarks, competitor logos, or celebrity likeness.",
+      "aspect_ratio": "4:3",
+      "resolution": "2K"
+    }
+  ]
+}
