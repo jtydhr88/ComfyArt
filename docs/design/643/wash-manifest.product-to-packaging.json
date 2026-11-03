@@ -1,0 +1,105 @@
+{
+  "skill_id": "product-to-packaging",
+  "note": "#643 final per-example wash prompts (latest round per index). Gold not committed.",
+  "assets": [
+    {
+      "skill_id": "product-to-packaging",
+      "slot": "examples",
+      "index": 1,
+      "source_path": "<lovart-gold, not committed>",
+      "prompt": "TRUE WASH — half-screen glance must instantly prove this is NOT the reference (previous soft remixes were rejected). Recreate as ORIGINAL artwork with NEW pixels. IDENTITY-LOCK: keep the same subject category, composition family, layout and use-slot as the reference — do NOT change topic. No brand marks, watermarks, competitor logos or recognizable celebrity likeness; replace any brand names with generic invented ones. Keep a product-to-packaging system sheet for a canned tea brand (cans, gift boxes, dielines, mockups, shelf/retail shots as in the reference) with the same layout. STRONG DELTA: invent a new brand name (not Moonwake), switch the dominant packaging color from dark green to a clearly different color (e.g. deep burgundy or midnight navy with copper), redesign the emblem/illustration motif, keep the same packaging structures and sheet layout. STRONGER DELTA (previous wash was only a recolor — rejected): keep the exact same packaging structures, dieline/carton/can shapes, camera angle and layout, but REDRAW ALL ILLUSTRATION ON THE PACKAGING: replace the crescent-moon + leaf-sprig motif with a completely different motif — a bold geometric art-deco sunburst with stylized koi fish and wave bands, large graphic shapes covering most of each panel. Background of packaging: warm ochre/mustard yellow with deep navy accents (not green, not burgundy). New invented brand name 'KOIRA' with a new geometric wordmark. Half-screen glance must show clearly different packaging art."
+    },
+    {
+      "skill_id": "product-to-packaging",
+      "slot": "examples",
+      "index": 2,
+      "source_path": "<lovart-gold, not committed>",
+      "prompt": "TRUE WASH — half-screen glance must instantly prove this is NOT the reference (previous soft remixes were rejected). Recreate as ORIGINAL artwork with NEW pixels. IDENTITY-LOCK: keep the same subject category, composition family, layout and use-slot as the reference — do NOT change topic. No brand marks, watermarks, competitor logos or recognizable celebrity likeness; replace any brand names with generic invented ones. Keep a product-to-packaging system sheet for a canned tea brand (cans, gift boxes, dielines, mockups, shelf/retail shots as in the reference) with the same layout. STRONG DELTA: invent a new brand name (not Moonwake), switch the dominant packaging color from dark green to a clearly different color (e.g. deep burgundy or midnight navy with copper), redesign the emblem/illustration motif, keep the same packaging structures and sheet layout. STRONGER DELTA (previous wash was only a recolor — rejected): keep the exact same packaging structures, dieline/carton/can shapes, camera angle and layout, but REDRAW ALL ILLUSTRATION ON THE PACKAGING: replace the crescent-moon + leaf-sprig motif with a completely different motif — a bold geometric art-deco sunburst with stylized koi fish and wave bands, large graphic shapes covering most of each panel. Background of packaging: warm ochre/mustard yellow with deep navy accents (not green, not burgundy). New invented brand name 'KOIRA' with a new geometric wordmark. Half-screen glance must show clearly different packaging art."
+    },
+    {
+      "skill_id": "product-to-packaging",
+      "slot": "examples",
+      "index": 3,
+      "source_path": "<lovart-gold, not committed>",
+      "prompt": "TRUE WASH — half-screen glance must instantly prove this is NOT the reference (previous soft remixes were rejected). Recreate as ORIGINAL artwork with NEW pixels. IDENTITY-LOCK: keep the same subject category, composition family, layout and use-slot as the reference — do NOT change topic. No brand marks, watermarks, competitor logos or recognizable celebrity likeness; replace any brand names with generic invented ones. Keep a product-to-packaging system sheet for a canned tea brand (cans, gift boxes, dielines, mockups, shelf/retail shots as in the reference) with the same layout. STRONG DELTA: invent a new brand name (not Moonwake), switch the dominant packaging color from dark green to a clearly different color (e.g. deep burgundy or midnight navy with copper), redesign the emblem/illustration motif, keep the same packaging structures and sheet layout. STRONGER DELTA (previous wash was only a recolor — rejected): keep the exact same packaging structures, dieline/carton/can shapes, camera angle and layout, but REDRAW ALL ILLUSTRATION ON THE PACKAGING: replace the crescent-moon + leaf-sprig motif with a completely different motif — a bold geometric art-deco sunburst with stylized koi fish and wave bands, large graphic shapes covering most of each panel. Background of packaging: warm ochre/mustard yellow with deep navy accents (not green, not burgundy). New invented brand name 'KOIRA' with a new geometric wordmark. Half-screen glance must show clearly different packaging art."
+    },
+    {
+      "skill_id": "product-to-packaging",
+      "slot": "examples",
+      "index": 4,
+      "source_path": "<lovart-gold, not committed>",
+      "prompt": "TRUE WASH — half-screen glance must instantly prove this is NOT the reference (previous soft remixes were rejected). Recreate as ORIGINAL artwork with NEW pixels. IDENTITY-LOCK: keep the same subject category, composition family, layout and use-slot as the reference — do NOT change topic. No brand marks, watermarks, competitor logos or recognizable celebrity likeness; replace any brand names with generic invented ones. Keep a product-to-packaging system sheet for a canned tea brand (cans, gift boxes, dielines, mockups, shelf/retail shots as in the reference) with the same layout. STRONG DELTA: invent a new brand name (not Moonwake), switch the dominant packaging color from dark green to a clearly different color (e.g. deep burgundy or midnight navy with copper), redesign the emblem/illustration motif, keep the same packaging structures and sheet layout. STRONGER DELTA (previous wash was only a recolor — rejected): keep the exact same packaging structures, dieline/carton/can shapes, camera angle and layout, but REDRAW ALL ILLUSTRATION ON THE PACKAGING: replace the crescent-moon + leaf-sprig motif with a completely different motif — a bold geometric art-deco sunburst with stylized koi fish and wave bands, large graphic shapes covering most of each panel. Background of packaging: warm ochre/mustard yellow with deep navy accents (not green, not burgundy). New invented brand name 'KOIRA' with a new geometric wordmark. Half-screen glance must show clearly different packaging art."
+    },
+    {
+      "skill_id": "product-to-packaging",
+      "slot": "examples",
+      "index": 5,
+      "source_path": "<lovart-gold, not committed>",
+      "prompt": "TRUE WASH — half-screen glance must instantly prove this is NOT the reference (previous soft remixes were rejected). Recreate as ORIGINAL artwork with NEW pixels. IDENTITY-LOCK: keep the same subject category, composition family, layout and use-slot as the reference — do NOT change topic. No brand marks, watermarks, competitor logos or recognizable celebrity likeness; replace any brand names with generic invented ones. Keep a product-to-packaging system sheet for a canned tea brand (cans, gift boxes, dielines, mockups, shelf/retail shots as in the reference) with the same layout. STRONG DELTA: invent a new brand name (not Moonwake), switch the dominant packaging color from dark green to a clearly different color (e.g. deep burgundy or midnight navy with copper), redesign the emblem/illustration motif, keep the same packaging structures and sheet layout. STRONGER DELTA (previous wash was only a recolor — rejected): keep the exact same packaging structures, dieline/carton/can shapes, camera angle and layout, but REDRAW ALL ILLUSTRATION ON THE PACKAGING: replace the crescent-moon + leaf-sprig motif with a completely different motif — a bold geometric art-deco sunburst with stylized koi fish and wave bands, large graphic shapes covering most of each panel. Background of packaging: warm ochre/mustard yellow with deep navy accents (not green, not burgundy). New invented brand name 'KOIRA' with a new geometric wordmark. Half-screen glance must show clearly different packaging art."
+    },
+    {
+      "skill_id": "product-to-packaging",
+      "slot": "examples",
+      "index": 6,
+      "source_path": "<lovart-gold, not committed>",
+      "prompt": "TEXT EDIT ONLY (kie flare 3 Nov 2026 ~23:51 UTC+8). Keep KOIRA ochre/navy koi suite. Re-letter mismatched PIL panel lines (SLOW ROASTED…, SUNRISE IN A CAN, NO PRESERVATIVES, NO ADDED SUGAR, 250ml) in the same bold geometric face as KOIRA. Source: prior wash tip db2557d0 ex06."
+    },
+    {
+      "skill_id": "product-to-packaging",
+      "slot": "examples",
+      "index": 7,
+      "source_path": "<lovart-gold, not committed>",
+      "prompt": "TRUE WASH — half-screen glance must instantly prove this is NOT the reference (previous soft remixes were rejected). Recreate as ORIGINAL artwork with NEW pixels. IDENTITY-LOCK: keep the same subject category, composition family, layout and use-slot as the reference — do NOT change topic. No brand marks, watermarks, competitor logos or recognizable celebrity likeness; replace any brand names with generic invented ones. Keep a product-to-packaging system sheet for a canned tea brand (cans, gift boxes, dielines, mockups, shelf/retail shots as in the reference) with the same layout. STRONG DELTA: invent a new brand name (not Moonwake), switch the dominant packaging color from dark green to a clearly different color (e.g. deep burgundy or midnight navy with copper), redesign the emblem/illustration motif, keep the same packaging structures and sheet layout. STRONGER DELTA (previous wash was only a recolor — rejected): keep the exact same packaging structures, dieline/carton/can shapes, camera angle and layout, but REDRAW ALL ILLUSTRATION ON THE PACKAGING: replace the crescent-moon + leaf-sprig motif with a completely different motif — a bold geometric art-deco sunburst with stylized koi fish and wave bands, large graphic shapes covering most of each panel. Background of packaging: warm ochre/mustard yellow with deep navy accents (not green, not burgundy). New invented brand name 'KOIRA' with a new geometric wordmark. Half-screen glance must show clearly different packaging art."
+    },
+    {
+      "skill_id": "product-to-packaging",
+      "slot": "examples",
+      "index": 8,
+      "source_path": "<lovart-gold, not committed>",
+      "prompt": "TRUE WASH — half-screen glance must instantly prove this is NOT the reference (previous soft remixes were rejected). Recreate as ORIGINAL artwork with NEW pixels. IDENTITY-LOCK: keep the same subject category, composition family, layout and use-slot as the reference — do NOT change topic. No brand marks, watermarks, competitor logos or recognizable celebrity likeness; replace any brand names with generic invented ones. Keep a product-to-packaging system sheet for a canned tea brand (cans, gift boxes, dielines, mockups, shelf/retail shots as in the reference) with the same layout. STRONG DELTA: invent a new brand name (not Moonwake), switch the dominant packaging color from dark green to a clearly different color (e.g. deep burgundy or midnight navy with copper), redesign the emblem/illustration motif, keep the same packaging structures and sheet layout. STRONGER DELTA (previous wash was only a recolor — rejected): keep the exact same packaging structures, dieline/carton/can shapes, camera angle and layout, but REDRAW ALL ILLUSTRATION ON THE PACKAGING: replace the crescent-moon + leaf-sprig motif with a completely different motif — a bold geometric art-deco sunburst with stylized koi fish and wave bands, large graphic shapes covering most of each panel. Background of packaging: warm ochre/mustard yellow with deep navy accents (not green, not burgundy). New invented brand name 'KOIRA' with a new geometric wordmark. Half-screen glance must show clearly different packaging art."
+    },
+    {
+      "skill_id": "product-to-packaging",
+      "slot": "examples",
+      "index": 9,
+      "source_path": "<lovart-gold, not committed>",
+      "prompt": "TEXT EDIT ONLY (kie flare 3 Nov 2026 ~23:53 UTC+8). Keep KOIRA wrap-label dieline. Re-letter centre-spine 'SUNLIT LEAVES / IN EVERY SIP' and side flavour lines to match KOIRA/JASMINE GREEN TEA face. Source: prior wash tip db2557d0 ex09."
+    },
+    {
+      "skill_id": "product-to-packaging",
+      "slot": "examples",
+      "index": 10,
+      "source_path": "<lovart-gold, not committed>",
+      "prompt": "TEXT EDIT ONLY (kie flare 3 Nov 2026 ~23:54 UTC+8). Keep KOIRA shipping-mailer dieline. Replace '(moon + text)' / 'GOLD FOIL (moon +text)' → '(sunburst + text)' / 'GOLD FOIL (sunburst + text)'. Source: prior wash tip db2557d0 ex10."
+    },
+    {
+      "skill_id": "product-to-packaging",
+      "slot": "examples",
+      "index": 11,
+      "source_path": "<lovart-gold, not committed>",
+      "prompt": "TRUE WASH — half-screen glance must instantly prove this is NOT the reference (previous soft remixes were rejected). Recreate as ORIGINAL artwork with NEW pixels. IDENTITY-LOCK: keep the same subject category, composition family, layout and use-slot as the reference — do NOT change topic. No brand marks, watermarks, competitor logos or recognizable celebrity likeness; replace any brand names with generic invented ones. Keep a product-to-packaging system sheet for a canned tea brand (cans, gift boxes, dielines, mockups, shelf/retail shots as in the reference) with the same layout. STRONG DELTA: invent a new brand name (not Moonwake), switch the dominant packaging color from dark green to a clearly different color (e.g. deep burgundy or midnight navy with copper), redesign the emblem/illustration motif, keep the same packaging structures and sheet layout. STRONGER DELTA (previous wash was only a recolor — rejected): keep the exact same packaging structures, dieline/carton/can shapes, camera angle and layout, but REDRAW ALL ILLUSTRATION ON THE PACKAGING: replace the crescent-moon + leaf-sprig motif with a completely different motif — a bold geometric art-deco sunburst with stylized koi fish and wave bands, large graphic shapes covering most of each panel. Background of packaging: warm ochre/mustard yellow with deep navy accents (not green, not burgundy). New invented brand name 'KOIRA' with a new geometric wordmark. Half-screen glance must show clearly different packaging art."
+    },
+    {
+      "skill_id": "product-to-packaging",
+      "slot": "examples",
+      "index": 12,
+      "source_path": "<lovart-gold, not committed>",
+      "prompt": "TRUE WASH — half-screen glance must instantly prove this is NOT the reference (previous soft remixes were rejected). Recreate as ORIGINAL artwork with NEW pixels. IDENTITY-LOCK: keep the same subject category, composition family, layout and use-slot as the reference — do NOT change topic. No brand marks, watermarks, competitor logos or recognizable celebrity likeness; replace any brand names with generic invented ones. Keep a product-to-packaging system sheet for a canned tea brand (cans, gift boxes, dielines, mockups, shelf/retail shots as in the reference) with the same layout. STRONG DELTA: invent a new brand name (not Moonwake), switch the dominant packaging color from dark green to a clearly different color (e.g. deep burgundy or midnight navy with copper), redesign the emblem/illustration motif, keep the same packaging structures and sheet layout. STRONGER DELTA (previous wash was only a recolor — rejected): keep the exact same packaging structures, dieline/carton/can shapes, camera angle and layout, but REDRAW ALL ILLUSTRATION ON THE PACKAGING: replace the crescent-moon + leaf-sprig motif with a completely different motif — a bold geometric art-deco sunburst with stylized koi fish and wave bands, large graphic shapes covering most of each panel. Background of packaging: warm ochre/mustard yellow with deep navy accents (not green, not burgundy). New invented brand name 'KOIRA' with a new geometric wordmark. Half-screen glance must show clearly different packaging art."
+    },
+    {
+      "skill_id": "product-to-packaging",
+      "slot": "examples",
+      "index": 13,
+      "source_path": "<lovart-gold, not committed>",
+      "prompt": "TRUE WASH — half-screen glance must instantly prove this is NOT the reference (previous soft remixes were rejected). Recreate as ORIGINAL artwork with NEW pixels. IDENTITY-LOCK: keep the same subject category, composition family, layout and use-slot as the reference — do NOT change topic. No brand marks, watermarks, competitor logos or recognizable celebrity likeness; replace any brand names with generic invented ones. Keep a product-to-packaging system sheet for a canned tea brand (cans, gift boxes, dielines, mockups, shelf/retail shots as in the reference) with the same layout. STRONG DELTA: invent a new brand name (not Moonwake), switch the dominant packaging color from dark green to a clearly different color (e.g. deep burgundy or midnight navy with copper), redesign the emblem/illustration motif, keep the same packaging structures and sheet layout. STRONGER DELTA (previous wash was only a recolor — rejected): keep the exact same packaging structures, dieline/carton/can shapes, camera angle and layout, but REDRAW ALL ILLUSTRATION ON THE PACKAGING: replace the crescent-moon + leaf-sprig motif with a completely different motif — a bold geometric art-deco sunburst with stylized koi fish and wave bands, large graphic shapes covering most of each panel. Background of packaging: warm ochre/mustard yellow with deep navy accents (not green, not burgundy). New invented brand name 'KOIRA' with a new geometric wordmark. Half-screen glance must show clearly different packaging art."
+    },
+    {
+      "skill_id": "product-to-packaging",
+      "slot": "examples",
+      "index": 14,
+      "source_path": "<lovart-gold, not committed>",
+      "prompt": "TRUE WASH — half-screen glance must instantly prove this is NOT the reference (previous soft remixes were rejected). Recreate as ORIGINAL artwork with NEW pixels. IDENTITY-LOCK: keep the same subject category, composition family, layout and use-slot as the reference — do NOT change topic. No brand marks, watermarks, competitor logos or recognizable celebrity likeness; replace any brand names with generic invented ones. Keep a product-to-packaging system sheet for a canned tea brand (cans, gift boxes, dielines, mockups, shelf/retail shots as in the reference) with the same layout. STRONG DELTA: invent a new brand name (not Moonwake), switch the dominant packaging color from dark green to a clearly different color (e.g. deep burgundy or midnight navy with copper), redesign the emblem/illustration motif, keep the same packaging structures and sheet layout. STRONGER DELTA (previous wash was only a recolor — rejected): keep the exact same packaging structures, dieline/carton/can shapes, camera angle and layout, but REDRAW ALL ILLUSTRATION ON THE PACKAGING: replace the crescent-moon + leaf-sprig motif with a completely different motif — a bold geometric art-deco sunburst with stylized koi fish and wave bands, large graphic shapes covering most of each panel. Background of packaging: warm ochre/mustard yellow with deep navy accents (not green, not burgundy). New invented brand name 'KOIRA' with a new geometric wordmark. Half-screen glance must show clearly different packaging art."
+    }
+  ],
+  "postprocess": "ex09: centre-panel slogan replaced locally (PIL text overlay, no model call) with SUNLIT LEAVES / IN EVERY SIP. WaveSpeed google/nano-banana-pro/edit (2k) local edit, layout kept: ex01/03/06/14 (ex03 tech labels + ex06 panel line PIL re-set). ex09 (2nd local PIL pass): 'WITH NATURAL FLAVORS'→'BREWED WITH BLOSSOM' (x2), side panel 'SPARKLING WATER / NATURAL FLAVORS'→'LIGHTLY FIZZED / NO ADDED SUGAR'."
+}

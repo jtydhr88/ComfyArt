@@ -23,7 +23,8 @@ NEW19_WASHED_643 = {"taobao-product": [1, 2, 3, 4, 5, 6, 7, 8], "before-after": 
                     "animated-poster": [1, 2],  # #643 per-slot PR
                     "premium-website": [1, 2, 3, 4, 5, 6, 7],  # #643 per-slot PR
                     "studio-model": [1, 2],  # #643 per-slot PR
-                    "restaurant-website": [1, 2, 3, 4, 5, 6, 7]}  # #643 per-slot PR
+                    "restaurant-website": [1, 2, 3, 4, 5, 6, 7],  # #643 per-slot PR
+                    "product-to-packaging": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]}  # #643 per-slot PR
 
 
 def test_cover_main_preview_hooks():
