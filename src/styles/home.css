@@ -771,6 +771,8 @@ body { background: var(--ca-float); }
   position: relative; display: block; width: 100%; aspect-ratio: 231 / 173;
   border-radius: 12px; overflow: hidden; background: var(--ca-hover);
 }
+/* #641 thumbnail shelf card: YouTube 16:9 cover. Other skills keep 231/173. */
+.ca-swall__card[data-skill="thumbnail"] .ca-swall__cover { aspect-ratio: 16 / 9; }
 .ca-swall__cover img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 300ms ease; }
 /* #594/#602 — dual media-fit on Skills wall: contain + light-gray plate for Phase1 new6 boards */
 .ca-swall__cover[data-fit="contain"] { background: var(--ca-field); }
@@ -930,6 +932,23 @@ body { background: var(--ca-float); }
 }
 /* absolute fill: % height doesn't resolve on a grid item of an aspect-ratio box, which let portrait images overflow (crop) */
 .ca-skillrun__stage img, .ca-skillrun__stage video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; object-position: center; }
+/* #641 — stage-local skeleton / error. The dialog and page stay put. */
+.ca-skillrun__skel { position: absolute; inset: 0; background: var(--ca-field); z-index: 1; }
+.ca-skillrun__empty { margin: 0; padding: 24px 0; text-align: center; color: var(--ca-muted); font: 400 13px/20px var(--ca-font); }
+.ca-skillrun__mediaerr {
+  position: absolute; inset: 0; z-index: 2; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px;
+  padding: 16px; text-align: center; color: var(--ca-text-2); font: 400 13px/20px var(--ca-font);
+}
+.ca-skillrun__mediaerr button, .ca-skillrun__fielderr button {
+  border: 0; background: none; padding: 0; color: var(--ca-text); font: inherit; text-decoration: underline; cursor: pointer;
+}
+.ca-skillrun__presets { margin: 0 0 16px; }
+.ca-skillrun__chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.ca-skillrun__chip {
+  height: 32px; padding: 0 12px; border-radius: 999px; border: var(--ca-border-w) solid var(--ca-border);
+  background: var(--ca-field); color: var(--ca-text); font: 500 13px/30px var(--ca-font); cursor: pointer;
+}
+.ca-skillrun__chip[data-on] { background: var(--ca-chip-on-bg); color: var(--ca-chip-on-fg); border-color: var(--ca-chip-on-border); }
 /* #636 C5: single-still hardMax1 — stage-fill (no gray side-slot flanks); keep tall ppt sheet asset */
 .ca-skillrun__examples[data-count="1"] .ca-skillrun__stage img,
 .ca-skillrun__examples[data-count="1"] .ca-skillrun__stage video {
@@ -1077,6 +1096,7 @@ body { background: var(--ca-float); }
 .ca-skillrun__upload .ca-icon { width: 20px; height: 20px; }
 .ca-skillrun__upload input { display: none; }
 .ca-skillrun__req { color: var(--ca-danger, #e5484d); }
+.ca-skillrun__fielderr { margin: 0; color: var(--ca-danger, #e5484d); font: 400 12px/18px var(--ca-font); }
 .ca-skillrun__foot {
   flex: none; margin-top: auto; display: flex; flex-direction: column; gap: 8px; padding: 12px 24px 24px;
 }

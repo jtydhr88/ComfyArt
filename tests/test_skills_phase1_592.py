@@ -9,7 +9,7 @@ ROOT = Path(__file__).resolve().parents[1]
 SKILLS_TS = (ROOT / "src/skills.ts").read_text()
 
 UPGRADE = ["brand", "packaging", "poster", "product", "character", "social", "motion", "banner", "thumbnail"]
-EFFECT = {"poster", "thumbnail", "banner"}  # #635: social gains Fashion UGC presets
+EFFECT = {"poster", "banner", "thumbnail"}  # #641: thumbnail dialog parity → EFFECT_INPUTS
 TEMPLATE_COUNTS = {"product": 6, "brand": 6, "packaging": 5, "character": 8, "motion": 2}
 
 
@@ -44,8 +44,14 @@ def test_upgrade9_presets_examples_inputs_complete():
         assert "inputs:" in e, sid
         if sid in EFFECT:
             assert "inputs: EFFECT_INPUTS" in e, sid
-            assert ("examples: ex541(" in e) or ("examples: [video(" in e and "ex541(" in e), sid  # #575 video lead ok
             assert len(re.findall(r"\bP\('", e)) == 0, sid
+            if sid == "thumbnail":
+                assert "titleCopy" not in e, sid
+                assert "cover: cover('thumbnail')" in e and "ex541(" in e and "feedCovers('thumbnail')" in e, sid
+                assert "video: video('thumbnail')" in e, sid
+                assert ("examples: [video(" in e and "ex541(" in e), sid
+            else:
+                assert ("examples: ex541(" in e) or ("examples: [video(" in e and "ex541(" in e), sid  # #575 video lead ok
         elif sid == "social":
             # #635 Phase2-S2: Fashion UGC presets coexist with RedNote examples; custom inputs
             assert "examples: ex541(" in e, sid
@@ -65,9 +71,16 @@ def test_upgrade9_keeps_existing_media_pins():
     entries = _entries()
     for sid in UPGRADE:
         e = entries[sid]
-        assert f"cover: cover('{sid}')" in e, sid
-        assert f"video: video('{sid}')" in e, sid
-        assert f"featured: feedCovers('{sid}')" in e, sid
+        if sid == "thumbnail":
+            # #641 drop soft-wash: Phase1 cover/featured/examples + video hover + quickStart
+            assert "cover: cover('thumbnail')" in e, sid
+            assert "video: video('thumbnail')" in e, sid
+            assert "featured: feedCovers('thumbnail')" in e, sid
+            assert "quickStartCover: quickStartCover('thumbnail')" in e, sid
+        else:
+            assert f"cover: cover('{sid}')" in e, sid
+            assert f"video: video('{sid}')" in e, sid
+            assert f"featured: feedCovers('{sid}')" in e, sid
 
 
 def test_no_competitor_brand_in_src_skills():

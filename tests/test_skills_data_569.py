@@ -15,7 +15,7 @@ ROOT = Path(__file__).resolve().parents[1]
 needs_node = pytest.mark.skipif(
     not (ROOT / "node_modules" / ".bin" / "rolldown").exists() or not shutil.which("node"), reason="needs node + npm install")
 
-EFFECT = ("poster", "thumbnail", "banner", "interior")  # #635: social → Fashion UGC presets
+EFFECT = ("poster", "banner", "interior", "thumbnail")  # #641: thumbnail dialog parity → no presets
 TEMPLATE = {"brand": 6, "packaging": 5, "character": 8, "product": 6, "motion": 2}
 ASSETS = "https://raw.githubusercontent.com/ganjmeng/ComfyArt/bd043d4cff5019fc4117b5b2f3a33ae437015a28/569/wash"
 CHARACTER = [("角色转身板", "Character Turnaround Sheet", "01-character-turnaround-sheet"),

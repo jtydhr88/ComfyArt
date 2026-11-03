@@ -31,7 +31,7 @@ def got(tmp_path_factory) -> dict:
     return json.loads(subprocess.run(["node", str(out)], check=True, capture_output=True, text=True).stdout)
 
 
-EFFECT = ("poster", "thumbnail", "banner", "interior")  # #635 social Fashion UGC
+EFFECT = ("poster", "banner", "interior", "thumbnail")  # #641 thumbnail dialog parity → EFFECT_INPUTS
 COUNTS = {"product": 6, "brand": 6, "packaging": 5, "character": 8, "motion": 2,  # #569 template counts
           "multi-angle": 4, "logo-material": 4, "meta-ads": 4, "mobile-ui": 4, "web-product": 4, "marketing-campaign": 4,  # #593 new-6
           "flash-cut-video": 3, "style-transfer": 3, "person-swap": 3, "commerce-strategist": 3, "lifestyle-scene": 3,

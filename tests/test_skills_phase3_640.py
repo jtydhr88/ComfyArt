@@ -115,7 +115,7 @@ def test_new_skills_cut2_skeleton_categories_and_website_chip_sources():
         assert "category: 'website'" in entries[sid]
     # upgrade thumbnail still social + present
     assert "category: 'social'" in entries["thumbnail"]
-    assert "#640 Phase3-S1 upgrade slot" in SKILLS_TS
+    assert ("#640 Phase3-S1 upgrade slot" in SKILLS_TS) or ("#641 Phase3-S2" in SKILLS_TS and "thumbnail" in SKILLS_TS)
 
 
 def test_locale_titles_descriptions_categories_for_new_ids():

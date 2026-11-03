@@ -103,7 +103,10 @@ def test_examples_carousel_is_data_driven(got):
     assert {k: v for k, v in got["examples"].items() if v} == want
     for sid in ("product", "brand", "packaging", "motion", "character", "custom-workflow"):
         assert got["examples"][sid] == 0, sid
-    assert got["exNone"] == ["", ""]
+    # Unset examples stay omitted. An explicit empty list is the #641 「暂无示例」 state.
+    assert got["exNone"][0] == ""
+    assert 'data-testid="skill-run-examples-empty"' in got["exNone"][1]
+    assert "No examples yet" in got["exNone"][1]
     html = got["exMock"]
     assert 'data-testid="skill-run-examples"' in html and 'data-count="5"' in html
     assert html.count('data-testid="skill-run-example-thumb"') == 5 and html.count('aria-selected="true"') == 1
@@ -118,7 +121,7 @@ def test_examples_carousel_is_data_driven(got):
 
 
 EX541 = {"interior": ("535d9568d1b8ca25e300fa32db1eca887889ba88", [1, 2, 3, 4]), "poster": ("6d864bd2dd53b9f5b487829f2834d94be013b0a5", [1, 2, 3, 4, 5]),
-         "thumbnail": ("5fc35b17f11ee58fde21671b16b574ecb0d35e5a", [1, 2, 3, 4, 5, 6]),
+         "thumbnail": ("5fc35b17f11ee58fde21671b16b574ecb0d35e5a", [1, 2, 3, 4, 5, 6]),  # Phase1 541/wash stills @16:9
          "social": ("cb41cb8a450139cd903e777c8f84024019d517cd", list(range(1, 11))),
          "banner": ("8cc3fb305f7ce29ebbab63525680e3436e964dbb", [1])}  # 1 × ~2:1 composite
 

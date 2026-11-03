@@ -70,6 +70,8 @@ export function SkillRunDialog({ skill, presetId, onClose, run = newProject }: {
   const [values, setValues] = useState(() => skillDefaults(skill))
   const [preset, setPreset] = useState(() => skillPreset(skill, presetId)?.id ?? null)
   const [uploading, setUploading] = useState<string | null>(null)
+  const [uploadError, setUploadError] = useState<string | null>(null)
+  const [runError, setRunError] = useState(false)
   const [fav, setFav] = useState(() => loadFavourites().includes(skill.id))
   const [shared, setShared] = useState(false)
   const missing = missingInputs(skill, values)
@@ -86,7 +88,12 @@ export function SkillRunDialog({ skill, presetId, onClose, run = newProject }: {
     void copyText(link).then(() => { setShared(true); setTimeout(() => setShared(false), 1500) })
   }
   const onFav = () => setFav(toggleFavourite(skill.id).includes(skill.id))
-  const onStart = () => { recordSkillUse(skill.id); run(skillRunParams(skill, values, preset)) }
+  const onStart = () => {
+    if (missing.length || uploading) return
+    setRunError(false)
+    recordSkillUse(skill.id)
+    try { run(skillRunParams(skill, values, preset)) } catch { setRunError(true) }
+  }
   useEscape(true, onClose)
   return (
     <div className="ca-modal" data-testid="skill-run-modal" onPointerDown={(e) => { e.stopPropagation(); if (e.target === e.currentTarget) onClose() }}>
@@ -126,8 +133,10 @@ export function SkillRunDialog({ skill, presetId, onClose, run = newProject }: {
           {(() => {
             const examples = skill.examples ?? []
             const presetTiles = (skill.presets ?? []).filter((p) => !!(p.image || p.video))
+            // #641: thumbnail (presetChips) with an explicit empty list still shows 「暂无示例」.
+            const showEmptyExamples = !!skill.presetChips && Array.isArray(skill.examples) && skill.examples.length === 0
             // #637: Examples-only left when examples drive the gold shape; 「模板」 grid only for real preset media (not cover fallback).
-            if (!examples.length && !presetTiles.length) return null
+            if (!examples.length && !presetTiles.length && !showEmptyExamples) return null
             return (
               <div className="ca-skillrun__templates" data-left={examples.length ? (presetTiles.length ? 'both' : 'examples') : 'templates'}>
                 <SkillExamples examples={skill.examples} />
@@ -149,7 +158,7 @@ export function SkillRunDialog({ skill, presetId, onClose, run = newProject }: {
         <div className="ca-skillrun__right">
           <div className="ca-skillrun__righthead">
             <span data-testid="skill-run-header">{t('skillRun.header')}</span>
-            <button type="button" className="ca-panel__icon" title={t('common.close')} onClick={onClose}>{Icons.close}</button>
+            <button type="button" className="ca-panel__icon" data-testid="skill-run-close" title={t('common.close')} onClick={onClose}>{Icons.close}</button>
           </div>
           <div className="ca-skillrun__body">
             {chosen && (() => {
@@ -172,25 +181,49 @@ export function SkillRunDialog({ skill, presetId, onClose, run = newProject }: {
               </div>
               )
             })()}
+            {!!skill.presetChips && !!skill.presets?.length && (
+              <div className="ca-skillrun__presets" data-testid="skill-run-preset-chips">
+                <div className="ca-skillrun__section">{t('skillRun.presets')}</div>
+                <div className="ca-skillrun__chips" role="radiogroup" aria-label={t('skillRun.presets')}>
+                  {skill.presets.map((p) => (
+                    <button key={p.id} type="button" role="radio" aria-checked={preset === p.id}
+                      className="ca-skillrun__chip" data-testid="skill-run-preset-chip" data-preset={p.id}
+                      data-on={preset === p.id || undefined}
+                      onClick={() => setPreset(p.id)}>{loc(p.name)}</button>
+                  ))}
+                </div>
+              </div>
+            )}
             {/* join existing ca-skillform system; field column mirrors Loomic template-dialog .fields/.field */}
             <div className="ca-skillform" data-testid="skill-run-form">
             {(skill.inputs ?? []).map((f) => {
               const id = `skill-run-${f.key}`
               const label = <label className="ca-skillform__label" htmlFor={id}>{loc(f.label)}{f.required && <span className="ca-skillrun__req" aria-hidden="true"> *</span>}</label>
               const ph = f.placeholder ? loc(f.placeholder) : ''
-              const common = { id, 'data-testid': 'skill-run-field', 'data-key': f.key, 'data-type': f.type, required: f.required, 'aria-required': f.required || undefined }
+              const invalid = missing.includes(f.key)
+              const common = { id, 'data-testid': 'skill-run-field', 'data-key': f.key, 'data-type': f.type, required: f.required, 'aria-required': f.required || undefined, 'aria-invalid': invalid || undefined }
+              const fieldError = invalid ? (
+                <p className="ca-skillrun__fielderr" role="alert" data-testid="skill-run-field-error" data-key={f.key}>{t('skillRun.fieldRequired', loc(f.label))}</p>
+              ) : uploadError === f.key ? (
+                <p className="ca-skillrun__fielderr" role="alert" data-testid="skill-run-upload-error" data-key={f.key}>
+                  {t('skillRun.uploadFailed')}{' '}
+                  <button type="button" data-testid="skill-run-upload-retry" onClick={() => setUploadError(null)}>{t('skillRun.retry')}</button>
+                </p>
+              ) : null
               if (f.type === 'select') return (
                 <div key={f.key} className="ca-skillrun__field">
                   {label}
                   <select {...common} className="ca-panel__input" value={values[f.key] ?? ''} onChange={(e) => set(f.key, e.target.value)} onKeyDown={stop}>
                     {f.options?.map((o) => <option key={o.value} value={o.value}>{loc(o.label)}</option>)}
                   </select>
+                  {fieldError}
                 </div>
               )
               if (f.type === 'textarea') return (
                 <div key={f.key} className="ca-skillrun__field">
                   {label}
                   <textarea {...common} className="ca-panel__prompt ca-panel__prompt--boxed" rows={3} placeholder={ph} value={values[f.key] ?? ''} onChange={(e) => set(f.key, e.target.value)} onKeyDown={stop} />
+                  {fieldError}
                 </div>
               )
               if (f.type === 'image') return (
@@ -204,21 +237,25 @@ export function SkillRunDialog({ skill, presetId, onClose, run = newProject }: {
                             const file = e.target.files?.[0]; e.target.value = ''
                             if (!file) return
                             setUploading(f.key)
-                            void uploadSkillImage(file, skill.id).then((src) => set(f.key, src)).finally(() => setUploading(null))
+                            setUploadError(null)
+                            void uploadSkillImage(file, skill.id).then((src) => set(f.key, src)).catch(() => setUploadError(f.key)).finally(() => setUploading(null))
                           }} /></label>}
                   </div>
+                  {fieldError}
                 </div>
               )
               return (
                 <div key={f.key} className="ca-skillrun__field">
                   {label}
                   <input {...common} className="ca-panel__input" placeholder={ph} value={values[f.key] ?? ''} onChange={(e) => set(f.key, e.target.value)} onKeyDown={stop} />
+                  {fieldError}
                 </div>
               )
             })}
             </div>
           </div>
           <div className="ca-skillrun__foot">
+            {runError && <p className="ca-skillrun__fielderr" role="alert" data-testid="skill-run-run-error">{t('skillRun.startFailed')}</p>}
             <button type="button" className="ca-panel__primary ca-skillrun__go" data-testid="skill-run-go" disabled={missing.length > 0 || !!uploading}
               onClick={onStart}>{t('skillRun.start')}</button>
           </div>
