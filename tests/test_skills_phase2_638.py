@@ -85,7 +85,11 @@ def test_b_washed_mounted_deferred_still_empty_assets():
         assert "featured: feat637(" in e or "featured:" in head, sid
         assert "demo" not in e.lower() and "placeholder.webp" not in e, sid
         assert "lovart" not in e.lower(), sid
-    for sid in PHASE2_DEFERRED_C + PHASE2_DEFERRED_D:
+    for sid in PHASE2_DEFERRED_C:  # #636 C5 soft wash landed: cover636 + ex636 + feat636
+        head = entries[sid].split("inputs:", 1)[0]
+        assert f"cover: cover636('{sid}')" in head and f"examples: ex636('{sid}'" in head and f"featured: feat636('{sid}'" in head, sid
+        assert "cover637" not in head, sid
+    for sid in PHASE2_DEFERRED_D:
         e = entries[sid]
         head = e.split("inputs:", 1)[0]
         assert "examples: []" in e and "featured: []" in e, sid

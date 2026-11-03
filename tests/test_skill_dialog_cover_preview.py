@@ -15,6 +15,11 @@ NEW19 = [
     "live-promo-decor", "linkedin-banner", "logo-animation", "restaurant-website", "clothing-swap",
 ]
 
+NEW19_WASHED_643 = {"taobao-product": [1, 2, 3, 4, 5, 6, 7, 8], "before-after": [1, 2, 3, 4, 5, 6, 7, 8],
+                    "product-website": [1, 2, 3], "linkedin-banner": [1], "clothing-swap": [1, 2],
+                    # #677/#682/#674 per-skill wash (pin sha as 3rd arg)
+                    "anim-2d": [1, 2, 3], "creator-identity": [1], "portrait-studio": [1, 2, 3, 4, 5, 6]}
+
 
 def test_cover_main_preview_hooks():
     assert "skillCover" in DLG
@@ -36,7 +41,10 @@ def test_new19_examples_still_empty_covers_pinned():
     entries = {p.split("'", 1)[0]: p for p in parts}
     for sid in NEW19:
         e = entries[sid]
-        assert "examples: []" in e, sid
+        if sid in NEW19_WASHED_643:  # #643 batch1 (#667) true-wash examples landed
+            assert re.search(rf"examples: ex643\('{sid}', {re.escape(str(NEW19_WASHED_643[sid]))}(, '[0-9a-f]{{40}}')?\)", e), sid
+        else:
+            assert "examples: []" in e, sid
         assert "featured: []" in e, sid
         head = e.split("inputs:", 1)[0]
         assert f"cover: cover643('{sid}')" in head, sid

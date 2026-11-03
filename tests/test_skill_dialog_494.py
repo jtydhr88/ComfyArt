@@ -31,7 +31,12 @@ def got(tmp_path_factory) -> dict:
     return json.loads(subprocess.run(["node", str(out)], check=True, capture_output=True, text=True).stdout)
 
 
-EFFECT = ("poster", "banner", "interior", "thumbnail")  # #641 thumbnail dialog parity → EFFECT_INPUTS
+EFFECT = ("poster", "banner", "interior", "thumbnail")
+# #636 C5 + #664 NEW19 share NEARMISS_INPUTS (Upload + Additional, none required)
+NEARMISS = ("naive-illustration", "logo-abstract", "photo-split-poster", "ppt-visual", "promo-ecommerce",
+            "taobao-product", "before-after", "anim-2d", "creator-identity", "product-website", "studio-model",
+            "youtube-channel-banner", "ai-model", "product-to-packaging", "game-art", "portrait-studio", "premium-website",
+            "animated-poster", "pose-fission", "live-promo-decor", "linkedin-banner", "logo-animation", "restaurant-website", "clothing-swap")  # #641 thumbnail dialog parity → EFFECT_INPUTS
 COUNTS = {"product": 6, "brand": 6, "packaging": 5, "character": 8, "motion": 2,  # #569 template counts
           "multi-angle": 4, "logo-material": 4, "meta-ads": 4, "mobile-ui": 4, "web-product": 4, "marketing-campaign": 4,  # #593 new-6
           "flash-cut-video": 3, "style-transfer": 3, "person-swap": 3, "commerce-strategist": 3, "lifestyle-scene": 3,
@@ -51,7 +56,7 @@ def test_every_field_is_bilingual_data(got):
     for sid, fields in got["fields"].items():
         assert fields, sid
         # #569: effect skills (upload + note) and character carry no required field, like the reference.
-        assert any(req for _, _, req, *_ in fields) == (sid not in EFFECT and sid not in {"character", "social"}), sid  # #635 social optional refs
+        assert any(req for _, _, req, *_ in fields) == (sid not in EFFECT and sid not in NEARMISS and sid not in {"character", "social"}), sid  # #635 social optional refs
         for key, typ, req, zh, en, ph in fields:
             assert typ in {"text", "textarea", "select", "image"} and zh and en, (sid, key)
             if req and typ in {"text", "textarea"}:
@@ -142,7 +147,8 @@ def test_dialog_is_data_driven():
 
 
 def test_page_wiring():
-    assert "hasSkillDialog(s) ? tryCard(s) : newProject({ skill: s.id })" in PAGE
+    # #494-3: tryCard owns the dialog-vs-direct rule (was inlined at the call site)
+    assert "const tryCard = (s: Skill) => (hasSkillDialog(s) ? setRunning({ id: s.id, preset: null }) : startDirect(s))" in PAGE
     assert "openSkillEditor(landing.id)" in PAGE and "openSkillDetail" not in PAGE
     assert 'data-testid="skills-card-try"' in PAGE and "home.skillsTryThis" in PAGE
     assert "onClick={row ? undefined : onTry}" in PAGE  # cover + title open the same dialog

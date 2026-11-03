@@ -47,12 +47,13 @@ def test_meta_copy_has_no_fake_usage():
 def test_lovart_sizes_and_theme_vars():
     assert "width: min(1112px, calc(100vw - 32px))" in CSS and "height: min(820px" in CSS
     assert "flex: 1 1 752px" in CSS and "flex: 0 0 360px" in CSS
-    assert "background: var(--ca-skillrun-side)" in CSS and "#f5f5f5" not in CSS
+    css_rules = re.sub(r"/\*.*?\*/", "", CSS, flags=re.S)  # hex may appear in history comments (#632)
+    assert "background: var(--ca-skillrun-side)" in CSS and "#f5f5f5" not in css_rules
     assert BASE.count("--ca-skillrun-side:") == 2 and BASE.count("--ca-skillrun-tile:") == 2  # light + dark
     assert "object-fit: contain" in CSS and "aspect-ratio: 160 / 120" in CSS  # 344×258 well
     assert "width: 22px; height: 22px" in CSS  # zoom
     assert "height: 86px" in CSS and "width: 36px; height: 36px" in CSS  # current card + thumb
-    assert "1px dashed" in CSS and "height: 108px" in CSS  # upload
+    assert "1px dashed" in CSS and "height: 140px; box-sizing: border-box" in CSS  # upload (#636 4289c673 gold: 108 → 140)
     assert "margin-top: auto" in CSS  # pinned submit
     # #576: ring on image only (title outside frame)
     assert ".ca-skillrun__preset[data-on] .ca-skillrun__presetimg::after" in CSS
@@ -99,7 +100,9 @@ def test_examples_carousel_is_data_driven(got):
     want = {"poster": 5, "thumbnail": 7, "social": 10, "banner": 2, "interior": 4,  # #575: thumbnail/banner lead with wash mp4
             "multi-angle": 4, "logo-material": 4, "meta-ads": 4, "mobile-ui": 4, "web-product": 4, "marketing-campaign": 4,  # #593 new-6
             "flash-cut-video": 1, "style-transfer": 4, "person-swap": 1, "commerce-strategist": 1, "lifestyle-scene": 2,  # #637 B5 hardMax
-            "logo-abstract": 11, "photo-split-poster": 1, "ppt-visual": 1, "promo-ecommerce": 4, "naive-illustration": 4}  # #636 C5 hardMax
+            "logo-abstract": 11, "photo-split-poster": 1, "ppt-visual": 1, "promo-ecommerce": 4, "naive-illustration": 4,  # #636 C5 hardMax
+            "taobao-product": 8, "before-after": 8, "product-website": 3, "linkedin-banner": 1, "clothing-swap": 2,  # #643 batch1 (#667)
+            "anim-2d": 3, "creator-identity": 1, "portrait-studio": 6}  # #643 per-skill wash (#677/#682/#674)
     assert {k: v for k, v in got["examples"].items() if v} == want
     for sid in ("product", "brand", "packaging", "motion", "character"):
         assert got["examples"][sid] == 0, sid
@@ -121,7 +124,6 @@ def test_examples_carousel_is_data_driven(got):
 
 
 EX541 = {"interior": ("535d9568d1b8ca25e300fa32db1eca887889ba88", [1, 2, 3, 4]), "poster": ("6d864bd2dd53b9f5b487829f2834d94be013b0a5", [1, 2, 3, 4, 5]),
-         "thumbnail": ("5fc35b17f11ee58fde21671b16b574ecb0d35e5a", [1, 2, 3, 4, 5, 6]),  # Phase1 541/wash stills @16:9
          "social": ("cb41cb8a450139cd903e777c8f84024019d517cd", list(range(1, 11))),
          "banner": ("8cc3fb305f7ce29ebbab63525680e3436e964dbb", [1])}  # 1 × ~2:1 composite
 
@@ -136,6 +138,9 @@ def test_examples_pinned_to_image_commits(got):
         stills = [f"https://raw.githubusercontent.com/ganjmeng/ComfyArt/{sha}/541/wash/{sid}/examples/{n}.webp" for n in ids]
         want = ([f"https://raw.githubusercontent.com/ganjmeng/ComfyArt/{TIP_VIDEO}/494/wash/videos/{sid}.mp4"] + stills) if sid in VIDEO_LEAD else stills
         assert got["exUrls"][sid] == want, sid
+    # #643 (#659) thumbnail true wash: lead mp4 + 6 stills re-pinned to WASH_643
+    w643 = "https://raw.githubusercontent.com/ganjmeng/ComfyArt/0be4350be224066cccf5e2929bfcb02e0bf8f7a9/643/wash/thumbnail/examples"
+    assert got["exUrls"]["thumbnail"] == [f"https://raw.githubusercontent.com/ganjmeng/ComfyArt/{TIP_VIDEO}/494/wash/videos/thumbnail.mp4"] + [f"{w643}/{n:02d}.webp" for n in range(1, 7)]
     assert not any("/541/wash/examples/" in u for us in got["exUrls"].values() for u in us)  # old void path
 
 

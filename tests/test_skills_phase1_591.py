@@ -55,10 +55,10 @@ def test_new_skills_cut2_skeleton_and_website_categories():
         assert f"category: '{cat}'" in e, sid
         assert "instructions:" in e and "inputs:" in e, sid
         assert "name: t(" in e, sid
-        # #594 wash pins — cover + featured; no hover video (#575)
+        # #594 wash pins — cover + featured; #623 wired Skill.video hover @ 594/wash
         head = e.split("inputs:", 1)[0]
         assert "cover: cover(" in head and "featured: feedCovers(" in head, sid
-        assert "video:" not in head, sid
+        assert f"video: video594('{sid}')" in head, sid
         assert "quickStartCoverFit: 'contain'" in head, sid
         assert "examples: ex594(" in head, sid
 

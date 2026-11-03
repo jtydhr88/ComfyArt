@@ -9,6 +9,11 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 SKILLS_TS = (ROOT / "src/skills.ts").read_text()
 SKILLS = (ROOT / "src/home/Skills.tsx").read_text()
+NEW19 = (  # #640 Phase3-S1 NEW19 → #664 NEARMISS_INPUTS
+    "taobao-product", "before-after", "anim-2d", "creator-identity", "product-website", "studio-model",
+    "youtube-channel-banner", "ai-model", "product-to-packaging", "game-art", "portrait-studio", "premium-website",
+    "animated-poster", "pose-fission", "live-promo-decor", "linkedin-banner", "logo-animation", "restaurant-website", "clothing-swap",
+)
 HOME_CSS = (ROOT / "src/styles/home.css").read_text()
 ICONS = (ROOT / "src/ui/icons.tsx").read_text()
 ZH = json.loads((ROOT / "src/locales/zh.json").read_text())
@@ -98,8 +103,8 @@ def test_presets_and_inputs_schema():
             # #635: Fashion UGC inputs (file + product/person refs + note); no required fields
             assert "inputs: [" in e and "productRef" in e and "personRef" in e, sid
             assert "inputs: EFFECT_INPUTS" not in e, sid
-        elif sid in ("naive-illustration", "logo-abstract", "photo-split-poster", "ppt-visual", "promo-ecommerce"):
-            # #636 C nearMiss Examples-only right rail
+        elif sid in ("naive-illustration", "logo-abstract", "photo-split-poster", "ppt-visual", "promo-ecommerce") or sid in NEW19:
+            # #636 C nearMiss Examples-only right rail; #664 NEW19 dialog field parity (Upload + Additional)
             assert "inputs: NEARMISS_INPUTS" in e, sid
         else:
             assert "inputs: [" in e and (", true" in e) == (sid != "character"), f"{sid} required input"
@@ -112,7 +117,7 @@ def test_presets_and_inputs_schema():
         assert len(re.findall(r"\bwashPreset\(", e)) == 0, sid  # #569: 494 preset washes retired
         assert len(re.findall(r"\bwash569\(", e)) == {"character": 8, "motion": 2}.get(sid, 0), sid  # #569 manifest washes
         assert len(re.findall(r"\bwashProduct541\(", e)) == (6 if sid == "product" else 0), sid  # #541 product 6
-        assert len(re.findall(r"Style: |Focus on |Motion: |Template: ", e)) == {"product": 6, "brand": 6, "packaging": 5, "character": 8, "motion": 2, "multi-angle": 4, "logo-material": 4, "meta-ads": 4, "mobile-ui": 4, "web-product": 4, "marketing-campaign": 4, "flash-cut-video": 3, "style-transfer": 3, "person-swap": 3, "commerce-strategist": 3, "lifestyle-scene": 3, "naive-illustration": 2, "logo-abstract": 2, "photo-split-poster": 2, "ppt-visual": 3, "promo-ecommerce": 2, "yingzao": 2, "crt-interface": 3, "crayon-sketch": 2, "fabric-collage": 2, "social": 2, "taobao-product": 3, "before-after": 3, "anim-2d": 2, "creator-identity": 3, "product-website": 2, "studio-model": 3, "youtube-channel-banner": 2, "ai-model": 3, "product-to-packaging": 3, "game-art": 3, "portrait-studio": 2, "premium-website": 2, "animated-poster": 2, "pose-fission": 3, "live-promo-decor": 3, "linkedin-banner": 2, "logo-animation": 2, "restaurant-website": 2, "clothing-swap": 3}.get(sid, 0), sid  # en prompt body (#593 + #634 + #635 + #640)
+        assert len(re.findall(r"\bP\('[^']*', '[^']*', '[^']*', '(?:Style: |Focus on |Motion: |Template: )", e)) == {"product": 6, "brand": 6, "packaging": 5, "character": 8, "motion": 2, "multi-angle": 4, "logo-material": 4, "meta-ads": 4, "mobile-ui": 4, "web-product": 4, "marketing-campaign": 4, "flash-cut-video": 3, "style-transfer": 3, "person-swap": 3, "commerce-strategist": 3, "lifestyle-scene": 3, "naive-illustration": 2, "logo-abstract": 2, "photo-split-poster": 2, "ppt-visual": 3, "promo-ecommerce": 2, "yingzao": 2, "crt-interface": 3, "crayon-sketch": 2, "fabric-collage": 2, "social": 2, "taobao-product": 3, "before-after": 3, "anim-2d": 2, "creator-identity": 3, "product-website": 2, "studio-model": 3, "youtube-channel-banner": 2, "ai-model": 3, "product-to-packaging": 3, "game-art": 3, "portrait-studio": 2, "premium-website": 2, "animated-poster": 2, "pose-fission": 3, "live-promo-decor": 3, "linkedin-banner": 2, "logo-animation": 2, "restaurant-website": 2, "clothing-swap": 3}.get(sid, 0), sid  # en prompt body, counted per preset (logo-animation instructions also say "Motion: ") (#593 + #634 + #635 + #640)
     # names/descriptions keep coming from locale keys (AC 1)
     for e in _entries().values():
         assert re.match(r"[\w-]+', name: t\('skills\.\w+'\)", e)
@@ -154,7 +159,8 @@ def test_cover_fallback_single_place():
     body = SKILLS_TS.split("export function skillCover", 1)[1].split("\n}\n", 1)[0]
     assert "skill.cover" in body and "Object.values(skill.images ?? {})[0]" in body  # own image first (AC 5)
     assert "pool" not in SKILLS_TS.lower() and "hash" not in SKILLS_TS.lower()  # 23:20 ruling: no image pool
-    assert "gradient" not in HOME_CSS.split(".ca-swall {", 1)[1].split("@media", 1)[0]
+    swall = HOME_CSS.split(".ca-swall {", 1)[1].split("@media", 1)[0]
+    assert "gradient" not in re.sub(r"/\*.*?\*/", "", swall, flags=re.S)  # #575 comment may say 'not gradient'
     assert "data-tone" not in SKILLS
     assert "Icons.workflow" not in SKILLS and "workflow:" in ICONS  # custom-workflow card removed; icon kept for WorkflowsDialog
     assert "alt={skill.name}" in SKILLS
@@ -171,7 +177,7 @@ def test_badge_position_and_placeholder_colour():
     tsx = (ROOT / "src/home/Skills.tsx").read_text()
     cover = tsx[tsx.index('className="ca-swall__cover"'):tsx.index('className="ca-swall__title"')]
     assert 'data-testid="skills-card-kind"' in cover and "{src" in cover  # badge outside the src ternary → every card
-    assert "imageLine: <Svg strokeWidth={2}>" in (ROOT / "src/ui/icons.tsx").read_text()
+    assert "imageLine: L(Image, 2)," in (ROOT / "src/ui/icons.tsx").read_text()
 
 
 def test_card_author_badge_bookmark():

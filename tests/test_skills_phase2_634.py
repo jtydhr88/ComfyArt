@@ -89,8 +89,11 @@ def test_new_skills_cut2_skeleton_categories():
             # #637 S4 soft wash pins
             assert "cover: cover637(" in head, sid
             assert "examples: []" not in e and "featured: []" not in e, sid
+        elif sid in ("naive-illustration", "logo-abstract", "photo-split-poster", "ppt-visual", "promo-ecommerce"):
+            # #636 C5 soft wash (Examples-only, nearMiss) — no longer deferred
+            assert f"cover: cover636('{sid}')" in head and f"examples: ex636('{sid}'" in head, sid
         else:
-            # C/D still deferred
+            # D still deferred
             assert "examples: []" in e and "featured: []" in e, sid
             assert "cover:" not in head and "video:" not in head, sid
 

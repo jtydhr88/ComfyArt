@@ -77,11 +77,29 @@ PHASE1_FEATURED = {
 }
 
 
+def _featured_from_data():
+    """Every builtin with feed cases: featured[] or still examples (#595 Phase1 + #637 B5 + #636 C5 + #643 thumbnail)."""
+    import re
+    src = (Path(__file__).resolve().parents[1] / "src/skills.ts").read_text()
+    a = src.index("export const BUILTIN_SKILLS")
+    block = src[a:src.find("\n]", a)]
+    out = set()
+    for p in re.split(r"\n  \{ id: '", block)[1:]:
+        m = re.search(r"featured: (\[\]|\w+\()", p)
+        # skillFeaturedCases: featured[] first, else still examples (e.g. #643 NEW19 ex643)
+        if (m and m.group(1) != "[]") or re.search(r"examples: ex\d+\(", p):
+            out.add(p.split("'", 1)[0])
+    return out
+
+
+FEATURED_DIRS = ("/580/featured-v1/", "/580/featured-v2/", "/637/wash/", "/636/wash/", "/643/wash/")
+
+
 def _check_tiles(tiles):
     skills = [t["skill"] for t in tiles]
-    assert set(skills) == PHASE1_FEATURED, set(skills)
-    # #588/#594: every skill ships washed featured[] (v1 upgrade9+interior, v2 Phase1 new6)
-    assert all("/580/featured-v1/" in t["img"] or "/580/featured-v2/" in t["img"] for t in tiles), [t["img"] for t in tiles]
+    assert PHASE1_FEATURED - {"thumbnail"} <= set(skills) == _featured_from_data(), set(skills)
+    # #588/#594 featured-v1/v2; later phases pin their own wash dirs (#637 B5, #636 C5, #643 thumbnail)
+    assert all(any(d in t["img"] for d in FEATURED_DIRS) for t in tiles), [t["img"] for t in tiles]
     assert all(a != b for a, b in zip(skills, skills[1:])), skills  # data order: no adjacent duplicates
     assert len({t["img"] for t in tiles}) == len(tiles)
     assert len(tiles) > len(PHASE1_FEATURED)  # second round follows

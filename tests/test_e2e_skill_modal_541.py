@@ -40,7 +40,7 @@ async def test_geometry(app_url, lang):  # noqa: F811
         a, b = await tiles.nth(0).evaluate(BOX), await tiles.nth(1).evaluate(BOX)
         assert b[2] - a[2] == 360  # 344 + gap 16
         assert (await pg.get_by_test_id("skill-run-current").locator(".ca-skillrun__currentrow").evaluate(BOX))[:2] == [312, 86]
-        assert (await pg.get_by_test_id("skill-run-upload").evaluate(BOX))[:2] == [312, 108]
+        assert (await pg.get_by_test_id("skill-run-upload").evaluate(BOX))[:2] == [312, 140]
         go = pg.get_by_test_id("skill-run-go")
         g, r = await go.evaluate(BOX), await dlg.evaluate(BOX)
         assert g[:2] == [312, 36] and r[3] + r[1] - (g[3] + g[1]) == 24  # pinned to bottom
@@ -101,6 +101,8 @@ async def test_example_stage_contain_no_crop(app_url, skill, portrait):  # noqa:
     async with pw.async_playwright() as p:
         browser, pg = await _open(p, app_url, "zh", "light")
         await _modal(pg, skill)
+        if skill in ("thumbnail", "banner"):  # #575 lead example is the wash mp4 → select the first still
+            await pg.locator('[data-testid="skill-run-example-thumb"][data-media="image"]').first.click()
         await pg.wait_for_function("() => { const i = document.querySelector('[data-testid=skill-run-example-stage] img');"
                                    " return i && i.complete && i.naturalWidth > 0 }", timeout=60000)
         r = await pg.evaluate(STAGE)

@@ -40,7 +40,7 @@ async def test_dialog_from_data_and_handoff(app_url, lang):  # noqa: F811
         assert await pg.get_by_test_id("skill-run-preset").count() == 6
         go = pg.get_by_test_id("skill-run-go")
         assert await go.is_disabled()
-        await pg.locator('[data-key="brandInfo"]').fill("Autumn launch")
+        await pg.locator('[data-testid="skill-run-field"][data-key="brandInfo"]').fill("Autumn launch")
         assert await go.is_enabled()
         await pg.get_by_test_id("skill-run-preset").nth(1).click()
         assert await pg.get_by_test_id("skill-run-current").inner_text()

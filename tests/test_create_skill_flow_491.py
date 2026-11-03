@@ -142,7 +142,7 @@ def test_a_skill_chip_reuses_484_chip() -> None:
 def test_a_skills_panel_icon_is_square_plus() -> None:
     m = re.search(r'data-testid="home-skills-more".*?<span className="ca-icon">\{Icons\.(\w+)\}</span>', HOME, re.S)
     assert m and m.group(1) == "squarePlus"
-    assert 'squarePlus: <Svg><rect width="18" height="18" x="3" y="3" rx="2" />' in ICONS
+    assert "squarePlus: L(SquarePlus)," in ICONS  # #608 Lucide soft replace (was inline <Svg>)
 
 
 def test_a_import_opens_new_dialog() -> None:
@@ -193,8 +193,8 @@ def test_d2_dropdown_icons() -> None:
     icons = re.findall(r"\{Icons\.(\w+)\}</span><span className=\"ca-menu__grow\">\{t\('home\.(\w+)'\)\}", menu)
     assert icons == [("circlePlus", "createSkill"), ("messageSquare", "createSkillFromChat"), ("uploadArrow", "importSkill")]
     assert re.search(r'<button type="button" className="ca-menu__item" disabled>\s*<span className="ca-icon">\{Icons\.messageSquare\}', menu)
-    assert 'circlePlus: <Svg strokeWidth={2}><circle cx="12" cy="12" r="10" />' in ICONS
-    assert "messageSquare: <Svg strokeWidth={2}>" in ICONS
+    assert "circlePlus: L(CirclePlus, 2)," in ICONS  # #608 Lucide, stroke 2 kept
+    assert "messageSquare: L(MessageSquare, 2)," in ICONS
 
 
 def test_d3_creator_chip_is_skill_chip_everywhere() -> None:

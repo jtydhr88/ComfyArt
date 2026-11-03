@@ -80,8 +80,11 @@ def test_phase1_media_and_no_demo_placeholder():
     for sid in PHASE1:
         e = entries[sid]
         head = e.split("inputs:", 1)[0]
-        assert "cover: cover(" in head, sid
-        assert "featured: feedCovers(" in head, sid
+        if sid == "thumbnail":  # #643 (#659) true wash re-pinned cover + featured
+            assert "cover: cover643('thumbnail')" in head and "featured: feat643('thumbnail'" in head, sid
+        else:
+            assert "cover: cover(" in head, sid
+            assert "featured: feedCovers(" in head, sid
         assert "demo" not in e.lower(), sid
         assert "placeholder.webp" not in e, sid
         assert "lovart" not in e.lower(), sid

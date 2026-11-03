@@ -24,6 +24,12 @@ def _home_skill_card_click() -> str:
     return m.group(1)
 
 
+def _home_skill_card_click_prop() -> str:
+    m = re.search(r'data-testid="home-skill-card"[\s\S]*?onClick=\{(\w+)\}', HOME)
+    assert m, "home-skill-card missing"
+    return m.group(1)
+
+
 def _featured_card_click() -> str:
     m = re.search(
         r'data-testid="home-featured-card"[\s\S]*?onClick=\{\(\) => (.*?)\}',
@@ -46,10 +52,12 @@ def test_home_imports_same_dialog_as_skills() -> None:
 
 
 def test_quick_start_opens_dialog_not_direct_project() -> None:
-    click = _home_skill_card_click()
-    assert "trySkill(s)" in click
-    assert "newProject({ skill: s.id })" not in click
-    assert "hasSkillDialog(s) ? setRunning({ id: s.id, preset }) : newProject({ skill: s.id })" in HOME
+    # skills-cut1: HomeSkillCard is a component; it forwards onTry and the row passes trySkill(s)
+    assert _home_skill_card_click_prop() == "onTry"
+    assert "<HomeSkillCard key={s.id} skill={s} onTry={() => trySkill(s)} />" in HOME
+    body = HOME.split("const trySkill = (s: Skill", 1)[1].split("\n  }\n", 1)[0]
+    assert "if (hasSkillDialog(s)) { setRunning({ id: s.id, preset }); return }" in body
+    assert body.index("hasSkillDialog(s)") < body.index("newProject({ skill: s.id })")  # direct start only without dialog
     assert 'data-testid="home-start-skill"' in HOME
     assert 'data-testid="home-skill-grid"' in HOME
     assert "startFromSkill" in HOME and "ca-skillgrid" in HOME  # keep #460 entry surface

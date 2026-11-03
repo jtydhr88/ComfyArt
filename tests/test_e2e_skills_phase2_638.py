@@ -81,7 +81,7 @@ async def test_commerce_strategist_dialog_to_agent_and_social_ugc(app_url):  # n
         dlg = pg.get_by_test_id("skill-run-dialog")
         await dlg.wait_for()
         assert await dlg.get_attribute("data-skill") == "commerce-strategist"
-        await pg.locator('[data-key="sellPoints"]').fill("3C earbuds — ANC, 30h battery, clear benefit ladder")
+        await pg.locator('[data-testid="skill-run-field"][data-key="sellPoints"]').fill("3C earbuds — ANC, 30h battery, clear benefit ladder")
         await pg.get_by_test_id("skill-run-go").click()
         await pg.wait_for_url(re.compile(r"[?&]skill=commerce-strategist"), timeout=10_000)
         assert "mode=agent" in pg.url

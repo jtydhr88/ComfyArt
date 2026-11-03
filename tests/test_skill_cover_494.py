@@ -38,7 +38,7 @@ def test_own_image_used(got):
 def test_builtin_covers(got):
     """#581 washed covers stay pinned; #594 Phase1 new 6 covers-v4 @ WASH_594."""
     covers = got["builtinCovers"]
-    washed = ["poster", "social", "brand", "packaging", "thumbnail", "banner", "character", "product", "motion", "interior"]
+    washed = ["poster", "social", "brand", "packaging", "banner", "character", "product", "motion", "interior"]
     phase1_new = ["multi-angle", "logo-material", "meta-ads", "mobile-ui", "web-product", "marketing-campaign"]
     v3, pin = "3c9b87e7eae72164efdd1fe30e00f576144475f4", {
         "banner": ("494/covers-v3.1", "9b23a3e8e3ca2f6b64dc16c0cf36fbf9c41fcaf4"),
@@ -50,6 +50,8 @@ def test_builtin_covers(got):
         k: "https://raw.githubusercontent.com/ganjmeng/ComfyArt/{1}/{0}/{2}.webp".format(*pin.get(k, ("494/covers-v3", v3)), k)
         for k in washed
     }
+    # #643 (#659) thumbnail true wash re-pinned cover to WASH_643
+    assert covers["thumbnail"] == "https://raw.githubusercontent.com/ganjmeng/ComfyArt/0be4350be224066cccf5e2929bfcb02e0bf8f7a9/643/wash/thumbnail/cover.webp"
     assert {k: covers[k] for k in phase1_new} == {
         k: f"https://raw.githubusercontent.com/ganjmeng/ComfyArt/{v4}/494/covers-v4/{k}.webp"
         for k in phase1_new
