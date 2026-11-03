@@ -1,0 +1,20 @@
+{
+ "skill_id": "studio-model",
+ "note": "#643 final per-example wash prompts (kie gpt-image i2i, 3 Nov 2026 round). Gold not committed.",
+ "assets": [
+  {
+   "skill_id": "studio-model",
+   "slot": "examples",
+   "index": 1,
+   "source_path": "<lovart-gold, not committed>",
+   "prompt": "TRUE WASH: an original new studio fashion e-commerce photo, clearly different from the reference at half-screen. Keep the same composition: one model standing full-body, centered, front-facing, plain seamless studio, same framing and camera height. CHANGE THE GARMENT COMPLETELY: she wears a terracotta (burnt orange-brown) silk satin cowl-neck midi slip dress with thin spaghetti straps, a draped cowl neckline, a bias-cut fluid skirt ending mid-calf with a straight hem, a liquid satin sheen, and no lace and no tiers. A different model: an East Asian woman with a sleek low bun, small gold hoop earrings, minimal makeup, and strappy tan heeled sandals. A warm oatmeal/sand seamless backdrop with soft natural daylight and a gentle floor shadow. No text, no logos, no watermark, no celebrity likeness."
+  },
+  {
+   "skill_id": "studio-model",
+   "slot": "examples",
+   "index": 2,
+   "source_path": "<lovart-gold, not committed>",
+   "prompt": "TRUE WASH: an original new product photo, clearly different from the reference at half-screen. Keep the same composition: a single dress shown alone, flat front view, centered full-length on a clean light background, an e-commerce ghost/flat-lay product shot. ABSOLUTELY NO PERSON. CHANGE THE GARMENT COMPLETELY: a terracotta (burnt orange-brown) silk satin cowl-neck midi slip dress with thin spaghetti straps, a draped cowl neckline, a bias-cut fluid skirt ending in a straight midi hem, a liquid satin sheen with soft highlights, and no lace and no tiers. A soft warm off-white background with a subtle shadow. No text, no logos, no watermark."
+  }
+ ]
+}

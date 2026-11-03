@@ -103,8 +103,9 @@ FEED_EXPECTED = frozenset({
     "taobao-product", "thumbnail", "web-product", "youtube-channel-banner",
     "animated-poster",  # #643 per-slot PR (examples wired => in feed)
     "premium-website",  # #643 per-slot PR (examples wired => in feed)
+    "studio-model",  # #643 per-slot PR (examples wired => in feed)
 })
-FEED_MIN = 37  # +#677 anim-2d, #682 creator-identity, #674 portrait-studio, #678 youtube-channel-banner, #643 animated-poster + premium-website
+FEED_MIN = 38  # +#677/#682/#674/#678 + #643 animated-poster + premium-website + studio-model
 
 
 FEATURED_DIRS = ("/580/featured-v1/", "/580/featured-v2/", "/637/wash/", "/636/wash/", "/643/wash/")
