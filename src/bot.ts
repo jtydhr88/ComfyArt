@@ -180,7 +180,8 @@ export async function loadProviders(opts?: { refresh?: boolean }) {
   providersStateAtom.set({ state: 'ready' })
   me = status.user
   botEnabledAtom.set(status.enabled)
-  providersAtom.set(status.providers)
+  // #661: same class of crash as chats — AgentPanel providers.find on undefined
+  providersAtom.set(status.providers ?? [])
 }
 
 function applySettings(settings: BotSettings) {
@@ -222,11 +223,12 @@ export function lostProvider(): ProviderInfo | null {
   return p && !p.available && saved !== BUILTIN_AGENT ? p : null
 }
 
-export const currentChat = () => chatsAtom.get().find((c) => c.id === chatIdAtom.get()) ?? null
+export const currentChat = () => (chatsAtom.get() ?? []).find((c) => c.id === chatIdAtom.get()) ?? null
 export const busy = () => !!currentChat()?.busy
 
 export async function loadChats() {
-  chatsAtom.set((await json<{ chats: BotChat[] }>(`/comfyart/bot/chats?project=${encodeURIComponent(project)}`)).chats)
+  // #661: never set chatsAtom to undefined — a body without `chats` used to white-screen AgentPanel (.find)
+  chatsAtom.set((await json<{ chats: BotChat[] }>(`/comfyart/bot/chats?project=${encodeURIComponent(project)}`)).chats ?? [])
 }
 
 /** #387: merge server pending asks into messages after refresh/reconnect. */
@@ -285,7 +287,7 @@ export async function openChat(id: string | null) {
 
 function upsertChat(chat: BotChat) {
   if (chat.project !== project || chat.user !== me) return
-  const list = chatsAtom.get()
+  const list = chatsAtom.get() ?? []
   chatsAtom.set(list.some((c) => c.id === chat.id) ? list.map((c) => (c.id === chat.id ? { ...c, ...chat } : c)) : [chat, ...list])
 }
 
@@ -343,7 +345,7 @@ export async function updateChat(id: string, patch: Partial<Pick<BotChat, 'title
 
 export async function deleteChat(id: string) {
   await json(`/comfyart/bot/chats/${id}`, { method: 'DELETE' })
-  chatsAtom.set(chatsAtom.get().filter((c) => c.id !== id))
+  chatsAtom.set((chatsAtom.get() ?? []).filter((c) => c.id !== id))
   if (chatIdAtom.get() === id) await openChat(null)
 }
 
@@ -397,7 +399,7 @@ const reducers: Record<string, (e: any) => void> = {
   chat_created: (e) => upsertChat(e.chat),
   chat_updated: (e) => upsertChat(e.chat),
   chat_deleted: (e) => {
-    chatsAtom.set(chatsAtom.get().filter((c) => c.id !== e.chat_id))
+    chatsAtom.set((chatsAtom.get() ?? []).filter((c) => c.id !== e.chat_id))
     if (chatIdAtom.get() === e.chat_id) void openChat(null)
   },
   messages_logged: (e) => {
@@ -408,7 +410,7 @@ const reducers: Record<string, (e: any) => void> = {
   },
   turn_start: (e) => {
     setAgentPlanConfirmed(false)
-    chatsAtom.set(chatsAtom.get().map((c) => (c.id === e.chat_id ? { ...c, busy: true } : c)))
+    chatsAtom.set((chatsAtom.get() ?? []).map((c) => (c.id === e.chat_id ? { ...c, busy: true } : c)))
     if (chatIdAtom.get() !== e.chat_id) return
     const rest = messagesAtom.get().filter((m) => m.id !== e.user_message.id)
     messagesAtom.set([...rest, e.user_message, e.assistant_message])
@@ -439,11 +441,11 @@ const reducers: Record<string, (e: any) => void> = {
       noteScheduleNotify(e.chat_id, e.block?.text ?? '')
       return
     }
-    if (chatsAtom.get().some((c) => c.id === e.chat_id)) void notify({ kind: 'suggestion', title: t('bot.runNeedsYou'), body: e.block?.text ?? '', chat: e.chat_id })
+    if ((chatsAtom.get() ?? []).some((c) => c.id === e.chat_id)) void notify({ kind: 'suggestion', title: t('bot.runNeedsYou'), body: e.block?.text ?? '', chat: e.chat_id })
   },
   turn_ask: (e) => {
     patchMessages(e.chat_id, e.message_id, (m) => appendBlock(m, { type: 'ask', status: 'pending', ...e }))
-    if (chatsAtom.get().some((c) => c.id === e.chat_id)) void notify({ kind: 'suggestion', title: t('bot.agentIsWaitingForYour'), body: e.prompt, chat: e.chat_id })
+    if ((chatsAtom.get() ?? []).some((c) => c.id === e.chat_id)) void notify({ kind: 'suggestion', title: t('bot.agentIsWaitingForYour'), body: e.prompt, chat: e.chat_id })
   },
   turn_ask_resolved: (e) => patchMessages(e.chat_id, e.message_id, (m) => ({
     ...m, blocks: m.blocks.map((b) => (b.type === 'ask' && b.ask_id === e.ask_id ? { ...b, status: e.status, selected: e.selected ?? b.selected, other_text: e.other_text ?? b.other_text, answers: e.answers ?? b.answers } : b)),
@@ -451,8 +453,8 @@ const reducers: Record<string, (e: any) => void> = {
   turn_done: (e) => {
     setAgentPlanConfirmed(false)
     if (runBudgetAtom.get()[e.chat_id]) { const { [e.chat_id]: _gone, ...rest } = runBudgetAtom.get(); runBudgetAtom.set(rest) }
-    const chat = chatsAtom.get().find((c) => c.id === e.chat_id)
-    chatsAtom.set(chatsAtom.get().map((c) => (c.id === e.chat_id ? { ...c, busy: false, ...(e.title ? { title: e.title } : {}) } : c)))
+    const chat = (chatsAtom.get() ?? []).find((c) => c.id === e.chat_id)
+    chatsAtom.set((chatsAtom.get() ?? []).map((c) => (c.id === e.chat_id ? { ...c, busy: false, ...(e.title ? { title: e.title } : {}) } : c)))
     if (chatIdAtom.get() === e.chat_id) void openChat(e.chat_id)
     // #388: schedule turns emit exactly one kind=schedule notice (skip or started)
     if (handleScheduleTurnDone(e)) return

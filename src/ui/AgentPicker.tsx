@@ -84,7 +84,7 @@ export function offRowReason(p: ProviderInfo) {
 // #246: the agent list lives in the composer mode menu; same items, ✓, #220 disabled/confirm rules
 export function useCurrentAgent() {
   const providers = useValue(providersAtom)
-  const chat = useValue('current chat', () => chatsAtom.get().find((c) => c.id === chatIdAtom.get()) ?? null, [])
+  const chat = useValue('current chat', () => (chatsAtom.get() ?? []).find((c) => c.id === chatIdAtom.get()) ?? null, [])
   const pending = useValue(newProviderAtom)
   const providerId = chat?.provider ?? (pending || defaultProvider())
   const loading = useValue('agent list loading', () => providersStateAtom.get().state === 'loading', [])
@@ -108,7 +108,7 @@ const LOADING_AGENT: ProviderInfo = { id: BUILTIN_AGENT, label: '', available: t
 
 export function AgentItems({ onError, current, close, onChosen }: { onError: (msg: string) => void; current: boolean; close: () => void; onChosen: () => void }) {
   const providers = useValue(providersAtom)
-  const chat = useValue('current chat', () => chatsAtom.get().find((c) => c.id === chatIdAtom.get()) ?? null, [])
+  const chat = useValue('current chat', () => (chatsAtom.get() ?? []).find((c) => c.id === chatIdAtom.get()) ?? null, [])
   const started = useValue('chat started', () => messagesAtom.get().length > 0, [])
   const pending = useValue(newProviderAtom)
   const providerId = chat?.provider ?? (pending || defaultProvider())
@@ -161,7 +161,7 @@ export function AgentItems({ onError, current, close, onChosen }: { onError: (ms
 export function AgentExtras({ onError, close }: { onError: (msg: string) => void; close: () => void }) {
   const providers = useValue(providersAtom)
   const settings = useValue(settingsAtom)
-  const chat = useValue('current chat', () => chatsAtom.get().find((c) => c.id === chatIdAtom.get()) ?? null, [])
+  const chat = useValue('current chat', () => (chatsAtom.get() ?? []).find((c) => c.id === chatIdAtom.get()) ?? null, [])
   const pending = useValue(newProviderAtom)
   const providerId = chat?.provider ?? (pending || defaultProvider())
   const provider = providers.find((p) => p.id === providerId)

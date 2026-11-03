@@ -57,7 +57,7 @@ export function TaskDetails({ editor }: { editor: Editor }) {
   const id = useValue(detailsAtom)
   const messages = useValue(messagesAtom)
   const providers = useValue(providersAtom)
-  const chat = useValue('current chat', () => chatsAtom.get().find((c) => c.id === chatIdAtom.get()) ?? null, [])
+  const chat = useValue('current chat', () => (chatsAtom.get() ?? []).find((c) => c.id === chatIdAtom.get()) ?? null, [])
   const index = messages.findIndex((m) => m.id === id)
   if (index < 0) return null
   const m = messages[index]

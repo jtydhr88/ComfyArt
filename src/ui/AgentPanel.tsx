@@ -39,9 +39,9 @@ export const chatViewAtom = atom<ChatView>('chat view', 'open')
 function History({ onError }: { onError: (msg: string) => void }) {
   const [open, setOpen] = useState(false)
   const [q, setQ] = useState('')
-  const chats = useValue(chatsAtom)
+  const chats = useValue(chatsAtom) ?? []
   const current = useValue(chatIdAtom)
-  const providers = useValue(providersAtom)
+  const providers = useValue(providersAtom) ?? []
   const shown = chats.filter((c) => c.title.toLowerCase().includes(q.toLowerCase()))
   const fail = (e: unknown) => onError(errorText(e))
   return (
@@ -114,8 +114,8 @@ export function AgentPanel({ editor, projectId, max, onMax, onCollapse, onError 
   onError: (msg: string) => void
 }) {
   const messages = useValue(messagesAtom)
-  const chat = useValue('current chat', () => chatsAtom.get().find((c) => c.id === chatIdAtom.get()) ?? null, [])
-  const providers = useValue(providersAtom)
+  const chat = useValue('current chat', () => (chatsAtom.get() ?? []).find((c) => c.id === chatIdAtom.get()) ?? null, [])
+  const providers = useValue(providersAtom) ?? []
   const keyStatus = useValue(keyStatusAtom)
   const enabled = useValue(botEnabledAtom)
   const dock = useValue(dockAtom)
