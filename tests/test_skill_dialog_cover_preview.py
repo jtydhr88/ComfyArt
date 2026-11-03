@@ -20,7 +20,8 @@ NEW19_WASHED_643 = {"taobao-product": [1, 2, 3, 4, 5, 6, 7, 8], "before-after": 
                     # #677/#682/#674 per-skill wash (pin sha as 3rd arg)
                     "anim-2d": [1, 2, 3], "creator-identity": [1], "portrait-studio": [1, 2, 3, 4, 5, 6],
                     "youtube-channel-banner": [1, 2, 3, 4, 5, 6, 7, 8, 9],  # #678
-                    "animated-poster": [1, 2]}  # #643 per-slot PR
+                    "animated-poster": [1, 2],  # #643 per-slot PR
+                    "premium-website": [1, 2, 3, 4, 5, 6, 7]}  # #643 per-slot PR
 
 
 def test_cover_main_preview_hooks():

@@ -1,0 +1,62 @@
+{
+ "skill_id": "premium-website",
+ "note": "#643 final per-example wash prompts (latest round per index). Gold not committed. | 3 Nov 2026 23:16–23:19 UTC+8: kie gpt-image i2i — brand MAPLEWICK BAKEHOUSE, ex01 text rewrite, ex03/ex04 true-wash regen.",
+ "assets": [
+  {
+   "skill_id": "premium-website",
+   "slot": "examples",
+   "index": 1,
+   "source_path": "<prior wash ex01 (layout kept)>",
+   "prompt": "EDIT this bakery website hero screenshot. Keep the layout, the photo of the loaf on the board, the colors, the typography styles and the positions identical. Replace ALL text as follows, keeping each element's style and size. Top dark announcement bar: 'WARM BAGUETTES AT 7:30 · PRE-ORDERS CLOSE AT NOON'. Logo at top-left: '❖ MAPLEWICK BAKEHOUSE' (no ampersand). Nav links stay exactly: 'Bakes', 'Our Story', 'Pre-order', 'Find Us'. Top-right red button: 'Hold my loaf'. Small red kicker above the headline: 'NEIGHBOURHOOD OVEN — EST. 2011'. Big serif headline on four lines: 'Crackling', 'loaves,', 'quiet' (in the red italic style), 'mornings.'. Paragraph: 'Rye, spelt and old-variety wheat, shaped by hand and baked in a stone deck oven for the street we live on.' Red button: 'Book a bake'. Text link: 'See what's baking →'. Round yellow badge on the photo: 'HAND SHAPED RYE'. Bottom dark ticker: 'RYE & SPELT  •  TARTS  •  SEASONAL GALETTES  •  HAND SHAPED  •  STONE DECK  •  RYE & SPELT  •  TARTS  •  SEASONAL GALETTES'. Do not include the words CRUST, CRUMB, DAILY, CELEBRATION, PIES, COMMUNITY, SINCE, 6AM, 3PM, 2018 anywhere. No other changes. || SECOND PASS (23:22 UTC+8): EDIT this bakery website screenshot. Keep everything identical (layout, photo, colors, fonts, positions, all other text) EXCEPT these four text changes, each in the same style and size as the text it replaces: (1) the small red kicker 'NEIGHBOURHOOD OVEN — EST. 2011' becomes 'A CORNER BAKEHOUSE · OPEN WED–SUN'. (2) the last headline line 'mornings.' becomes 'kitchens.' so the headline reads 'Crackling loaves, quiet kitchens.' with 'quiet' still in red italic. (3) the round yellow badge text 'HAND SHAPED RYE' becomes 'STONE DECK RYE'. (4) in the bottom dark ticker, every 'HAND SHAPED' becomes 'WOOD-FIRED BUNS'. No other changes."
+  },
+  {
+   "skill_id": "premium-website",
+   "slot": "examples",
+   "index": 2,
+   "source_path": "<lovart-gold, not committed>",
+   "prompt": "Recreate this image as original artwork with NEW pixels so a half-screen glance proves it is not a soft copy. IDENTITY-LOCK: keep the same subject category, composition family, and use-slot as the reference — do NOT change topic. No brand marks, watermarks, competitor logos, or recognizable celebrity likeness. Keep a wide bakery interior photograph: saturated yellow feature wall with window-shadow + potted plant on left; marble counter with sourdough boules + croissants, glass pastry case, wood shelves on white subway tile on right. Same premium bakery brand photography use-slot. STRONG DELTA REQUIRED (previous attempt was a near-copy and was rejected): re-shoot the bakery/food scene with a different arrangement, a different camera angle (e.g. top-down or low 3/4), a different dominant background color (e.g. deep teal, terracotta, or cream instead of the reference color), different lighting mood and different props. Keep the same artisanal bakery product category and premium website hero/section image use-slot.",
+   "aspect_ratio": "16:9",
+   "resolution": "2K"
+  },
+  {
+   "skill_id": "premium-website",
+   "slot": "examples",
+   "index": 3,
+   "source_path": "<lovart-gold, not committed>",
+   "prompt": "TRUE WASH: create a new, original food photograph for a bakery website, clearly different from the reference at half-screen, keeping the same composition family (a single hero bake as the centered focal point, dramatic studio lighting, dynamic floating crumbs/flour particles, deep colored backdrop with a bit of props at the lower left). CHANGE THE SUBJECT AND PROPS: instead of the bread, show a tall braided golden challah-style loaf brushed with egg wash and sprinkled with sesame seeds, suspended diagonally, with sesame seeds and a few flakes of sea salt floating around it; backdrop is a warm burnt-ochre / mustard color; props at the lower left are a small copper bowl of sesame seeds and a folded linen napkin (no wheat stalks). No text, no logos, no watermark. || SECOND PASS (23:24 UTC+8): EDIT: keep the braided sesame loaf, its pose, lighting, the floating sesame seeds and salt flakes, and the copper bowl on linen exactly as they are. Change ONLY the background and floor color from mustard yellow to a deep plum / aubergine purple with a soft gradient, and adjust reflections to match. No text, no other changes."
+  },
+  {
+   "skill_id": "premium-website",
+   "slot": "examples",
+   "index": 4,
+   "source_path": "<lovart-gold, not committed>",
+   "prompt": "TRUE WASH: create a new, original food photograph for a bakery website, clearly different from the reference at half-screen, keeping the same composition family (an overhead-angled pastry still life placed toward the right of the frame, on a serving board, with a small condiment bowl and scattered crumbs, plenty of plain backdrop space at the left). CHANGE THE SUBJECT AND ARRANGEMENT: instead of croissants, show a row of four glossy cinnamon-cardamom knots (Swedish kardemummabullar style) and two square almond-topped danishes arranged in a loose fan on a dark slate board; a small bowl of whipped honey butter; scattered pearl sugar and cardamom pods; a sprig of rosemary; backdrop is a soft sage-green linen surface. No text, no logos, no watermark."
+  },
+  {
+   "skill_id": "premium-website",
+   "slot": "examples",
+   "index": 5,
+   "source_path": "<lovart-gold, not committed>",
+   "prompt": "TRUE WASH — original artwork, NEW pixels, clearly distinguishable from the reference at half-screen. Keep the same premium bakery website section layout (nav, heading, product grid/arrangement positions, buttons). REARRANGE AND CHANGE THE PRODUCTS: replace the cookies/bread with different baked goods (e.g. glazed fruit tarts, pistachio croissants, cinnamon knots) in a different arrangement and on different props/plates; new lighting and palette. TEXT RULE: no text, brand, name, number or price from the reference may survive verbatim — every word and numeral must be newly invented. No watermarks, real brands or celebrity likeness."
+  },
+  {
+   "skill_id": "premium-website",
+   "slot": "examples",
+   "index": 6,
+   "source_path": "<lovart-gold, not committed>",
+   "prompt": "Recreate this image as original artwork with NEW pixels so a half-screen glance proves it is not a soft copy. IDENTITY-LOCK: keep the same subject category, composition family, and use-slot as the reference — do NOT change topic. No brand marks, watermarks, competitor logos, or recognizable celebrity likeness. Keep a tall berry-topped layer cake + tall slice on matching red plates against solid red backdrop with hard side light; cherries in foreground. Same premium bakery celebration-cake photography use-slot. STRONG DELTA REQUIRED (previous attempt was a near-copy and was rejected): re-shoot the bakery/food scene with a different arrangement, a different camera angle (e.g. top-down or low 3/4), a different dominant background color (e.g. deep teal, terracotta, or cream instead of the reference color), different lighting mood and different props. Keep the same artisanal bakery product category and premium website hero/section image use-slot.",
+   "aspect_ratio": "4:3",
+   "resolution": "2K"
+  },
+  {
+   "skill_id": "premium-website",
+   "slot": "examples",
+   "index": 7,
+   "source_path": "<lovart-gold, not committed>",
+   "prompt": "Recreate this image as original artwork with NEW pixels so a half-screen glance proves it is not a soft copy. IDENTITY-LOCK: keep the same subject category, composition family, and use-slot as the reference — do NOT change topic. No brand marks, watermarks, competitor logos, or recognizable celebrity likeness. Keep a vertical warm bakery craft photo: flour-dusted hands shaping a dough boule on wood bench, wicker banneton, bowls, midground dough rounds on couche with light steam, soft window-lit kitchen bokeh. Same premium bakery craft/process photography use-slot — stay bakery craft, not cleaning before/after. STRONG DELTA REQUIRED (previous attempt was a near-copy and was rejected): re-shoot the bakery/food scene with a different arrangement, a different camera angle (e.g. top-down or low 3/4), a different dominant background color (e.g. deep teal, terracotta, or cream instead of the reference color), different lighting mood and different props. Keep the same artisanal bakery product category and premium website hero/section image use-slot.",
+   "aspect_ratio": "3:4",
+   "resolution": "2K"
+  }
+ ],
+ "postprocess": "WaveSpeed google/nano-banana-pro/edit (2k) local edit, layout kept: ex01."
+}
