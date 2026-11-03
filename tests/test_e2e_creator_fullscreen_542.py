@@ -92,7 +92,7 @@ async def test_both_entries_identical(app_url, lang, theme, chip):  # noqa: F811
     assert h["ref"] == "", h
     # P1-2: the full-screen top-bar group (saved / new chat / notices / expand / collapse) sits at the top right
     assert h["top"][0] <= 24 and h["top"][1] > 640, h["top"]
-    assert h["placeholder"].startswith("请描述你的设计需求" if lang == "zh" else "Describe your design needs")
+    assert h["placeholder"] == ""  # #650: gold creator input is empty
     # 3 buttons, stacked, centred, ~172x38, not stretched
     b = h["buttons"]
     assert len(b) == 3 and all(w == 172 and ht == 38 for _, _, w, ht in b)

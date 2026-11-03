@@ -199,9 +199,9 @@ export function AgentPanel({ editor, projectId, max, onMax, onCollapse, onError 
                 </>
               )}
             <div className="ca-chat__starts">
-              <button type="button" className="ca-chat__start" onClick={() => pickFiles((files) => void uploadRefs(editor, files).catch(fail))}><span className="ca-icon">{Icons.upload}</span>{t('agentPanel.uploadReference')}</button>
-              <button type="button" className="ca-chat__start" onClick={() => { draftAtom.set('/'); (document.querySelector('.ca-composer__input') as HTMLTextAreaElement | null)?.focus() }}><span className="ca-icon">{Icons.skill}</span>{t('agentPanel.startFromSkill')}</button>
-              <button type="button" className="ca-chat__start" onClick={() => { if (max) onMax(); libraryTabAtom.set('brand'); sideAtom.set('assets') }}><span className="ca-icon">{Icons.assets}</span>{t('agentPanel.useBrandKit')}</button>
+              <button type="button" className="ca-chat__start" onClick={() => pickFiles((files) => void uploadRefs(editor, files).catch(fail))}><span className="ca-icon">{Icons.upload}</span>{t(creating ? 'agentPanel.creatorAddReference' : 'agentPanel.uploadReference')}</button>
+              <button type="button" className="ca-chat__start" onClick={() => { draftAtom.set('/'); (document.querySelector('.ca-composer__input') as HTMLTextAreaElement | null)?.focus() }}><span className="ca-icon">{Icons.skill}</span>{t(creating ? 'agentPanel.creatorStartFromSkill' : 'agentPanel.startFromSkill')}</button>
+              <button type="button" className="ca-chat__start" onClick={() => { if (max) onMax(); libraryTabAtom.set('brand'); sideAtom.set('assets') }}><span className="ca-icon">{Icons.assets}</span>{t(creating ? 'agentPanel.creatorAddBrandKit' : 'agentPanel.useBrandKit')}</button>
             </div>
           </div>
         )}

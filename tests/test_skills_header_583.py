@@ -32,7 +32,7 @@ def test_create_split_80x36_radius_8() -> None:
     assert "height: 36px" in create and "border-radius: 8px" in create
     assert "400 14px/22px" in create
     wrap = _rule(".ca-skills__createwrap", OVERLAYS)
-    assert "width: 80px" in wrap and "height: 36px" in wrap
+    assert "min-width: 96px" in wrap and "height: 36px" in wrap  # #650 gold 96 (grows per #676)
     inner = _rule(".ca-skills__createwrap .ca-skills__create", OVERLAYS)
     assert "border-radius: 8px 0 0 8px" in inner
     # #676: 「创建」 must never wrap to two lines

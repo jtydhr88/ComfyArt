@@ -49,13 +49,17 @@ def test_handoff_sets_chip_focus_max_and_never_sends() -> None:
 
 
 def test_landing_heading_and_three_existing_buttons() -> None:
-    assert ZH["agentPanel.creatorStartTitle"] == "准备怎么开启你的创作？"
+    assert ZH["agentPanel.creatorStartTitle"] == "你想设计什么？"  # #650 gold
     assert EN["agentPanel.creatorStartTitle"]
     assert "{creating\n" in PANEL and 'data-testid="creator-landing-title"' in PANEL
-    labels = re.findall(r"t\('(agentPanel\.\w+)'\)", _starts())
-    assert labels == ["agentPanel.uploadReference", "agentPanel.startFromSkill", "agentPanel.useBrandKit"]
-    assert [ZH[k] for k in labels] == ["上传本地参考", "选择 Skill 开始创作", "使用品牌套件"]
-    assert "Pinterest" not in PANEL and "pinterest" not in json.dumps(ZH).lower()
+    # #650: creator landing uses the gold pill copy; normal panel keeps the old keys
+    pairs = re.findall(r"t\(creating \? '(agentPanel\.\w+)' : '(agentPanel\.\w+)'\)", _starts())
+    assert pairs == [("agentPanel.creatorAddReference", "agentPanel.uploadReference"), ("agentPanel.creatorStartFromSkill", "agentPanel.startFromSkill"), ("agentPanel.creatorAddBrandKit", "agentPanel.useBrandKit")]
+    assert [ZH[a] for a, _ in pairs] == ["添加你的参考", "从技能开始", "添加你的品牌套件"]
+    assert [EN[a] for a, _ in pairs] == ["Add your reference", "Start from skill", "Add your brand kit"]
+    assert [ZH[b] for _, b in pairs] == ["上传本地参考", "选择 Skill 开始创作", "使用品牌套件"]
+    # #650 known diff: no Pinterest pill on the creator landing (home tab keys are separate)
+    assert "pinterest" not in PANEL.lower() and not [k for k in ZH if k.startswith("agentPanel.") and "pinterest" in (k + ZH[k]).lower()]
 
 
 def test_buttons_stacked_172x38_not_stretched() -> None:
@@ -66,7 +70,8 @@ def test_buttons_stacked_172x38_not_stretched() -> None:
 def test_input_card_720_docked_bottom_and_lovart_placeholder() -> None:
     assert ".ca-agent[data-max] .ca-composer { width: min(720px, calc(100% - 24px));" in SHELL
     assert ".ca-agent[data-max] .ca-composer { margin-bottom: 8px; }" in SHELL
-    assert "placeholder={t('composer.describeYourDesignNeedsFor')}" in COMPOSER
+    # #650: creator landing input is empty per gold; normal composer keeps the hint
+    assert "placeholder={skillCreator.on ? '' : t('composer.describeYourDesignNeedsFor')}" in COMPOSER
     assert ZH["composer.describeYourDesignNeedsFor"] == '请描述你的设计需求，"/"使用技能，"@"引用参考'
 
 

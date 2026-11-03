@@ -1163,15 +1163,18 @@
 .ca-skimport__drop[data-error] { border-color: #e74c3c; border-style: solid; }
 .ca-skimport__notes { margin: 12px 0 0; padding-left: 18px; color: var(--ca-text-2); font: 400 12px/20px var(--ca-font); }
 
-/* #463 / #583 — Create split (80×36 r8: text 52 + chevron 28) → Import a Skill */
-.ca-skills__createwrap { position: relative; display: inline-flex; min-width: 80px; height: 36px; } /* #676: grow, never wrap */
-.ca-skills__createwrap .ca-skills__create { border-radius: 8px 0 0 8px; flex: 1 0 auto; min-width: 52px; white-space: nowrap; padding: 7px 6px 7px 16px; }
+/* #463 / #583 / #650 — Create split (96×36 r8: text 68 + chevron 28, no divider, per gold) → Import a Skill */
+.ca-skills__createwrap { position: relative; display: inline-flex; min-width: 96px; height: 36px; } /* #676: grow, never wrap */
+.ca-skills__createwrap .ca-skills__create { border-radius: 8px 0 0 8px; flex: 1 0 auto; min-width: 52px; white-space: nowrap; padding: 7px 4px 7px 16px; }
 .ca-skills__createmore {
   border-radius: 0 8px 8px 0 !important; width: 28px; min-width: 28px; padding: 9px 8px 9px 2px !important;
-  border-left: 1px solid color-mix(in srgb, var(--ca-float) 25%, transparent) !important;
   box-sizing: border-box;
 }
-.ca-skills__createmenu { position: absolute; top: calc(100% + 6px); right: 0; z-index: 50; }
+/* #694: the caret also carries .ca-skills__create, so the wrap rule above gave it flex:1 (rendered 52px); pin it to 28. */
+.ca-skills__createwrap .ca-skills__createmore { flex: none; width: 28px; min-width: 28px; }
+.ca-skills__createmenu { position: absolute; top: calc(100% + 6px); right: 0; z-index: 50; white-space: nowrap; }
+.ca-skills__createmore .ca-icon { transition: transform .15s; }
+.ca-skills__createmore[aria-expanded="true"] .ca-icon { transform: rotate(180deg); }
 
 /* #570: tool panel at the image's right (upscale / 转 3D), modeled on the reference multi-angle panel */
 .ca-toolpanel-host { position: absolute; z-index: 301; }
