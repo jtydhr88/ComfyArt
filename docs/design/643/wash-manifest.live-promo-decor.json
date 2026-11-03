@@ -1,0 +1,105 @@
+{
+  "skill_id": "live-promo-decor",
+  "note": "#643 final per-example wash prompts (latest round per index). Gold not committed.",
+  "assets": [
+    {
+      "skill_id": "live-promo-decor",
+      "slot": "examples",
+      "index": 1,
+      "source_path": "<lovart-gold, not committed>",
+      "prompt": "TRUE WASH — original artwork, NEW pixels, clearly distinguishable from the reference at half-screen. Keep a Chinese e-commerce livestream (直播) promo decoration in the same format, layout and panel structure as the reference. PHONE LOCK (shared with ex02/ex10): the product is the '星瀚' brand smartphone in lavender, graphite black and silver, triple-camera module; host is a different young woman. Theme 双11 phone flash sale with new copy. TEXT RULE: no text, brand, name, number or price from the reference may survive verbatim — every word and numeral must be newly invented. No watermarks, real brands or celebrity likeness."
+    },
+    {
+      "skill_id": "live-promo-decor",
+      "slot": "examples",
+      "index": 2,
+      "source_path": "<lovart-gold, not committed>",
+      "prompt": "TRUE WASH — original artwork, NEW pixels, clearly distinguishable from the reference at half-screen. Keep a Chinese e-commerce livestream (直播) promo decoration in the same format, layout and panel structure as the reference. PHONE LOCK (shared with ex01/ex10): the product is the '星瀚' brand smartphone in lavender, graphite black and silver, triple-camera module. Remove any 'FEIRO' text entirely. New host, new palette (warm orange/coral). TEXT RULE: no text, brand, name, number or price from the reference may survive verbatim — every word and numeral must be newly invented. No watermarks, real brands or celebrity likeness."
+    },
+    {
+      "skill_id": "live-promo-decor",
+      "slot": "examples",
+      "index": 3,
+      "source_path": "<lovart-gold, not committed>",
+      "prompt": "TRUE WASH — original artwork, NEW pixels, clearly distinguishable from the reference at half-screen. Keep a Chinese e-commerce livestream (直播) promo decoration in the same format, layout and panel structure as the reference. CHAIR LOCK (shared with ex11): product is a '栖木家居' cream bouclé lounge armchair with walnut wood legs. New host, warm terracotta palette. TEXT RULE: no text, brand, name, number or price from the reference may survive verbatim — every word and numeral must be newly invented. No watermarks, real brands or celebrity likeness."
+    },
+    {
+      "skill_id": "live-promo-decor",
+      "slot": "examples",
+      "index": 4,
+      "source_path": "<lovart-gold, not committed>",
+      "prompt": "TRUE WASH — original artwork, NEW pixels, clearly distinguishable from the reference at half-screen. Keep a Chinese e-commerce livestream (直播) promo decoration in the same format, layout and panel structure as the reference. COAT LOCK (shared with ex12): product is a '雪境' lavender long belted wool coat; model wears it. New model, lilac/silver palette. TEXT RULE: no text, brand, name, number or price from the reference may survive verbatim — every word and numeral must be newly invented. No watermarks, real brands or celebrity likeness."
+    },
+    {
+      "skill_id": "live-promo-decor",
+      "slot": "examples",
+      "index": 5,
+      "source_path": "<lovart-gold, not committed>",
+      "prompt": "TRUE WASH — half-screen glance must instantly prove this is NOT the reference (previous soft remixes were rejected). Recreate as ORIGINAL artwork with NEW pixels. IDENTITY-LOCK: keep the same subject category, composition family, layout and use-slot as the reference — do NOT change topic. No brand marks, watermarks, competitor logos or recognizable celebrity likeness; replace any brand names with generic invented ones. Keep a Chinese e-commerce livestream promo decoration design (live-room backgrounds, price-tag stickers, corner badges, product/host promo panels) with the same panel layout and Chinese promo-copy hierarchy. STRONG DELTA: change dominant color palette to a clearly different scheme, redraw all decorative shapes/ribbons/badges, use a different host/model and different product styling, new invented brand names and different price numerals.",
+      "aspect_ratio": "auto",
+      "resolution": "2K"
+    },
+    {
+      "skill_id": "live-promo-decor",
+      "slot": "examples",
+      "index": 6,
+      "source_path": "<lovart-gold, not committed>",
+      "prompt": "TRUE WASH — original artwork, NEW pixels, clearly distinguishable from the reference at half-screen. Keep a Chinese e-commerce livestream (直播) promo decoration in the same format, layout and panel structure as the reference. JACKET LOCK: product remains a BLUE (royal blue) sports track jacket as in the reference; new model, new invented brand '跃野', new background in graphite + lime. TEXT RULE: no text, brand, name, number or price from the reference may survive verbatim — every word and numeral must be newly invented. No watermarks, real brands or celebrity likeness."
+    },
+    {
+      "skill_id": "live-promo-decor",
+      "slot": "examples",
+      "index": 7,
+      "source_path": "<lovart-gold, not committed>",
+      "prompt": "TRUE WASH — half-screen glance must instantly prove this is NOT the reference (previous soft remixes were rejected). Recreate as ORIGINAL artwork with NEW pixels. IDENTITY-LOCK: keep the same subject category, composition family, layout and use-slot as the reference — do NOT change topic. No brand marks, watermarks, competitor logos or recognizable celebrity likeness; replace any brand names with generic invented ones. Keep a Chinese e-commerce livestream promo decoration design (live-room backgrounds, price-tag stickers, corner badges, product/host promo panels) with the same panel layout and Chinese promo-copy hierarchy. STRONG DELTA: change dominant color palette to a clearly different scheme, redraw all decorative shapes/ribbons/badges, use a different host/model and different product styling, new invented brand names and different price numerals.",
+      "aspect_ratio": "auto",
+      "resolution": "2K"
+    },
+    {
+      "skill_id": "live-promo-decor",
+      "slot": "examples",
+      "index": 8,
+      "source_path": "<lovart-gold, not committed>",
+      "prompt": "TRUE WASH — original artwork, NEW pixels, clearly distinguishable from the reference at half-screen. No brand marks, watermarks or celebrity likeness. Keep a Chinese e-commerce livestream promo decoration set for a SPORTS / athletic-shoe brand, exactly the same 4 overlay structures in the same positions and layout as the reference: (1) a price panel with the big price '¥599', (2) a danmaku / bullet-comment prompt sticker with '扣1' call-to-action, (3) a 'why choose our brand' (为什么选择) panel, (4) a panel of 4 tech selling points each with an icon. Keep sports product category (running shoes/sportswear). CHANGE: invent a new sports brand name (e.g. 'VOLTRA'), a clearly different color palette (electric lime + graphite if reference is otherwise), redraw all decorative shapes, badges and icons. Chinese promo copy hierarchy same."
+    },
+    {
+      "skill_id": "live-promo-decor",
+      "slot": "examples",
+      "index": 9,
+      "source_path": "<lovart-gold, not committed>",
+      "prompt": "TRUE WASH — half-screen glance must instantly prove this is NOT the reference (previous soft remixes were rejected). Recreate as ORIGINAL artwork with NEW pixels. IDENTITY-LOCK: keep the same subject category, composition family, layout and use-slot as the reference — do NOT change topic. No brand marks, watermarks, competitor logos or recognizable celebrity likeness; replace any brand names with generic invented ones. Keep a Chinese e-commerce livestream promo decoration design (live-room backgrounds, price-tag stickers, corner badges, product/host promo panels) with the same panel layout and Chinese promo-copy hierarchy. STRONG DELTA: change dominant color palette to a clearly different scheme, redraw all decorative shapes/ribbons/badges, use a different host/model and different product styling, new invented brand names and different price numerals. PRODUCT LOCK: four sticker cards for a DESSERT/snack brand exactly as reference (card 1 price burst with dessert, card 2 follow-to-win-prize sticker, card 3 regular-vs-live price comparison with dessert, card 4 ingredient-feature card with 4 icons). Do NOT add any person. Change only palette (e.g. mint+berry), brand name, numbers and decorative shapes.",
+      "aspect_ratio": "auto",
+      "resolution": "2K"
+    },
+    {
+      "skill_id": "live-promo-decor",
+      "slot": "examples",
+      "index": 10,
+      "source_path": "<lovart-gold, not committed>",
+      "prompt": "TRUE WASH — original artwork, NEW pixels, clearly distinguishable from the reference at half-screen. Keep a Chinese e-commerce livestream (直播) promo decoration in the same format, layout and panel structure as the reference. PHONE LOCK (shared with ex01/ex02): the '星瀚' brand smartphone in lavender, graphite black and silver, triple-camera module. Sticker set layout same as reference, red/orange palette. TEXT RULE: no text, brand, name, number or price from the reference may survive verbatim — every word and numeral must be newly invented. No watermarks, real brands or celebrity likeness."
+    },
+    {
+      "skill_id": "live-promo-decor",
+      "slot": "examples",
+      "index": 11,
+      "source_path": "<lovart-gold, not committed>",
+      "prompt": "TRUE WASH — original artwork, NEW pixels, clearly distinguishable from the reference at half-screen. Keep a Chinese e-commerce livestream (直播) promo decoration in the same format, layout and panel structure as the reference. CHAIR LOCK (shared with ex03): product is a '栖木家居' cream bouclé lounge armchair with walnut wood legs, shown in the sticker panels. Warm terracotta palette. TEXT RULE: no text, brand, name, number or price from the reference may survive verbatim — every word and numeral must be newly invented. No watermarks, real brands or celebrity likeness."
+    },
+    {
+      "skill_id": "live-promo-decor",
+      "slot": "examples",
+      "index": 12,
+      "source_path": "<lovart-gold, not committed>",
+      "prompt": "TRUE WASH — half-screen glance must instantly prove this is NOT the reference (previous soft remixes were rejected). Recreate as ORIGINAL artwork with NEW pixels. IDENTITY-LOCK: keep the same subject category, composition family, layout and use-slot as the reference — do NOT change topic. No brand marks, watermarks, competitor logos or recognizable celebrity likeness; replace any brand names with generic invented ones. Keep a Chinese e-commerce livestream promo decoration design (live-room backgrounds, price-tag stickers, corner badges, product/host promo panels) with the same panel layout and Chinese promo-copy hierarchy. STRONG DELTA: change dominant color palette to a clearly different scheme, redraw all decorative shapes/ribbons/badges, use a different host/model and different product styling, new invented brand names and different price numerals. PRODUCT LOCK: four sticker cards for a WOMEN'S COAT/fashion promotion exactly as reference (card 1 regular-vs-live price label, card 2 follow-livestream sticker, card 3 limited-discount burst, card 4 product card showing a long winter coat with 4 feature lines). Do NOT add any person and do NOT change the product to an appliance. Change palette (e.g. purple/lilac instead of brown), brand name and numbers.",
+      "aspect_ratio": "auto",
+      "resolution": "2K"
+    }
+  ],
+  "postprocess": {
+    "wavespeed": "WaveSpeed google/nano-banana-pro/edit (2k) local edit, layout kept: ex02/07/08/10/12 (ex12 feature line PIL).",
+    "local_text_fixes": {
+      "02": "local PIL: removed duplicated left '星瀚' headline word (background interpolation) → headline '星瀚上市'; feature chip '长续续航'→'长效续航'.",
+      "07": "local PIL: re-lettered garbled lip/feature labels → 唇色暗沉, 唇纹明显, 滋润饱满, 玻尿酸滋润, 持色不易掉, 轻盈不黏腻."
+    }
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "issue": 643,
+  "tool": "scripts/kie_wash_phase3.py",
+  "model": "gpt-image-2-5-sunburst-image-to-image",
+  "assets": [
+    {
+      "skill_id": "live-promo-decor",
+      "slot": "examples",
+      "index": 2,
+      "path": "live-promo-decor/examples/02.png",
+      "sha256": "723e8776ed8bdb803af25d7c78410732cd048d8bc4f0167cadad5235760bbc79",
+      "model": "gpt-image-2-5-sunburst-image-to-image",
+      "task_id": "40d54dcacb5da59d52c56bf8ea7af343",
+      "source": "ex-02.webp"
+    },
+    {
+      "skill_id": "live-promo-decor",
+      "slot": "examples",
+      "index": 8,
+      "path": "live-promo-decor/examples/08.png",
+      "sha256": "fd1f20060ab8e567e61bf5090ad3a4b7cb5cdee8dfb73f3eb11ea596a8ac9599",
+      "model": "gpt-image-2-5-sunburst-image-to-image",
+      "task_id": "40533f64805483bf847c7ad7d6e043a8",
+      "source": "ex-08.webp"
+    }
+  ],
+  "errors": []
+}

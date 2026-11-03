@@ -1,0 +1,24 @@
+{
+  "skill_id": "live-promo-decor",
+  "note": "#683 team lock rewash: ex02 lipstick/beauty (Luvia family), ex08 jacket/outerwear 4-tile; ex07 untouched",
+  "assets": [
+    {
+      "skill_id": "live-promo-decor",
+      "slot": "examples",
+      "index": 2,
+      "source_path": "/workspace/w683b/src/ex-02.webp",
+      "aspect_ratio": "21:9",
+      "resolution": "2K",
+      "prompt": "TRUE WASH — original artwork, NEW pixels, half-screen must prove this is NOT the reference. Keep the SAME composition family: a horizontal strip of THREE vertical livestream promo panels with a young East-Asian female host portrait, large Chinese headline, lip-glaze product showcase, and benefit icons. PRODUCT + BRAND LOCK (beauty/lipstick family matching suite ex07): invented brand 'Luvia', product '水光唇釉' shown as squeeze tubes with metallic applicator (shade range soft rose to berry). FORBIDDEN products: phone, electronics, FEIRO, glossa, 星瀚. New host (different face/hairstyle/outfit from the reference), warm coral-peach-champagne palette (NOT the reference pink-bubble look; NOT lavender of sibling stickers). Redraw all bubbles, ribbons, gift props and frames as soft rounded pill/pearl chrome — no dashed cut-line copy of gold. Invent ALL Chinese promo copy with CLEAR, sharp, readable glyphs painted into the artwork (no PIL paste, no blank chip boxes). Suggested invented lines (use these or close variants, do not invent illegible glyphs): 'Luvia今晚开售', '水光唇釉直播价', '一抹水光', '直播专享 ¥69' (struck ¥109), '官方正品保障', '当天下单发货', '破损包退'. TEXT RULE: ZERO verbatim gold text — forbid 'glossa', '肽唇釉', '双十一抢先购', '新品首发', '¥59', '¥79', '到手价', '现货现发', '运费险' exactly. No watermarks, real brands or celebrity likeness."
+    },
+    {
+      "skill_id": "live-promo-decor",
+      "slot": "examples",
+      "index": 8,
+      "source_path": "/workspace/w683b/src/ex-08.webp",
+      "aspect_ratio": "3:1",
+      "resolution": "2K",
+      "prompt": "TRUE WASH — original artwork, NEW pixels, half-screen must prove this is NOT the reference. Keep the SAME 4-tile livestream promo-decoration STRUCTURE and positions: (1) price/promo panel with big price numeral, (2) danmaku engagement sticker with a '扣1' style CTA, (3) '为什么选…' VS comparison panel (ordinary vs our tech), (4) four tech selling-point icons panel. PRODUCT + BRAND LOCK — JACKET / OUTERWEAR only: invented sportswear brand '跃野', product a royal-to-navy or graphite athletic track jacket (zippered, sporty silhouette). FORBIDDEN: running shoes, sneakers, VOLTRA, ABCD, phone, beauty tubes. Palette: electric lime + graphite black + white (NOT reference blue spray). CRITICAL — REPLACE gold sticker chrome: every panel frame must be a NEW shape language (torn-paper tickets / hex badges / bold comic bursts) — NO dashed cut-line border, NO jagged white sticker outline copied from gold. Redraw crowns, icons, splatters. Invent ALL Chinese promo copy with CLEAR sharp readable glyphs painted into the scene (no pasted text, no empty boxes). Suggested invented lines: panel1 '跃野机能专场' '直播价 ¥459' '满200减40' '前50名送腕带'; panel2 '弹幕扣1' '进粉丝团领券'; panel3 '为什么选跃野' VS '市面厚重款' vs '跃野透气款' with 4 paired contrasts; panel4 '跃野运动夹克' '四大机能卖点' with 4 icon labels '吸汗速干' '轻量透气' '高弹舒适' '立体剪裁'. TEXT RULE: ZERO verbatim gold text — forbid 'ABCD', '599', '满300减50', '前100名赠挂件', 'ABCD科技款', '蓝色运动夹克' exactly. Price numeral MUST change (use ¥459 not 599). No watermarks, real brands or celebrity likeness."
+    }
+  ]
+}
