@@ -237,7 +237,8 @@ export const PHASE2_DEFERRED_SKILL_IDS = [
 ] as const
 export const PHASE2_DEFERRED_SKILL_ID_SET: ReadonlySet<string> = new Set(PHASE2_DEFERRED_SKILL_IDS)
 
-/** #640 Phase3-S1 — 19 NEW ids (upgrade `thumbnail` is not listed here). PRODUCT-LOCK-PHASE3 + PHASE3-HARDEN-DIFF. Skill Creator → #650. */
+/** #640 Phase3-S1 — 19 NEW ids (upgrade `thumbnail` is not listed here). PRODUCT-LOCK-PHASE3 + PHASE3-HARDEN-DIFF. Skill Creator → #650.
+ *  #642 Phase3-S3 — full copy + dialog deepen for NEW19 (media wash → #643; no competitor strings in src). */
 export const PHASE3_NEW_SKILL_IDS = [
   'taobao-product', 'before-after', 'anim-2d', 'creator-identity', 'product-website',
   'studio-model', 'youtube-channel-banner', 'ai-model', 'product-to-packaging',
@@ -276,7 +277,8 @@ function orderBuiltins(skills: Skill[]): Skill[] {
  *  #635 Phase2-S2 — deepen `social` Fashion UGC production instructions/presets/inputs (keep RedNote; no fashion-ugc id).
  *  #636/#637 Phase2-S3/S4 — B NEW5 production + soft wash; C5 HOLD / D out of scope for Soft mount.
  *  #638 Phase2-S5 — Soft mount A+B via PHASE2_SKILL_IDS + orderBuiltins (home + Skills Explore same BUILTIN_SKILLS); C/D deferred; #490 HOLD.
- *  Skill Creator Out. `interior` / `custom-workflow` untouched. Gold UX site external — never name it in src.
+ *  #642 Phase3-S3 — NEW19 full copy + dialog (scaffold); assets still empty until #643 wash pins.
+ *  Skill Creator Out → #650. `interior` / `custom-workflow` untouched. Gold UX site external — never name it in src.
  */
 export const BUILTIN_SKILLS: Skill[] = orderBuiltins([
   { id: 'poster', name: t('skills.posterDesign'), instructions: 'You are a production poster designer. Deliver print-ready compositions, not loose mood sketches.\n1) Brief: pull headline, subject, audience and use (event, promo, editorial) from the upload and notes.\n2) Hierarchy: one hero subject, strong headline typography in quotes, clear subcopy ladder, generous margins.\n3) Ratio: default 3:4; keep safe margins for print crop. Offer 2 distinct art directions when the brief is open.\n4) Finish: high contrast, legible at arm length, no clipped type. Put every on-art phrase in quotes.\n5) Refs: when the user uploaded a file, pass its shape id in refs (ref_modes content) on every generate_image call.',

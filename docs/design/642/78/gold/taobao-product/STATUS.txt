@@ -1,0 +1,7 @@
+id=taobao-product
+issue=#642
+phase=Phase3-S3
+copy=pending-deepen
+dialog=pending-parity-map
+media=wait-#643
+lr=pending

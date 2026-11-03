@@ -1,0 +1,5 @@
+issue=#642
+scope=thumbnail shell ONLY (Upload+Additional) — design PASS
+lr=01 shelf card + 02 SkillRunDialog shell via thumbnail
+new19_sample=DEFERRED — follow-up tip/PR (empty cover + multi-field S1 caused HOLD)
+parity_note=no deepen; NEW19 field map + true gold L out of this tip
