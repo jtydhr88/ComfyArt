@@ -1,0 +1,70 @@
+{
+ "skill_id": "youtube-channel-banner",
+ "note": "#643 final per-example wash prompts (latest round per index). Gold not committed.",
+ "assets": [
+  {
+   "skill_id": "youtube-channel-banner",
+   "slot": "examples",
+   "index": 1,
+   "source_path": "<lovart-gold, not committed>",
+   "prompt": "TEXT EDIT ONLY. Keep this image pixel-identical in layout, art, people, colors, framing and any page/UI skeleton. Replace ONLY the channel name text with 'SALT & SAFFRON' and the tagline/subtitle text with 'Cooking with soul', in a similar typographic style and the same position and size. Remove all other old wording."
+  },
+  {
+   "skill_id": "youtube-channel-banner",
+   "slot": "examples",
+   "index": 2,
+   "source_path": "<lovart-gold, not committed>",
+   "prompt": "TEXT EDIT ONLY. Keep this image pixel-identical in layout, art, people, colors, framing and any page/UI skeleton. Replace ONLY the channel name text with 'NORTHBOUND TRAILS' and the tagline/subtitle text with 'Chase the next summit', in a similar typographic style and the same position and size. Remove all other old wording."
+  },
+  {
+   "skill_id": "youtube-channel-banner",
+   "slot": "examples",
+   "index": 3,
+   "source_path": "<lovart-gold, not committed>",
+   "prompt": "TEXT EDIT ONLY. Keep this image pixel-identical in layout, art, people, colors, framing and any page/UI skeleton. Replace ONLY the channel name text with 'STARDUST ATLAS' and the tagline/subtitle text with 'Mapping the cosmos', in a similar typographic style and the same position and size. Remove all other old wording."
+  },
+  {
+   "skill_id": "youtube-channel-banner",
+   "slot": "examples",
+   "index": 4,
+   "source_path": "<lovart-gold, not committed>",
+   "prompt": "TEXT EDIT ONLY. Keep this image pixel-identical in layout, art, people, colors, framing and any page/UI skeleton. Replace ONLY the channel name text with 'CAPITAL CLIMB' and the tagline/subtitle text with 'SAVE · INVEST · GROW', in a similar typographic style and the same position and size. Remove all other old wording."
+  },
+  {
+   "skill_id": "youtube-channel-banner",
+   "slot": "examples",
+   "index": 5,
+   "source_path": "<lovart-gold, not committed>",
+   "prompt": "TEXT EDIT ONLY. Keep this image pixel-identical in layout, art, people, colors, framing and any page/UI skeleton. Replace ONLY the channel name text with 'SUNNY WITH JUNE' and the tagline/subtitle text with 'CAFÉS · JOURNALS · SLOW DAYS', in a similar typographic style and the same position and size. Remove all other old wording."
+  },
+  {
+   "skill_id": "youtube-channel-banner",
+   "slot": "examples",
+   "index": 6,
+   "source_path": "<lovart-gold, not committed>",
+   "prompt": "TEXT EDIT ONLY. Keep this image pixel-identical in layout, art, people, colors, framing and any page/UI skeleton. Replace ONLY the channel name text with 'ROAMING ROWAN' and the tagline/subtitle text with 'JOURNEYS · FOOD · STORIES', in a similar typographic style and the same position and size. Remove all other old wording."
+  },
+  {
+   "skill_id": "youtube-channel-banner",
+   "slot": "examples",
+   "index": 7,
+   "source_path": "<lovart-gold, not committed>",
+   "prompt": "TEXT EDIT ONLY. Keep this image pixel-identical in layout, art, people, colors, framing and any page/UI skeleton. Replace ONLY the channel name text with 'VOLT ARCADE' and the tagline/subtitle text with 'GAMEPLAY · CLIPS · RANKED', in a similar typographic style and the same position and size. Remove all other old wording."
+  },
+  {
+   "skill_id": "youtube-channel-banner",
+   "slot": "examples",
+   "index": 8,
+   "source_path": "<lovart-gold, not committed>",
+   "prompt": "TEXT EDIT ONLY. Keep this image pixel-identical in layout, art, people, colors, framing and any page/UI skeleton. Replace ONLY the channel name text with 'FERN & FIELD' and the tagline/subtitle text with 'NATURAL · HANDMADE · SLOW LIVING', in a similar typographic style and the same position and size. Remove all other old wording."
+  },
+  {
+   "skill_id": "youtube-channel-banner",
+   "slot": "examples",
+   "index": 9,
+   "source_path": "<lovart-gold, not committed>",
+   "prompt": "TEXT EDIT ONLY. Keep this image pixel-identical in layout, art, people, colors, framing and any page/UI skeleton. Replace ONLY the channel name text with 'QUANTA LABS' and the tagline/subtitle text with 'DATA · SECURITY · AUTOMATION', in a similar typographic style and the same position and size. Remove all other old wording. Also redraw the hexagon N logo mark as a new Q-shaped geometric mark."
+  }
+ ],
+ "postprocess": "ex05-ex09: washed banner art re-composited into the gold page skeleton at the gold banner rect (same position/aspect); ex01/02 recompressed <400KB."
+}

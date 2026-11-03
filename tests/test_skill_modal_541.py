@@ -102,7 +102,8 @@ def test_examples_carousel_is_data_driven(got):
             "flash-cut-video": 1, "style-transfer": 4, "person-swap": 1, "commerce-strategist": 1, "lifestyle-scene": 2,  # #637 B5 hardMax
             "logo-abstract": 11, "photo-split-poster": 1, "ppt-visual": 1, "promo-ecommerce": 4, "naive-illustration": 4,  # #636 C5 hardMax
             "taobao-product": 8, "before-after": 8, "product-website": 3, "linkedin-banner": 1, "clothing-swap": 2,  # #643 batch1 (#667)
-            "anim-2d": 3, "creator-identity": 1, "portrait-studio": 6}  # #643 per-skill wash (#677/#682/#674)
+            "anim-2d": 3, "creator-identity": 1, "portrait-studio": 6,
+            "youtube-channel-banner": 9}  # #678  # #643 per-skill wash (#677/#682/#674)
     assert {k: v for k, v in got["examples"].items() if v} == want
     for sid in ("product", "brand", "packaging", "motion", "character"):
         assert got["examples"][sid] == 0, sid
