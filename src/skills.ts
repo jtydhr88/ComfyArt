@@ -794,10 +794,12 @@ export async function skillTool(args: Record<string, unknown>): Promise<unknown>
   if (!id && !(typeof args.name === 'string' && args.name.trim())) {
     throw new Error(`${SKILL_NON_RETRYABLE} skill read needs a non-empty id or name (e.g. id="linkedin-banner"); do not retry this call — use action="list" for ids`)
   }
-  const hit = id ? skills.find((s) => s.id === id) : skills.find((s) => s.name === args.name)
-  // #673: a hidden built-in is not available for new selection (still resolvable by id for saved sessions via loadSkills).
-  if (hit && !isListedSkill(hit)) throw new Error(`${SKILL_NON_RETRYABLE} ${t('skills.hiddenUnavailable')}`)  // #673 design: user-facing copy only — no id, no retry hints
-  const skill = hit
+  // #733: a read resolves by id OR display name (either field); hiding (#673) only affects entry points / pick-lists,
+  // never the agent's own read by id or name.
+  const keys = [id, typeof args.name === 'string' ? args.name.trim() : ''].filter(Boolean)
+  const norm = (v: string) => v.trim().toLowerCase()
+  const skill = skills.find((s) => keys.includes(s.id)) ?? skills.find((s) => keys.includes(s.name))
+    ?? skills.find((s) => keys.some((k) => norm(k) === norm(s.id) || norm(k) === norm(s.name)))
   if (!skill) throw new Error(`unknown skill ${JSON.stringify(id || args.name)} — available: ${listed.map((s) => `${s.name} (${s.id})`).join(', ')}`)
   if (args.path) {
     const content = skill.files?.[String(args.path)]

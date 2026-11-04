@@ -15,7 +15,7 @@ async function main() {
   const resolved: Record<string, unknown> = {}
   for (const id of S.HIDDEN_BUILTIN_SKILL_IDS) {
     const b = S.BUILTIN_SKILLS.find((s) => s.id === id)!
-    hiddenReads[id] = { byId: await safe(() => S.skillTool({ action: 'read', id })), byName: await safe(() => S.skillTool({ action: 'read', name: b.name })) }
+    hiddenReads[id] = { byId: await safe(() => S.skillTool({ action: 'read', id })), byName: await safe(() => S.skillTool({ action: 'read', name: b.name })), idInName: await safe(() => S.skillTool({ action: 'read', name: id })), nameInId: await safe(() => S.skillTool({ action: 'read', id: b.name })) }
     // saved session / card path: handoff.ts + Home starter use loadSkills().find(id) → withPreset → run params
     resolved[id] = await safe(async () => {
       const s = all.find((x) => x.id === id)

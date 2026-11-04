@@ -75,10 +75,12 @@ def test_agent_list_excludes_hidden_and_keeps_order() -> None:
 
 @needs_node
 @pytest.mark.parametrize("sid", HIDDEN)
-def test_agent_read_of_hidden_is_not_available_non_retryable(sid) -> None:
-    for how in ("byId", "byName"):
-        err = report()["hiddenReads"][sid][how]["error"]
-        assert err == "[non-retryable] " + COPY["zh"], err  # user-facing copy only
+def test_agent_read_of_hidden_resolves_by_id_and_by_name_733(sid) -> None:
+    """#733: hiding only affects entry points/UI; the agent's read resolves id and display name (either field)."""
+    for how in ("byId", "byName", "idInName", "nameInId"):
+        res = report()["hiddenReads"][sid][how]
+        assert "error" not in res, (how, res)
+        assert res["id"] == sid and res["instructions"], (how, res)
 
 
 @needs_node
@@ -147,11 +149,9 @@ def test_three_attach_paths_use_the_guard_before_any_send() -> None:
 
 @needs_node
 @pytest.mark.parametrize("lang", ["zh", "en"])
-def test_agent_tool_error_never_leaks_ids_or_retry_hints(lang) -> None:
-    err = report()["guard"][lang]["readErr"]
-    assert err == "[non-retryable] " + COPY[lang]
-    for leak in ("ppt-visual", "do not retry", "action=", "list"):
-        assert leak not in err.split("] ", 1)[1], leak
+def test_agent_read_of_hidden_skill_by_id_is_not_an_error_733(lang) -> None:
+    # #733: hiding only affects entry points / UI; reading by id resolves
+    assert report()["guard"][lang].get("readErr") is None
 
 
 SRC = ROOT / "src"
