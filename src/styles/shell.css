@@ -199,7 +199,7 @@ button.ca-head__logo:hover, button.ca-head__logo[data-open] { background: var(--
 .ca-composer[data-drop] { outline: 2px dashed var(--ca-blue); outline-offset: -2px; }
 .ca-composer__chips { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
 .ca-composer__suggest { position: absolute; left: 0; right: 0; bottom: calc(100% + 6px); max-height: 280px; overflow: auto; z-index: 20; }
-.ca-composer__notice { position: absolute; left: 0; right: 0; bottom: calc(100% + 6px); z-index: 19; display: flex; align-items: center; gap: 8px; padding: 8px 10px; border-radius: 10px; background: var(--ca-float); color: var(--ca-text); border: 1px solid var(--ca-border); box-shadow: 0 2px 8px rgb(0 0 0 / 8%); font-size: 13px; }
+.ca-composer__notice { /* #644: in flow above the composer: 12 below the chat, 36 above the rim (mascot peeks 29) */ flex: none; margin: 12px 12px 36px; display: flex; align-items: center; gap: 8px; padding: 8px 10px; border-radius: 10px; background: var(--ca-float); color: var(--ca-text); border: 1px solid var(--ca-border); box-shadow: 0 2px 8px rgb(0 0 0 / 8%); font-size: 13px; }
 .ca-composer__mini { width: 24px; height: 24px; border-radius: 4px; object-fit: cover; }
 
 /* #362 @ menu groups 参考/本项目/素材 (no Model) + composer capsules */

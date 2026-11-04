@@ -3,6 +3,7 @@
 **Branch:** `feat/640-skills-phase3-s1` · **Asia/Shanghai** · Issue #640  
 **Tip-pin:** absolute `raw.githubusercontent.com` URLs live in the draft PR body (exact tip SHA).  
 **SSOT:** `PRODUCT-LOCK-PHASE3.md` · `PHASE3-HARDEN-DIFF.md` · review gold `ComfyArt-review-assets/phase3/DESIGN-GOLD.md`  
+**Note (#723):** the original `PHASE3-HARDEN-DIFF.md` was never committed; the 20-id list in `tests/test_e2e_regression_644.py` (sourced from #640, locked 11-02: upgrade `thumbnail` + NEW19, dropped-13) is the source of truth.  
 **Comments chain to:** `#640` + locks. Soft mainline Phase3 / **#490 HOLD**. Skill Creator → **#650** (out of slots).
 
 ## Gold embeds (cover + dialog only)

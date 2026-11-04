@@ -23,6 +23,9 @@ export type AgentMode = 'agent' | 'image' | 'video'
 
 export const draftAtom = atom('agent draft', '')
 export const extraRefsAtom = atom<TLShapeId[]>('agent refs', [])
+/** #644: composer-only reference images (no canvas shape) — an old hidden-skill ?skill= link restores its refs here. */
+export interface LooseRef { src: string; name: string }
+export const looseRefsAtom = atom<LooseRef[]>('composer loose refs', [])
 export const agentModeAtom = atom<AgentMode>('agent mode', 'agent')
 export const kitsAtom = atom<LibraryItem[]>('agent kits', [])
 
@@ -94,7 +97,7 @@ export function canvasNodesFromEditor(editor: Editor): { nodes: SnapshotNode[]; 
   return { nodes, selection }
 }
 
-export async function sendToAgent(editor: Editor, text: string, refs: RefShape[], skill: Skill | null, kits: LibraryItem[] = [], docs: ChatDoc[] = [], context = '', opts?: { runMode?: 'interactive' | 'unattended'; chip?: string }) {
+export async function sendToAgent(editor: Editor, text: string, refs: RefShape[], skill: Skill | null, kits: LibraryItem[] = [], docs: ChatDoc[] = [], context = '', opts?: { runMode?: 'interactive' | 'unattended'; chip?: string; loose?: LooseRef[] }) {
   // #673 safety net: a hidden (deferred) skill never starts a run — no request at all; the composer shows the notice.
   if (blockHiddenSkill(skill)) return
   const linked = linkedKit(editor.getDocumentSettings().meta.brandKit)
@@ -117,6 +120,8 @@ export async function sendToAgent(editor: Editor, text: string, refs: RefShape[]
     const transcript = kind === 'audio' ? await transcribeFile(src).catch(() => '') : ''
     return [{ id: r.id, src, name: mediaName(editor, r), kind, ...(transcript ? { transcript } : {}) }]
   }))
+  const loose = (opts?.loose ?? []).map((l, i) => ({ id: `loose:${i}` as TLShapeId, src: l.src, name: l.name, kind: 'image' as const }))
+  if (loose.length) sent.push(loose)
   const mem = settingsAtom.get()['memory-enabled'] === false ? '' : memoryPrompt(text)
   // #384: every turn attaches a fresh canvas snapshot; pack against the shared #382 window budget.
   const { nodes, selection } = canvasNodesFromEditor(editor)
@@ -131,7 +136,7 @@ export async function sendToAgent(editor: Editor, text: string, refs: RefShape[]
     memoryPrompt: mem,
     snapshot: snap.text,
     text,
-    imageCount: refs.length,
+    imageCount: refs.length + loose.length,
   })
   const ctx = [packed.snapshot, context].filter(Boolean).join('\n')
   await sendMessage({
@@ -168,7 +173,7 @@ export function commentsToChat(editor: Editor, comments: CommentShape[]) {
 
 export type { DirectSettings } from './models'
 
-export interface DirectRun { refs: RefShape[]; prompt: string; near?: TLShapeId }
+export interface DirectRun { refs: RefShape[]; prompt: string; near?: TLShapeId; loose?: string[] }
 
 const RESULT_GAP = 40
 
@@ -178,7 +183,8 @@ function startDirect(editor: Editor, run: DirectRun, video: boolean, onError: Er
   const picked = settings.ratio ?? (video ? VIDEO_RATIOS[0] : '1:1')
   const ratio = video && refs[0] ? nearestRatio(refs[0].props.w / refs[0].props.h, VIDEO_RATIOS) : picked
   const media = video && run.refs.some((r) => r.type !== 'image')
-  const srcs = media ? capRefs(run.refs.flatMap((r) => srcOf(editor, r) ?? [])) : refs.flatMap((r) => srcOf(editor, r) ?? []).slice(0, video ? 1 : undefined)
+  const own = run.refs.flatMap((r) => srcOf(editor, r) ?? [])
+  const srcs = media ? capRefs([...own, ...(run.loose ?? [])]) : [...refs.flatMap((r) => srcOf(editor, r) ?? []), ...(run.loose ?? [])].slice(0, video ? 1 : undefined)
   const near = run.near && editor.getShapePageBounds(run.near)
   const holder = createGenerator(editor, video, { ...settings, prompt: run.prompt, ratio }, false, near ? [near.x, near.maxY + RESULT_GAP] : undefined)
   if (srcs.length) editor.updateShape<GeneratorShape>({ id: holder, type: GENERATOR, meta: { refs: srcs, ...(media ? { videoMode: 'refs' } : {}) } })

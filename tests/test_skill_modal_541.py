@@ -32,7 +32,10 @@ def got(tmp_path_factory) -> dict:
 def test_meta_is_template_count_only(got):
     # #581: skillMeta also carries usage (0 when store empty). No presets + no usage → null.
     for sid, n in got["presets"].items():
-        assert got["meta"][sid] == ({"templates": n, "usage": 0} if n else None), sid
+        # #644 design: the count is the dialog's real thumbnails (examples + preset tiles with media), not presets[]
+        assert (got["meta"][sid] is None) == (n == 0 or got["thumbs"][sid] == 0), sid  # 0 thumbnails → no label
+        if got["meta"][sid]:
+            assert got["meta"][sid]["templates"] == got["thumbs"][sid] and got["meta"][sid]["usage"] == 0, sid
     assert "custom-workflow" not in got["meta"] and got["old"] is None
 
 

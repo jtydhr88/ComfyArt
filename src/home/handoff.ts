@@ -1,6 +1,6 @@
 import { atom, createShapeId, type Editor, type TLImageShape, type TLShape } from 'tldraw'
 
-import { agentModeAtom, draftAtom, extraRefsAtom, generateDirect, sendToAgent, type AgentMode } from '../agent'
+import { agentModeAtom, draftAtom, extraRefsAtom, looseRefsAtom, generateDirect, sendToAgent, type AgentMode } from '../agent'
 import { refreshBot } from '../bot'
 import { t } from '../i18n'
 import { refFromUrl, refKind } from '../comfy'
@@ -175,6 +175,8 @@ export async function takeHandoff(editor: Editor, onError: ErrorSink) {
   const skill = found && withPreset(found, presetId)
   if (skill && !attachSkill(skill)) {  // #673: hidden skill from an old link — no chip, notice shown, nothing sent
     if (text) draftAtom.set(text)
+    // #644 (product call): the link's reference images go back ONLY into the composer's attachments — never the canvas
+    if (refs.length) looseRefsAtom.set(refs.filter((r) => refKind(r) !== 'audio').map((src) => ({ src, name: refFromUrl(src).filename })))
     return
   }
   const shapes = await placeRefs(editor, refs)

@@ -982,10 +982,17 @@ export function withPreset(skill: Skill, presetId?: string | null): Skill {
   return p?.prompt ? { ...skill, instructions: `${skill.instructions.trimEnd()}\n\n${p.prompt}` } : skill
 }
 
+/** #644 design: 「N 个模板」 = the thumbnails the dialog really shows — the Examples strip plus preset tiles with media
+ *  (same sources as SkillRunDialog). Presets without media add no thumbnail and are not counted. */
+export function skillThumbCount(skill: Skill): number {
+  return (skill.examples?.length ?? 0) + (skill.presets ?? []).filter((p) => !!(p.image || p.video)).length
+}
+
 /** #541/#581 — design-spec meta under the description. Real data only: template count from presets[];
  *  usage from local `loadSkillUsage` (never seeded). No presets and no usage → null. */
 export function skillMeta(skill: Skill): { templates: number; usage: number } | null {
-  const templates = skill.presets?.length ?? 0
+  // #569 ruling kept: effect skills (no presets) show no 「N 个模板」 line; template skills count real thumbnails (#644)
+  const templates = skill.presets?.length ? skillThumbCount(skill) : 0
   const usage = getSkillUsage(skill.id)
   if (!templates && !usage) return null
   return { templates, usage }

@@ -5,7 +5,7 @@
 })()
 
 // #541 harness: Lovart meta line is real data only (template count from presets[]; no usage counter).
-import { BUILTIN_SKILLS, isSkillMediaVideo, presetImage, skillMeta } from '../../src/skills'
+import { BUILTIN_SKILLS, isSkillMediaVideo, presetImage, skillMeta, skillThumbCount } from '../../src/skills'
 import { createElement } from 'react'
 import { renderToStaticMarkup } from 'react-dom/server'
 import { SkillExamples } from '../../src/ui/SkillExamples'
@@ -15,6 +15,7 @@ const old = { id: 'old-skill', name: 'Old', instructions: 'Old rules.', custom: 
 console.log(JSON.stringify({
   meta: Object.fromEntries(BUILTIN_SKILLS.map((s) => [s.id, skillMeta(s)])),
   presets: Object.fromEntries(BUILTIN_SKILLS.map((s) => [s.id, s.presets?.length ?? 0])),
+  thumbs: Object.fromEntries(BUILTIN_SKILLS.map((s) => [s.id, skillThumbCount(s)])),
   old: skillMeta(old),
   imgs: { product: img('product'), brand: img('brand'), packaging: img('packaging') },
   exUrls: Object.fromEntries(BUILTIN_SKILLS.filter((s) => s.examples?.length).map((s) => [s.id, s.examples])),
