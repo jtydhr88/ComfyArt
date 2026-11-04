@@ -94,3 +94,9 @@ def test_template_no_bare_half_body_label_and_no_ultra():
     t = _template()
     assert "ultra" not in t.lower()
     assert "(no full body / waist-up / half body / close-up / 半身)" in t  # only as the banned list
+
+
+def test_navel_cut_is_hard_frame_edge():
+    t = _template()
+    assert "画面下边缘切在肚脐处，肚脐以下不入画，人物头顶到肚脐占满画面高度" in t
+    assert "nothing below the navel is in frame" in t and "from top of head to navel fills the full frame height" in t

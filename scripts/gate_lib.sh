@@ -42,3 +42,10 @@ gate_check_log_errors() {
   hits=$(grep -nE '(^|[^A-Za-z_])(error|ERROR)([^A-Za-z_]|$)' "$1" | grep -vE '^[0-9]+:(PASSED|SKIPPED) ' || true)
   if [ -n "$hits" ]; then echo "$hits" | head -20 >&2; gate_die "error lines found in $1"; return 1; fi
 }
+
+# Tail of a failed --co log without pytest's own "N/M tests collected, K error" summary line
+# (that partial N would contradict collected=COLLECTION_ERROR).
+gate_collect_err_tail() {
+  tail -20 "$1" | grep -vE '^[0-9]+(/[0-9]+)? tests? (collected|selected)'
+  return 0
+}

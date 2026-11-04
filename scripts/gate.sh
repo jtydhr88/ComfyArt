@@ -39,7 +39,7 @@ stage() { # name, -k expr
   local n=$1 k=$2 co
   "$PY" -m pytest -q -p no:cacheprovider --co tests -k "$k" >"$LOGDIR/$n.collect.log" 2>&1; co=$?
   if [ "$co" != 0 ]; then   # no count on a broken collection (pytest's partial N would mislead)
-    echo "$S $n: collected=COLLECTION_ERROR collect_exit=$co"; tail -20 "$LOGDIR/$n.collect.log"
+    echo "$S $n: collected=COLLECTION_ERROR collect_exit=$co"; gate_collect_err_tail "$LOGDIR/$n.collect.log"
     fail "$n collection exit $co"; return
   fi
   local cnt; cnt=$(grep -oE '^[0-9]+(/[0-9]+)? tests? (collected|selected)' "$LOGDIR/$n.collect.log" | grep -oE '^[0-9]+' | head -1)
