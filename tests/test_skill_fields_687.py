@@ -50,8 +50,11 @@ def test_ref12_zh_placeholder_exact_687(got):
 
 
 def test_typo_uploaded_file_are_uploaded_fixed_687():
-    assert "uploaded file are uploaded" not in (ROOT / "src/skills.ts").read_text()
-
+    """No skill copy (src/skills.ts + every locale skills.* string) may contain the substring 'uploaded file'."""
+    import json
+    assert "uploaded file" not in (ROOT / "src/skills.ts").read_text().lower()
+    for f in (ROOT / "src/locales").glob("*.json"):
+        assert "uploaded file" not in json.dumps(json.loads(f.read_text()).get("skills", {}), ensure_ascii=False).lower(), f.name
 
 def test_motion_title_desc_remake_687():
     import json
