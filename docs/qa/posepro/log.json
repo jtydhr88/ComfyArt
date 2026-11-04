@@ -1,16 +1,21 @@
 {
- "balance_start": 46.276249,
- "balance_end": 45.772249,
+ "run_id": "posepro-run2-20261104150505",
+ "template": "final (navel hard frame edge)",
+ "balance_start": 45.772249,
+ "balance_end": 45.268249,
  "spent_usd": 0.504,
+ "attempts": 4,
+ "delivered": 4,
  "runs": [
   {
    "i": 1,
-   "task": "92b97025374341efa1596d56e31f44af",
+   "task": "715f185cc8b9475e85568d726d2f6531",
    "model_requested": "google/nano-banana-pro/edit",
    "model_returned": "google/nano-banana-pro/edit",
    "status": "completed",
+   "size": "1792x2400",
    "resolution": "2k",
-   "quote_usd": 0.126,
+   "cost_usd": 0.126,
    "prompt": "Edit the reference photo. Single 3:4 photorealistic editorial fashion photograph, one frame only, not a collage, grid or contact sheet. Same person, same identity, same outfit, same location and light as reference; change ONLY camera angle and framing. Commercial fashion model, refined makeup and styling, as attractive as the reference. Same outfit as reference: oversized belted beige-brown double-breasted blazer, black shorts, sandals, earrings, unchanged. Same location as reference: city sidewalk with yellow curb line and dark building wall, unchanged; background two stops darker than face. Keep the reference's hard directional light: same light direction (from camera left), same contrast ratio and deep shadows; dappled light and cast shadows fall across the face and the clothing. Editorial color grade, fine film grain. Natural skin texture, visible pores, real fabric wrinkles; realistic does not mean unattractive. No flat lighting, no white backdrop, no heavy filter or skin smoothing. Head and body at 0°, facing camera directly, mid-stride. Full-length framing: clear headroom above the top of the head, both feet fully inside the frame with pavement visible below the soles. Camera at eye level, 35mm f/2.8, subject on the left third.",
    "choice": {
     "model": "google/nano-banana-pro/edit",
@@ -28,12 +33,13 @@
   },
   {
    "i": 2,
-   "task": "91954aae20ba4f33b82f36fc30ded185",
+   "task": "7949868d37b94bc9868ec8db86d4fd9e",
    "model_requested": "google/nano-banana-pro/edit",
    "model_returned": "google/nano-banana-pro/edit",
    "status": "completed",
+   "size": "1792x2400",
    "resolution": "2k",
-   "quote_usd": 0.126,
+   "cost_usd": 0.126,
    "prompt": "Edit the reference photo. Single 3:4 photorealistic editorial fashion photograph, one frame only, not a collage, grid or contact sheet. Same person, same identity, same outfit, same location and light as reference; change ONLY camera angle and framing. Commercial fashion model, refined makeup and styling, as attractive as the reference. Same outfit as reference: oversized belted beige-brown double-breasted blazer, black shorts, sandals, earrings, unchanged. Same location as reference: city sidewalk with yellow curb line and dark building wall, unchanged; background two stops darker than face. Keep the reference's hard directional light: same light direction (from camera left), same contrast ratio and deep shadows; dappled light and cast shadows fall across the face and the clothing. Editorial color grade, fine film grain. Natural skin texture, visible pores, real fabric wrinkles; realistic does not mean unattractive. No flat lighting, no white backdrop, no heavy filter or skin smoothing. Body facing away from camera walking, head turned 90° back over the right shoulder, chin passes beyond the shoulder line, looking back toward camera. Full-length framing: clear headroom above the head, both feet fully inside the frame. Camera at eye level, 50mm f/2, subject on the right third.",
    "choice": {
     "model": "google/nano-banana-pro/edit",
@@ -51,13 +57,14 @@
   },
   {
    "i": 3,
-   "task": "54f9db47b7434cf4b195ff8853b15d5d",
+   "task": "96c275de895e499c87d5df1f485f8bfc",
    "model_requested": "google/nano-banana-pro/edit",
    "model_returned": "google/nano-banana-pro/edit",
    "status": "completed",
+   "size": "1792x2400",
    "resolution": "2k",
-   "quote_usd": 0.126,
-   "prompt": "Edit the reference photo. Single 3:4 photorealistic editorial fashion photograph, one frame only, not a collage, grid or contact sheet. Same person, same identity, same outfit, same location and light as reference; change ONLY camera angle and framing. Commercial fashion model, refined makeup and styling, as attractive as the reference. Same outfit as reference: oversized belted beige-brown double-breasted blazer, black shorts, sandals, earrings, unchanged. Same location as reference: city sidewalk with yellow curb line and dark building wall, unchanged; background two stops darker than face. Keep the reference's hard directional light: same light direction (from camera left), same contrast ratio and deep shadows; dappled light and cast shadows fall across the face and the clothing. Editorial color grade, fine film grain. Natural skin texture, visible pores, real fabric wrinkles; realistic does not mean unattractive. No flat lighting, no white backdrop, no heavy filter or skin smoothing. Strict 90° side profile facing frame left: nose, lips and chin in silhouette, the far eye is NOT visible. Framing crops at the navel: bottom edge of the frame cuts exactly at the navel, hips NOT visible. Hard light rakes along the profile, leaf shadows on cheek and shoulder. 50mm f/2, negative space in front of the face.",
+   "cost_usd": 0.126,
+   "prompt": "Edit the reference photo. Single 3:4 photorealistic editorial fashion photograph, one frame only, not a collage, grid or contact sheet. Same person, same identity, same outfit, same location and light as reference; change ONLY camera angle and framing. Commercial fashion model, refined makeup and styling, as attractive as the reference. Same outfit as reference: oversized belted beige-brown double-breasted blazer, black shorts, sandals, earrings, unchanged. Same location as reference: city sidewalk with yellow curb line and dark building wall, unchanged; background two stops darker than face. Keep the reference's hard directional light: same light direction (from camera left), same contrast ratio and deep shadows; dappled light and cast shadows fall across the face and the clothing. Editorial color grade, fine film grain. Natural skin texture, visible pores, real fabric wrinkles; realistic does not mean unattractive. No flat lighting, no white backdrop, no heavy filter or skin smoothing. Strict 90° side profile facing frame left: nose, lips and chin in silhouette, the far eye is NOT visible. Framing crops at the waistline / navel: bottom edge of the frame cuts exactly at the navel, nothing below the navel is in frame, hips and thighs NOT visible; the figure from top of head to navel fills the full frame height (画面下边缘切在肚脐处，肚脐以下不入画，人物头顶到肚脐占满画面高度). Hard light rakes along the profile, leaf shadows on cheek and shoulder. 50mm f/2, negative space in front of the face.",
    "choice": {
     "model": "google/nano-banana-pro/edit",
     "auto": true,
@@ -74,12 +81,13 @@
   },
   {
    "i": 4,
-   "task": "63e2887225ce427b8606e649a09a45d9",
+   "task": "848a63a013044f7e9723f6095b6daf62",
    "model_requested": "google/nano-banana-pro/edit",
    "model_returned": "google/nano-banana-pro/edit",
    "status": "completed",
+   "size": "1792x2400",
    "resolution": "2k",
-   "quote_usd": 0.126,
+   "cost_usd": 0.126,
    "prompt": "Edit the reference photo. Single 3:4 photorealistic editorial fashion photograph, one frame only, not a collage, grid or contact sheet. Same person, same identity, same outfit, same location and light as reference; change ONLY camera angle and framing. Commercial fashion model, refined makeup and styling, as attractive as the reference. Same outfit as reference: oversized belted beige-brown double-breasted blazer, black shorts, sandals, earrings, unchanged. Same location as reference: city sidewalk with yellow curb line and dark building wall, unchanged; background two stops darker than face. Keep the reference's hard directional light: same light direction (from camera left), same contrast ratio and deep shadows; dappled light and cast shadows fall across the face and the clothing. Editorial color grade, fine film grain. Natural skin texture, visible pores, real fabric wrinkles; realistic does not mean unattractive. No flat lighting, no white backdrop, no heavy filter or skin smoothing. Head turned 45° from camera, hand adjusting hair near the ear, gaze slightly off-camera. Tight framing: bottom edge of the frame cuts at the collarbones, chest NOT visible, face fills the upper two thirds. Dappled light spots across forehead, cheek and hand. 85mm f/1.8, eyes in sharp focus.",
    "choice": {
     "model": "google/nano-banana-pro/edit",
@@ -95,5 +103,6 @@
     }
    }
   }
- ]
+ ],
+ "superseded": "run1 (tasks 92b97025/91954aae/54f9db47/63e28872, $0.504) used the pre-navel-fix template; not shown"
 }
