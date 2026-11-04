@@ -1,11 +1,11 @@
 # Small text erased to background in washed images (follow-up $0 text-fix PR, not #736)
 
 Team standard: wherever the gold has text, ours must have text of similar length, size, weight and position. Per Angela's rule, the fix is a model edit with the gold as the base. No local overlay.
-Block counts below come from RapidOCR. "Gold" counts the gold's text blocks and "ours" counts ours. A gap means text was erased.
+Block counts below come from RapidOCR. Counts not yet computed.
 
 | Image | Gold blocks | Ours blocks | Status |
 |---|---|---|---|
-| 673/wash/promo-ecommerce/examples/01 (gold ex02) | 94 | 74 | in #736: 12 spots + 2 typos ([drops.json](../../../qa/736/drops.json)), fix via prompt 1 |
+| 673/wash/promo-ecommerce/examples/01 (gold ex02) | – | – | in #736: 12 spots + 2 typos ([drops.json](../../../qa/736/drops.json)), fix via prompt 1 |
 | 643/wash/taobao-product/examples/07 | – | – | in #736: copy verbatim, fix via prompt 2 |
 | 673/wash/ppt-visual/examples/01 | – | – | in #736: 4 English words, fix via prompt 3 |
 | promo-ecommerce ex01 (6 posters, docs/design/673/next/promo-ex01.webp) | TBD | TBD | follow-up: recount |
