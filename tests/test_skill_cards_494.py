@@ -32,7 +32,7 @@ REAL = ["poster", "social", "brand", "packaging", "thumbnail", "banner", "charac
         "interior"]  # custom-workflow removed (no Lovart card)
 PHASE1_HOT = ["brand", "packaging", "poster", "product", "character", "social", "motion", "banner", "thumbnail",
               "multi-angle", "logo-material", "meta-ads", "mobile-ui", "web-product", "marketing-campaign"]
-COVERED = ["poster", "social", "brand", "packaging", "thumbnail", "banner", "character", "product", "motion", "interior"]  # local public/skills; phase1_new=#594 cover(); phase2_b=#637 cover637(); phase2_c=#636 cover636()
+COVERED = ["poster", "social", "brand", "packaging", "thumbnail", "banner", "character", "product", "motion", "interior"]  # local public/skills; phase1_new=#594 cover(); phase2_b=#637 cover637(); phase2_c=#636 cover673()
 # Product ruling (#494 18:26 + AC comment 23:15): 3 skills have no category and appear only under 为你推荐.
 CATEGORY = {"poster": "ads", "social": "social", "brand": "branding", "packaging": "ecommerce", "thumbnail": "social",
             "banner": "ads", "character": None, "product": "ecommerce", "motion": "ads",
@@ -151,7 +151,7 @@ def test_covers_ten_webps_with_source_manifest():
         elif sid in phase2_b:
             assert f"cover: cover637('{sid}')" in head, sid  # #637 soft wash intentional covers
         elif sid in phase2_c:
-            assert f"cover: cover636('{sid}')" in head, sid  # #636 C soft wash intentional covers
+            assert f"cover: cover673('{sid}')" in head, sid  # #636 C soft wash intentional covers
         elif sid in {"taobao-product", "before-after", "anim-2d", "creator-identity", "product-website", "studio-model", "youtube-channel-banner", "ai-model", "product-to-packaging", "game-art", "portrait-studio", "premium-website", "animated-poster", "pose-fission", "live-promo-decor", "linkedin-banner", "logo-animation", "restaurant-website", "clothing-swap"}:
             assert f"cover: cover643('{sid}')" in head, sid  # #643 NEW19 true-wash covers
         else:

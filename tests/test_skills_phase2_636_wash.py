@@ -8,7 +8,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 SKILLS_TS = (ROOT / "src/skills.ts").read_text()
 
-WASH_636 = "5ccfdf0f481bbcbb3392516dba75f1ec3bda3ab6"
+WASH_673 = "a4baa17bfb6eb984348a23b439a925f465a0ee53"  # #673 C re-wash replaced the #636 soft wash
 PHASE2_C = [
     "naive-illustration",
     "logo-abstract",
@@ -17,17 +17,17 @@ PHASE2_C = [
     "promo-ecommerce",
 ]
 HARD_MAX = {
-    "logo-abstract": 11,          # examples-carousel hardMax11
+    "logo-abstract": 4,           # #673: ex02/ex06/ex09/ex10
     "photo-split-poster": 1,      # examples-single-still
     "ppt-visual": 1,              # examples-single-still
-    "promo-ecommerce": 4,         # examples-carousel4
+    "promo-ecommerce": 1,         # #673: ex01 pulled, ex02 only
     "naive-illustration": 4,      # examples-carousel4 (near=2qapfgd34fsw)
 }
 FEAT_MIN = {
     "logo-abstract": 5,
-    "photo-split-poster": 3,
-    "ppt-visual": 3,
-    "promo-ecommerce": 5,
+    "photo-split-poster": 2,
+    "ppt-visual": 2,
+    "promo-ecommerce": 2,
     "naive-illustration": 5,
 }
 
@@ -40,8 +40,8 @@ def _entries() -> dict[str, str]:
 
 
 def test_wash_636_pin_and_helpers():
-    assert f"const WASH_636 = '{WASH_636}'" in SKILLS_TS
-    for h in ("cover636", "ex636", "feat636"):
+    assert f"const WASH_673 = '{WASH_673}'" in SKILLS_TS
+    for h in ("cover673", "ex673", "feat673"):
         assert f"const {h}" in SKILLS_TS or f"{h} =" in SKILLS_TS or f"{h}(" in SKILLS_TS
 
 
@@ -50,16 +50,16 @@ def test_c5_hardmax_examples_featured_cover():
     for sid in PHASE2_C:
         e = entries[sid]
         head = e.split("inputs:", 1)[0]
-        assert f"cover: cover636('{sid}')" in head, sid
+        assert f"cover: cover673('{sid}')" in head, sid
         assert "placeholder" not in e.lower(), sid
         assert "lovart" not in e.lower(), sid
         n = HARD_MAX[sid]
         ids = ", ".join(str(i) for i in range(1, n + 1))
-        assert f"examples: ex636('{sid}', [{ids}])" in e, (sid, e[e.find("examples:"):e.find("examples:")+120])
+        assert f"examples: ex673('{sid}', [{ids}])" in e, (sid, e[e.find("examples:"):e.find("examples:")+120])
         assert "video:" not in head, sid
         feat_n = FEAT_MIN[sid]
         fids = ", ".join(str(i) for i in range(1, feat_n + 1))
-        assert f"featured: feat636('{sid}', [{fids}])" in e, sid
+        assert f"featured: feat673('{sid}', [{fids}])" in e, sid
 
 
 def test_no_gray_empty_examples_on_c():
