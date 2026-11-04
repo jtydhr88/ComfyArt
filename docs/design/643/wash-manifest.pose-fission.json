@@ -1,0 +1,219 @@
+{
+  "skill_id": "pose-fission",
+  "note": "#643 #670 final: face/hair (clipped above collar line, zero clothing pixels) + ONE small scene box (touches no clothing) inpainted onto gold; every clothing pixel, pose, light, grade and grain = gold. Same new model (dark-brown chin-length bob with bangs) across all 4. Gold not committed.",
+  "assets": [
+    {
+      "skill_id": "pose-fission",
+      "slot": "examples",
+      "index": 1,
+      "source_path": "<lovart-gold ex01, not committed>",
+      "method": "local inpaint: kie i2i edit of gold; edit gain-matched to gold face luminance and face-shadow high-pass reduced to gold grain level; Pillow/numpy feathered-mask composite: face/hair ellipse x 40px ramp-to-0 at collar line (no clothing) + ONE small scene box (feather inside box, touches no clothing); all other pixels = gold",
+      "model": "gpt-image-2-5-flare-image-to-image",
+      "refs": [
+        "<lovart-gold ex01, not committed>"
+      ],
+      "prompt": "Edit this exact photo minimally. KEEP EVERYTHING identical: same pose, framing, camel blazer with belt, black shorts, sandals, hard low sun, shadows, color grade and film grain. CHANGE ONLY: (1) her face and hair to a different, equally attractive fashion model — e.g. a woman with sleek dark-brown chin-length bob, different eye shape, nose, lips and jaw, refined natural makeup, same head angle and gaze — clearly a different person at a glance; (2) small scene details: the background building walls slightly warmer ochre instead of grey, swap the street manhole cover for a plain drain grate, replace any sign with plain wall. No text, letters, logos or numbers anywhere. Photoreal, real skin texture.",
+      "mask": {
+        "coords": "gold px 1529x2048",
+        "face_ellipse": [
+          640,
+          140,
+          960,
+          560
+        ],
+        "face_blur": 28,
+        "collar_clip_y": 430,
+        "collar_ramp_px": 40,
+        "scene_box": [
+          0,
+          1480,
+          480,
+          1800
+        ],
+        "box_feather": 14,
+        "scene": "round manhole cover -> rectangular drain grate",
+        "clothing_pixels": "100% gold (mask==0 pixels byte-identical to gold in PNG master)",
+        "area_pct_of_frame": {
+          "face_pct": 3.9,
+          "scene_pct": 4.89,
+          "total_pct": 8.79,
+          "weighted_pct": 6.53
+        }
+      },
+      "path": "643/wash/pose-fission/examples/01.webp",
+      "sha256": "54c186ed66cd4202d9edccad11a479000be4830d68dbdc9d4aab93e7dbf0a5d7",
+      "meanAbs_vs_gold_report_only": 3.05,
+      "tone": {
+        "edit_gain": 0.7911,
+        "face_lum_delta_vs_gold": 0.22,
+        "face_shadow_hp_std_gold": 6.11,
+        "face_shadow_hp_std_out": 6.06,
+        "face_shadow_hp_std_edit_raw": 6.68,
+        "hp_reduce": 0.085
+      }
+    },
+    {
+      "skill_id": "pose-fission",
+      "slot": "examples",
+      "index": 2,
+      "source_path": "<lovart-gold ex02, not committed>",
+      "method": "local inpaint: kie i2i edit of gold; edit gain-matched to gold face luminance and face-shadow high-pass reduced to gold grain level; Pillow/numpy feathered-mask composite: face/hair ellipse x 40px ramp-to-0 at collar line (no clothing) + ONE small scene box (feather inside box, touches no clothing); all other pixels = gold",
+      "model": "gpt-image-2-5-flare-image-to-image",
+      "refs": [
+        "<lovart-gold ex02, not committed>",
+        "ex01 composite (identity ref, Image 2)"
+      ],
+      "prompt": "Edit Image 1 minimally. KEEP EVERYTHING in Image 1 identical: pose (walking mid-stride, head turned toward camera over the shoulder), framing, camel blazer, black shorts/skirt, sandals, hands, hard low sun direction, shadows on face and body, color grade and film grain. CHANGE ONLY: (1) replace her face and hair with the woman from Image 2 — same face, sleek dark-brown chin-length bob with bangs, refined natural makeup, beautiful fashion-model features — but keep Image 1's exact head angle, gaze direction and the same hard side lighting falling on the face; clean hair edges against the dark background; (2) one small scene detail: replace the round manhole cover in the street with a plain square drain grate. No text, letters, logos or numbers. Photoreal, real skin texture.",
+      "mask": {
+        "coords": "gold px 1529x2048",
+        "face_ellipse": [
+          690,
+          60,
+          980,
+          390
+        ],
+        "face_blur": 24,
+        "collar_clip_y": 345,
+        "collar_ramp_px": 40,
+        "scene_box": [
+          60,
+          1320,
+          600,
+          1545
+        ],
+        "box_feather": 14,
+        "scene": "round manhole cover -> square drain grate",
+        "clothing_pixels": "100% gold (mask==0 pixels byte-identical to gold in PNG master)",
+        "area_pct_of_frame": {
+          "face_pct": 3.39,
+          "scene_pct": 3.87,
+          "total_pct": 7.26,
+          "weighted_pct": 5.3
+        }
+      },
+      "path": "643/wash/pose-fission/examples/02.webp",
+      "sha256": "364720b45cf1ba8c66f63e02dde2bacecd651f29fd7474220c9f84a6fa3ab628",
+      "meanAbs_vs_gold_report_only": 2.43,
+      "tone": {
+        "edit_gain": 0.8654,
+        "face_lum_delta_vs_gold": 0.27,
+        "face_shadow_hp_std_gold": 5.52,
+        "face_shadow_hp_std_out": 5.7,
+        "face_shadow_hp_std_edit_raw": 6.68,
+        "hp_reduce": 0.174
+      }
+    },
+    {
+      "skill_id": "pose-fission",
+      "slot": "examples",
+      "index": 3,
+      "source_path": "<lovart-gold ex03, not committed>",
+      "method": "local inpaint: kie i2i edit of gold; edit gain-matched to gold face luminance and face-shadow high-pass reduced to gold grain level; Pillow/numpy feathered-mask composite: face/hair ellipse x 40px ramp-to-0 at collar line (no clothing) + ONE small scene box (feather inside box, touches no clothing); all other pixels = gold",
+      "model": "gpt-image-2-5-flare-image-to-image",
+      "refs": [
+        "<lovart-gold ex03, not committed>",
+        "ex01 composite (identity ref, Image 2)"
+      ],
+      "prompt": "Edit Image 1 minimally. KEEP EVERYTHING in Image 1 identical: pose (leaning on the dark pole, head turned/looking off to the side), framing, camel blazer, black shorts/skirt, sandals, hands, hard low sun direction, shadows on face and body, color grade and film grain. CHANGE ONLY: (1) replace her face and hair with the woman from Image 2 — same face, sleek dark-brown chin-length bob with bangs, refined natural makeup, beautiful fashion-model features — but keep Image 1's exact head angle, gaze direction and the same hard side lighting falling on the face; clean hair edges against the dark background; (2) one small scene detail: remove the yellow curb line segment near her feet, plain grey curb instead. No text, letters, logos or numbers. Photoreal, real skin texture.",
+      "mask": {
+        "coords": "gold px 1529x2048",
+        "face_ellipse": [
+          500,
+          95,
+          775,
+          420
+        ],
+        "face_blur": 24,
+        "collar_clip_y": 360,
+        "collar_ramp_px": 40,
+        "scene_box": [
+          0,
+          1385,
+          316,
+          1535
+        ],
+        "box_feather": 10,
+        "scene": "rectangular drain grate (lower-left sidewalk, frame+pattern) -> plain paving slabs",
+        "clothing_pixels": "100% gold (mask==0 pixels byte-identical to gold in PNG master)",
+        "area_pct_of_frame": {
+          "face_pct": 3.06,
+          "scene_pct": 1.51,
+          "total_pct": 4.57,
+          "weighted_pct": 3.05
+        }
+      },
+      "path": "643/wash/pose-fission/examples/03.webp",
+      "sha256": "8802130b7325b05df55d4b16d0aa85ef05879b1c0c3857cd05ead4bf1515ff6f",
+      "meanAbs_vs_gold_report_only": 1.66,
+      "scene_pass": {
+        "model": "gpt-image-2-5-flare-image-to-image",
+        "input": "gold",
+        "prompt": "Edit this exact photo minimally; keep every other pixel... ONLY change: remove the rectangular drain grate at the lower-left completely, frame and pattern included, replace with plain grey paving slabs continuing the sidewalk. No text."
+      },
+      "tone": {
+        "edit_gain": 0.9045,
+        "face_lum_delta_vs_gold": 0.27,
+        "face_shadow_hp_std_gold": 5.97,
+        "face_shadow_hp_std_out": 6.21,
+        "face_shadow_hp_std_edit_raw": 7.18,
+        "hp_reduce": 0.168
+      }
+    },
+    {
+      "skill_id": "pose-fission",
+      "slot": "examples",
+      "index": 4,
+      "source_path": "<lovart-gold ex04, not committed>",
+      "method": "local inpaint: kie i2i edit of gold; edit gain-matched to gold face luminance and face-shadow high-pass reduced to gold grain level; Pillow/numpy feathered-mask composite: face/hair ellipse x 40px ramp-to-0 at collar line (no clothing) + ONE small scene box (feather inside box, touches no clothing); all other pixels = gold",
+      "model": "gpt-image-2-5-flare-image-to-image",
+      "refs": [
+        "<lovart-gold ex04, not committed>",
+        "ex01 composite (identity ref, Image 2)"
+      ],
+      "prompt": "Edit Image 1 minimally. KEEP EVERYTHING in Image 1 identical: pose (close half-body, one hand in her hair at the side of the head, head slightly tilted, direct gaze), framing, camel blazer, black shorts/skirt, sandals, hands, hard low sun direction, shadows on face and body, color grade and film grain. CHANGE ONLY: (1) replace her face and hair with the woman from Image 2 — same face, sleek dark-brown chin-length bob with bangs, refined natural makeup, beautiful fashion-model features — but keep Image 1's exact head angle, gaze direction and the same hard side lighting falling on the face; clean hair edges against the dark background; (2) one small scene detail: make the blurred background building wall slightly warmer ochre. No text, letters, logos or numbers. Photoreal, real skin texture.",
+      "mask": {
+        "coords": "gold px 1529x2048",
+        "face_ellipse": [
+          600,
+          45,
+          1110,
+          560
+        ],
+        "face_blur": 30,
+        "collar_clip_y": 480,
+        "collar_ramp_px": 40,
+        "scene_box": [
+          1255,
+          85,
+          1515,
+          375
+        ],
+        "box_feather": 22,
+        "scene": "small wrought-iron wall lamp on far facade, top-right (blur 2.5 to match DOF)",
+        "clothing_pixels": "100% gold (mask==0 pixels byte-identical to gold in PNG master)",
+        "area_pct_of_frame": {
+          "face_pct": 8.25,
+          "scene_pct": 2.38,
+          "total_pct": 10.62,
+          "weighted_pct": 7.39
+        }
+      },
+      "path": "643/wash/pose-fission/examples/04.webp",
+      "sha256": "c67cc1887b5782a43eab826194163cbe75cd32a52b6faf523fa2ea0c09691776",
+      "meanAbs_vs_gold_report_only": 3.38,
+      "scene_pass": {
+        "model": "gpt-image-2-5-flare-image-to-image",
+        "input": "gold",
+        "prompt": "Edit this exact photo minimally; keep every other pixel... ONLY change: add one small black wrought-iron wall-mounted street lamp on the far facade at top-right. No text."
+      },
+      "tone": {
+        "edit_gain": 1.001,
+        "face_lum_delta_vs_gold": -1.26,
+        "face_shadow_hp_std_gold": 5.13,
+        "face_shadow_hp_std_out": 5.51,
+        "face_shadow_hp_std_edit_raw": 6.99,
+        "hp_reduce": 0.266
+      }
+    }
+  ]
+}
