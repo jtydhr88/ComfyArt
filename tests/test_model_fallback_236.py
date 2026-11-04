@@ -165,6 +165,11 @@ async def _turn(monkeypatch, steps, *, user_text="画一张写实人像", lang="
 
     monkeypatch.setattr(provider, "_request_json", fake_request)
     monkeypatch.setattr(provider, "_mcp_call_tool", fake_call)
+
+    async def free_price(model, inputs):  # #732: pricing now fails closed, so stub it (no WaveSpeed key here)
+        return 0.0
+
+    monkeypatch.setattr(provider, "_price_one", free_price)
     monkeypatch.setattr(LocalLlmProvider, "_confirm_fallback", confirm)
     events: list[BotEvent] = []
 

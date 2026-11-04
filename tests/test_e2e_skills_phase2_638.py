@@ -63,8 +63,9 @@ async def test_skills_explore_phase2_b_after_phase1(app_url):  # noqa: F811
         # Soft order among B: flash-cut → style-transfer → person-swap → commerce → lifestyle
         bpos = [ids.index(s) for s in PHASE2_B]
         assert bpos == sorted(bpos)
-        # #673: deferred ids hidden from the wall
-        assert "naive-illustration" not in ids and "ppt-visual" not in ids
+        # #735: C unhidden on the wall; D still absent
+        assert "naive-illustration" in ids and "ppt-visual" in ids
+        assert "yingzao" not in ids and "fabric-collage" not in ids
         # website chip on Explore
         assert await pg.get_by_test_id("skills-chip-website").count() == 1
         await browser.close()

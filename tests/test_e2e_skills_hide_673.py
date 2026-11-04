@@ -1,5 +1,5 @@
-"""#673 e2e (mock only, $0): the 9 hidden Phase2 skills appear nowhere on home (featured, chips, + → 技能) or the
-Skills page (every chip). Set HIDE673_SHOTS=/dir for zh-light / en-dark PNGs."""
+"""#673/#735 e2e (mock only, $0): the remaining hidden Phase2 D-group skills appear nowhere on home (featured, chips, + → 技能) or the
+Skills page (every chip). C-group is listed after #735. Set HIDE673_SHOTS=/dir for PNGs."""
 from __future__ import annotations
 
 import json
@@ -10,7 +10,7 @@ from pathlib import Path
 import pytest
 
 from test_e2e_comment_edit import app_url, mock_ws  # noqa: F401
-from test_skills_hide_673 import HIDDEN, MAIN_ORDER_40
+from test_skills_hide_673 import HIDDEN, MAIN_ORDER_45 as MAIN_ORDER_40
 
 pw = pytest.importorskip("playwright.async_api")
 ROOT = Path(__file__).resolve().parent.parent
@@ -70,8 +70,9 @@ async def test_composer_slash_picker_hides_deferred(app_url, lang, theme):  # no
                 await pg.wait_for_timeout(300)
         first = await _slash(pg, "")
         assert first == MAIN_ORDER_40[:8], first  # '/' lists listed skills only, main order
-        assert "ppt-visual" not in await _slash(pg, "ppt")
-        assert "ppt-visual" not in await _slash(pg, "PPT")
+        assert "ppt-visual" in await _slash(pg, "ppt")  # #735 C unhidden
+        assert "yingzao" not in await _slash(pg, "ying")
+        assert "yingzao" not in await _slash(pg, "营造")
         for h in HIDDEN:  # searching a hidden skill by its own name never offers it
             got = await _slash(pg, names[h].split()[0])
             assert not set(got) & set(HIDDEN), (h, got)

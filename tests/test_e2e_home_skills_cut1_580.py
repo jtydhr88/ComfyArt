@@ -96,12 +96,12 @@ def _featured_from_data():
 
 # Fixed expectation (#689 follow-up): pinned id list so a skill silently dropping out of the
 # feed fails here; _featured_from_data() is only a drift guard against src/skills.ts.
-FEED_EXPECTED = frozenset({  # #673: 9 deferred ids hidden
+FEED_EXPECTED = frozenset({  # #735: D-group 4 hidden; C unhidden into feed
     "anim-2d", "banner", "before-after", "brand", "character", "clothing-swap", "commerce-strategist", "creator-identity",
     "flash-cut-video", "interior", "lifestyle-scene", "linkedin-banner",
-    "logo-material", "marketing-campaign", "meta-ads", "mobile-ui", "motion", "multi-angle",
-    "packaging", "person-swap", "portrait-studio", "poster",
-    "product", "product-website", "social", "style-transfer",
+    "logo-abstract", "logo-material", "marketing-campaign", "meta-ads", "mobile-ui", "motion", "multi-angle",
+    "naive-illustration", "packaging", "person-swap", "photo-split-poster", "portrait-studio", "poster", "ppt-visual",
+    "product", "product-website", "promo-ecommerce", "social", "style-transfer",
     "taobao-product", "thumbnail", "web-product", "youtube-channel-banner",
     "animated-poster",  # #643 per-slot PR (examples wired => in feed)
     "premium-website",  # #643 per-slot PR (examples wired => in feed)
@@ -114,7 +114,7 @@ FEED_EXPECTED = frozenset({  # #673: 9 deferred ids hidden
     "ai-model",  # #643 per-slot PR (examples wired => in feed)
     "pose-fission",  # #643 per-slot PR (examples wired => in feed)
 })
-FEED_MIN = 40  # #673: 45 minus 5 hidden deferred; +#643 … + live-promo-decor + ai-model + pose-fission
+FEED_MIN = 45  # #735: 49 builtins minus 4 D hidden
 
 
 FEATURED_DIRS = ("/580/featured-v1/", "/580/featured-v2/", "/637/wash/", "/636/wash/", "/643/wash/", "/673/wash/")

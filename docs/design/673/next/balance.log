@@ -1,0 +1,8 @@
+# WaveSpeed google/nano-banana-2.1/edit, 1k. balance read before/after each call
+group A start=44.285449
+promo-ex01  id=cfef0be13bb24dc2b26320d2e7b2d85f before=44.285449 after=44.247649 cost=0.0378 ok (attempt 1/1)
+ppt-p07     id=446a45a246bf4a2ba1d1e0fc28915088 before=44.247649 after=44.209849 cost=0.0378 ok (attempt 1/1)
+group A end=44.209849 total=0.0756 (cap 0.08)
+group B start=44.209849
+taobao-product id=f91c28d393de4f008ad5c041b83241c0 before=44.209849 after=44.172049 cost=0.0378 ok (attempt 1/3)
+group B end=44.172049 total=0.0378 (cap 0.30)

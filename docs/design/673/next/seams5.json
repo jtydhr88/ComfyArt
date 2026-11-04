@@ -1,0 +1,27 @@
+{
+ "joins": [
+  {
+   "join": 1047,
+   "lum_diff": 1.13,
+   "pass": true
+  },
+  {
+   "join": 2094,
+   "lum_diff": 0.85,
+   "pass": true
+  },
+  {
+   "join": 3141,
+   "lum_diff": 8.64,
+   "pass": true
+  },
+  {
+   "join": 4188,
+   "lum_diff": 1.98,
+   "pass": true
+  }
+ ],
+ "row_min": 6.1,
+ "row_max": 103.81,
+ "rows_ok": true
+}
