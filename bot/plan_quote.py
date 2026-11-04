@@ -132,7 +132,7 @@ def model_label(model_id: str) -> str:
     if not model_id:
         return ""
     try:
-        from ComfyArt.api.wavespeed import display_of, short_label
+        from ..api.wavespeed import display_of, short_label
         shown = display_of(model_id)
         if shown and shown.get("name"):
             return str(shown["name"])
