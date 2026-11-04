@@ -1,13 +1,18 @@
 import type { ReactNode } from 'react'
 
 import { CopyButton } from './CopyButton'
+import { isTaskRefCode } from '../wsErrors'
 
 const INLINE = /(\*\*[^*]+\*\*|`[^`]+`|\[[^\]]+\]\([^)\s]+\))/g
 
 function inline(text: string): ReactNode[] {
-  return text.split(INLINE).map((part, i) => {
+  const parts = text.split(INLINE)
+  return parts.map((part, i) => {
     if (part.startsWith('**') && part.endsWith('**') && part.length > 4) return <strong key={i}>{part.slice(2, -2)}</strong>
-    if (part.startsWith('`') && part.endsWith('`') && part.length > 2) return <code key={i}>{part.slice(1, -1)}</code>
+    if (part.startsWith('`') && part.endsWith('`') && part.length > 2) {
+      const c = part.slice(1, -1)  // #715: only the task id after the taskRef prefix gets nowrap/ellipsis/title; other code is main's behaviour
+      return isTaskRefCode(parts[i - 1] ?? '') ? <code key={i} className="ca-task-id" title={c}>{c}</code> : <code key={i}>{c}</code>
+    }
     const link = /^\[([^\]]+)\]\(([^)\s]+)\)$/.exec(part)
     if (link) return <a key={i} href={link[2]} target="_blank" rel="noreferrer">{link[1]}</a>
     return part

@@ -11,3 +11,4 @@ wavespeed.env
 # WaveSpeed key saved from Settings (normally in the ComfyUI user dir, never in the repo)
 wavespeed_key.json
 .gate_owned
+tmp-712-shots/

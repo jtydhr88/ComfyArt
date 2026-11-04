@@ -174,6 +174,9 @@ def test_locales_only_add_memory_retrieved_430():
         "projectHeader.saved", "projectHeader.savedAt", "projectHeader.saving",
         # #672: builtin custom-workflow card removed (not memory copy)
         "skills.customWorkflow", "skills.cat.custom-workflow", "skills.desc.custom-workflow",
+        # #712: billed-with-no-image failure copy (not memory copy)
+        "wsErr.noOutput", "wsErr.noOutputNoAmount", "wsErr.noTaskId", "wsErr.noTaskIdNoAmount", "wsErr.unregisteredModel",
+        "wsErr.timeout", "wsErr.timeoutNoAmount", "wsErr.taskRef",  # #712: 后台 -> 控制台, {0} carries the $
     }
     for p, v in (("src/locales/zh.json", "记忆已读取"), ("src/locales/en.json", "Memory retrieved")):
         m = _git_main(p)

@@ -80,10 +80,71 @@ def test_top_up_link_clickable_in_card():
 
 def test_174_timeout_copy_zh_en(js):
     zh, en = js["zh"], js["en"]
-    assert zh["timeout"] == "WaveSpeed 任务超时，可能已扣费约 $0.32。请先到 WaveSpeed 后台确认结果，再决定要不要重试。"
-    assert en["timeout"] == "The WaveSpeed task timed out and may have been charged about $0.32. Please check the result in your WaveSpeed dashboard before retrying."
+    assert zh["timeout"] == "任务超时，可能已扣费约 $0.32。重试前请注意可能重复扣费。"
+    assert en["timeout"] == "The task timed out and may have been charged about $0.32. Retrying may charge again."
     # amount unknown: the 「约 $…」 / 'about $…' half is dropped cleanly
-    assert zh["timeoutNoAmount"] == "WaveSpeed 任务超时，可能已扣费。请先到 WaveSpeed 后台确认结果，再决定要不要重试。"
-    assert en["timeoutNoAmount"] == "The WaveSpeed task timed out and may have been charged. Please check the result in your WaveSpeed dashboard before retrying."
-    assert "约 $1.5。" in zh["timeoutBody"] and "about $1.5." in en["timeoutBody"]
+    assert zh["timeoutNoAmount"] == "任务超时，可能已扣费。重试前请注意可能重复扣费。"
+    assert en["timeoutNoAmount"] == "The task timed out and may have been charged. Retrying may charge again."
+    assert "约 $1.50。" in zh["timeoutBody"] and "about $1.50." in en["timeoutBody"]
     assert "quoted price" not in zh["timeoutBody"] + en["timeoutBody"]
+
+
+def test_712_fmt_usd_two_decimals_and_sub_cent(js):
+    assert js["fmtUsd"][:4] == ["$0.10", "$0.14", "$1.50", "$0.32"]
+    assert js["fmtUsd"][4:6] == ["< $0.01", "< $0.01"]
+    assert js["fmtUsd"][6:8] == ["$0.00", "$0.01"] and js["fmtUsd"][9] == "$12.00"
+    # #715: exact-ish amounts ($0.00, < $0.01) drop 约/about; >= 1 cent keeps it
+    assert js["zh"]["tiny"].startswith("任务已结束但没有返回图片，可能已扣费 < $0.01。") and "约" not in js["zh"]["tiny"]
+    assert "may have been charged < $0.01." in js["en"]["tiny"] and "about" not in js["en"]["tiny"]
+    assert js["zh"]["zero"] == "任务超时，可能已扣费 $0.00。重试前请注意可能重复扣费。"
+    assert js["en"]["zero"] == "The task timed out and may have been charged $0.00. Retrying may charge again."
+    assert "可能已扣费 $0.00。" in js["zh"]["zeroNoTaskId"] and "charged $0.00." in js["en"]["zeroNoTaskId"]
+    assert "约 $0.01。" in js["zh"]["cent"] and "about $0.01." in js["en"]["cent"]
+
+
+def test_712_unregistered_and_task_id_copy(js):
+    assert js["zh"]["unregisteredModel"] == "所选模型暂不可用，未发送、未扣费。请换一个模型再试。"
+    assert js["en"]["unregisteredModel"] == "The selected model isn't available right now. Nothing was sent or charged. Please try another model."
+    assert js["zh"]["noTaskId"].startswith("没有拿到任务编号，无法取回结果，可能已扣费约 $0.10。") and "$0.10" in js["zh"]["noTaskId"]
+    assert js["en"]["noTaskId"].startswith("No task ID came back, so the result cannot be fetched") and "task id" not in js["en"]["noTaskId"]
+    zh = json.loads((ROOT / "src/locales/zh.json").read_text(encoding="utf-8"))
+    assert js["zh"]["noTaskId"] == "没有拿到任务编号，无法取回结果，可能已扣费约 $0.10。已记为失败。"
+
+
+# #712 PM: no vendor name in user-facing wsErr copy. These keys predate #712, still name the vendor and are left
+# unchanged on purpose (reported in PR #715, out of scope); every other wsErr.* key must not.
+PRE_712_VENDOR_KEYS = {"wsErr.failed", "wsErr.insufficientCredit", "wsErr.invalidKey", "wsErr.moderation", "wsErr.network",
+                       "wsErr.rateLimit"}
+
+
+def test_712_no_vendor_or_console_in_wserr_copy():
+    import re
+    for lang in ("zh", "en"):
+        loc = json.loads((ROOT / f"src/locales/{lang}.json").read_text(encoding="utf-8"))
+        hits = {k for k, v in loc.items() if k.startswith("wsErr.") and re.search(r"wavespeed|kie", v, re.I)}
+        assert hits == PRE_712_VENDOR_KEYS, (lang, sorted(hits ^ PRE_712_VENDOR_KEYS))
+        # no pointer to a vendor console / back office, nor to a generation history UI that doesn't exist yet (#715 option a)
+        bad = [k for k, v in loc.items() if k.startswith("wsErr.") and re.search(r"控制台|后台|console|dashboard|生成记录|历史记录|generation history", v, re.I)]
+        assert not bad, (lang, bad)
+
+
+def test_712_task_id_shown_when_obtained(js):
+    zh, en = js["zh"], js["en"]
+    assert zh["timeoutId"].endswith("重试前请注意可能重复扣费。\n\n任务编号：`ws-abc123`（反馈或退款时请提供）")  # #715: own line, id as code
+    assert en["timeoutId"].endswith("Retrying may charge again.\n\nTask ID: `ws-abc123` (include it in feedback or refund requests)")
+    assert " 任务编号" not in zh["timeoutId"] and " Task ID" not in en["timeoutId"]  # no stray space before the ref line
+    assert "任务编号：`ws-abc123`" in zh["noOutputId"] and "Task ID: `ws-abc123`" in en["noOutputId"]
+    assert "ws-abc123" in zh["bodyId"] and "ws-abc123" in en["bodyId"]
+    assert "ws-abc123" not in zh["noTaskIdWithId"] + en["noTaskIdWithId"]  # noTaskId never shows an id
+    assert "ws-abc123" not in zh["timeout"] + en["timeout"]  # no id -> no ref line
+
+
+def test_715_task_ref_prefixes_match_locales():
+    # .ca-task-id is chosen by the text before the code span; keep it in sync with wsErr.taskRef
+    src = (ROOT / "src/wsErrors.ts").read_text(encoding="utf-8")
+    for lang in ("zh", "en"):
+        ref = json.loads((ROOT / f"src/locales/{lang}.json").read_text(encoding="utf-8"))["wsErr.taskRef"]
+        assert f"'{ref.split('{0}')[0]}'" in src, (lang, ref)
+    css = (ROOT / "src/styles/overlays.css").read_text(encoding="utf-8")
+    md = [l for l in css.splitlines() if l.startswith(".ca-md code")]
+    assert md == [".ca-md code { padding: 1px 4px; border-radius: 4px; background: var(--ca-field); font-size: 12px; }"]  # main's rule, unchanged

@@ -64,13 +64,33 @@ def test_reply_states_model_and_reason_zh_en():
     assert "say in your reply" in __import__("ComfyArt.bot.guide", fromlist=["AGENT_GUIDE"]).AGENT_GUIDE
 
 
-def test_missing_model_falls_back_to_default(monkeypatch, caplog):
+def test_missing_model_raises_unregistered(monkeypatch, caplog):
+    """#712: a table model the catalog does not register is an explicit error, no silent swap to the default."""
     real = auto_models.load_table()
     real["text_to_image"]["categories"][0]["model"] = "nope/not-in-catalog"
     monkeypatch.setattr(auto_models, "load_table", lambda: real)
+    n = len(SENT)
+    out = run("generate_image", prompt="logo for a cafe")
+    assert out["status"] == "failed" and out["kind"] == "unregisteredModel" and out["generation_succeeded"] is False
+    assert "所选模型暂不可用" in out["user_message"] and "isn't available right now" in out["user_message"]
+    assert "nope/not-in-catalog" in out["error"] and len(SENT) == n  # nothing was sent, nothing charged
+
+
+def test_missing_model_uses_registered_fallback_and_logs(monkeypatch, caplog):
+    real = auto_models.load_table()
+    real["text_to_image"]["categories"][0].update(model="nope/not-in-catalog", fallback=["nope/also-missing", default("text_to_image")])
+    monkeypatch.setattr(auto_models, "load_table", lambda: real)
     choice = run("generate_image", prompt="logo for a cafe")["model_choice"]
     assert choice["model"] == default("text_to_image") and choice["fallback"] == "nope/not-in-catalog"
-    assert "not in catalog" in caplog.text
+    assert "registered fallback" in caplog.text
+
+
+def test_choose_raises_directly():
+    import pytest
+    cfg = {"models": [{"id": "a"}], "default": "a"}
+    with pytest.raises(auto_models.UnregisteredModel):
+        auto_models.registered({"model": "b"}, {"a"}, "x/y")
+    assert auto_models.registered({"model": "b", "fallback": "a"}, {"a"}, "x/y") == ("a", "b")
 
 
 def test_edit_table_and_one_ref():
@@ -101,12 +121,12 @@ def test_two_refs_user_named_model_unchanged():
     assert not choice["auto"] and "edit_model" not in SENT[-1][1] and SENT[-1][1]["model"] == "openai/gpt-image-2/text-to-image"
 
 
-def test_two_refs_missing_model_falls_back(monkeypatch, caplog):
+def test_two_refs_missing_model_raises(monkeypatch):
     real = auto_models.load_table()
     real["image_edit"]["multi_reference"]["model"] = "nope/x"
     monkeypatch.setattr(canvas, "load_table", lambda: real)
-    choice = run("generate_image", prompt="p", refs=["shape:a", "shape:b"])["model_choice"]
-    assert choice["model"] == default("image_edit") and "edit_model" not in SENT[-1][1] and "not in catalog" in caplog.text
+    out = run("generate_image", prompt="p", refs=["shape:a", "shape:b"])
+    assert out["status"] == "failed" and out["kind"] == "unregisteredModel" and "nope/x" in out["error"]
 
 
 def test_page_runs_the_auto_edit_pick():

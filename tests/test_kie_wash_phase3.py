@@ -383,3 +383,39 @@ def test_script_is_not_wired_into_the_app():
     assert "api/wavespeed.py" not in text
     assert "KIE_API_KEY" in text
     assert "gpt-image-2-5-sunburst-image-to-image" in text
+
+
+def test_712_lost_poll_resumes_with_saved_task_id(tmp_path):
+    calls = {"create": 0, "poll": 0}
+
+    def transport(method, url, json_body=None, raw=None, content_type=None):
+        if url.endswith(kie.CREATE_PATH):
+            calls["create"] += 1
+            return {"code": 200, "data": {"taskId": "task_712"}}
+        assert "taskId=task_712" in url
+        calls["poll"] += 1
+        if calls["poll"] == 1:
+            raise kie.KieError("network error: reset")
+        return {"code": 200, "data": {"state": "success", "resultJson": json.dumps(
+            {"resultUrls": ["https://tempfile.example/out.png"]})}}
+
+    assets, errors = kie.wash([kie.parse_entry(_entry(), 1)], tmp_path / "w", kie.DEFAULT_MODEL, _client(transport))
+    assert errors == [] and assets[0]["task_id"] == "task_712" and calls == {"create": 1, "poll": 2}
+
+
+def test_712_failed_task_row_keeps_task_id_and_marks_not_succeeded(tmp_path):
+    def transport(method, url, json_body=None, raw=None, content_type=None):
+        if url.endswith(kie.CREATE_PATH):
+            return {"code": 200, "data": {"taskId": "task_712b"}}
+        return {"code": 200, "data": {"state": "fail", "failCode": "500", "failMsg": "boom"}}
+
+    _, errors = kie.wash([kie.parse_entry(_entry(), 1)], tmp_path / "w", kie.DEFAULT_MODEL, _client(transport))
+    assert errors[0]["task_id"] == "task_712b" and errors[0]["generation_succeeded"] is False
+
+
+def test_712_no_task_id_row_has_none(tmp_path):
+    def transport(method, url, json_body=None, raw=None, content_type=None):
+        return {"code": 200, "data": {}}
+
+    _, errors = kie.wash([kie.parse_entry(_entry(), 1)], tmp_path / "w", kie.DEFAULT_MODEL, _client(transport))
+    assert errors[0]["task_id"] is None and "no taskId" in errors[0]["error"]

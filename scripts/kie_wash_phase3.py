@@ -573,6 +573,7 @@ def wash(entries: list[dict], out_dir: Path, model: str, client: KieClient) -> t
     errors: list[dict] = []
     for item in entries:
         label = f"skill={item['skill_id']} slot={item['slot']} index={item['index']}"
+        task_id = None
         try:
             if item["source_path"]:
                 input_url = client.upload_file(Path(item["source_path"]))
@@ -582,7 +583,16 @@ def wash(entries: list[dict], out_dir: Path, model: str, client: KieClient) -> t
                 model, item["prompt"], input_url, item["aspect_ratio"], item["resolution"]
             )
             task_id = client.create_task(body)
-            urls = client.poll(task_id)
+            # #712: the id is kept before polling, so a lost poll can be resumed instead of paying for a re-run
+            print(f"submitted {label} task_id={task_id}", flush=True)
+            try:
+                urls = client.poll(task_id)
+            except KieError as exc:
+                if str(exc).startswith("task failed"):
+                    raise
+                print(client._redact(f"poll lost {label} task_id={task_id} ({exc}); retrying with the saved id"),
+                      file=sys.stderr, flush=True)
+                urls = client.poll(task_id)
             blob = client._download(urls[0])
             saved, ext = normalize_image(blob)
             rel = f"{item['skill_id']}/{item['slot']}/{output_name(item['slot'], item['index'], ext)}"
@@ -613,6 +623,10 @@ def wash(entries: list[dict], out_dir: Path, model: str, client: KieClient) -> t
                 "slot": item["slot"],
                 "index": item["index"],
                 "error": message,
+                # #712: a submitted task may have been charged even with no output; keep its id for the bill
+                "task_id": task_id,
+                "generation_succeeded": False,
+                "cost": None,
             })
             print(f"FAIL {label} {message}", file=sys.stderr, flush=True)
     return assets, errors

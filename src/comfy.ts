@@ -146,7 +146,7 @@ function promptError(body: any, status: number): string {
     (ne?.errors ?? []).map((er: any) => `${ne.class_type ?? ''} #${id}: ${er.message}${er.details ? ` — ${er.details}` : ''}`))
   if (lines.length) return lines.join('\n')
   const top = body?.error
-  const readable = wsErrorText(top?.kind, top?.charged_usd)
+  const readable = wsErrorText(top?.kind, top?.charged_usd, top?.task_id)
   if (readable) return readable
   if (!top?.message) return `queue failed: ${status}`
   return top.details ? `${top.message}: ${top.details}` : top.message
@@ -295,7 +295,7 @@ async function waitForOutput<T>(promptId: string, node: string, pick: (out: Reco
     if (hist) {
       const messages: [string, any][] = hist.status?.messages ?? []
       const err = messages.find((m) => m[0] === 'execution_error')
-      if (err) throw new Error(wsErrorText(err[1]?.ws_kind, err[1]?.ws_charged) ?? String(err[1]?.exception_message ?? 'execution failed'))
+      if (err) throw new Error(wsErrorText(err[1]?.ws_kind, err[1]?.ws_charged, err[1]?.ws_task_id) ?? String(err[1]?.exception_message ?? 'execution failed'))
       const interrupted = messages.find((m) => m[0] === 'execution_interrupted')
       if (interrupted) {
         const charged = interrupted[1]?.ws_charged
