@@ -141,7 +141,8 @@ def test_dialog_is_data_driven():
     assert "ca-skillrun__head" in DLG and "ca-skillrun__title" in DLG and "ca-skillrun__desc" in DLG
     for bad in ("'poster'", "'product'", "topic", "headline"):
         assert bad not in DLG, bad
-    assert "missing.length > 0" in DLG and "skillRunParams(skill, values, preset)" in DLG
+    # #687 — Start stays clickable; onStart gates on missing inputs and only then reveals errors (tried).
+    assert "if (missing.length) { setTried(true)" in DLG and "skillRunParams(skill, values, preset)" in DLG
     # 「详情」 keeps main's #484 edit page — no new detail route.
     assert "openSkillEditor(skill.id)" in DLG
 
