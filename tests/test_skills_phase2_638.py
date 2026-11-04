@@ -1,4 +1,4 @@
-"""#638 Phase2-S5 Soft mount: home + Skills hang Phase2 A+B (Soft order); C/D deferred; #490 HOLD.
+"""#638/#735 Phase2 Soft mount: home + Skills hang Phase2 A+B+C (Soft order); D deferred; #490 HOLD.
 $0 static reads; no network."""
 from __future__ import annotations
 
@@ -16,18 +16,20 @@ PHASE1 = [
     "motion", "meta-ads", "poster", "thumbnail", "mobile-ui", "social",
     "marketing-campaign", "web-product", "banner",
 ]
-# Soft order slots 1–6 (PRODUCT-LOCK-PHASE2): A social + B NEW5
+# Soft order: A social + B NEW5 + #735 C NEW5 (washed)
 PHASE2_MOUNT = [
     "flash-cut-video", "style-transfer", "person-swap", "social",
     "commerce-strategist", "lifestyle-scene",
+    "naive-illustration", "logo-abstract", "photo-split-poster", "ppt-visual", "promo-ecommerce",
 ]
 PHASE2_B = [
     "flash-cut-video", "style-transfer", "person-swap",
     "commerce-strategist", "lifestyle-scene",
 ]
-PHASE2_DEFERRED_C = [
+PHASE2_C = [
     "naive-illustration", "logo-abstract", "photo-split-poster", "ppt-visual", "promo-ecommerce",
 ]
+PHASE2_DEFERRED_C = PHASE2_C  # historical name; C is mounted after #735
 PHASE2_DEFERRED_D = ["yingzao", "crt-interface", "crayon-sketch", "fabric-collage"]
 UNTOUCHED = ["interior"]  # custom-workflow removed (no Lovart card)
 
@@ -47,13 +49,14 @@ def _const_ids(name: str) -> list[str]:
 
 def test_phase2_soft_mount_constants():
     assert _const_ids("PHASE2_SKILL_IDS") == PHASE2_MOUNT
-    assert len(PHASE2_MOUNT) == 6 and len(set(PHASE2_MOUNT)) == 6
+    assert len(PHASE2_MOUNT) == 11 and len(set(PHASE2_MOUNT)) == 11
     assert "social" in PHASE2_MOUNT and "fashion-ugc" not in PHASE2_MOUNT
     deferred = _const_ids("PHASE2_DEFERRED_SKILL_IDS")
-    assert deferred == PHASE2_DEFERRED_C + PHASE2_DEFERRED_D
-    # C/D must not be in Soft mount list
-    assert not (set(PHASE2_DEFERRED_C + PHASE2_DEFERRED_D) & set(PHASE2_MOUNT) - {"social"})
-    assert "ppt-visual" not in PHASE2_MOUNT  # C HOLD
+    assert deferred == PHASE2_DEFERRED_D  # #735: only D deferred
+    # D must not be in Soft mount; C is mounted
+    assert not (set(PHASE2_DEFERRED_D) & set(PHASE2_MOUNT))
+    assert set(PHASE2_C) <= set(PHASE2_MOUNT)
+    assert "ppt-visual" in PHASE2_MOUNT  # #735 C unhidden
     assert "#638" in SKILLS_TS and "PRODUCT-LOCK-PHASE2" in SKILLS_TS
     assert "#490" in SKILLS_TS and "HOLD" in SKILLS_TS
 
@@ -66,7 +69,7 @@ def test_order_builtins_phase1_then_phase2_b_then_deferred():
     # Source presence
     assert set(PHASE1) <= set(ids)
     assert set(PHASE2_B) <= set(ids)
-    assert set(PHASE2_DEFERRED_C + PHASE2_DEFERRED_D) <= set(ids)
+    assert set(PHASE2_C + PHASE2_DEFERRED_D) <= set(ids)
     assert all(u in ids for u in UNTOUCHED)
     assert len(ids) == 49  # #640 Phase3-S1
     # Runtime order is orderBuiltins output — assert the exported const lists encode Soft order
@@ -85,7 +88,7 @@ def test_b_washed_mounted_deferred_still_empty_assets():
         assert "featured: feat637(" in e or "featured:" in head, sid
         assert "demo" not in e.lower() and "placeholder.webp" not in e, sid
         assert "lovart" not in e.lower(), sid
-    for sid in PHASE2_DEFERRED_C:  # #636 C5 soft wash landed: cover673 + ex673 + feat673
+    for sid in PHASE2_C:  # #636/#673 C5 wash; #735 mounted
         head = entries[sid].split("inputs:", 1)[0]
         assert f"cover: cover673('{sid}')" in head and f"examples: ex673('{sid}'" in head and f"featured: feat673('{sid}'" in head, sid
         assert "cover637" not in head, sid
@@ -106,7 +109,7 @@ def test_home_skills_same_source_and_chips():
     entries = _entries()
     assert "category: 'website'" in entries["mobile-ui"]
     assert "category: 'website'" in entries["web-product"]
-    assert "category: 'website'" in entries["ppt-visual"]  # data present but deferred
+    assert "category: 'website'" in entries["ppt-visual"]  # #735 mounted (website chip)
     assert "'website'" in SKILLS_TS
 
 

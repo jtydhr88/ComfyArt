@@ -225,15 +225,16 @@ export const PHASE2_NEW_SKILL_IDS = [
 ] as const
 export const PHASE2_NEW_SKILL_ID_SET: ReadonlySet<string> = new Set(PHASE2_NEW_SKILL_IDS)
 
-/** #638 Phase2-S5 Soft mount — PRODUCT-LOCK-PHASE2 Soft order slots 1–6 production-ready (A social upgrade + B NEW5 washed).
- *  `social` also lives in PHASE1_SKILL_IDS (upgrade, no dup card). C deferred5 + D style4 stay unmounted as production (#653/#636-C HOLD; D out of scope). #490 HOLD. */
+/** #638 Phase2-S5 Soft mount — PRODUCT-LOCK-PHASE2 Soft order + #735 C-group wash PASS (unhide).
+ *  `social` also lives in PHASE1_SKILL_IDS (upgrade, no dup card). Slots: A social upgrade + B NEW5 + C NEW5 washed.
+ *  D style4 stays deferred / hidden (Phase4). #490 HOLD. */
 export const PHASE2_SKILL_IDS = [
   'flash-cut-video', 'style-transfer', 'person-swap', 'social', 'commerce-strategist', 'lifestyle-scene',
+  'naive-illustration', 'logo-abstract', 'photo-split-poster', 'ppt-visual', 'promo-ecommerce',
 ] as const
 export const PHASE2_SKILL_ID_SET: ReadonlySet<string> = new Set(PHASE2_SKILL_IDS)
-/** #638 — C deferred .art5 + D style4: data-contract only; do not treat as washed production mount. */
+/** #638/#735 — D style4 only: still data-contract / Phase4; not washed production mount. C moved to PHASE2_SKILL_IDS. */
 export const PHASE2_DEFERRED_SKILL_IDS = [
-  'naive-illustration', 'logo-abstract', 'photo-split-poster', 'ppt-visual', 'promo-ecommerce',
   'yingzao', 'crt-interface', 'crayon-sketch', 'fabric-collage',
 ] as const
 export const PHASE2_DEFERRED_SKILL_ID_SET: ReadonlySet<string> = new Set(PHASE2_DEFERRED_SKILL_IDS)
@@ -241,9 +242,9 @@ export const PHASE2_DEFERRED_SKILL_ID_SET: ReadonlySet<string> = new Set(PHASE2_
  *  all intact, so saved sessions / cards that reference them still open) but are NOT listed anywhere a user or the agent
  *  picks a skill for new work: home featured waterfall + quick-start + category chips, Skills page, 「+ → 技能」 menu,
  *  composer 「/」 picker, and the agent `skill` tool (list + read).
- *  TO RE-LIST A SKILL: once it is washed in #673 and Angela gives PASS, delete its id from this array. Nothing else to change. */
+ *  TO RE-LIST A SKILL: once it is washed in #673 and Angela gives PASS, delete its id from this array. Nothing else to change.
+ *  #735 — C-group 5 removed from this list (Skills page visible); D-group 4 stay hidden. */
 export const HIDDEN_BUILTIN_SKILL_IDS: readonly string[] = [
-  'naive-illustration', 'logo-abstract', 'photo-split-poster', 'ppt-visual', 'promo-ecommerce',
   'yingzao', 'crt-interface', 'crayon-sketch', 'fabric-collage',
 ]
 export const HIDDEN_BUILTIN_SKILL_ID_SET: ReadonlySet<string> = new Set(HIDDEN_BUILTIN_SKILL_IDS)
@@ -264,7 +265,7 @@ export const PHASE3_NEW_SKILL_IDS = [
 ] as const
 export const PHASE3_NEW_SKILL_ID_SET: ReadonlySet<string> = new Set(PHASE3_NEW_SKILL_IDS)
 
-/** Phase1 hot order → Phase2 Soft mount NEW (B) → deferred C/D → untouched / other. */
+/** Phase1 hot order → Phase2 Soft mount NEW (B+C) → deferred D → untouched / other. */
 function orderBuiltins(skills: Skill[]): Skill[] {
   const phase1Rank = new Map<string, number>(PHASE1_SKILL_IDS.map((id, i) => [id, i]))
   // Soft mount NEW only (exclude `social` — already ranked in Phase1)
@@ -292,8 +293,8 @@ function orderBuiltins(skills: Skill[]): Skill[] {
  *  New 6 media: covers-v4 + featured-v2 + 594/wash examples @ WASH_594; dual-fit contain (#602); hover video @ WASH_623_NEW6_VIDEO (#623).
  *  #634 Phase2-S1 — PRODUCT-LOCK-PHASE2: 14 NEW ids (B .ai5 + C deferred.art5 + D style4).
  *  #635 Phase2-S2 — deepen `social` Fashion UGC production instructions/presets/inputs (keep RedNote; no fashion-ugc id).
- *  #636/#637 Phase2-S3/S4 — B NEW5 production + soft wash; C5 HOLD / D out of scope for Soft mount.
- *  #638 Phase2-S5 — Soft mount A+B via PHASE2_SKILL_IDS + orderBuiltins (home + Skills Explore same BUILTIN_SKILLS); C/D deferred; #490 HOLD.
+ *  #636/#637 Phase2-S3/S4 — B NEW5 production + soft wash; C5 later via #673/#735; D Phase4.
+ *  #638 Phase2-S5 — Soft mount A+B via PHASE2_SKILL_IDS + orderBuiltins; #735 mounts C (washed) too; D deferred/hidden; #490 HOLD.
  *  #642 Phase3-S3 — NEW19 NEARMISS_INPUTS field parity (scaffold); assets empty until #643 wash pins.
  *  Skill Creator Out → #650. `interior` untouched. Gold UX site external — never name it in src.
  */
