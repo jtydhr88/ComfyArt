@@ -221,7 +221,7 @@ async def test_hard_cap_stops_and_says_so(monkeypatch, store):
     c = card(ev)
     assert stop_of(res)["reason"] == "hard_cap" and res.error  # announced, not silent
     # no parsable goal and only free steps: no ratio and no credits estimate (EL 6441143985)
-    assert c["copy"]["zh"]["title"] == "先停在这里了" and c["copy"]["zh"]["body"] == "预算到了，要继续吗？"
+    assert c["copy"]["zh"]["title"] == "已自动暂停" and c["copy"]["zh"]["body"] == "已达到单次步数上限，已生成的图会保留。"
     assert (c["copy"]["zh"]["primary"], c["copy"]["zh"]["secondary"]) == ("继续生成", "先到这里")   # no estimate
     assert "5 步" not in res.error and "上限" not in res.error  # the cap number is never shown
     assert len(r.mcp) == 5 and c["can_continue"]

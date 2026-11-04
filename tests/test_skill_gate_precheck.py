@@ -14,7 +14,9 @@ def _run(fn: str, *args: str, env=None):
 def test_rejects_hyphen_worktree(tmp_path):
     d = tmp_path / "wt_foo-bar"; d.mkdir()
     r = _run("gate_check_wt_name", str(d))
-    assert r.returncode == 1 and "contains '-'" in r.stderr
+    assert r.returncode == 1 and "contains '-'" in r.stderr and "use e.g. wt_foobar " in r.stderr
+    q = tmp_path / "qa-711h"; q.mkdir()
+    assert "use e.g. wt_qa711h " in _run("gate_check_wt_name", str(q)).stderr
     ok = tmp_path / "wt_foobar"; ok.mkdir()
     assert _run("gate_check_wt_name", str(ok)).returncode == 0
 
@@ -38,12 +40,14 @@ def test_busy_port_detected():
 
 
 def test_running_pytest_detected():
-    p = subprocess.Popen(["bash", "-c", "exec -a gatefakeproc sleep 30"])
+    # Real default pattern (no GATE_PYTEST_PATTERN override): a process whose cmdline is "python ... -m pytest".
+    import os, sys, time
+    p = subprocess.Popen([sys.executable, "-c", "import time; time.sleep(30)", "-m", "pytest"])
     try:
-        import os
-        env = {**os.environ, "GATE_PYTEST_PATTERN": "gatefakeproc"}
+        time.sleep(0.2)
+        env = {k: v for k, v in os.environ.items() if k != "GATE_PYTEST_PATTERN"}
         r = _run("gate_check_no_pytest", env=env)
-        assert r.returncode == 1 and "another pytest" in r.stderr
+        assert r.returncode == 1 and "another pytest" in r.stderr and str(p.pid) in r.stderr
     finally:
         p.kill()
 
@@ -91,3 +95,18 @@ def test_unowned_interrupted_run_keeps_sentinel(tmp_path):
     time.sleep(0.05); p.send_signal(signal.SIGTERM); p.wait(10)
     assert (wt2 / "node_modules" / "SENTINEL").read_text() == "keep"
     assert not (wt2 / ".gate_owned").exists()
+
+
+def test_collection_error_prints_no_count(tmp_path):
+    # A broken collection must report COLLECTION_ERROR, never a misleading collected=N.
+    src = (LIB.parent / "gate.sh").read_text()
+    assert "collected=COLLECTION_ERROR" in src
+    i_err, i_cnt = src.index("collected=COLLECTION_ERROR"), src.index('collected=${cnt:-?}')
+    assert i_err < i_cnt and "return" in src[i_err:i_cnt]
+
+
+def test_concurrency_checks_run_before_unit():
+    src = (LIB.parent / "gate.sh").read_text()
+    unit = src.index('stage UNIT')
+    assert src.index("gate_check_no_pytest") < unit and src.index("gate_check_ports_free") < unit
+    assert src.index("gate_check_no_pytest", unit) < src.index('stage E2E')

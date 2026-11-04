@@ -1466,7 +1466,7 @@
   "runStop.reason.done": "Delivered",
   "runStop.reason.budget": "Paused at the budget",
   "runStop.reason.stuck": "Stuck",
-  "runStop.reason.hard_cap": "Paused here for now",
+  "runStop.reason.hard_cap": "Paused automatically",
   "runStop.reason.user_stop": "Stopped by you",
   "runStop.reason.error": "Stopped by an error",
   "runStop.sub.paused": "needs your OK",

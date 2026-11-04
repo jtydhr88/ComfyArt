@@ -499,7 +499,7 @@ class TestStepLimit232:
         if os.environ.get("COMFYART_AGENT_BUDGET_LOOP") == "0":   # legacy loop
             assert result.error == "Reached the 3-step limit and stopped; no further charges. Done so far: View canvas ×3."
         else:   # #391: no cap number shown to the user
-            assert result.error == ("Paused here for now; progress is saved. Press Continue to keep going. "
+            assert result.error == ("Paused automatically; progress is saved. Press Continue to keep going. "
                                     "Done so far: View canvas ×3.")
 
 

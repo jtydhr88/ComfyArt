@@ -1466,7 +1466,7 @@
   "runStop.reason.done": "已交付",
   "runStop.reason.budget": "已到预算，暂停",
   "runStop.reason.stuck": "卡住了",
-  "runStop.reason.hard_cap": "先停在这里了",
+  "runStop.reason.hard_cap": "已自动暂停",
   "runStop.reason.user_stop": "你已停止",
   "runStop.reason.error": "出错停止",
   "runStop.sub.paused": "需要你确认",

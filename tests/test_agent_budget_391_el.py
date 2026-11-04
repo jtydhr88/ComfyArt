@@ -188,7 +188,7 @@ def test_stop_enum_is_locked():
 LOCKED = {
     "done": ("已完成", "生成了 {n} 张，已放到画布上", None, None),
     "budget": ("已自动暂停", "{reason}", "继续生成", "先到这里"),
-    "hard_cap": ("先停在这里了", "已完成 {n}/{m}，继续大约需要 {x} 积分", "继续生成", "先到这里"),
+    "hard_cap": ("已自动暂停", "已完成 {n}/{m}，继续大约需要 {x} 积分", "继续生成", "先到这里"),
     "stuck": ("已暂停", "{reason}", "继续生成", "先到这里"),
     "stuck:self_check_failed": ("结果未通过自检", "已交付 {n} 张，还差：{miss}", "继续", None),
     "user_stop": ("已停止", "已保留生成的 {n} 张", "继续", None),
@@ -211,7 +211,7 @@ async def test_card_has_collapsed_plain_details_without_caps(monkeypatch, store)
             store=store)
     res, ev = await r.send("画 4 张猫")
     c = card(ev)
-    assert c["copy"]["zh"]["title"] == "先停在这里了" and c["copy"]["zh"]["secondary"] == "先到这里"  # no estimate: sentence hidden, buttons kept
+    assert c["copy"]["zh"]["title"] == "已自动暂停" and c["copy"]["zh"]["secondary"] == "先到这里"  # no estimate: sentence hidden, buttons kept
     assert c["copy"]["zh"]["body"] == c["copy"]["zh"]["body"].replace("上限", "") and "4 步" not in c["copy"]["zh"]["body"]
     zh = c["details"]["zh"]
     assert [x.split(" ")[0] for x in zh] == ["步数", agent_loop.DETAIL_TOKEN_LABEL["zh"], "积分", "用时"]
@@ -293,7 +293,7 @@ async def test_no_image_target_budget_card_asks(monkeypatch, store):
             store=store)
     res, ev = await r.send("加字", goal="")
     zh = card(ev)["copy"]["zh"]["body"]
-    assert zh == "预算到了，要继续吗？" and "/" not in zh
+    assert zh == "已达到单次步数上限，已生成的图会保留。" and "/" not in zh
     c = card(ev)["copy"]["zh"]
     assert (c["primary"], c["secondary"]) == ("继续生成", "先到这里")
 

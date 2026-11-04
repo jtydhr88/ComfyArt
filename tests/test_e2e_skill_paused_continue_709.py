@@ -110,7 +110,7 @@ def test_budget_exhausted_plain_reason_primary_continue_keeps_images(monkeypatch
     b = card(ev)
     assert b["can_continue"] and b["run_id"] == rid
     mins = max(1, round(res.run["log"]["wall_s"] / 60))
-    want = f"已运行 {mins} 分钟，达到单次时长上限。已生成的图保留在画布上。"
+    want = f"已运行 {mins} 分钟，达到单次时长上限，已生成的图会保留。"
     shot = str(Path(SHOT) / "paused_budget_time_zh.png") if SHOT else None
     card_el, got = ui_continue(page, b, want, shot, title="已自动暂停")
     assert got == rid
@@ -129,7 +129,7 @@ def test_stuck_plain_reason_and_primary_continue_resumes_same_run(monkeypatch, s
     assert s["reason"] == "stuck" and store.get_run(rid)["status"] == "paused"
     b = card(ev)
     assert s["sub"] == "same_tool", s
-    want = "连续重复同一步，已停下"
+    want = "连续重复同一步，已停下。"
     assert b["copy"]["zh"]["body"] == want and "reason" not in b["copy"]["zh"] and b["copy"]["action"] == "continue"
     shot = str(Path(SHOT) / "paused_stuck_same_tool_zh.png") if SHOT else None
     assert ui_continue(page, b, want, shot, title="已暂停")[1] == rid
@@ -148,7 +148,23 @@ def test_stuck_timeout_plain_reason_and_primary_continue_resumes_same_run(monkey
     s, rid = stop_of(res), res.run["run_id"]
     assert (s["reason"], s["sub"]) == ("stuck", "timeout") and store.get_run(rid)["status"] == "paused"
     shot = str(Path(SHOT) / "paused_wait_timeout_zh.png") if SHOT else None
-    assert ui_continue(page, card(ev), "等待生成结果超过 11 分钟", shot, title="已暂停")[1] == rid
+    assert ui_continue(page, card(ev), "等待生成结果超过 11 分钟。", shot, title="已暂停")[1] == rid
+    resume_to_done(monkeypatch, store, rid)
+
+
+def test_hard_cap_unified_title_plain_body_primary_continue(monkeypatch, store, page):
+    r = Rig(monkeypatch, lambda m, n: calls(("add_text", {"text": f"x{n}"})), policy={"hard_cap_steps": 3},
+            store=store)
+    res, ev = arun(r.send("加字", goal=""))
+    s, rid = stop_of(res), res.run["run_id"]
+    assert s["reason"] == "hard_cap" and store.get_run(rid)["status"] == "paused"
+    b = card(ev)
+    want = "已达到单次步数上限，已生成的图会保留。"
+    assert (b["copy"]["zh"]["title"], b["copy"]["zh"]["body"]) == ("已自动暂停", want)
+    assert (b["copy"]["zh"]["primary"], b["copy"]["zh"]["secondary"]) == ("继续生成", "先到这里")
+    shot = str(Path(SHOT) / "paused_hard_cap_zh.png") if SHOT else None
+    card_el, got = ui_continue(page, b, want, shot, title="已自动暂停")
+    assert got == rid and card_el.locator("button.ca-panel__secondary").inner_text() == "先到这里"
     resume_to_done(monkeypatch, store, rid)
 
 

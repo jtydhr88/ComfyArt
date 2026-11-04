@@ -27,6 +27,10 @@ trap 'RC=130; exit 130' INT TERM
 gate_check_wt_name "$W" || { RC=2; exit 2; }
 gate_check_no_node_modules "$W" || { RC=2; exit 2; }
 [ -e "$W/.gate_owned" ] && { echo "GATE_FAIL: $W/.gate_owned exists (another gate run, or stale marker: remove it)" >&2; RC=2; exit 2; }
+# concurrency pre-checks before ANY pytest stage (repeated before E2E)
+gate_check_no_pytest || { RC=2; exit 2; }
+# shellcheck disable=SC2086
+gate_check_ports_free ${GATE_PORTS:-9392} || { RC=2; exit 2; }
 cd "$W"; echo "$$" > .gate_owned; cp -al "$MAIN/node_modules" node_modules
 
 npx tsc --noEmit -p . >"$LOGDIR/tsc.log" 2>&1 && echo "$S TSC_OK" || fail "tsc (see $LOGDIR/tsc.log)"
@@ -34,9 +38,12 @@ npx tsc --noEmit -p . >"$LOGDIR/tsc.log" 2>&1 && echo "$S TSC_OK" || fail "tsc (
 stage() { # name, -k expr
   local n=$1 k=$2 co
   "$PY" -m pytest -q -p no:cacheprovider --co tests -k "$k" >"$LOGDIR/$n.collect.log" 2>&1; co=$?
+  if [ "$co" != 0 ]; then   # no count on a broken collection (pytest's partial N would mislead)
+    echo "$S $n: collected=COLLECTION_ERROR collect_exit=$co"; tail -20 "$LOGDIR/$n.collect.log"
+    fail "$n collection exit $co"; return
+  fi
   local cnt; cnt=$(grep -oE '^[0-9]+(/[0-9]+)? tests? (collected|selected)' "$LOGDIR/$n.collect.log" | grep -oE '^[0-9]+' | head -1)
   echo "$S $n: collected=${cnt:-?} collect_exit=$co"
-  [ "$co" = 0 ] || { fail "$n collection exit $co"; tail -20 "$LOGDIR/$n.collect.log"; }
   "$PY" -m pytest -q -p no:cacheprovider tests -k "$k" >"$LOGDIR/$n.log" 2>&1; local ec=$?
   grep -E "^FAILED|^ERROR|passed|failed" "$LOGDIR/$n.log" | sed "s/^/$S $n: /"
   echo "$S $n: exit=$ec"

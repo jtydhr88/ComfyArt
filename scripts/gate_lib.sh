@@ -1,12 +1,13 @@
 # shellcheck shell=bash
-# Pre-check helpers for scripts/gate.sh. Sourced by gate.sh and tests/test_gate_precheck.py.
+# Pre-check helpers for scripts/gate.sh. Sourced by gate.sh and tests/test_skill_gate_precheck.py.
 
 gate_die() { echo "GATE_FAIL: $*" >&2; return 1; }
 
 # Reject worktree dirs whose basename has a hyphen (breaks python imports of the checkout).
 gate_check_wt_name() {
-  local base; base=$(basename "$1")
-  case "$base" in *-*) gate_die "worktree name '$base' contains '-'; use e.g. wt_${base//-/} (hyphens break imports)"; return 1;; esac
+  local base sug; base=$(basename "$1"); sug=${base//-/}
+  case "$sug" in wt_*) ;; *) sug="wt_$sug";; esac
+  case "$base" in *-*) gate_die "worktree name '$base' contains '-'; use e.g. $sug (hyphens break imports)"; return 1;; esac
   [ -d "$1" ] || { gate_die "worktree dir $1 not found"; return 1; }
 }
 
@@ -21,7 +22,7 @@ gate_check_no_node_modules() {
 gate_check_no_pytest() {
   local pids; pids=$(pgrep -f "${GATE_PYTEST_PATTERN:-python.* -m pytest}" | grep -vx "$$" || true)
   if [ -n "$pids" ]; then
-    gate_die "another pytest is running (pids: $(echo $pids)); wait or kill it before e2e"; return 1
+    gate_die "another pytest is running (pids: $(echo $pids)); wait or kill it before running the gate"; return 1
   fi
 }
 

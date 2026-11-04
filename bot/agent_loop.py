@@ -61,8 +61,8 @@ _STOP_TEXT = {
     "stuck": {"zh": "任务卡住了（{sub}），停在第 {step} 步，换思路重试后仍无进展，已停止，未继续扣费。",
                 "en": "The task is stuck ({sub}) at step {step}; still no progress after trying another "
                       "approach, so it stopped with no further charges."},
-    "hard_cap": {"zh": "先停在这里了，进度已保存，点「继续」接着做。",
-                 "en": "Paused here for now; progress is saved. Press Continue to keep going."},
+    "hard_cap": {"zh": "已自动暂停，进度已保存，点「继续」接着做。",
+                 "en": "Paused automatically; progress is saved. Press Continue to keep going."},
     "error:llm_retry_exhausted": {"zh": "{detail}", "en": "{detail}"},
     "error:tool": {"zh": "工具出错：{detail}", "en": "Tool error: {detail}"},
 }
@@ -356,8 +356,8 @@ CARD_COPY = {
     "budget": {"zh": ("已自动暂停", "{reason}", "继续生成", "先到这里"),
                "en": ("Paused automatically", "{reason}", "Continue generating",
                       "Stop here")},
-    "hard_cap": {"zh": ("先停在这里了", "已完成 {n}/{m}，继续大约需要 {x} 积分", "继续生成", "先到这里"),
-                 "en": ("Paused here for now", "{n}/{m} done; continuing needs about {x} credits", "Continue generating",
+    "hard_cap": {"zh": ("已自动暂停", "已完成 {n}/{m}，继续大约需要 {x} 积分", "继续生成", "先到这里"),
+                 "en": ("Paused automatically", "{n}/{m} done; continuing needs about {x} credits", "Continue generating",
                         "Stop here")},
     "stuck": {"zh": ("已暂停", "{reason}", "继续生成", "先到这里"),
               "en": ("Paused", "{reason}", "Continue generating", "Stop here")},
@@ -379,25 +379,25 @@ CARD_COPY = {
 # #418: label for a card still WAITING on the user (pending, not a stop). Must differ from the
 # awaiting_confirm:not_approved stop title so a pending card and an unapproved one never read the same.
 PENDING_CONFIRM_LABEL = {"zh": "等待确认", "en": "Awaiting confirmation"}
-# primary button action: continue the run from its checkpoint | rephrase (focus the composer) | retry
+# primary button action: continue (resume the run from its checkpoint) | retry; #709 removed rephrase
 _PRIMARY_ACTION = {"error": "retry"}  # #709: stuck primary = 继续生成 (continue)
 # #709: every paused card names WHY it paused (one plain line) and stuck cards also offer 继续, which resumes
 # the same run from its checkpoint (agent_loop resume: fresh progress window for stuck, +1 budget for budget).
 # #709 UIUX: the card's reason is a plain sentence (never stuck:* / budget:* codes).
 _STUCK_REASON = {
-    "zh": {"no_progress": "连续几步都没有新产出，自动暂停", "repeat": "同一个操作反复出现，自动暂停",
-           "tool_error": "工具连续出错，自动暂停", "readonly_limit": "连续多步只在查看、没有生成，自动暂停",
-           "same_tool": "连续重复同一步，已停下", "non_retryable": "工具返回了无法重试的错误，已暂停",
-           "budget": "生成和工具调用次数到了本次上限，自动暂停",
-           "timeout": "等待生成结果超过 {N} 分钟"},
-    "en": {"no_progress": "No new output for several steps, paused automatically",
-           "repeat": "The same action kept repeating, paused automatically",
-           "tool_error": "A tool failed several times in a row, paused automatically",
-           "readonly_limit": "Several steps only looked and made nothing, paused automatically",
-           "same_tool": "Repeated the same step in a row, stopped",
-           "non_retryable": "A tool returned an error that can't be retried, paused",
-           "budget": "Generation and tool calls reached this run's limit, paused automatically",
-           "timeout": "Waited over {N} min for the result"},
+    "zh": {"no_progress": "连续几步都没有新产出，自动暂停。", "repeat": "同一个操作反复出现，自动暂停。",
+           "tool_error": "工具连续出错，自动暂停。", "readonly_limit": "连续多步只在查看、没有生成，自动暂停。",
+           "same_tool": "连续重复同一步，已停下。", "non_retryable": "工具返回了无法重试的错误，已暂停。",
+           "budget": "生成和工具调用次数到了本次上限，自动暂停。",
+           "timeout": "等待生成结果超过 {N} 分钟。"},
+    "en": {"no_progress": "No new output for several steps, paused automatically.",
+           "repeat": "The same action kept repeating, paused automatically.",
+           "tool_error": "A tool failed several times in a row, paused automatically.",
+           "readonly_limit": "Several steps only looked and made nothing, paused automatically.",
+           "same_tool": "Repeated the same step in a row, stopped.",
+           "non_retryable": "A tool returned an error that can't be retried, paused.",
+           "budget": "Generation and tool calls reached this run's limit, paused automatically.",
+           "timeout": "Waited over {N} min for the result."},
 }
 _CONTINUE_LABEL = {"zh": "继续生成", "en": "Continue generating"}
 
@@ -407,8 +407,8 @@ def _budget_reason(ctx: "RunContext", dim: str, lk: str) -> str:
     u = ctx.budget.used
     if dim == "time":
         mins = max(1, int(round(u.wall_s / 60)))
-        return (f"已运行 {mins} 分钟，达到单次时长上限。已生成的图保留在画布上。" if lk == "zh" else
-                f"Ran for {mins} min, reaching the per-run time limit. Images already made stay on the canvas.")
+        return (f"已运行 {mins} 分钟，达到单次时长上限，已生成的图会保留。" if lk == "zh" else
+                f"Ran for {mins} min, reached the per-run time limit; images made are kept.")
     if dim == "credits":
         c = ui_credits(u.credits)
         return (f"已用 {c} 积分，达到单次积分上限。已生成的图保留在画布上。" if lk == "zh" else
@@ -438,10 +438,10 @@ _DETAIL_LABEL = {"zh": ("步数", DETAIL_TOKEN_LABEL["zh"], "积分", "用时"),
 _UNIT = {"zh": {"image": "张", "video": "段视频", "text": "条文案", "": "个结果"},
          "en": {"image": "images", "video": "videos", "text": "texts", "": "results"}}
 _FRAG = {
-    "zh": {"progress": "已完成 {n}/{m}", "ask": "预算到了，要继续吗？", "est": "，继续大约需要 {x} 积分",
+    "zh": {"progress": "已完成 {n}/{m}", "ask": "已达到单次步数上限，已生成的图会保留。", "est": "，继续大约需要 {x} 积分",
            "done": "已完成", "kept": "已保留生成的 {n} {u}", "kept_none": "进度已保存", "free": "未扣费", "declined": "报价没有确认，不会扣费",
            "self_check": "已交付 {n} {u}，还差：{miss}"},
-    "en": {"progress": "{n}/{m} done", "ask": "Budget reached. Continue?", "est": "; continuing needs about {x} credits",
+    "en": {"progress": "{n}/{m} done", "ask": "Reached the per-run step limit; images made are kept.", "est": "; continuing needs about {x} credits",
            "done": "Done", "kept": "Kept the {n} {u} already generated", "kept_none": "Progress saved",
            "free": "Nothing charged", "declined": "Quote not confirmed, so no charge", "self_check": "Delivered {n} {u}; still missing: {miss}"},
 }

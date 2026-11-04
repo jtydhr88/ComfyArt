@@ -182,7 +182,7 @@ CASES: list[Case] = [
          [{"zh": "把这 400 条标语逐条加到画布上", "en": "Add these 400 slogans to the canvas one by one"}],
          [Step(calls=[("add_text", {"text": f"slogan {i}"})]) for i in range(301)],
          ["add_text"] * 300, 0, {"text": 300}, limit=300, status="error",
-         error={"zh": "先停在这里了", "en": "Paused here for now"}, llm_requests=300, extra="hard_cap",
+         error={"zh": "已自动暂停", "en": "Paused automatically"}, llm_requests=300, extra="hard_cap",
          # the token budget must not end a 300-step run first: this case tests the step cap only
          settings={"agent-token-window-multiple": 200}),
     Case("15-readonly", "#391 read-only steps are not 'no progress' up to 8 in a row, then stuck",
