@@ -33,12 +33,10 @@ CHARACTER_V2 = "https://raw.githubusercontent.com/ganjmeng/ComfyArt/b63d44ea6108
 MOTION = [("海报动画", "Poster Animation", "01-poster-animation"),
           ("首帧到末帧动画", "First-to-Last Frame Animation", "02-first-to-last-frame-animation")]
 # (zh label, type, required) — 当前模板 is the dialog's own preset row, so each template skill has 3 data inputs.
+# #687: brand / packaging / character → reference-card Upload + Additional; motion → Reference Video Remake
+# (locked in tests/test_skill_fields_687.py). product keeps the #569 three fields.
 INPUTS = {
-    "brand": [("品牌资料", "text", True), ("品牌素材", "image", False), ("视觉呈现方式", "text", False)],
-    "packaging": [("商品与包装资料", "text", True), ("商品与包装素材", "image", False), ("视觉呈现方式", "text", False)],
-    "character": [("角色参考图片", "image", False), ("角色资料", "text", False), ("视觉呈现方式", "text", False)],
     "product": [("商品图片", "image", True), ("商品资料", "text", False), ("视觉呈现方式", "text", False)],
-    "motion": [("静态原稿", "image", True), ("动态要求", "text", False), ("视觉呈现方式", "text", False)],
 }
 
 
