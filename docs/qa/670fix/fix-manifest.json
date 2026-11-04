@@ -1,0 +1,63 @@
+{
+ "2": {
+  "webp_quality": 90,
+  "bytes": 345706,
+  "outside_mask_meanAbs_vs_main": 0.443,
+  "outside_mask_max_vs_main": 14,
+  "face_lum_delta_vs_main": 0.07,
+  "face_lum_delta_vs_gold": 0.39,
+  "mask_area_pct": 0.379
+ },
+ "3": {
+  "webp_quality": 90,
+  "bytes": 262394,
+  "outside_mask_meanAbs_vs_main": 0.454,
+  "outside_mask_max_vs_main": 12,
+  "face_lum_delta_vs_main": 0.3,
+  "face_lum_delta_vs_gold": 0.61,
+  "mask_area_pct": 0.54
+ },
+ "method": {
+  "model": "kie gpt-image-2-5-flare-image-to-image",
+  "crop_512_upscaled_1024": {
+   "02": [
+    624,
+    60
+   ],
+   "03": [
+    430,
+    60
+   ]
+  },
+  "ellipses(cx,cy,rx,ry)": {
+   "02": [
+    [
+     880,
+     318,
+     55,
+     34
+    ]
+   ],
+   "03": [
+    [
+     712,
+     300,
+     28,
+     22
+    ],
+    [
+     625,
+     338,
+     58,
+     32
+    ]
+   ]
+  },
+  "feather_gaussian_px": 9,
+  "encode": "webp lossy q90 method6 (tech lead decision on #714)"
+ },
+ "prompts": {
+  "2": "Edit this exact close-up photo minimally. Keep the same woman, identity, face shape, nose, eyes, skin tone, hair, light direction, color grade and film grain identical. ONLY fix the mouth: the lips are deformed (doubled lip line, smeared upper lip). Redraw a natural, attractive, closed relaxed mouth with a clean single lip line, natural upper and lower lip shape matching her face and the hard side light, realistic photographic lip and skin texture. No text, no makeup change.",
+  "3": "Edit this exact close-up photo minimally. Keep the same woman, identity, face shape, nose, eyes, lips, skin tone, hair, light direction, color grade and film grain identical. ONLY fix two defects: (1) the dark smudge on the philtrum between the nose and upper lip — make it clean natural skin with a subtle philtrum groove; (2) the faint semi-transparent ghost hair strands overlapping the cheek and jawline on the left — remove them so the jaw and cheek are clean skin with a crisp jaw edge. Realistic photographic skin texture. No text."
+ }
+}

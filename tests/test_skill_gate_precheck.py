@@ -110,3 +110,14 @@ def test_concurrency_checks_run_before_unit():
     unit = src.index('stage UNIT')
     assert src.index("gate_check_no_pytest") < unit and src.index("gate_check_ports_free") < unit
     assert src.index("gate_check_no_pytest", unit) < src.index('stage E2E')
+
+
+def test_collection_error_tail_drops_pytest_count_line(tmp_path):
+    log = tmp_path / "u.collect.log"
+    log.write_text("ERROR tests/test_bad.py - SyntaxError\n"
+                   "345/3075 tests collected (2730 deselected), 1 error in 2.10s\n"
+                   "1 test collected, 1 error in 0.1s\n")
+    r = _run("gate_collect_err_tail", str(log))
+    assert r.returncode == 0
+    assert "SyntaxError" in r.stdout and "collected" not in r.stdout
+    assert "gate_collect_err_tail" in (LIB.parent / "gate.sh").read_text()
