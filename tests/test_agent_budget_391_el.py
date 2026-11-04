@@ -187,9 +187,9 @@ def test_stop_enum_is_locked():
 
 LOCKED = {
     "done": ("已完成", "生成了 {n} 张，已放到画布上", None, None),
-    "budget": ("预算用完了", "已完成 {n}/{m}，继续大约需要 {x} 积分", "继续", "先到这里"),
-    "hard_cap": ("先停在这里了", "已完成 {n}/{m}，继续大约需要 {x} 积分", "继续", "先到这里"),
-    "stuck": ("卡住了", "卡在：{step}", "换个说法再试", None),
+    "budget": ("已自动暂停", "{reason}", "继续生成", "先到这里"),
+    "hard_cap": ("先停在这里了", "已完成 {n}/{m}，继续大约需要 {x} 积分", "继续生成", "先到这里"),
+    "stuck": ("已暂停", "{reason}", "继续生成", "先到这里"),
     "stuck:self_check_failed": ("结果未通过自检", "已交付 {n} 张，还差：{miss}", "继续", None),
     "user_stop": ("已停止", "已保留生成的 {n} 张", "继续", None),
     "user_stop:quote_declined": ("已取消", "报价没有确认，不会扣费；已保留之前生成的 {n} 张", "继续", None),
@@ -226,8 +226,10 @@ async def test_stuck_card_names_the_step(monkeypatch, store):
     c = card(ev)
     assert stop_of(res)["reason"] == "stuck"
     body = c["copy"]["zh"]["body"]
-    assert body.startswith("卡在：") and len(body) > len("卡在：")
-    assert c["copy"]["zh"]["primary"] == "换个说法再试" and c["copy"]["action"] == "rephrase"
+    # #709: stuck card = one plain sentence, 先到这里 / 继续生成 only (换个说法再试 removed)
+    assert body == agent_loop._STUCK_REASON["zh"][stop_of(res)["sub"]] and "reason" not in c["copy"]["zh"]
+    assert (c["copy"]["zh"]["title"], c["copy"]["zh"]["primary"], c["copy"]["zh"]["secondary"]) == ("已暂停", "继续生成", "先到这里")
+    assert c["copy"]["action"] == "continue" and "continue" not in c["copy"]["zh"]
 
 
 async def test_quote_declined_card_is_neutral_and_free(monkeypatch, store):
@@ -273,8 +275,8 @@ async def test_no_estimate_means_no_credits_sentence_and_keeps_both_buttons(monk
     res, ev = await r.send("画 4 张猫")
     c = card(ev)["copy"]
     assert c["zh"]["body"] == "已完成 0/4" and "积分" not in c["zh"]["body"] and "credits" not in c["en"]["body"]
-    assert (c["zh"]["primary"], c["zh"]["secondary"]) == ("继续", "先到这里")
-    assert (c["en"]["primary"], c["en"]["secondary"]) == ("Continue", "Stop here")
+    assert (c["zh"]["primary"], c["zh"]["secondary"]) == ("继续生成", "先到这里")
+    assert (c["en"]["primary"], c["en"]["secondary"]) == ("Continue generating", "Stop here")
 
 
 async def test_real_estimate_keeps_the_locked_sentence(monkeypatch, store):
@@ -283,7 +285,7 @@ async def test_real_estimate_keeps_the_locked_sentence(monkeypatch, store):
     res, ev = await r.send("画 4 张猫")
     c = card(ev)["copy"]["zh"]
     assert re.fullmatch(r"已完成 \d/4，继续大约需要 [1-9]\d* 积分", c["body"]), c["body"]
-    assert (c["primary"], c["secondary"]) == ("继续", "先到这里")
+    assert (c["primary"], c["secondary"]) == ("继续生成", "先到这里")
 
 
 async def test_no_image_target_budget_card_asks(monkeypatch, store):
@@ -293,7 +295,7 @@ async def test_no_image_target_budget_card_asks(monkeypatch, store):
     zh = card(ev)["copy"]["zh"]["body"]
     assert zh == "预算到了，要继续吗？" and "/" not in zh
     c = card(ev)["copy"]["zh"]
-    assert (c["primary"], c["secondary"]) == ("继续", "先到这里")
+    assert (c["primary"], c["secondary"]) == ("继续生成", "先到这里")
 
 
 async def test_chat_done_body_is_neutral(monkeypatch, store):

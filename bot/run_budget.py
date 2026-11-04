@@ -46,7 +46,7 @@ class StopReason(str, Enum):
 SUB_REASONS: dict[StopReason, frozenset[str]] = {
     StopReason.DONE: frozenset({""}),
     StopReason.BUDGET: frozenset({"paused", "exhausted", "unattended_skipped"}),
-    StopReason.STUCK: frozenset({"no_progress", "repeat", "tool_error", "readonly_limit", "self_check_failed"}),
+    StopReason.STUCK: frozenset({"no_progress", "repeat", "tool_error", "readonly_limit", "self_check_failed", "same_tool", "non_retryable", "budget", "timeout"}),
     StopReason.HARD_CAP: frozenset({""}),
     StopReason.USER_STOP: frozenset({"", "quote_declined"}),
     StopReason.AWAITING_CONFIRM: frozenset({"not_approved"}),
@@ -91,6 +91,8 @@ LEGACY_MAX_STEPS_ENV = "COMFYART_AGENT_MAX_STEPS"
 SYSTEM_DEFAULTS: dict[str, Any] = {
     FEATURE_FLAG: True,
     "hard_cap_steps": 300,
+    "max_tool_calls": 30,           # #705: paid/external tool calls per run (generate_image: planned images + 2)
+    "max_all_tool_calls": 300,      # #705: backstop, tool calls of any kind per run
     "token_window_multiple": 40,    # per-run token cap = 40 x model window; every request's re-sent input counts
     "wall_time_s": 15 * 60,
     "credits_usd": 5.0,             # paid ceiling per run; every paid call is also capped by its quote
@@ -408,6 +410,13 @@ READ_ONLY_TOOLS = frozenset({
     "ToolSearch", "tool_search", "read_skill", "list_skills", "memory_read", "read_memory",
     "web_search", "web_fetch", "search", "get_shape", "list_shapes", "wait_generation",
 })
+
+
+def _capped_readonly(tool: str) -> bool:
+    base = re.sub(r"^mcp__\w+__", "", tool or "")
+    return base == "skill" or (base in READ_ONLY_TOOLS and base != "wait_generation")
+
+
 _VOLATILE_RE = re.compile(
     r'"(?:elapsed[_a-z]*|duration[_a-z]*|time|timestamp|ts|until|updated_at|created_at|now|request_id)"\s*:\s*[^,}\]]+')
 _NUM_TS_RE = re.compile(r"\b1[6-9]\d{8,11}\b")
@@ -452,6 +461,9 @@ class StepObservation:
     failed: bool = False
 
 
+DEFAULT_PLANNED_IMAGES = 4  # generate_image page clamp (plan_quote.units_of)
+
+
 @dataclass
 class ProgressTracker:
     stall_steps: int = 4
@@ -464,6 +476,24 @@ class ProgressTracker:
     fail_run: int = 0
     last_call: str = ""
     repeat_run: int = 0
+    same_tool_max: int = 3   # #705 P1: >3 consecutive steps calling only the same tool = hard stop
+    # #705 budget caps (tech lead): <= 30 PAID/external calls (guide.PAID_TOOLS: WaveSpeed generate/edit/video/...;
+    # local tools like add_text do not count), <= 300 calls of any tool (backstop), generate_image <= planned + 2.
+    # No per-run plan count exists yet and skills declare none, so planned falls back to the page's max batch (4).
+    tool_calls_max: int = 30
+    all_calls_max: int = 300
+    paid_calls: int = 0
+    planned_images: int = 0
+    total_calls: int = 0
+    gen_calls: int = 0
+    # #705: wait_generation is outside the 30 cap but each task gets max 10 min OR 120 polls -> stuck:timeout
+    wait_max_s: float = 600.0
+    wait_max_polls: int = 120
+    wait_first: dict = field(default_factory=dict)   # task id -> run-clock time of first poll
+    wait_waited_s: float = 0.0                       # #709: longest wait so far (run clock), for the card copy
+    wait_polls: dict = field(default_factory=dict)   # task id -> polls so far
+    last_tool: str = ""
+    same_tool_run: int = 0
     nudged: bool = False
     seen_artifacts: list = field(default_factory=list)
     stuck_at: int = 0
@@ -506,15 +536,62 @@ class ProgressTracker:
             if self.unchanged >= self.stall_steps:
                 return self._stall(step, "no_progress")
         self.last_fp = fp
+        # #705 P1: one step = one assistant message, so a parallel batch (4x generate_image) counts once;
+        # a step that lands a new artifact (shape / job id) is progress and resets the run.
+        tools = {o.tool for o in obs if o.tool not in READ_ONLY_TOOLS}
+        step_tool = next(iter(tools)) if len(tools) == 1 else ""
+        if new_ids or not step_tool:
+            self.same_tool_run = 0
+        else:
+            self.same_tool_run = self.same_tool_run + 1 if step_tool == self.last_tool else 1
+        self.last_tool = step_tool
+        if self.same_tool_run > self.same_tool_max:
+            return self._stall(step, "same_tool")
         return None
 
     def _stall(self, step: int, sub: str) -> str:
         self.stuck_at = step
         return sub
 
+    def gen_cap(self) -> int:
+        return (self.planned_images or DEFAULT_PLANNED_IMAGES) + 2
+
+    def over_budget(self, obs: list[StepObservation]) -> bool:
+        """#705: count this step's calls; True once the run exceeds the tool-call or generate_image cap (never reset)."""
+        from .guide import PAID_TOOLS
+        self.total_calls += len(obs)
+        # #705: paid/external calls AND read-only calls (skill reads, views; not wait_generation polls) share the
+        # 30 cap, so a read-only loop (stuck:repeat style) cannot run past it either.
+        self.paid_calls += sum(1 for o in obs if o.tool in PAID_TOOLS or _capped_readonly(o.tool))
+        self.gen_calls += sum(1 for o in obs if o.tool == "generate_image")
+        return (self.paid_calls > self.tool_calls_max or self.total_calls > self.all_calls_max
+                or self.gen_calls > self.gen_cap())
+
+    def wait_timeout(self, obs: list[StepObservation], now: Optional[float] = None) -> bool:
+        """#705: True once any task polled by wait_generation passes wait_max_s since its first poll or wait_max_polls."""
+        # #709: callers pass the run's clock (time.monotonic-based, same as the other loop caps)
+        now = time.monotonic() if now is None else now
+        hit = False
+        for o in obs:
+            if re.sub(r"^mcp__\w+__", "", o.tool or "") != "wait_generation":
+                continue
+            try:
+                args = json.loads(o.args_key.split("\x00", 1)[1])
+            except (IndexError, ValueError):
+                args = {}
+            ids = args.get("ids") if isinstance(args, dict) else None
+            ids = [str(i) for i in ids] if isinstance(ids, list) and ids else ["*"]
+            for i in ids:
+                self.wait_first.setdefault(i, now)
+                self.wait_polls[i] = self.wait_polls.get(i, 0) + 1
+                self.wait_waited_s = max(self.wait_waited_s, now - self.wait_first[i])
+                if self.wait_polls[i] > self.wait_max_polls or now - self.wait_first[i] > self.wait_max_s:
+                    hit = True
+        return hit
+
     def reset_after_nudge(self) -> None:
         self.nudged = True
-        self.unchanged = self.readonly_run = self.fail_run = self.repeat_run = 0
+        self.unchanged = self.readonly_run = self.fail_run = self.repeat_run = self.same_tool_run = 0
         self.last_call = ""
 
     def snapshot(self) -> dict:

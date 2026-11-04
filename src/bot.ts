@@ -78,7 +78,7 @@ export interface BotBlock {
   submitted?: number
   notify?: boolean
 }
-export interface RunStopText { title: string; body: string; primary: string | null; secondary: string | null }
+export interface RunStopText { title: string; body: string; primary: string | null; secondary: string | null; reason?: string; continue?: string }
 export interface RunStopCopy { key: string; action: 'continue' | 'rephrase' | 'retry'; tone: 'ok' | 'warn' | 'error' | 'neutral'; zh: RunStopText; en: RunStopText }
 export interface RunBudgetMeter { used: number; limit: number; pct: number }
 export interface RunBudgetView { run_id?: string; step: number; hard_cap: number; tokens: RunBudgetMeter; credits: RunBudgetMeter; time: RunBudgetMeter; soft: boolean }

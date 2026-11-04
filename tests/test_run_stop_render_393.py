@@ -23,9 +23,10 @@ TONE = {"done": "ok", "budget": "warn", "hard_cap": "warn", "stuck": "warn", "st
         "awaiting_confirm:not_approved": "warn"}
 # (copy key, body args): the same 11 cards as the #78 sheet
 CARDS = [("done", dict(n=4, m=4, x=None, kind="image")), ("done", dict(n=0, m=None, x=None, kind="")),
-         ("budget", dict(n=3, m=4, x=40, kind="image")), ("hard_cap", dict(n=3, m=4, x=None, kind="image")),
-         ("budget", dict(n=0, m=None, x=None, kind="")),
-         ("stuck", dict(n=0, m=None, x=None, kind="", step={"zh": "生成图片", "en": "Generate image"})),
+         ("budget", dict(n=3, m=4, x=40, kind="image", reason={"zh": "已运行 15 分钟，达到单次时长上限。已生成的图保留在画布上。", "en": "Ran for 15 min, reaching the per-run time limit. Images already made stay on the canvas."})), ("hard_cap", dict(n=3, m=4, x=None, kind="image")),
+         ("budget", dict(n=0, m=None, x=None, kind="", reason={"zh": "已运行 15 分钟，达到单次时长上限。已生成的图保留在画布上。", "en": "Ran for 15 min, reaching the per-run time limit. Images already made stay on the canvas."})),
+         ("stuck", dict(n=0, m=None, x=None, kind="", step={"zh": "生成图片", "en": "Generate image"},
+                            reason={"zh": "连续重复同一步，已停下", "en": "Repeated the same step in a row, stopped"})),
          ("stuck:self_check_failed", dict(n=3, m=4, x=None, kind="image", miss={"zh": "1 张图", "en": "1 image"})),
          ("user_stop", dict(n=3, m=4, x=None, kind="image")),
          ("user_stop:quote_declined", dict(n=3, m=4, x=None, kind="image")),

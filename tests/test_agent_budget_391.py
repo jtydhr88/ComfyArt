@@ -222,7 +222,7 @@ async def test_hard_cap_stops_and_says_so(monkeypatch, store):
     assert stop_of(res)["reason"] == "hard_cap" and res.error  # announced, not silent
     # no parsable goal and only free steps: no ratio and no credits estimate (EL 6441143985)
     assert c["copy"]["zh"]["title"] == "先停在这里了" and c["copy"]["zh"]["body"] == "预算到了，要继续吗？"
-    assert (c["copy"]["zh"]["primary"], c["copy"]["zh"]["secondary"]) == ("继续", "先到这里")   # no estimate
+    assert (c["copy"]["zh"]["primary"], c["copy"]["zh"]["secondary"]) == ("继续生成", "先到这里")   # no estimate
     assert "5 步" not in res.error and "上限" not in res.error  # the cap number is never shown
     assert len(r.mcp) == 5 and c["can_continue"]
 
@@ -306,8 +306,9 @@ async def test_soft_limit_exceeded_pauses_interactive(monkeypatch, store):
     c = card(ev)
     assert c["can_continue"] and c["estimate"]["credits"] > 0 and c["remaining"]["deliverables"] >= 1
     zh = c["copy"]["zh"]
-    assert zh["title"] == "预算用完了" and zh["primary"] == "继续" and zh["secondary"] == "先到这里"
-    assert zh["body"].startswith("已完成 ") and "/4" in zh["body"] and "继续大约需要" in zh["body"] and "积分" in zh["body"]
+    assert zh["title"] == "已自动暂停" and zh["primary"] == "继续生成" and zh["secondary"] == "先到这里"
+    assert zh["body"].startswith("已用 ") and "达到单次积分上限。已生成的图保留在画布上。继续大约需要" in zh["body"]
+    assert "预算" not in zh["body"] and "reason" not in zh
     assert store.get_run(res.run["run_id"])["status"] == "paused"
 
 

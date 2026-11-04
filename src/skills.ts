@@ -724,6 +724,9 @@ export function skillEditToolHint(skill: Pick<Skill, 'id' | 'name'>): string {
 /** The agent `skill` tool (#463). Skills are addressed by `id` when given: "Edit in chat" passes the id and a save with
  *  an id updates exactly that skill. A save by name updates the one custom skill with that name; when the name is
  *  ambiguous (duplicates from import) or new, a new skill is created and no existing one is touched. */
+/** #705: marker the agent loop treats as a hard stop (bot/agent_loop.py NON_RETRYABLE_MARK). */
+export const SKILL_NON_RETRYABLE = '[non-retryable]'
+
 export async function skillTool(args: Record<string, unknown>): Promise<unknown> {
   const skills = await loadSkills()
   if (args.action === 'list') return { skills: skills.map((s) => ({ id: s.id, name: s.name, description: s.description ?? '', custom: !!s.custom })) }
@@ -749,6 +752,10 @@ export async function skillTool(args: Record<string, unknown>): Promise<unknown>
     return { saved: name, id: skill.id, description: description ?? '' }
   }
   if (args.action !== 'read') throw new Error('action must be list, read or save')
+  // #705: an empty read used to fall through to `unknown skill undefined` and the agent retried it in a loop.
+  if (!id && !(typeof args.name === 'string' && args.name.trim())) {
+    throw new Error(`${SKILL_NON_RETRYABLE} skill read needs a non-empty id or name (e.g. id="linkedin-banner"); do not retry this call — use action="list" for ids`)
+  }
   const skill = id ? skills.find((s) => s.id === id) : skills.find((s) => s.name === args.name)
   if (!skill) throw new Error(`unknown skill ${JSON.stringify(id || args.name)} — available: ${skills.map((s) => `${s.name} (${s.id})`).join(', ')}`)
   if (args.path) {

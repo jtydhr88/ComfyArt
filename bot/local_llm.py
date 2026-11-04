@@ -1700,6 +1700,12 @@ class LocalLlmProvider(AgentProvider):
                 args = {}
             if not isinstance(args, dict):
                 args = {}
+            if loop.get("run") is not None:  # #705: empty skill read in a skill run -> the run's skill
+                from .agent_loop import autofill_skill_read
+                filled = autofill_skill_read(loop["run"], name, args)
+                if filled is not args:
+                    args = filled
+                    fn["arguments"] = json.dumps(args, ensure_ascii=False)
             key = _call_key(name, args)
             loop["repeat"] = loop["repeat"] + 1 if key == loop["last_key"] else 1
             loop["last_key"] = key

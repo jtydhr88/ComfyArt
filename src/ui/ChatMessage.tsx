@@ -309,6 +309,7 @@ export function RunStop({ b, latest }: { b: BotBlock; latest: boolean }) {
         <span className="ca-run__title">{title}</span>
       </div>
       {body && <div className="ca-run__body">{body}</div>}
+      {copy?.reason && copy.reason !== body && <div className="ca-run__body" data-run-reason="">{copy.reason}</div>}
       {details.length > 0 && (
         <details className="ca-run__details">
           <summary>{t('runStop.details')}</summary>
@@ -319,6 +320,7 @@ export function RunStop({ b, latest }: { b: BotBlock; latest: boolean }) {
       {b.can_continue && latest && !closed && copy?.primary && (
         <div className="ca-panel__foot">
           {copy.secondary && <button type="button" className="ca-panel__secondary" disabled={busy} onClick={() => setClosed(true)}>{copy.secondary}</button>}
+          {/* #709: when the card offers 继续生成, it is THE primary action; the locked primary steps back */}
           <button type="button" className="ca-panel__primary" data-action={b.copy?.action} disabled={busy} onClick={go}>{copy.primary}</button>
         </div>
       )}

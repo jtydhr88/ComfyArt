@@ -11,6 +11,7 @@ import asyncio
 
 import aiohttp
 import json
+import re
 import logging
 import time
 import uuid
@@ -67,11 +68,12 @@ _STOP_TEXT = {
 }
 _DIM = {"zh": {"tokens": "token ", "credits": "积分", "time": "时长"},
         "en": {"tokens": "token", "credits": "credit", "time": "time"}}
+NON_RETRYABLE_MARK = "[non-retryable]"  # #705: keep in sync with SKILL_NON_RETRYABLE (src/skills.ts)
 _STALL_LABEL = {
     "zh": {"no_progress": "连续多步没有新产出", "repeat": "同一调用反复出现", "tool_error": "工具连续失败",
-           "readonly_limit": "连续只读步骤过多", "self_check_failed": "结果未通过自检"},
+           "readonly_limit": "连续只读步骤过多", "same_tool": "同一工具连续调用超过 3 次", "non_retryable": "工具返回不可重试的错误", "budget": "超过单次运行的付费/工具调用上限", "timeout": "等待生成结果超时（10 分钟或 120 次轮询）", "self_check_failed": "结果未通过自检"},
     "en": {"no_progress": "no new output for several steps", "repeat": "the same call repeated",
-           "tool_error": "tool failed repeatedly", "readonly_limit": "too many read-only steps in a row",
+           "tool_error": "tool failed repeatedly", "readonly_limit": "too many read-only steps in a row", "same_tool": "the same tool was called more than 3 times in a row", "non_retryable": "a tool returned a non-retryable error", "budget": "the run hit its paid or total tool-call cap", "timeout": "waiting for a generation took over 10 minutes or 120 polls",
            "self_check_failed": "the result failed the self-check"},
 }
 _SELF_CHECK_NUDGE = {
@@ -89,6 +91,49 @@ _PAID_PENDING_NOTE = {
           "charge. Use wait_generation / get_canvas to see its result.",
 }
 
+
+
+_SKILL_START_RE = re.compile(r"Use the ComfyArt skill (['\"])(.+?)\1 for this task")
+
+
+def current_skill_from_messages(messages: list) -> str:
+    """#705: the skill a run was started from (api/bot_send.compose_provider_text puts it in the first user turn)."""
+    for m in messages or []:
+        if m.get("role") != "user":
+            continue
+        c = m.get("content")
+        if isinstance(c, list):
+            c = " ".join(str(p.get("text") or "") for p in c if isinstance(p, dict))
+        hit = _SKILL_START_RE.search(str(c or ""))
+        if hit:
+            return hit.group(2).strip()
+    return ""
+
+
+def autofill_skill_read(ctx: Optional["RunContext"], name: str, args: dict) -> dict:
+    """#705: `skill {"action":"read"}` with no id/name inside a skill run reads the run's skill; logged in the run log."""
+    if ctx is None or name != "skill" or str(args.get("action") or "").lower() != "read" or not ctx.current_skill:
+        return args
+    if str(args.get("id") or "").strip() or str(args.get("name") or "").strip():
+        return args
+    ctx.skill_autofills += 1
+    record = {"event": "skill_autofill", "run_id": ctx.run_id, "filled": {"name": ctx.current_skill},
+              "detail": f"skill read had no id/name; filled name={ctx.current_skill!r} from the run's skill"}
+    _log.info("[ComfyArt/agent] %s", json.dumps(record, ensure_ascii=False))
+    if ctx.store:
+        try:
+            ctx.store.add_run_log(run_id=ctx.run_id, record=record, owner_id=ctx.owner_id,
+                                  workspace_id=ctx.workspace_id, project_id=ctx.project_id)
+        except Exception:  # noqa: BLE001 — logging must never break the run
+            _log.debug("skill_autofill run log failed", exc_info=True)
+    return {**args, "name": ctx.current_skill}
+
+
+def _result_failed(b: dict) -> bool:
+    """#705: a tool result failed if status=error or its text starts with [error] / [tool error]
+    (mirror bot/local_llm.py). Real tools return status=success + "[tool error] ValueError: ..."."""
+    t = str(b.get("text") or "").lstrip()
+    return b.get("status") == "error" or t.startswith("[error]") or t.startswith("[tool error]")
 
 def _key_str(name: str, args: dict) -> str:
     return json.dumps(canon_key(name, args), ensure_ascii=False)
@@ -121,6 +166,8 @@ class RunContext:
     messages: list = field(default_factory=list)  # live transcript (same list the loop appends to)
     pricer: Any = None
     confirmer: Any = None
+    current_skill: str = ""                         # #705: skill the run was started from (auto-fills empty reads)
+    skill_autofills: int = 0
 
     # -- persistence -------------------------------------------------------------
     def state(self, messages: Optional[list] = None) -> dict:
@@ -306,14 +353,14 @@ def _remaining_steps(ctx: RunContext) -> int:
 CARD_COPY = {
     "done": {"zh": ("已完成", "生成了 {n} 张，已放到画布上", None, None),
              "en": ("Done", "Made {n}, placed on the canvas", None, None)},
-    "budget": {"zh": ("预算用完了", "已完成 {n}/{m}，继续大约需要 {x} 积分", "继续", "先到这里"),
-               "en": ("Budget used up", "{n}/{m} done; continuing needs about {x} credits", "Continue",
+    "budget": {"zh": ("已自动暂停", "{reason}", "继续生成", "先到这里"),
+               "en": ("Paused automatically", "{reason}", "Continue generating",
                       "Stop here")},
-    "hard_cap": {"zh": ("先停在这里了", "已完成 {n}/{m}，继续大约需要 {x} 积分", "继续", "先到这里"),
-                 "en": ("Paused here for now", "{n}/{m} done; continuing needs about {x} credits", "Continue",
+    "hard_cap": {"zh": ("先停在这里了", "已完成 {n}/{m}，继续大约需要 {x} 积分", "继续生成", "先到这里"),
+                 "en": ("Paused here for now", "{n}/{m} done; continuing needs about {x} credits", "Continue generating",
                         "Stop here")},
-    "stuck": {"zh": ("卡住了", "卡在：{step}", "换个说法再试", None),
-              "en": ("Stuck", "Stuck at: {step}", "Try rephrasing", None)},
+    "stuck": {"zh": ("已暂停", "{reason}", "继续生成", "先到这里"),
+              "en": ("Paused", "{reason}", "Continue generating", "Stop here")},
     "stuck:self_check_failed": {"zh": ("结果未通过自检", "已交付 {n} 张，还差：{miss}", "继续", None),
                                 "en": ("Result failed the self-check", "Delivered {n}; still missing: {miss}",
                                        "Continue", None)},
@@ -333,7 +380,52 @@ CARD_COPY = {
 # awaiting_confirm:not_approved stop title so a pending card and an unapproved one never read the same.
 PENDING_CONFIRM_LABEL = {"zh": "等待确认", "en": "Awaiting confirmation"}
 # primary button action: continue the run from its checkpoint | rephrase (focus the composer) | retry
-_PRIMARY_ACTION = {"stuck": "rephrase", "error": "retry"}
+_PRIMARY_ACTION = {"error": "retry"}  # #709: stuck primary = 继续生成 (continue)
+# #709: every paused card names WHY it paused (one plain line) and stuck cards also offer 继续, which resumes
+# the same run from its checkpoint (agent_loop resume: fresh progress window for stuck, +1 budget for budget).
+# #709 UIUX: the card's reason is a plain sentence (never stuck:* / budget:* codes).
+_STUCK_REASON = {
+    "zh": {"no_progress": "连续几步都没有新产出，自动暂停", "repeat": "同一个操作反复出现，自动暂停",
+           "tool_error": "工具连续出错，自动暂停", "readonly_limit": "连续多步只在查看、没有生成，自动暂停",
+           "same_tool": "连续重复同一步，已停下", "non_retryable": "工具返回了无法重试的错误，已暂停",
+           "budget": "生成和工具调用次数到了本次上限，自动暂停",
+           "timeout": "等待生成结果超过 {N} 分钟"},
+    "en": {"no_progress": "No new output for several steps, paused automatically",
+           "repeat": "The same action kept repeating, paused automatically",
+           "tool_error": "A tool failed several times in a row, paused automatically",
+           "readonly_limit": "Several steps only looked and made nothing, paused automatically",
+           "same_tool": "Repeated the same step in a row, stopped",
+           "non_retryable": "A tool returned an error that can't be retried, paused",
+           "budget": "Generation and tool calls reached this run's limit, paused automatically",
+           "timeout": "Waited over {N} min for the result"},
+}
+_CONTINUE_LABEL = {"zh": "继续生成", "en": "Continue generating"}
+
+
+def _budget_reason(ctx: "RunContext", dim: str, lk: str) -> str:
+    """#709 UIUX: one plain sentence with the run's real numbers; never an internal code."""
+    u = ctx.budget.used
+    if dim == "time":
+        mins = max(1, int(round(u.wall_s / 60)))
+        return (f"已运行 {mins} 分钟，达到单次时长上限。已生成的图保留在画布上。" if lk == "zh" else
+                f"Ran for {mins} min, reaching the per-run time limit. Images already made stay on the canvas.")
+    if dim == "credits":
+        c = ui_credits(u.credits)
+        return (f"已用 {c} 积分，达到单次积分上限。已生成的图保留在画布上。" if lk == "zh" else
+                f"Used {c} credits, reaching the per-run credit limit. Images already made stay on the canvas.")
+    if dim == "tokens":
+        t = _fmt_tokens(u.tokens)
+        return (f"模型用量已达 {t}，达到单次上限。已生成的图保留在画布上。" if lk == "zh" else
+                f"Model usage reached {t}, the per-run limit. Images already made stay on the canvas.")
+    return "已自动暂停" if lk == "zh" else "Paused automatically"
+
+
+def _stuck_reason(ctx: "RunContext", sub: str, lk: str) -> str:
+    t = _STUCK_REASON[lk].get(sub, "已自动暂停" if lk == "zh" else "Paused automatically")
+    if "{N}" in t:
+        tr = ctx.tracker
+        t = t.replace("{N}", str(max(1, int((max(tr.wait_waited_s, 0) or tr.wait_max_s) // 60))))
+    return t
 
 
 # 「详情」 token line label: ONE copy key, design picks the final Chinese word (placeholder 用量).
@@ -362,7 +454,11 @@ def _card_body(key: str, lk: str, *, n: int, m: Optional[int], x: Optional[int],
     image = kind == "image" and m is not None
     u = _UNIT[lk].get(kind, _UNIT[lk][""])
     sep = "，" if lk == "zh" else "; "
-    if key in ("budget", "hard_cap"):
+    if key == "budget" and x is not None:   # #709: plain sentence + the real cost to continue
+        return kw["reason"] + (f"继续大约需要 {x} 积分。" if lk == "zh" else f" Continuing needs about {x} credits.")
+    if key in ("budget", "stuck"):
+        return kw["reason"]          # #709: one plain sentence, no separate duplicated reason line
+    if key == "hard_cap":
         if not image:
             return f["ask"]
         return f["progress"].format(n=n, m=m) + (f["est"].format(x=x) if x is not None else "")
@@ -458,10 +554,16 @@ def card_copy(ctx: RunContext, stop: Stop, check: sc_mod.SelfCheck, remaining: i
         miss = (f"{check.missing} {sc_mod._KIND_LABEL[lk][goal.kind]}" if lk == "en" else
                 f"{check.missing} {dict(image='张', video='段', text='条')[goal.kind]}{sc_mod._KIND_LABEL[lk][goal.kind]}") if goal else ""
         reason = (stop.detail or _STALL_LABEL[lk].get(stop.sub, "") or stop.code).strip().splitlines()
+        plain = (_budget_reason(ctx, stop.dimension, lk) if key == "budget" else
+                 _stuck_reason(ctx, stop.sub, lk) if key == "stuck" else (reason[0] if reason else "")[:160])
         out[lk] = {"title": title,
-                   "body": _card_body(key, lk, n=n, m=m, x=x, kind=kind, step=step, miss=miss,
-                                      reason=(reason[0] if reason else "")[:160]),
+                   "body": _card_body(key, lk, n=n, m=m, x=x, kind=kind, step=step, miss=miss, reason=plain),
                    "primary": primary, "secondary": secondary}
+        if stop.reason in (StopReason.BUDGET, StopReason.STUCK) and key not in ("budget", "stuck"):
+            r = (_budget_reason(ctx, stop.dimension, lk) if stop.reason == StopReason.BUDGET
+                 else _stuck_reason(ctx, stop.sub, lk))
+            if r != out[lk]["body"]:
+                out[lk]["reason"] = r
     return out
 
 
@@ -545,6 +647,7 @@ async def run(provider, *, session, turn, emit, handle, base: str, model: str, t
         elif prev == "stuck":         # a fresh progress window (and one more nudge) for the user's retry
             tracker = ProgressTracker(policy["stall_steps"], policy["readonly_max"], policy["tool_fail_max"],
                                       policy["repeat_max"], seen_artifacts=tracker.seen_artifacts)
+            tracker.tool_calls_max, tracker.all_calls_max = int(policy["max_tool_calls"]), int(policy["max_all_tool_calls"])  # #705
         ctx = RunContext(run_id=resumed["id"], store=store, lease_owner=lease_owner, policy=policy, budget=budget,
                          tracker=tracker, mode=turn.run_mode or resumed["mode"], goal=resumed["goal"], lang=st.get("lang") or lang,
                          owner_id=resumed["owner_id"], workspace_id=resumed["workspace_id"],
@@ -565,6 +668,7 @@ async def run(provider, *, session, turn, emit, handle, base: str, model: str, t
         budget = RunBudget(limits, k=k, soft_fraction=policy["soft_fraction"], clock=clock)
         tracker = ProgressTracker(policy["stall_steps"], policy["readonly_max"], policy["tool_fail_max"],
                                   policy["repeat_max"])
+        tracker.tool_calls_max, tracker.all_calls_max = int(policy["max_tool_calls"]), int(policy["max_all_tool_calls"])  # #705
         run_id = f"run-{uuid.uuid4().hex[:16]}"
         ctx = RunContext(run_id=run_id, store=store, lease_owner=lease_owner, policy=policy, budget=budget,
                          tracker=tracker, mode=turn.run_mode or "interactive", goal=turn.user_text, lang=lang,
@@ -578,6 +682,7 @@ async def run(provider, *, session, turn, emit, handle, base: str, model: str, t
                              state=ctx.state(messages))
             store.acquire_lease(run_id, lease_owner, policy["lease_s"])
     ctx.messages = messages
+    ctx.current_skill = ctx.current_skill or current_skill_from_messages(messages)
     ctx.pricer = getattr(provider, "_price_call", None)
     ctx.confirmer = getattr(provider, "_confirm_paid_over_quote", None)
     t_start = clock()
@@ -639,7 +744,7 @@ async def run(provider, *, session, turn, emit, handle, base: str, model: str, t
             "wall_s": round(ctx.budget.used.wall_s, 2), "turn_s": round(clock() - t_start, 2),
             "stop_reason": stop.reason.value, "stop_sub": stop.sub, "stop_code": stop.code,
             "dimension": stop.dimension, "compressions": ctx.compressions, "paid_calls": ctx.paid_calls,
-            "self_check": check.to_dict(), "status": status,
+            "skill_autofills": ctx.skill_autofills, "self_check": check.to_dict(), "status": status,
         }
         _log.info("[ComfyArt/agent] %s", json.dumps(record, ensure_ascii=False))
         if ctx.store:
@@ -807,15 +912,26 @@ async def run(provider, *, session, turn, emit, handle, base: str, model: str, t
                 obs.append(StepObservation(tool=str(b.get("name") or ""),
                                            args_key=_call_key(str(b.get("name") or ""), u.get("input") or {}),
                                            result=str(b.get("text") or ""),
-                                           failed=b.get("status") == "error" or str(b.get("text") or "").startswith("[error]")))
+                                           failed=_result_failed(b)))
             for o in obs:
                 if not o.failed:
                     for a in sorted(artifact_ids(o.result)):
                         if a not in ctx.artifacts:
                             ctx.artifacts.append(a)
+            fatal = next((o for o in obs if o.failed and NON_RETRYABLE_MARK in o.result), None)
+            if fatal is not None:  # #705: never let the model retry a call the tool says cannot succeed
+                _log.warning("[ComfyArt/agent] run %s non-retryable %s error, stopping", ctx.run_id, fatal.tool)
+                return await finish(Stop(StopReason.STUCK, "non_retryable", step=ctx.budget.used.steps))
+            if ctx.tracker.over_budget(obs):  # #705: hard cap, no nudge (e.g. every step a new image, never done)
+                _log.warning("[ComfyArt/agent] run %s over budget: %d calls, %d generate_image (cap %d/%d)", ctx.run_id,
+                             ctx.tracker.total_calls, ctx.tracker.gen_calls, ctx.tracker.tool_calls_max, ctx.tracker.gen_cap())
+                return await finish(Stop(StopReason.STUCK, "budget", step=ctx.budget.used.steps))
+            if ctx.tracker.wait_timeout(obs, now=clock()):  # #705: one generation task waited > 10 min or > 120 polls
+                _log.warning("[ComfyArt/agent] run %s wait_generation timeout: %s", ctx.run_id, ctx.tracker.wait_polls)
+                return await finish(Stop(StopReason.STUCK, "timeout", step=ctx.budget.used.steps))
             stall = ctx.tracker.observe(ctx.budget.used.steps, obs, canvas_fp="|".join(ctx.artifacts[-200:]))
             if stall:
-                if not ctx.tracker.nudged:
+                if not ctx.tracker.nudged and stall != "same_tool":
                     ctx.tracker.reset_after_nudge()
                     lk = "zh" if ctx.lang == "zh" else "en"
                     messages.append({"role": "user", "content": TRY_ANOTHER_APPROACH[lk].format(
