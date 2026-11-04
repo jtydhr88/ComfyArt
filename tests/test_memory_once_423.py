@@ -154,6 +154,8 @@ def test_locales_only_add_memory_retrieved_430():
         "home.skillsFavourites", "home.skillsExplore", "home.skillsPersonal",
         "home.skillsAuthorPersonal", "home.skillsCommunity", "home.skillsViews",
         "home.skills", "home.skillsCreate",
+        # #673: 隐藏技能的直显提示（旧链接/重新生成/试用）
+        "skills.hiddenUnavailable",
         # #509: 配乐时长提示、空风格拦截、自定义配乐工作流文案（非记忆文案）
         "audio.needMusicPrompt", "audio.needLyrics", "audio.durationByLyrics",
         "customWorkflows.action.music", "customWorkflows.musicGone", "customWorkflows.group.audio",
@@ -174,6 +176,9 @@ def test_locales_only_add_memory_retrieved_430():
         "projectHeader.saved", "projectHeader.savedAt", "projectHeader.saving",
         # #672: builtin custom-workflow card removed (not memory copy)
         "skills.customWorkflow", "skills.cat.custom-workflow", "skills.desc.custom-workflow",
+        # #712: billed-with-no-image failure copy (not memory copy)
+        "wsErr.noOutput", "wsErr.noOutputNoAmount", "wsErr.noTaskId", "wsErr.noTaskIdNoAmount", "wsErr.unregisteredModel",
+        "wsErr.timeout", "wsErr.timeoutNoAmount", "wsErr.taskRef",  # #712: 后台 -> 控制台, {0} carries the $
     }
     for p, v in (("src/locales/zh.json", "记忆已读取"), ("src/locales/en.json", "Memory retrieved")):
         m = _git_main(p)

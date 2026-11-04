@@ -249,3 +249,48 @@ def node_ready() -> bool:
 def pytest_sessionstart(session):
     if not node_ready() and os.environ.get("COMFYART_SKIP_NODE_TESTS") != "1":
         raise pytest.UsageError(NODE_HINT)
+
+
+# --- #712 no-spend: under scripts/gate.sh (GATE=1) paid keys are unset and outbound network is blocked ---
+GATE_PAID_KEYS = ("WAVESPEED_API_KEY", "KIE_API_KEY")
+_LOCAL = ("127.0.0.1", "::1", "localhost", "0.0.0.0")
+
+
+class GateNetworkBlocked(OSError):
+    pass
+
+
+def _gate_guard() -> None:
+    import socket
+
+    for k in GATE_PAID_KEYS:
+        os.environ.pop(k, None)
+    real_connect, real_connect_ex = socket.socket.connect, socket.socket.connect_ex
+
+    def _check(sock, addr):
+        if sock.family in (socket.AF_INET, socket.AF_INET6):
+            host = addr[0] if isinstance(addr, tuple) else addr
+            if host not in _LOCAL:
+                raise GateNetworkBlocked(f"gate: outbound network blocked ({host}); use a localhost mock (#712)")
+
+    def connect(self, addr):
+        _check(self, addr)
+        return real_connect(self, addr)
+
+    def connect_ex(self, addr):
+        _check(self, addr)
+        return real_connect_ex(self, addr)
+
+    socket.socket.connect, socket.socket.connect_ex = connect, connect_ex
+    real_gai = socket.getaddrinfo
+
+    def getaddrinfo(host, *a, **kw):
+        if host not in _LOCAL and host is not None:
+            raise GateNetworkBlocked(f"gate: DNS lookup blocked ({host}) (#712)")
+        return real_gai(host, *a, **kw)
+
+    socket.getaddrinfo = getaddrinfo
+
+
+if os.environ.get("GATE") == "1":
+    _gate_guard()

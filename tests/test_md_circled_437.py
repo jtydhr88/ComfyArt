@@ -1,3 +1,4 @@
+import pytest
 """#437: .ca-md ships a unicode-range face for U+2460–U+2473 so ①②③… match 13px/1.6 body."""
 from pathlib import Path
 
@@ -15,6 +16,7 @@ def test_enclosed_font_face_and_asset_437():
     assert 'font: 400 13px/1.6 "CA Enclosed", var(--ca-font)' in CSS
 
 
+@pytest.mark.gate_skip(reason="needs fontTools, which the gate venv does not install (#437)")
 def test_enclosed_woff2_covers_2460_2473_437():
     from fontTools.ttLib import TTFont
     cmap = TTFont(str(FONT)).getBestCmap()

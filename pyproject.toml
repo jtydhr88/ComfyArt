@@ -19,3 +19,6 @@ testpaths = ["tests"]
 python_files = ["test_*.py"]
 asyncio_mode = "auto"
 asyncio_default_fixture_loop_scope = "function"
+markers = [
+  "gate_skip(reason): known failure on clean main, excluded from scripts/gate.sh with a reason and an issue number (#712)",
+]

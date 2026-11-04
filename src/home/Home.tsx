@@ -12,7 +12,7 @@ import { CHIP_LABEL } from './Skills'
 import { toolCover } from './toolCovers'
 import { showMemoryToast } from '../memory'
 import { BUILTIN_SKILLS, hasSkillDialog,
-  recordSkillUse, importLanding, loadSkills, matchesSkillChip, skillChips, skillCoverVideoHover, skillFeaturedCases, skillQuickStartCover, skillQuickStartCoverFit, skillVideo, FEED_SPECIAL_COLLAGE, type Skill, type SkillChipId } from '../skills'
+  recordSkillUse, importLanding, loadListedSkills, matchesSkillChip, skillChips, skillCoverVideoHover, skillFeaturedCases, skillQuickStartCover, skillQuickStartCoverFit, skillVideo, FEED_SPECIAL_COLLAGE, type Skill, type SkillChipId } from '../skills'
 import { SkillChip, chipBackspace } from '../ui/SkillChip'
 import { SkillImportDialog } from '../ui/SkillImportDialog'
 import { SkillRunDialog } from '../ui/SkillRunDialog'
@@ -219,7 +219,7 @@ export function Home() {
       setAgent(on)
       if (!on) setMode('image')
     }, () => { setAgent(false); setMode('image') })
-    void loadSkills().then(setSkills)
+    void loadListedSkills().then(setSkills)
     const timer = window.setInterval(() => setExample((i) => (i + 1) % EXAMPLES.length), ROTATE_MS)
     return () => clearInterval(timer)
   }, [])
@@ -463,7 +463,7 @@ export function Home() {
                   </Popover>
                 </div>
                 {skills.map((s) => (
-                  <button key={s.id} type="button" className="ca-menu__item" title={s.name} data-testid="home-skill-row" onClick={() => { setPlus(null); setPicked(s); input.current?.focus() }}>
+                  <button key={s.id} data-skill={s.id} type="button" className="ca-menu__item" title={s.name} data-testid="home-skill-row" onClick={() => { setPlus(null); setPicked(s); input.current?.focus() }}>
                     <span className="ca-menu__grow ca-skills__name">{s.name}</span>
                     {s.custom && <span className="ca-menu__key">{t('composer.personal')}</span>}
                   </button>
@@ -521,7 +521,7 @@ export function Home() {
             const landing = importLanding(skill, skipped)
             openSkillEditor(landing.id)
             if (landing.skipped) showMemoryToast(landing.skipped, 'info')
-            void loadSkills().then(setSkills)
+            void loadListedSkills().then(setSkills)
           }}
         />
       )}

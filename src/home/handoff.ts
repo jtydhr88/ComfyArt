@@ -1,13 +1,13 @@
 import { atom, createShapeId, type Editor, type TLImageShape, type TLShape } from 'tldraw'
 
-import { agentModeAtom, draftAtom, extraRefsAtom, generateDirect, sendToAgent, type AgentMode } from '../agent'
+import { agentModeAtom, draftAtom, extraRefsAtom, looseRefsAtom, generateDirect, sendToAgent, type AgentMode } from '../agent'
 import { refreshBot } from '../bot'
 import { t } from '../i18n'
 import { refFromUrl, refKind } from '../comfy'
 import { editElements } from '../elements'
 import { createGenerator } from '../generate'
 import { placeMedia, toMedia, type ErrorSink } from '../jobs'
-import { CREATE_ENTRY_CHIP_KEY, loadSkills, skillAtom, skillCreatorAtom, withPreset } from '../skills'
+import { attachSkill, CREATE_ENTRY_CHIP_KEY, loadSkills, skillAtom, skillCreatorAtom, withPreset } from '../skills'
 import { chatViewAtom } from '../ui/AgentPanel'
 import { audioDialogAtom } from '../ui/AudioDialog'
 import { enterMode } from '../ui/mode'
@@ -173,7 +173,12 @@ export async function takeHandoff(editor: Editor, onError: ErrorSink) {
   agentModeAtom.set(mode)
   const found = skillId ? (await loadSkills()).find((s) => s.id === skillId) ?? null : null
   const skill = found && withPreset(found, presetId)
-  if (skill) skillAtom.set(skill)
+  if (skill && !attachSkill(skill)) {  // #673: hidden skill from an old link — no chip, notice shown, nothing sent
+    if (text) draftAtom.set(text)
+    // #644 (product call): the link's reference images go back ONLY into the composer's attachments — never the canvas
+    if (refs.length) looseRefsAtom.set(refs.filter((r) => refKind(r) !== 'audio').map((src) => ({ src, name: refFromUrl(src).filename })))
+    return
+  }
   const shapes = await placeRefs(editor, refs)
   if (!text) {
     extraRefsAtom.set(shapes.map((s) => s.id))

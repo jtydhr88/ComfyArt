@@ -1,7 +1,7 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { useValue, type Editor, type TLShapeId } from 'tldraw'
 
-import { agentModeAtom, DOC_ACCEPT, docsAtom, draftAtom, eachLine, eachRuns, extraRefsAtom, generateDirect, isRefShape, kitsAtom, refKindOf, sendToAgent, srcOf, uploadRefs, type RefShape } from '../agent'
+import { agentModeAtom, DOC_ACCEPT, docsAtom, draftAtom, eachLine, eachRuns, extraRefsAtom, looseRefsAtom, generateDirect, isRefShape, kitsAtom, refKindOf, sendToAgent, srcOf, uploadRefs, type RefShape } from '../agent'
 
 import { keyMissing, keySettingsOpenAtom, keyStatusAtom, refreshKeyStatus } from '../wavespeedKey'
 import { EachButton, EachRole, useEach } from './EachToggle'
@@ -11,7 +11,7 @@ import { botEnabledAtom, loadProviders, loadSettings, messagesAtom, providerLabe
 import { errorText } from '../jobs'
 import { KIND_LABELS, libraryAtom } from '../library'
 import type { AudioShape } from '../shapes/EmbedShapes'
-import { loadSkills, saveSkill, skillAtom, skillCreatorAtom, type Skill } from '../skills'
+import { loadListedSkills, saveSkill, skillAtom, skillCreatorAtom, skillNoticeAtom, type Skill } from '../skills'
 import { AssetGrid } from './AssetPicker'
 import { schedulesOpenAtom } from '../schedules'
 import { AgentExtras, AgentItems, shortLabel, useCurrentAgent } from './AgentPicker'
@@ -90,8 +90,10 @@ export function Composer({ editor, busy, onError }: { editor: Editor; busy: bool
   const listLoading = useValue('agent list loading', () => providersStateAtom.get().state === 'loading', [])
   const agentLoading = mode === 'agent' && listLoading  // #294: no sending to an Agent until the list has arrived
   const skill = useValue(skillAtom)
+  const skillNotice = useValue(skillNoticeAtom)  // #673
   const skillCreator = useValue(skillCreatorAtom)
   const extra = useValue(extraRefsAtom)
+  const loose = useValue(looseRefsAtom)  // #644: composer-only refs, no canvas shape
   const kits = useValue(kitsAtom)
   const library = useValue(libraryAtom)
   const docs = useValue(docsAtom)
@@ -118,7 +120,7 @@ export function Composer({ editor, busy, onError }: { editor: Editor; busy: bool
   const at = /(?:^|\s)@(\S*)$/.exec(draft)
 
   useEffect(() => {
-    if (menu === 'skills' || slash) void loadSkills().then(setSkills)
+    if (menu === 'skills' || slash) void loadListedSkills().then(setSkills)
   }, [menu, !!slash])
 
   // #362: load 素材 for @ menu (no model group). Fail soft → empty 素材 group.
@@ -144,15 +146,15 @@ export function Composer({ editor, busy, onError }: { editor: Editor; busy: bool
     extraRefsAtom.set(next.extra)
     setHidden(next.hidden)
   }
-  const useSkill = (s: Skill) => { skillAtom.set(s); setMenu(null); if (slash) draftAtom.set('') }
+  const useSkill = (s: Skill) => { skillNoticeAtom.set(null); skillAtom.set(s); setMenu(null); if (slash) draftAtom.set('') }
 
   const fail = (e: unknown) => onError(errorText(e))
   const upload = (files: FileList | null) => uploadRefs(editor, Array.from(files ?? [])).catch(fail)
   const imageFiles = (list: DataTransfer) => Array.from(list.files)
-  const { showSend, setVoice } = useSlot(content || refs.length > 0, composing)
+  const { showSend, setVoice } = useSlot(content || refs.length > 0 || loose.length > 0, composing)
   const send = () => {
     const text = draft.trim()
-    if ((!text && !refs.length) || agentOff || agentLoading) return  // #268: an image with no text counts as content
+    if ((!text && !refs.length && !loose.length) || agentOff || agentLoading) return  // #268: an image with no text counts as content
     // #294: after a failed Agent-list load, every agent-mode send re-loads the list once first.
     // Still failing → toast the real error and keep the draft; succeeded → send as normal.
     if (mode === 'agent' && providersStateAtom.get().state === 'error') {
@@ -171,12 +173,14 @@ export function Composer({ editor, busy, onError }: { editor: Editor; busy: bool
       const keptSkill = skill
       const keptKits = kits
       const keptDocs = docs
+      const keptLoose = loose
       const creating = skillCreatorAtom.get().on
       // #491 A3: the user's words go in the bubble; the creator instruction rides in the hidden context
       const creatorContext = creating && text ? t('composer.skillCreatorPrefill', text) : ''
       const creatorChip = creating ? t(skillCreatorAtom.get().chip ?? 'composer.skillCreator') : ''
       draftAtom.set('')
       extraRefsAtom.set([])
+      looseRefsAtom.set([])
       kitsAtom.set([])
       if (creating) skillCreatorAtom.set({ on: false })
       if (mode === 'agent') {
@@ -186,18 +190,19 @@ export function Composer({ editor, busy, onError }: { editor: Editor; busy: bool
       const targets = keptRefs.length > 1 ? each.targets(keptRefs) : []
       each.reset()
       try {
-        if (mode === 'agent') await sendToAgent(editor, text, keptRefs, creating ? null : keptSkill, keptKits, keptDocs, [targets.length ? eachLine(keptRefs, targets) : '', creatorContext].filter(Boolean).join('\n'), creatorChip ? { chip: creatorChip } : undefined)
-        else await generateDirect(editor, text, eachRuns(keptRefs, targets, () => text), mode === 'video', onError)
+        if (mode === 'agent') await sendToAgent(editor, text, keptRefs, creating ? null : keptSkill, keptKits, keptDocs, [targets.length ? eachLine(keptRefs, targets) : '', creatorContext].filter(Boolean).join('\n'), { ...(creatorChip ? { chip: creatorChip } : undefined), loose: keptLoose })
+        else await generateDirect(editor, text, eachRuns(keptRefs, targets, () => text).map((run) => ({ ...run, loose: keptLoose.map((l) => l.src) })), mode === 'video', onError)
       } catch (e) {
         // restore composer content if the send never reached the chat / job
         draftAtom.set(text || draftAtom.get())
+        if (keptLoose.length) looseRefsAtom.set(keptLoose)
         fail(e)
       }
     }
     void go()
   }
 
-  const filtered = slash ? skills.filter((s) => s.name.includes(slash[1])) : skills
+  const filtered = slash ? skills.filter((s) => s.name.toLowerCase().includes(slash[1].toLowerCase())) : skills  // #673: '/ppt' finds PPT
   // #362 @ menu: exactly 参考 → 本项目 → 素材. NO model group (voids old Assets/Model fake-align).
   const atQ = (at?.[1] ?? '').toLowerCase()
   const atRefs = at ? library.filter((k) => k.name.toLowerCase().includes(atQ) && !kits.some((x) => x.id === k.id)) : []
@@ -207,6 +212,7 @@ export function Composer({ editor, busy, onError }: { editor: Editor; busy: bool
   const clearAt = () => draftAtom.set(draft.slice(0, at!.index) + (at!.index ? ' ' : ''))
   const clearAllCapsules = () => {
     extraRefsAtom.set([])
+    looseRefsAtom.set([])
     setHidden(selected.map((s) => s.id))
   }
   const modeInfo = modeOf(mode)
@@ -216,6 +222,14 @@ export function Composer({ editor, busy, onError }: { editor: Editor; busy: bool
   const typing = content
 
   return (
+    <>
+    {/* #644: the #673 notice sits in normal flow ABOVE the composer (clear of the mascot peek), so it never overlaps the chat's start buttons */}
+    {skillNotice && (
+        <div className="ca-chat__hint ca-composer__notice" role="status" data-testid="skill-hidden-notice">
+          <span className="ca-menu__grow">{skillNotice}</span>
+          <button type="button" className="ca-history__del" title={t('common.close')} data-testid="skill-hidden-notice-close" onClick={() => skillNoticeAtom.set(null)}>{Icons.close}</button>
+        </div>
+      )}
     <div
       className="ca-composer"
       data-drop={drop || undefined}
@@ -226,9 +240,9 @@ export function Composer({ editor, busy, onError }: { editor: Editor; busy: bool
       {/* #371 P1-mascot: left-top peek; idle static frame 0; --play/--typing animate */}
       <ArtiMascot busy={busy} typing={typing} />
       {(slash && filtered.length > 0) && (
-        <div className="ca-menu ca-composer__suggest">
+        <div className="ca-menu ca-composer__suggest" data-testid="slash-menu">
           {filtered.slice(0, 8).map((s) => (
-            <button key={s.id} type="button" className="ca-menu__item" onClick={() => useSkill(s)}>
+            <button key={s.id} data-skill={s.id} type="button" className="ca-menu__item" onClick={() => useSkill(s)}>
               <span className="ca-icon">{Icons.skill}</span><span className="ca-menu__grow">{s.name}</span>
             </button>
           ))}
@@ -297,7 +311,7 @@ export function Composer({ editor, busy, onError }: { editor: Editor; busy: bool
           </div>
         </div>
       )}
-      {(refs.length > 0 || skill || skillCreator.on || kits.length > 0 || (mode === 'agent' && docs.length > 0)) && (
+      {(refs.length > 0 || loose.length > 0 || skill || skillCreator.on || kits.length > 0 || (mode === 'agent' && docs.length > 0)) && (
         <div className="ca-composer__chips">
           {kits.map((k) => (
             <span key={k.id} className="ca-chip">
@@ -315,6 +329,14 @@ export function Composer({ editor, busy, onError }: { editor: Editor; busy: bool
             <span key={d.src} className="ca-chip" title={d.name}>
               <span className="ca-icon">{Icons.page}</span><span className="ca-chip__name">{d.name}</span>
               <button type="button" title={t('common.remove')} onClick={() => docsAtom.set(docs.filter((x) => x.src !== d.src))}>{Icons.close}</button>
+            </span>
+          ))}
+          {/* #644: composer-only refs (old hidden-skill link) — same capsule look, never a canvas shape */}
+          {loose.map((l, i) => (
+            <span key={`loose-${i}`} className="ca-chip ca-chip--capsule" data-testid="composer-capsule" data-loose title={l.name}>
+              <span className="ca-chip__thumb"><img src={l.src} alt="" /></span>
+              <span className="ca-chip__name">{truncateLabel(l.name)}</span>
+              <button type="button" title={t('common.remove')} onClick={() => looseRefsAtom.set(loose.filter((_, j) => j !== i))}>{Icons.close}</button>
             </span>
           ))}
           {/* #362: canvas multi-select → composer capsules (thumb + truncated label); removable; no auto-send */}
@@ -475,5 +497,6 @@ export function Composer({ editor, busy, onError }: { editor: Editor; busy: bool
           onText={(t) => draftAtom.set(`${draftAtom.get()}${draftAtom.get() ? ' ' : ''}${t}`)} />
       </div>
     </div>
+    </>
   )
 }

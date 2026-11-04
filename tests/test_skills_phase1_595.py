@@ -62,7 +62,7 @@ def test_website_chip_source_and_home_skills_same_data():
     # Home + Skills Explore both pull skillChips / matchesSkillChip / loadSkills — same source
     assert "skillChips(" in HOME and "matchesSkillChip(" in HOME
     assert "skillChips(" in SKILLS_PAGE and "matchesSkillChip(" in SKILLS_PAGE
-    assert "loadSkills(" in HOME and "loadSkills(" in SKILLS_PAGE
+    assert "loadListedSkills(" in HOME and "loadListedSkills(" in SKILLS_PAGE  # #673: listed (hide-list filtered) source
     assert "skillFeaturedCases(" in HOME
     assert "HOME_SKILL_ROW" in HOME
 

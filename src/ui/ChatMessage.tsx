@@ -17,7 +17,7 @@ import { lang, t } from '../i18n'
 import { openMemoryDialog } from './MemoryDialog'
 import { stepState } from './stepState'
 import { readLocal, writeLocal } from '../localPrefs'
-import { loadSkills, skillAtom, skillCreatorAtom } from '../skills'
+import { attachSkill, loadSkills, skillCreatorAtom } from '../skills'
 import { openSkillEditor } from './SkillsDialog'
 
 const GEN_TOOLS = new Set(['generate_image', 'generate_video', 'edit_image', 'animate_image', 'upscale_image', 'remove_background', 'expand_image', 'split_layers', 'change_angle', 'replace_text', 'edit_region', 'erase_region', 'move_object', 'style_transfer', 'extend_video', 'upscale_video', 'remove_video_background', 'generate_music', 'generate_sound_effect', 'text_to_speech', 'image_to_3d', 'edit_elements', 'create_mockup', 'create_slides'])
@@ -161,7 +161,7 @@ export function SkillCreatedCard({ skill }: { skill: CreatedSkill }) {
     const s = all.find((x) => x.id === skill.id)
     if (!s) return
     skillCreatorAtom.set({ on: false })
-    skillAtom.set(s)
+    attachSkill(s)  // #673: a hidden skill shows the notice instead of a chip
   })
   return (
     <div className="ca-chat__skillcard" data-testid="skill-created-card" data-skill={skill.id}>

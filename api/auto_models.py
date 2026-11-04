@@ -93,6 +93,26 @@ def _matches(cat: dict, text: str) -> bool:
     return any(group and all(_positive(k, text) for k in group) for group in cat.get("also") or [])
 
 
+class UnregisteredModel(ValueError):
+    """#712: the table names a model the catalog does not register, and no fallback is registered for it."""
+
+
+def registered(row: dict, ids: set, where: str) -> tuple[str, str | None]:
+    """(model to run, failed model or None). The row's model when the catalog has it; else the first model in the
+    row's explicit ``fallback`` list (str or list) that the catalog has, logged. Nothing silent: no registered
+    fallback -> UnregisteredModel."""
+    model = row["model"]
+    if model in ids:
+        return model, None
+    backups = row.get("fallback") or []
+    for alt in [backups] if isinstance(backups, str) else list(backups):
+        if alt in ids:
+            log.warning("auto model %s for %s not in catalog; using its registered fallback %s", model, where, alt)
+            return alt, model
+    raise UnregisteredModel(f"auto model {model!r} for {where} is not registered in the model catalog and has no "
+                            f"registered fallback in auto_models.json; register it or add a \"fallback\" entry")
+
+
 def choose(feature: str, prompt: str, named: str | None, catalog: dict, masked: bool = False) -> dict:
     """catalog: load_config() result. Returns {model, auto, category, reason: {zh, en}}.
     masked (#45): the edit has a selection or brushed mask -> the table's 'masked' row (user-named still wins)."""
@@ -102,16 +122,19 @@ def choose(feature: str, prompt: str, named: str | None, catalog: dict, masked: 
                 "reason": {"zh": "你指定了这个模型", "en": "you named this model"}}
     spec = load_table()[feature]
     row = spec.get("masked") if masked else None
-    if row and row["model"] in {m["id"] for m in cfg["models"]}:
-        return {"model": row["model"], "auto": True, "category": "masked", "reason": {"zh": row["zh"], "en": row["en"]}}
+    ids = {m["id"] for m in cfg["models"]}
+    if row:
+        model, failed = registered(row, ids, f"{feature}/masked")
+        out = {"model": model, "auto": True, "category": "masked", "reason": {"zh": row["zh"], "en": row["en"]}}
+        return {**out, "fallback": failed} if failed else out
     text = _norm(prompt or "")
     cat = next((c for c in spec["categories"] if _matches(c, text)), None)
-    ids = {m["id"] for m in cfg["models"]}
     if cat and cat["model"] not in ids:
-        log.warning("auto model %s for %s/%s not in catalog; falling back to %s", cat["model"], feature, cat["id"], cfg["default"])
-        return {"model": cfg["default"], "auto": True, "category": cat["id"], "fallback": cat["model"],
-                "reason": {"zh": f"{cat['zh']}，但 {cat['model']} 当前不可用，改用默认模型",
-                           "en": f"{cat['en']}, but {cat['model']} is unavailable, so the default model was used"}}
+        # #712: only an explicitly registered fallback may stand in; otherwise registered() raises
+        model, failed = registered(cat, ids, f"{feature}/{cat['id']}")
+        return {"model": model, "auto": True, "category": cat["id"], "fallback": failed,
+                "reason": {"zh": f"{cat['zh']}，{failed} 未登记，按登记的备选改用 {model}",
+                           "en": f"{cat['en']}; {failed} is not registered, so its registered fallback {model} was used"}}
     if cat:
         return {"model": cat["model"], "auto": True, "category": cat["id"], "reason": {"zh": cat["zh"], "en": cat["en"]}}
     return {"model": cfg["default"], "auto": True, "category": "default", "reason": dict(spec["default"]), "plain": True}

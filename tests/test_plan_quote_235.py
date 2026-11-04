@@ -215,6 +215,11 @@ async def _run(monkeypatch, responses, *, lang="zh", quote=None, confirm="start"
     monkeypatch.setattr(provider, "_request_json", fake_request)
     monkeypatch.setattr(provider, "_mcp_call_tool", fake_call)
     monkeypatch.setattr(provider, "_quote_steps", fake_quote)
+
+    async def free_price(model, inputs):  # #732: per-call pricing now fails closed; no WaveSpeed key here
+        return 0.0
+
+    monkeypatch.setattr(provider, "_price_one", free_price)
     monkeypatch.setattr(provider, "_confirm_plan", fake_confirm)
     events = []
 

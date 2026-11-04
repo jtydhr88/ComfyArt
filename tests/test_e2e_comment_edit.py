@@ -348,7 +348,7 @@ async def test_comment_edit_failure_and_timeout_are_reported(page, mock_ws, monk
     panel = await _point_comment(pg, mock_ws, "把背景变成夜晚")
     await panel.get_by_role("button", name=ZH["common.generate"]).click()
     await _until(lambda: _async(len(_edits(mock_ws)) == 1))
-    want = ZH["wsErr.failed"] if mode == "failed" else ZH["wsErr.timeout"].split("$")[0]
+    want = ZH["wsErr.failed"] if mode == "failed" else ZH["wsErr.timeout"].split("{0}")[0]
     await _until(lambda: _body_has(pg, want), 25)
     await pg.screenshot(path=str(SHOTS / f"e2e-05-{mode}-zh.png"))
     await pg.wait_for_timeout(500)

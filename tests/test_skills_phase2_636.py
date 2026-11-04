@@ -103,9 +103,9 @@ def _assert_production(sid: str, cat: str, preset_min: int, required: list[str],
     assert f"category: '{cat}'" in e, sid
     # #636 C soft wash: cover + examples/featured filled (hardMax layouts)
     head = e.split("inputs:", 1)[0]
-    assert "cover: cover636(" in head, sid
+    assert "cover: cover673(" in head, sid
     assert "examples: []" not in e and "featured: []" not in e, sid
-    assert "feat636(" in e or "ex636(" in e, sid
+    assert "feat673(" in e or "ex673(" in e, sid
     assert "video:" not in head, sid  # C stills only
     instr = _instructions(e)
     assert r"\n1)" in instr and r"\n5)" in instr, sid

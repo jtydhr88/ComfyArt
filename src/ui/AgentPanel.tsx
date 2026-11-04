@@ -6,7 +6,7 @@ import { BUILTIN_AGENT, NO_KEY_DETAIL, botEnabledAtom, branchFrom, chatIdAtom, c
 import { chatFrameOf, locateChatFrame } from '../chatFrame'
 import { errorText } from '../jobs'
 import { libraryAtom } from '../library'
-import { loadSkills, skillCreatorAtom } from '../skills'
+import { BUILTIN_SKILLS, blockHiddenSkill, loadSkills, skillCreatorAtom } from '../skills'
 import { botSettingsOpenAtom } from './AgentPicker'
 import { dockAtom } from './chatDock'
 import { libraryTabAtom } from './LibraryPanel'
@@ -82,7 +82,10 @@ function refsOf(editor: Editor, m: BotMessage): RefShape[] {
 
 async function resend(editor: Editor, m: BotMessage) {
   const skillName = m.blocks.find((b) => b.type === 'skill')?.name
+  // #673: a hidden built-in is refused before any lookup — notice only, zero requests, nothing is sent
+  if (blockHiddenSkill(skillName ? BUILTIN_SKILLS.find((s) => s.name === skillName) : null)) return
   const skill = skillName ? (await loadSkills()).find((s) => s.name === skillName) ?? null : null
+  if (blockHiddenSkill(skill)) return
   const kits = libraryAtom.get().filter((k) => m.blocks.some((b) => b.type === 'kit' && b.name === k.name))
   const docs = m.blocks.filter((b) => b.type === 'file' && b.url).map((b) => ({ src: b.url!, name: b.name ?? '' }))
   await sendToAgent(editor, textOf(m), refsOf(editor, m), skill, kits, docs)

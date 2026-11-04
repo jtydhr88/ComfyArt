@@ -25,6 +25,10 @@ FAIL_JSON = json.dumps({
 CANCEL_TEXT = "已取消该生成，未扣费。"
 
 
+async def _free_price(model, inputs):
+    return 0.0
+
+
 def test_model_call_failed_detects_payload() -> None:
     assert model_call_failed("generate_image", {"model": SEEDREAM}, FAIL_JSON) == SEEDREAM
     assert model_call_failed("generate_image", {}, CANCEL_TEXT) is None
@@ -73,6 +77,7 @@ async def test_generate_image_failure_marks_is_error(monkeypatch) -> None:
 
     monkeypatch.setattr(provider, "_request_json", fake_request)
     monkeypatch.setattr(provider, "_mcp_call_tool", fake_call)
+    monkeypatch.setattr(provider, "_price_one", _free_price)  # #732: pricing fails closed; no key here
     monkeypatch.setattr(LocalLlmProvider, "_confirm_fallback", no_fallback)
 
     events: list[BotEvent] = []
@@ -118,6 +123,7 @@ async def test_cancelled_generate_is_not_error(monkeypatch) -> None:
 
     monkeypatch.setattr(provider, "_request_json", fake_request)
     monkeypatch.setattr(provider, "_mcp_call_tool", fake_call)
+    monkeypatch.setattr(provider, "_price_one", _free_price)  # #732: pricing fails closed; no key here
 
     events: list[BotEvent] = []
 

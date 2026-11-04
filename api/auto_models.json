@@ -1,5 +1,5 @@
 {
- "_comment": "#133 product table v1, widened for #237 accuracy. Categories are first-match: logo, poster/text, anime/illustration, photoreal portrait/product/e-commerce, then character/product consistency, else the feature default. English keywords are whole words; Chinese keywords are substrings. A keyword preceded by a negation (no / don't / 不要 / 没有) does not count. exclude blanks a phrase before matching (portrait orientation, job title, context menu). also is a list of groups that all have to hit, so bare 'photorealistic' or '写实' is not enough for a landscape. 2+ reference images are not a category here: api/mcp_tools/canvas.py sends them to image_edit multi_reference (google/nano-banana-2.1/edit, #153) because refs run on the edit path. A model missing from the catalog falls back to the feature default (logged).",
+ "_comment": "#133 product table v1, widened for #237 accuracy. Categories are first-match: logo, poster/text, anime/illustration, photoreal portrait/product/e-commerce, then character/product consistency, else the feature default. English keywords are whole words; Chinese keywords are substrings. A keyword preceded by a negation (no / don't / 不要 / 没有) does not count. exclude blanks a phrase before matching (portrait orientation, job title, context menu). also is a list of groups that all have to hit, so bare 'photorealistic' or '写实' is not enough for a landscape. 2+ reference images are not a category here: api/mcp_tools/canvas.py sends them to image_edit multi_reference (google/nano-banana-2.1/edit, #153) because refs run on the edit path. A model missing from the catalog is an error (#712); only a model listed in the row's explicit \"fallback\" (string or list) stands in, logged.",
  "skills": {
   "_comment": "#708/#712: per-skill model pins. Registered explicitly: the skill's model runs at its resolution; fallback runs only after the primary call fails (logged). A pinned model missing from the catalog is an error, never a silent switch to the feature default.",
   "pose-fission": {
@@ -15,42 +15,315 @@
  "features": {
   "text_to_image": {
    "tool": "generate_image",
-   "default": {"zh": "这是通用生图的默认模型", "en": "the default model for general image generation"},
+   "default": {
+    "zh": "这是通用生图的默认模型",
+    "en": "the default model for general image generation"
+   },
    "categories": [
-    {"id": "logo", "model": "recraft-ai/recraft-v3",
-     "zh": "这是 Logo / 图标 / 矢量风格任务", "en": "this is a logo, icon or vector-style task",
-     "keywords": ["logo", "icon", "vector", "emblem", "monogram", "wordmark", "brand mark", "trademark", "标志", "图标", "矢量", "徽标", "商标", "字标", "应用图标"]},
-    {"id": "poster_text", "model": "openai/gpt-image-2.5-flare/text-to-image",
-     "zh": "这是海报 / 信息图 / 带文字的任务", "en": "this is a poster, infographic or text-heavy task",
-     "keywords": ["poster", "infographic", "flyer", "banner", "headline", "title", "typography", "menu", "brochure", "leaflet", "billboard", "slogan", "海报", "信息图", "标题", "文字", "传单", "横幅", "宣传单", "标语", "菜单", "易拉宝", "大标题"],
-     "exclude": ["job title", "context menu", "menu bar", "title bar", "window title"]},
-    {"id": "anime_art", "model": "midjourney/text-to-image",
-     "zh": "这是动漫 / 插画 / 艺术风格任务", "en": "this is an anime, illustration or art-style task",
-     "keywords": ["anime", "manga", "illustration", "illustrated", "cartoon", "watercolor", "oil painting", "painterly", "comic", "comics", "digital painting", "line art", "ghibli", "picture book", "children's book", "hand drawn", "动漫", "二次元", "插画", "卡通", "水彩", "油画", "漫画", "手绘", "绘本", "水墨", "吉卜力", "线稿", "素描"]},
-    {"id": "photoreal", "model": "bytedance/seedream-v5.0-pro",
-     "zh": "这是写实人像 / 产品摄影 / 电商主图任务", "en": "this is a photoreal portrait, product photo or e-commerce shot",
-     "keywords": ["portrait", "headshot", "head shot", "product photo", "product shot", "product photography", "packshot", "pack shot", "e-commerce", "ecommerce", "studio photo", "studio portrait", "人像", "肖像", "写真", "半身照", "证件照", "产品摄影", "产品图", "产品照", "商品图", "白底图", "电商", "主图", "棚拍", "真人照片", "真人肖像"],
-     "exclude": ["portrait orientation"],
-     "also": [["photorealistic", "portrait"], ["photorealistic", "person"], ["photorealistic", "woman"], ["photorealistic", "man"], ["photoreal", "portrait"], ["realistic", "portrait"], ["写实", "人像"], ["写实", "人物"], ["写实", "真人"]]},
-    {"id": "consistency", "model": "google/nano-banana-2.1/text-to-image",
-     "zh": "这是要求角色或产品保持一致的任务", "en": "this is a character or product consistency task",
-     "keywords": ["same character", "same girl", "same boy", "same face", "identical face", "character consistency", "product consistency", "consistent character", "consistent face", "consistent product", "角色一致", "人物一致", "五官一致", "同一个角色", "同一角色", "同一张脸", "产品一致", "商品一致", "角色一致性", "产品一致性"]}
+    {
+     "id": "logo",
+     "model": "recraft-ai/recraft-v3",
+     "zh": "这是 Logo / 图标 / 矢量风格任务",
+     "en": "this is a logo, icon or vector-style task",
+     "keywords": [
+      "logo",
+      "icon",
+      "vector",
+      "emblem",
+      "monogram",
+      "wordmark",
+      "brand mark",
+      "trademark",
+      "标志",
+      "图标",
+      "矢量",
+      "徽标",
+      "商标",
+      "字标",
+      "应用图标"
+     ]
+    },
+    {
+     "id": "poster_text",
+     "model": "openai/gpt-image-2.5-flare/text-to-image",
+     "zh": "这是海报 / 信息图 / 带文字的任务",
+     "en": "this is a poster, infographic or text-heavy task",
+     "keywords": [
+      "poster",
+      "infographic",
+      "flyer",
+      "banner",
+      "headline",
+      "title",
+      "typography",
+      "menu",
+      "brochure",
+      "leaflet",
+      "billboard",
+      "slogan",
+      "海报",
+      "信息图",
+      "标题",
+      "文字",
+      "传单",
+      "横幅",
+      "宣传单",
+      "标语",
+      "菜单",
+      "易拉宝",
+      "大标题"
+     ],
+     "exclude": [
+      "job title",
+      "context menu",
+      "menu bar",
+      "title bar",
+      "window title"
+     ]
+    },
+    {
+     "id": "anime_art",
+     "model": "midjourney/text-to-image",
+     "zh": "这是动漫 / 插画 / 艺术风格任务",
+     "en": "this is an anime, illustration or art-style task",
+     "keywords": [
+      "anime",
+      "manga",
+      "illustration",
+      "illustrated",
+      "cartoon",
+      "watercolor",
+      "oil painting",
+      "painterly",
+      "comic",
+      "comics",
+      "digital painting",
+      "line art",
+      "ghibli",
+      "picture book",
+      "children's book",
+      "hand drawn",
+      "动漫",
+      "二次元",
+      "插画",
+      "卡通",
+      "水彩",
+      "油画",
+      "漫画",
+      "手绘",
+      "绘本",
+      "水墨",
+      "吉卜力",
+      "线稿",
+      "素描"
+     ]
+    },
+    {
+     "id": "photoreal",
+     "model": "bytedance/seedream-v5.0-pro",
+     "zh": "这是写实人像 / 产品摄影 / 电商主图任务",
+     "en": "this is a photoreal portrait, product photo or e-commerce shot",
+     "keywords": [
+      "portrait",
+      "headshot",
+      "head shot",
+      "product photo",
+      "product shot",
+      "product photography",
+      "packshot",
+      "pack shot",
+      "e-commerce",
+      "ecommerce",
+      "studio photo",
+      "studio portrait",
+      "人像",
+      "肖像",
+      "写真",
+      "半身照",
+      "证件照",
+      "产品摄影",
+      "产品图",
+      "产品照",
+      "商品图",
+      "白底图",
+      "电商",
+      "主图",
+      "棚拍",
+      "真人照片",
+      "真人肖像"
+     ],
+     "exclude": [
+      "portrait orientation"
+     ],
+     "also": [
+      [
+       "photorealistic",
+       "portrait"
+      ],
+      [
+       "photorealistic",
+       "person"
+      ],
+      [
+       "photorealistic",
+       "woman"
+      ],
+      [
+       "photorealistic",
+       "man"
+      ],
+      [
+       "photoreal",
+       "portrait"
+      ],
+      [
+       "realistic",
+       "portrait"
+      ],
+      [
+       "写实",
+       "人像"
+      ],
+      [
+       "写实",
+       "人物"
+      ],
+      [
+       "写实",
+       "真人"
+      ]
+     ]
+    },
+    {
+     "id": "consistency",
+     "model": "google/nano-banana-2.1/text-to-image",
+     "zh": "这是要求角色或产品保持一致的任务",
+     "en": "this is a character or product consistency task",
+     "keywords": [
+      "same character",
+      "same girl",
+      "same boy",
+      "same face",
+      "identical face",
+      "character consistency",
+      "product consistency",
+      "consistent character",
+      "consistent face",
+      "consistent product",
+      "角色一致",
+      "人物一致",
+      "五官一致",
+      "同一个角色",
+      "同一角色",
+      "同一张脸",
+      "产品一致",
+      "商品一致",
+      "角色一致性",
+      "产品一致性"
+     ]
+    }
    ]
   },
   "image_edit": {
    "tool": "edit_image",
-   "multi_reference": {"model": "google/nano-banana-2.1/edit",
-     "zh": "给了 {n} 张参考图，需要多图参考和角色或产品一致", "en": "{n} reference images were given, which needs multi-reference and character or product consistency"},
-   "masked": {"model": "openai/gpt-image-2.5-sunburst/edit", "tools": ["edit_region"],
-     "zh": "这是带选区或涂抹蒙版的局部编辑（#45），只改选区，用精度更高的模型", "en": "this is an edit with a selection or brushed mask (#45), which only changes the selection and uses the more precise model"},
-   "default": {"zh": "这是通用图片编辑的默认模型", "en": "the default model for general image editing"},
+   "multi_reference": {
+    "model": "google/nano-banana-2.1/edit",
+    "zh": "给了 {n} 张参考图，需要多图参考和角色或产品一致",
+    "en": "{n} reference images were given, which needs multi-reference and character or product consistency"
+   },
+   "masked": {
+    "model": "openai/gpt-image-2.5-sunburst/edit",
+    "tools": [
+     "edit_region"
+    ],
+    "zh": "这是带选区或涂抹蒙版的局部编辑（#45），只改选区，用精度更高的模型",
+    "en": "this is an edit with a selection or brushed mask (#45), which only changes the selection and uses the more precise model"
+   },
+   "default": {
+    "zh": "这是通用图片编辑的默认模型",
+    "en": "the default model for general image editing"
+   },
    "categories": [
-    {"id": "keep_identity", "model": "google/nano-banana-2.1/edit",
-     "zh": "这是要保持人物或产品一致的局部修改", "en": "this is a local edit that must keep the person or product consistent",
-     "keywords": ["keep the same", "keep the face", "keep the person", "keep the product", "keep her face", "keep his face", "keep their face", "don't change her face", "don't change his face", "don't change the face", "don't change the person", "don't change the product", "same person", "same product", "same face", "look identical", "identical face", "preserve the face", "preserve the person", "preserve the product", "保持人物", "保持脸", "保持五官", "保持产品", "保持一致", "保持原样", "保持原貌", "保持不变", "同一个人", "人物不变", "人物不要变", "产品不变", "脸不变", "五官不变", "人脸不要", "不要换脸", "不要动脸", "保留人物", "保留产品", "保留脸", "只换背景", "只改背景"]},
-    {"id": "photo_retouch", "model": "bytedance/seedream-v5.0-pro/edit",
-     "zh": "这是写实照片精修", "en": "this is a photoreal photo retouch",
-     "keywords": ["retouch", "retouched", "retouching", "skin", "photo enhance", "relight", "blemish", "blemishes", "wrinkle", "wrinkles", "complexion", "fix the lighting", "精修", "修图", "磨皮", "美颜", "修脸", "祛痘", "去皱", "皱纹", "补光", "肤质"]}
+    {
+     "id": "keep_identity",
+     "model": "google/nano-banana-2.1/edit",
+     "zh": "这是要保持人物或产品一致的局部修改",
+     "en": "this is a local edit that must keep the person or product consistent",
+     "keywords": [
+      "keep the same",
+      "keep the face",
+      "keep the person",
+      "keep the product",
+      "keep her face",
+      "keep his face",
+      "keep their face",
+      "don't change her face",
+      "don't change his face",
+      "don't change the face",
+      "don't change the person",
+      "don't change the product",
+      "same person",
+      "same product",
+      "same face",
+      "look identical",
+      "identical face",
+      "preserve the face",
+      "preserve the person",
+      "preserve the product",
+      "保持人物",
+      "保持脸",
+      "保持五官",
+      "保持产品",
+      "保持一致",
+      "保持原样",
+      "保持原貌",
+      "保持不变",
+      "同一个人",
+      "人物不变",
+      "人物不要变",
+      "产品不变",
+      "脸不变",
+      "五官不变",
+      "人脸不要",
+      "不要换脸",
+      "不要动脸",
+      "保留人物",
+      "保留产品",
+      "保留脸",
+      "只换背景",
+      "只改背景"
+     ]
+    },
+    {
+     "id": "photo_retouch",
+     "model": "bytedance/seedream-v5.0-pro/edit",
+     "zh": "这是写实照片精修",
+     "en": "this is a photoreal photo retouch",
+     "keywords": [
+      "retouch",
+      "retouched",
+      "retouching",
+      "skin",
+      "photo enhance",
+      "relight",
+      "blemish",
+      "blemishes",
+      "wrinkle",
+      "wrinkles",
+      "complexion",
+      "fix the lighting",
+      "精修",
+      "修图",
+      "磨皮",
+      "美颜",
+      "修脸",
+      "祛痘",
+      "去皱",
+      "皱纹",
+      "补光",
+      "肤质"
+     ]
+    }
    ]
   }
  }

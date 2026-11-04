@@ -1,0 +1,3 @@
+{"slot": "ex07", "tag": "a", "id": "589dd76e1c4941bfb3db7c2e5ca7c40d", "status": "completed", "err": "", "before": 43.560306, "after": 43.522506, "cost": 0.0378, "t": "23:43:25"}
+{"slot": "promo", "tag": "b", "id": "6089eeb2c2524fe38eee6465ee9886ac", "status": "completed", "err": "", "before": 43.522506, "after": 43.484706, "cost": 0.0378, "t": "23:44:24"}
+{"slot":"promo","tag":"a","id":"lost (run interrupted before logging)","status":"completed","before":null,"after":43.560306,"cost":"~0.0378 (list price)","t":"~23:41"}

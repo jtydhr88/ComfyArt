@@ -1,9 +1,11 @@
 """Pre-check helpers of scripts/gate_lib.sh (gate hardening)."""
 import socket
 import subprocess
+import sys
 from pathlib import Path
 
 LIB = Path(__file__).resolve().parents[1] / "scripts" / "gate_lib.sh"
+ROOT = Path(__file__).resolve().parents[1]
 
 
 def _run(fn: str, *args: str, env=None):
@@ -121,3 +123,49 @@ def test_collection_error_tail_drops_pytest_count_line(tmp_path):
     assert r.returncode == 0
     assert "SyntaxError" in r.stdout and "collected" not in r.stdout
     assert "gate_collect_err_tail" in (LIB.parent / "gate.sh").read_text()
+
+
+# --- #712: UNIT runs the whole unit suite; only gate_skip tests (with reason + issue) drop out ---
+def test_gate_unit_stage_runs_all_unit_tests():
+    sh = (ROOT / "scripts" / "gate.sh").read_text()
+    assert 'stage UNIT "not e2e"' in sh
+    assert sh.count('-m "not gate_skip"') == 2  # collect + run
+
+
+def test_gate_skip_marker_registered():
+    assert "gate_skip(reason)" in (ROOT / "pyproject.toml").read_text()
+
+
+def test_every_gate_skip_names_reason_and_issue():
+    import re
+    hits = []
+    for p in (ROOT / "tests").glob("test_*.py"):
+        for m in re.finditer(r"@pytest\.mark\.gate_skip\((.*?)\)\n", p.read_text()):
+            hits.append((p.name, m.group(1)))
+    assert hits, "expected the known main failures to be marked"
+    for name, args in hits:
+        assert 'reason="' in args and re.search(r"#\d+", args), (name, args)
+
+
+# --- #712 no-spend: gate stages unset paid keys and block outbound network ---
+def test_gate_stages_unset_paid_keys_and_enable_guard():
+    sh = (ROOT / "scripts" / "gate.sh").read_text()
+    assert sh.count("env -u WAVESPEED_API_KEY -u KIE_API_KEY GATE=1") == 2  # collect + run
+    assert "duration=" in sh
+
+
+def test_gate_guard_blocks_outbound_allows_localhost():
+    code = (
+        "import os, socket, sys; os.environ['WAVESPEED_API_KEY']='x'; os.environ['GATE']='1';"
+        "sys.path.insert(0, 'tests'); import conftest;"
+        "assert 'WAVESPEED_API_KEY' not in os.environ;"
+        "s=socket.socket(); s.settimeout(1)\n"
+        "try:\n s.connect(('8.8.8.8', 443)); print('OPEN')\n"
+        "except conftest.GateNetworkBlocked: print('BLOCKED')\n"
+        "try:\n socket.getaddrinfo('api.wavespeed.ai', 443); print('DNS')\n"
+        "except conftest.GateNetworkBlocked: print('DNSBLOCKED')\n"
+        "srv=socket.socket(); srv.bind(('127.0.0.1',0)); srv.listen(1);"
+        "c=socket.socket(); c.connect(srv.getsockname()); print('LOCAL')"
+    )
+    out = subprocess.run([sys.executable, "-c", code], cwd=ROOT, capture_output=True, text=True, timeout=60)
+    assert out.stdout.split() == ["BLOCKED", "DNSBLOCKED", "LOCAL"], out.stderr[-800:]

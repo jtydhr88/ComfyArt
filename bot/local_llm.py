@@ -888,10 +888,7 @@ def _ref_lines_for(msg: dict) -> str:
     # blocks_text already embeds Attached-lines; don't duplicate
     if "[Attached " in text or "shape id " in text:
         return ""
-    try:
-        from ..api.bot_turns import format_ref_lines
-    except ImportError:
-        from ComfyArt.api.bot_turns import format_ref_lines  # type: ignore
+    from ..api.bot_turns import format_ref_lines
     return "\n".join(format_ref_lines(refs))
 
 
@@ -1413,6 +1410,16 @@ class LocalLlmProvider(AgentProvider):
         model = str(args.get("model") or "")
         if not model:
             return None
+        # #734: an unregistered model falls back to Auto in the tool, so price what will really run. A pricing
+        # error here propagates and paid_gate fails closed (#732).
+        from ..api.mcp_tools.canvas import _auto_choice, unregistered_model
+        if unregistered_model(name, args):
+            clean = {k: v for k, v in args.items() if k not in ("model", "auto_model")}
+            choice = _auto_choice(name, clean) or {}
+            model = str(choice.get("edit_model") or choice.get("model") or "")
+            if not model:
+                return None
+            args = clean
         return await self._price_one(model, args)
 
     async def _llm_request(self, session: aiohttp.ClientSession, url: str,
@@ -1529,16 +1536,16 @@ class LocalLlmProvider(AgentProvider):
         return [{"role": "system", "content": text}, *msgs[1:]] if text else msgs[1:]
 
     def _threshold(self) -> float:
-        from ComfyArt.api.wavespeed import confirm_usd
+        from ..api.wavespeed import confirm_usd
         return float(confirm_usd())
 
     async def _price_one(self, model: str, inputs: dict):
-        from ComfyArt.api.wavespeed import quote
+        from ..api.wavespeed import quote
         price, _source = await quote(model, inputs)
         return price
 
     async def _models_for(self, feature: str):
-        from ComfyArt.api.wavespeed import grouped_models
+        from ..api.wavespeed import grouped_models
         grouped = await grouped_models()
         feat = grouped.get(feature) or {}
         rows = []
@@ -1560,8 +1567,8 @@ class LocalLlmProvider(AgentProvider):
         is checkpointed as 'awaiting_confirm' while it does."""
         if handle.stop_requested:
             return "cancel"
-        from ComfyArt.api.bot_turns import ACTIVE_TURNS
-        from ComfyArt.api.mcp_tools.bot_tools import _await_ask
+        from ..api.bot_turns import ACTIVE_TURNS
+        from ..api.mcp_tools.bot_tools import _await_ask
         state = ACTIVE_TURNS.get(turn.chat_id)
         if state is None:
             return "unattended"
@@ -1598,8 +1605,8 @@ class LocalLlmProvider(AgentProvider):
         answer is selected [confirm] | [decline]. Anything else (dismiss, timeout, no live turn) declines."""
         if handle is not None and handle.stop_requested:
             return False
-        from ComfyArt.api.bot_turns import ACTIVE_TURNS
-        from ComfyArt.api.mcp_tools.bot_tools import _await_ask
+        from ..api.bot_turns import ACTIVE_TURNS
+        from ..api.mcp_tools.bot_tools import _await_ask
         state = ACTIVE_TURNS.get(turn.chat_id) if turn is not None else None
         if state is None:
             return False

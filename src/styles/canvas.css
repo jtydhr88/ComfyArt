@@ -10,6 +10,9 @@
 .ca-gen-card { position: relative; }
 .ca-gen-card__error a { color: inherit; text-decoration: underline; pointer-events: all; cursor: pointer; }
 .ca-gen-card__error { position: absolute; left: 8px; right: 8px; top: 8px; padding: 6px 12px; border-radius: 8px; background: var(--ca-error-bg); color: var(--ca-error-text); font-size: 13px; overflow-wrap: anywhere; }
+/* #715 design: task-id line on its own line; the id never breaks mid-string, ellipsis if wider than the card (full id in title) */
+.ca-gen-card__error { white-space: pre-line; }
+.ca-gen-card__error .ca-task-id { pointer-events: all; cursor: text; font: inherit; }
 .ca-gen-card__icon svg { width: 100%; height: 100%; }
 /* #356 canvas Generating frame — single flat grey + pill (reference design 01 / 04e); no shimmer/ring/nested stroke */
 .ca-gen-card[data-running],

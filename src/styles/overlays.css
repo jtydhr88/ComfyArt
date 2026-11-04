@@ -434,6 +434,8 @@
 .ca-md ul, .ca-md ol { padding-left: 20px; }
 .ca-md .ca-md__h { font-weight: 600; }
 .ca-md code { padding: 1px 4px; border-radius: 4px; background: var(--ca-field); font-size: 12px; }
+/* #715 design: only the task id never breaks mid-string; too long -> whole id moves down, then end ellipsis (full id in title, copyable) */
+.ca-task-id { display: inline-block; max-width: 100%; box-sizing: border-box; vertical-align: bottom; white-space: nowrap; word-break: keep-all; overflow-wrap: normal; overflow: hidden; text-overflow: ellipsis; user-select: text; }
 .ca-md table { border-collapse: collapse; font-size: 12px; }
 .ca-md th, .ca-md td { padding: 4px 8px; border: var(--ca-border-w) solid var(--ca-border); text-align: left; vertical-align: top; }
 .ca-md pre { margin: 0; padding: 8px 10px; border-radius: 8px; background: var(--ca-field); font-size: 12px; overflow: auto; }

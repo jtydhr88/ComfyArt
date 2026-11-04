@@ -1,6 +1,6 @@
 import logging
 
-from ..auto_models import choose, load_table, note, skill_pin, tool_feature
+from ..auto_models import UnregisteredModel, choose, load_table, note, registered, skill_pin, tool_feature
 from ..mcp_commands import submit_command
 from ..wavespeed import compact_models, grouped_models, load_config, model_details
 from ._context import BOT_CHAT_ID, PROJECT
@@ -37,50 +37,81 @@ def _relay(action: str, *, timeout: float = 20.0, approval: str = ""):
             blocked = await maybe_ask_run_approval(f"{approval}{'：' + label if label else ''}")
             if blocked is not None:
                 return blocked
-        if fallback_for:
-            # #236: switch once, to a different model from the #133 table. Never submit the failed model again.
-            choice = _fallback_choice(action, args, fallback_for)
-            if not choice or choice["model"] == fallback_for:
-                return _same_model_block(fallback_for)
-            if "edit_model" in choice:
-                args.pop("model", None)
-                args.pop("auto_model", None)
-                args["edit_model"] = choice["edit_model"]
-            else:
-                args.pop("edit_model", None)
-                args["model"] = choice["model"]
-                args["auto_model"] = True
-            if (args.get("edit_model") or args.get("model")) == fallback_for:
-                return _same_model_block(fallback_for)
-        else:
-            choice = _auto_choice(action, args)
-            if choice and choice.get("category") == "skill_unregistered":
-                return _unregistered_block(choice)
-            if choice and choice["auto"] and choice["category"] != "references" and "model" not in args and choice["model"] != load_config()["features"][tool_feature(action)]["default"]:
-                args = {**args, "model": choice["model"], "auto_model": True} if "edit_model" not in choice else {**args, "edit_model": choice["edit_model"]}
-        if choice and choice.get("category") in ("skill", "skill_fallback"):
-            args = _pin_args(args, choice)
-        args.pop("skill", None)
-        result = await submit_command(action, args, PROJECT.get(), timeout, chat=BOT_CHAT_ID.get())
-        if choice and isinstance(result, dict) and not result.get("cancelled"):
-            ran = result.get("model")
-            if choice["auto"] and "edit_model" not in choice and choice["category"] != "references" and ran and ran != choice["model"]:
-                log.warning("auto model %s is disabled on the page; %s ran instead", choice["model"], ran)
-                if choice.get("category") == "fallback":
-                    asked, failed = choice["model"], choice.get("fallback") or choice["model"]
-                    choice = {**choice, "model": ran, "fallback": failed,
-                              "reason": {"zh": f"{failed} 调用失败，备用模型 {asked} 已在模型设置里关闭，实际改用 {ran}",
-                                         "en": f"{failed} failed, and the fallback {asked} is turned off in model settings, so {ran} ran"}}
-                else:
-                    choice = {**choice, "model": ran, "fallback": choice["model"],
-                              "reason": {"zh": f"{choice['reason']['zh']}，但 {choice['model']} 已在模型设置里关闭，改用默认模型",
-                                         "en": f"{choice['reason']['en']}, but {choice['model']} is turned off in model settings, so the default model was used"}}
-            result["model_choice"] = {**choice, "note": note(choice)}
-        image = result.pop("png", None)
-        if image:
-            result["_images"] = [{"data": image, "mime": "image/png"}]
-        return result
+        try:
+            return await _relay_run(action, args, fallback_for, timeout)
+        except UnregisteredModel as e:
+            # #712: an unregistered table model is an explicit error, never a silent swap to another model
+            log.error("%s", e)
+            return {"status": "failed", "generation_succeeded": False, "error": str(e), "kind": "unregisteredModel",
+                    "user_message": _unregistered_copy()}
     return handler
+
+
+def _unregistered_copy() -> str:
+    """#712: the same zh/en copy as src/locales wsErr.unregisteredModel (the UI shows it for kind=unregisteredModel)."""
+    import json as _json
+    from pathlib import Path as _P
+    loc = _P(__file__).resolve().parents[2] / "src" / "locales"
+    return " / ".join(_json.loads((loc / f"{l}.json").read_text(encoding="utf-8"))["wsErr.unregisteredModel"] for l in ("zh", "en"))
+
+
+async def _relay_run(action: str, args: dict, fallback_for: str, timeout: float) -> dict:
+    if fallback_for:
+        # #236: switch once, to a different model from the #133 table. Never submit the failed model again.
+        choice = _fallback_choice(action, args, fallback_for)
+        if not choice or choice["model"] == fallback_for:
+            return _same_model_block(fallback_for)
+        if "edit_model" in choice:
+            args.pop("model", None)
+            args.pop("auto_model", None)
+            args["edit_model"] = choice["edit_model"]
+        else:
+            args.pop("edit_model", None)
+            args["model"] = choice["model"]
+            args["auto_model"] = True
+        if (args.get("edit_model") or args.get("model")) == fallback_for:
+            return _same_model_block(fallback_for)
+    else:
+        requested = unregistered_model(action, args)
+        if requested:
+            # #734: a model id the catalog does not register never errors out or asks the user: drop it and let
+            # Auto pick, recording the original value and why on the result (model_choice).
+            log.warning("model %r for %s is not registered; falling back to Auto", requested, action)
+            args = {k: v for k, v in args.items() if k not in ("model", "auto_model")}
+        choice = _auto_choice(action, args)
+        if choice and choice.get("category") == "skill_unregistered":
+            return _unregistered_block(choice)
+        if requested:
+            choice = {**(choice or {"model": "", "auto": True, "category": "auto",
+                                    "reason": {"zh": "自动选择", "en": "Auto picked it"}}),
+                      "requested_model": requested, "fallback_reason": _unregistered_reason(requested)}
+        if choice and choice["auto"] and choice["category"] != "references" and "model" not in args and choice["model"] != load_config()["features"][tool_feature(action)]["default"]:
+            args = {**args, "model": choice["model"], "auto_model": True} if "edit_model" not in choice else {**args, "edit_model": choice["edit_model"]}
+    if choice and choice.get("category") in ("skill", "skill_fallback"):
+        args = _pin_args(args, choice)
+    args.pop("skill", None)
+    result = await submit_command(action, args, PROJECT.get(), timeout, chat=BOT_CHAT_ID.get())
+    if choice and isinstance(result, dict) and not result.get("cancelled"):
+        ran = result.get("model")
+        if choice["auto"] and "edit_model" not in choice and choice["category"] != "references" and ran and ran != choice["model"]:
+            log.warning("auto model %s is disabled on the page; %s ran instead", choice["model"], ran)
+            if choice.get("category") == "fallback":
+                asked, failed = choice["model"], choice.get("fallback") or choice["model"]
+                choice = {**choice, "model": ran, "fallback": failed,
+                          "reason": {"zh": f"{failed} 调用失败，备用模型 {asked} 已在模型设置里关闭，实际改用 {ran}",
+                                     "en": f"{failed} failed, and the fallback {asked} is turned off in model settings, so {ran} ran"}}
+            else:
+                choice = {**choice, "model": ran, "fallback": choice["model"],
+                          "reason": {"zh": f"{choice['reason']['zh']}，但 {choice['model']} 已在模型设置里关闭，改用默认模型",
+                                     "en": f"{choice['reason']['en']}, but {choice['model']} is turned off in model settings, so the default model was used"}}
+        result["model_choice"] = {**choice, "note": note(choice) if choice.get("model") else choice["fallback_reason"]["en"]}
+        if choice.get("requested_model"):
+            result["requested_model"] = choice["requested_model"]
+            result["model_fallback_reason"] = choice["fallback_reason"]
+    image = result.pop("png", None)
+    if image:
+        result["_images"] = [{"data": image, "mime": "image/png"}]
+    return result
 
 
 async def _wait_generation(args: dict) -> dict:
@@ -142,6 +173,7 @@ def _same_model_block(model: str) -> dict:
             "note": f"没有用 {model} 再次提交。/ Did not submit {model} again."}
 
 
+
 def _skill_row(action: str, args: dict) -> dict | None:
     """#708: the skill's pinned row when this call runs on that row's feature and names no model."""
     pin = skill_pin(args.get("skill"))
@@ -196,6 +228,28 @@ def _unregistered_block(choice: dict) -> dict:
             "note": f"没有提交：{choice['reason']['zh']}。/ Not submitted: {choice['reason']['en']}."}
 
 
+def registered_ids(action: str) -> set[str]:
+    """#734: model ids the catalog registers for this tool's feature (empty when the tool has no model feature)."""
+    feature = tool_feature(action)
+    if not feature:
+        return set()
+    feats = load_config()["features"]
+    return {m["id"] for m in (feats.get(feature) or {}).get("models") or []}
+
+
+def unregistered_model(action: str, args: dict) -> str:
+    """#734: the agent-passed model when the catalog does not register it for this tool, else ''."""
+    model = str(args.get("model") or "")
+    if not model or not tool_feature(action):
+        return ""
+    return "" if model in registered_ids(action) else model
+
+
+def _unregistered_reason(model: str) -> dict:
+    return {"zh": f"{model} 不是已注册的模型，已改用自动选择",
+            "en": f"{model} is not a registered model, so Auto picked the model instead"}
+
+
 def _auto_choice(action: str, args: dict) -> dict | None:
     """#133: which model runs and why (user-named wins, else the Auto table). #708: a skill pin wins over Auto."""
     feature = tool_feature(action)
@@ -210,13 +264,12 @@ def _auto_choice(action: str, args: dict) -> dict | None:
         # else the edit default. A user-named (text-to-image) model keeps the page's edit default as before.
         refs = len(args.get("refs") or [])
         if not args.get("model") and refs >= 2:
-            pick = choose("image_edit", "", None, cfg)  # default, used as the fallback below
             multi = load_table()["image_edit"]["multi_reference"]
             ids = {m["id"] for m in cfg["features"]["image_edit"]["models"]}
-            if multi["model"] in ids:
-                return {"model": multi["model"], "auto": True, "category": "multi_reference", "edit_model": multi["model"],
-                        "reason": {"zh": multi["zh"].format(n=refs), "en": multi["en"].format(n=refs)}}
-            log.warning("auto model %s for multi_reference not in catalog; falling back to %s", multi["model"], pick["model"])
+            model, failed = registered(multi, ids, "image_edit/multi_reference")  # #712: no silent fallback
+            out = {"model": model, "auto": True, "category": "multi_reference", "edit_model": model,
+                   "reason": {"zh": multi["zh"].format(n=refs), "en": multi["en"].format(n=refs)}}
+            return {**out, "fallback": failed} if failed else out
         if args.get("model"):
             reason = {"zh": f"你指定了 {args['model']}，但带参考图时走图片编辑，用的是它的默认模型",
                       "en": f"you named {args['model']}, but references run on image editing, which uses its default model"}

@@ -161,14 +161,14 @@ const ex643 = (id: string, ids: number[], pin: string = WASH_643) =>
   ids.map((n) => pinned(`643/wash/${id}/examples`, pin, `${String(n).padStart(2, '0')}.webp`))
 const feat643 = (id: string, ids: number[]) =>
   ids.map((n) => pinned(`643/wash/${id}/featured`, WASH_643, `${String(n).padStart(2, '0')}.webp`))
-// #636 Phase2-S3 C deferred5 soft wash — nearMiss remap Examples-only (hardMax layouts).
-// logo carousel11; photo-split/ppt still1; promo/naive carousel4; featured 3–5 cycle.
-const WASH_636 = '5ccfdf0f481bbcbb3392516dba75f1ec3bda3ab6'
-const cover636 = (id: string) => pinned(`636/wash/${id}`, WASH_636, 'cover.webp')
-const ex636 = (id: string, ids: number[]) =>
-  ids.map((n) => pinned(`636/wash/${id}/examples`, WASH_636, `${String(n).padStart(2, '0')}.webp`))
-const feat636 = (id: string, ids: number[]) =>
-  ids.map((n) => pinned(`636/wash/${id}/featured`, WASH_636, `${String(n).padStart(2, '0')}.webp`))
+// #673 C group re-wash (design+QA PASS at docs/673-audit 44515872); pulled: promo ex01, ppt p07.
+// logo carousel4; photo-split/ppt still1; promo still1; naive carousel4; featured = cover + examples.
+const WASH_673 = 'a4baa17bfb6eb984348a23b439a925f465a0ee53'
+const cover673 = (id: string) => pinned(`673/wash/${id}`, WASH_673, 'cover.webp')
+const ex673 = (id: string, ids: number[]) =>
+  ids.map((n) => pinned(`673/wash/${id}/examples`, WASH_673, `${String(n).padStart(2, '0')}.webp`))
+const feat673 = (id: string, ids: number[]) =>
+  ids.map((n) => pinned(`673/wash/${id}/featured`, WASH_673, `${String(n).padStart(2, '0')}.webp`))
 const wash541 = (commit: string, skillId: string, presetId: string) =>
   `https://raw.githubusercontent.com/ganjmeng/ComfyArt/${commit}/541/wash/${skillId}/${skillId}__${presetId}.webp`
 const washProduct541 = (presetId: string) => wash541(presetId === 'detail' ? WASH_541.productDetail : WASH_541.product, 'product', presetId)
@@ -225,18 +225,35 @@ export const PHASE2_NEW_SKILL_IDS = [
 ] as const
 export const PHASE2_NEW_SKILL_ID_SET: ReadonlySet<string> = new Set(PHASE2_NEW_SKILL_IDS)
 
-/** #638 Phase2-S5 Soft mount — PRODUCT-LOCK-PHASE2 Soft order slots 1–6 production-ready (A social upgrade + B NEW5 washed).
- *  `social` also lives in PHASE1_SKILL_IDS (upgrade, no dup card). C deferred5 + D style4 stay unmounted as production (#653/#636-C HOLD; D out of scope). #490 HOLD. */
+/** #638 Phase2-S5 Soft mount — PRODUCT-LOCK-PHASE2 Soft order + #735 C-group wash PASS (unhide).
+ *  `social` also lives in PHASE1_SKILL_IDS (upgrade, no dup card). Slots: A social upgrade + B NEW5 + C NEW5 washed.
+ *  D style4 stays deferred / hidden (Phase4). #490 HOLD. */
 export const PHASE2_SKILL_IDS = [
   'flash-cut-video', 'style-transfer', 'person-swap', 'social', 'commerce-strategist', 'lifestyle-scene',
+  'naive-illustration', 'logo-abstract', 'photo-split-poster', 'ppt-visual', 'promo-ecommerce',
 ] as const
 export const PHASE2_SKILL_ID_SET: ReadonlySet<string> = new Set(PHASE2_SKILL_IDS)
-/** #638 — C deferred .art5 + D style4: data-contract only; do not treat as washed production mount. */
+/** #638/#735 — D style4 only: still data-contract / Phase4; not washed production mount. C moved to PHASE2_SKILL_IDS. */
 export const PHASE2_DEFERRED_SKILL_IDS = [
-  'naive-illustration', 'logo-abstract', 'photo-split-poster', 'ppt-visual', 'promo-ecommerce',
   'yingzao', 'crt-interface', 'crayon-sketch', 'fabric-collage',
 ] as const
 export const PHASE2_DEFERRED_SKILL_ID_SET: ReadonlySet<string> = new Set(PHASE2_DEFERRED_SKILL_IDS)
+/** #673 — HIDE LIST (not a delete). Built-in skills listed here are kept in BUILTIN_SKILLS (data, assets, lookup by id
+ *  all intact, so saved sessions / cards that reference them still open) but are NOT listed anywhere a user or the agent
+ *  picks a skill for new work: home featured waterfall + quick-start + category chips, Skills page, 「+ → 技能」 menu,
+ *  composer 「/」 picker, and the agent `skill` tool (list + read).
+ *  TO RE-LIST A SKILL: once it is washed in #673 and Angela gives PASS, delete its id from this array. Nothing else to change.
+ *  #735 — C-group 5 removed from this list (Skills page visible); D-group 4 stay hidden. */
+export const HIDDEN_BUILTIN_SKILL_IDS: readonly string[] = [
+  'yingzao', 'crt-interface', 'crayon-sketch', 'fabric-collage',
+]
+export const HIDDEN_BUILTIN_SKILL_ID_SET: ReadonlySet<string> = new Set(HIDDEN_BUILTIN_SKILL_IDS)
+/** #673 — true when a skill may be offered for NEW selection. Personal (custom) skills are always listed. */
+export const isListedSkill = (s: Pick<Skill, 'id' | 'custom'>): boolean => !!s.custom || !HIDDEN_BUILTIN_SKILL_ID_SET.has(s.id)
+export const listedSkills = <T extends Pick<Skill, 'id' | 'custom'>>(skills: T[]): T[] => skills.filter(isListedSkill)
+/** #673 — the plain sentence a user sees when an old session / card / link starts a hidden skill. */
+export const hiddenSkillNotice = (skill: Pick<Skill, 'id' | 'custom'> | null | undefined): string | null =>
+  skill && !isListedSkill(skill) ? t('skills.hiddenUnavailable') : null
 
 /** #640 Phase3-S1 — 19 NEW ids (upgrade `thumbnail` is not listed here). PRODUCT-LOCK-PHASE3 + PHASE3-HARDEN-DIFF. Skill Creator → #650.
  *  #642 Phase3-S3 — NEW19 field parity Upload+Additional (NEARMISS_INPUTS); media wash → #643; no competitor strings in src). */
@@ -248,7 +265,7 @@ export const PHASE3_NEW_SKILL_IDS = [
 ] as const
 export const PHASE3_NEW_SKILL_ID_SET: ReadonlySet<string> = new Set(PHASE3_NEW_SKILL_IDS)
 
-/** Phase1 hot order → Phase2 Soft mount NEW (B) → deferred C/D → untouched / other. */
+/** Phase1 hot order → Phase2 Soft mount NEW (B+C) → deferred D → untouched / other. */
 function orderBuiltins(skills: Skill[]): Skill[] {
   const phase1Rank = new Map<string, number>(PHASE1_SKILL_IDS.map((id, i) => [id, i]))
   // Soft mount NEW only (exclude `social` — already ranked in Phase1)
@@ -276,8 +293,8 @@ function orderBuiltins(skills: Skill[]): Skill[] {
  *  New 6 media: covers-v4 + featured-v2 + 594/wash examples @ WASH_594; dual-fit contain (#602); hover video @ WASH_623_NEW6_VIDEO (#623).
  *  #634 Phase2-S1 — PRODUCT-LOCK-PHASE2: 14 NEW ids (B .ai5 + C deferred.art5 + D style4).
  *  #635 Phase2-S2 — deepen `social` Fashion UGC production instructions/presets/inputs (keep RedNote; no fashion-ugc id).
- *  #636/#637 Phase2-S3/S4 — B NEW5 production + soft wash; C5 HOLD / D out of scope for Soft mount.
- *  #638 Phase2-S5 — Soft mount A+B via PHASE2_SKILL_IDS + orderBuiltins (home + Skills Explore same BUILTIN_SKILLS); C/D deferred; #490 HOLD.
+ *  #636/#637 Phase2-S3/S4 — B NEW5 production + soft wash; C5 later via #673/#735; D Phase4.
+ *  #638 Phase2-S5 — Soft mount A+B via PHASE2_SKILL_IDS + orderBuiltins; #735 mounts C (washed) too; D deferred/hidden; #490 HOLD.
  *  #642 Phase3-S3 — NEW19 NEARMISS_INPUTS field parity (scaffold); assets empty until #643 wash pins.
  *  Skill Creator Out → #650. `interior` untouched. Gold UX site external — never name it in src.
  */
@@ -381,28 +398,28 @@ export const BUILTIN_SKILLS: Skill[] = orderBuiltins([
     inputs: [I('productImage', ['商品图片', 'Product images'], 'image', true), I('sceneBrief', ['场景说明', 'Scene brief'], 'text', false, ['家居/穿搭/氛围偏好', 'Home / wear / mood preferences']), VISUAL] },
   // C deferred .art5 — #636 Phase2-S3 C production (instructions/inputs/presets). B wash landed via #637; C still examples:[].
   { id: 'naive-illustration', name: t('skills.naiveIllustration'), instructions: 'You are a production naive hand-drawn illustrator. Ship giant-object vs tiny-person contrast frames with cafe/worker wit. Not a social-media cover set and not a RedNote sticker pack.\n1) Modes: B/W line draft or soft flat-color object-play — follow the selected preset; keep the giant-vs-mini scale joke unmistakable.\n2) Subject: oversized everyday object (coffee cup, bag, phone, food) with a tiny worker/person interacting; friendly line, simple shapes, limited palette unless brief asks otherwise.\n3) Guardrails: never collapse into a generic social cover grid, fashion UGC set, or crayon-sketch children-book look; this is the scale-joke illustration lane.\n4) Copy: put every on-art phrase in quotes; prefer sparse witty labels over poster headlines.\n5) Refs: when refs are uploaded, pass shape ids in refs (ref_modes content) on every generate_image call.',
-    category: 'social', cover: cover636('naive-illustration'),
-    examples: ex636('naive-illustration', [1, 2, 3, 4]), featured: feat636('naive-illustration', [1, 2, 3, 4, 5]),
+    category: 'social', cover: cover673('naive-illustration'),
+    examples: ex673('naive-illustration', [1, 2, 3, 4]), featured: feat673('naive-illustration', [1, 2, 3, 4, 5]),
     presets: [P('line', '黑白线稿', 'B/W line', 'Style: naive B/W line illustration, giant object vs tiny person, witty cafe/worker energy, clean strokes.'), P('object', '实物互动', 'Object play', 'Style: naive soft flat-color illustration with interactive oversized object play, friendly limited palette.')],
     inputs: NEARMISS_INPUTS },
   { id: 'logo-abstract', name: t('skills.logoAbstract'), instructions: 'You are a production minimal geometric logo designer. Distill a photo into one scalable geometric mark. Not a 3D material study and not a full brand VI kit.\n1) Intake: require the reference photo; lock the subject traits called out in markNotes when present.\n2) Distill: reduce to a single geometric symbol on a plain ground — two-color preference, strict grid, silhouette that survives tiny sizes.\n3) Scope: one mark only; no stationery system, no packaging, no multi-asset VI board (leave those to brand); distinct from logo-material finish studies.\n4) Presentation: plain ground, optional tiny construction notes; put any on-art words in quotes.\n5) Refs: pass the photo shape id in refs (ref_modes content) on every generate_image call.',
-    category: 'branding', cover: cover636('logo-abstract'),
-    examples: ex636('logo-abstract', [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]), featured: feat636('logo-abstract', [1, 2, 3, 4, 5]),
+    category: 'branding', cover: cover673('logo-abstract'),
+    examples: ex673('logo-abstract', [1, 2, 3, 4]), featured: feat673('logo-abstract', [1, 2, 3, 4, 5]),
     presets: [P('circle', '圆形几何', 'Circle geometry', 'Style: minimal circular geometric logo mark distilled from the photo, two-color, scalable silhouette.'), P('angular', '折线几何', 'Angular geometry', 'Style: angular geometric logo mark from the photo, strict grid, plain ground, single-mark discipline.')],
     inputs: NEARMISS_INPUTS },
   { id: 'photo-split-poster', name: t('skills.photoSplitPoster'), instructions: 'You are a production photo-split abstract poster designer. Keep the exact layout: top half original photo, bottom half abstract geometry sampled from its colors. Not a generic flat poster without the photo half.\n1) Intake: require the photo; sample palette strictly from it.\n2) Layout lock: horizontal split — photo above, geometric abstract below; hard or soft edge per preset; never drop the photo half.\n3) Craft: sparse typography if any; every on-art phrase in quotes; prefer portrait/poster ratios suited to ads.\n4) Guardrails: do not morph into a full campaign KV system or a lifestyle scene without the split grammar.\n5) Refs: pass the photo shape id in refs (ref_modes content) on every generate_image call.',
-    category: 'ads', cover: cover636('photo-split-poster'),
-    examples: ex636('photo-split-poster', [1]), featured: feat636('photo-split-poster', [1, 2, 3]),
+    category: 'ads', cover: cover673('photo-split-poster'),
+    examples: ex673('photo-split-poster', [1]), featured: feat673('photo-split-poster', [1, 2]),
     presets: [P('hard', '硬切对半', 'Hard split', 'Style: hard horizontal split poster, photo above, geometric abstract below, palette sampled from the photo.'), P('soft', '柔边对半', 'Soft split', 'Style: soft-edge split poster, photo above, abstract geometry below, shared palette from the photo.')],
     inputs: NEARMISS_INPUTS },
   { id: 'ppt-visual', name: t('skills.pptVisual'), instructions: 'You are a production premium PPT / deck visual designer. Ship modular presentation pages with a shared style library — not print posters and not marketing campaign KVs.\n1) Brief: read deckBrief for topic, page types and style; optional refs set the look library.\n2) Page types: cover, section divider, comparison (and closing when asked) as coherent 16:9 deck frames with one type scale and module system.\n3) Website-chip intent: this lights the website category; keep product-deck language, not printable poster art.\n4) Copy: short on-slide lines in quotes; clear hierarchy; generous margins for projection.\n5) Refs: when refs are uploaded, pass shape ids in refs (ref_modes content) on every generate_image call.',
-    category: 'website', cover: cover636('ppt-visual'),
-    examples: ex636('ppt-visual', [1]), featured: feat636('ppt-visual', [1, 2, 3]),
+    category: 'website', cover: cover673('ppt-visual'),
+    examples: ex673('ppt-visual', [1]), featured: feat673('ppt-visual', [1, 2]),
     presets: [P('cover', '封面页', 'Cover slide', 'Style: premium deck cover slide 16:9, strong hierarchy, short title in quotes, shared module system.'), P('section', '章节页', 'Section slide', 'Style: section divider slide, modular system coherent with cover, 16:9 projection-safe.'), P('compare', '对比页', 'Comparison slide', 'Style: comparison module slide, clear columns, premium deck language, shared style library.')],
     inputs: NEARMISS_INPUTS },
   { id: 'promo-ecommerce', name: t('skills.promoEcommerce'), instructions: 'You are a production e-commerce promo key-visual designer. Ship big-sale KV plus reusable promo chrome (ribbons, frames, badges). Not a white-bg listing main image and not a full multi-platform marketing-campaign system.\n1) Intake: require productImage and promoBrief (sale theme, offer, dates); lock product identity from the ref.\n2) KV: bold promo hierarchy with product hero, clear claim ladder; put price/claim words in quotes; keep legal honesty.\n3) Chrome: deliver matching reusable promo components (corner badges, borders, ribbons) consistent with the KV.\n4) Division of labor: leave white-bg / A+ listing sets to product; leave brand-wide campaign systems to marketing-campaign.\n5) Refs: pass product shape ids in refs (ref_modes content) on every generate_image call.',
-    category: 'ecommerce', cover: cover636('promo-ecommerce'),
-    examples: ex636('promo-ecommerce', [1, 2, 3, 4]), featured: feat636('promo-ecommerce', [1, 2, 3, 4, 5]),
+    category: 'ecommerce', cover: cover673('promo-ecommerce'),
+    examples: ex673('promo-ecommerce', [1]), featured: feat673('promo-ecommerce', [1, 2]),
     presets: [P('kv', '大促主视觉', 'Promo KV', 'Style: ecommerce promo key visual, bold sale hierarchy, product hero locked from ref, claims in quotes.'), P('badge', '促销组件', 'Promo chrome', 'Style: matching promo badges, ribbons and frames for the same sale system, reusable chrome.')],
     inputs: NEARMISS_INPUTS },
   // D style4 (KEEP for full 15)
@@ -505,6 +522,22 @@ export const BUILTIN_SKILLS: Skill[] = orderBuiltins([
 ])
 
 export const skillAtom = atom<Skill | null>('skill', null)
+/** #673 — the plain sentence shown in the composer when a hidden skill is attached from an old session / card / link. */
+export const skillNoticeAtom = atom<string | null>('skill notice', null)
+/** #673 — the one place a skill reaches the composer from saved work (deep link, resend, try-it). A hidden skill is
+ *  refused: no chip, the notice is shown, and the caller must not send (no agent turn, no paid submit, no request). */
+export function attachSkill(s: Skill | null): boolean {
+  if (s && hiddenSkillNotice(s)) { skillAtom.set(null); skillNoticeAtom.set(hiddenSkillNotice(s)); return false }
+  skillNoticeAtom.set(null)
+  skillAtom.set(s)
+  return true
+}
+/** #673 — same refusal for a send that already holds a skill (safety net in sendToAgent). True = blocked. */
+export function blockHiddenSkill(s: Pick<Skill, 'id' | 'custom'> | null | undefined): boolean {
+  const notice = hiddenSkillNotice(s)
+  if (notice) skillNoticeAtom.set(notice)
+  return !!notice
+}
 
 const listFiles = (dir: string) => listUserFiles(`${ROOT}/${dir}`.replace(/\/$/, ''), true)
 const read = (path: string) => readUserText(`${ROOT}/${path}`)
@@ -550,6 +583,11 @@ export async function loadSkills(): Promise<Skill[]> {
   }
   const custom = await Promise.all([...byId].filter(([, paths]) => paths.includes('SKILL.md')).map(([id, paths]) => readSkill(id, paths)))
   return [...custom.filter((s): s is Skill => !!s), ...BUILTIN_SKILLS]
+}
+
+/** #673 — what pickers show (home, Skills page, + menu, / picker, agent list). Lookups by id keep using loadSkills(). */
+export async function loadListedSkills(): Promise<Skill[]> {
+  return listedSkills(await loadSkills())
 }
 
 export async function saveSkill(skill: Skill) {
@@ -729,7 +767,8 @@ export const SKILL_NON_RETRYABLE = '[non-retryable]'
 
 export async function skillTool(args: Record<string, unknown>): Promise<unknown> {
   const skills = await loadSkills()
-  if (args.action === 'list') return { skills: skills.map((s) => ({ id: s.id, name: s.name, description: s.description ?? '', custom: !!s.custom })) }
+  const listed = listedSkills(skills)
+  if (args.action === 'list') return { skills: listed.map((s) => ({ id: s.id, name: s.name, description: s.description ?? '', custom: !!s.custom })) }
   const id = args.id ? String(args.id) : ''
   if (args.action === 'save') {
     if (!args.name && !id) throw new Error('save needs a name or id')
@@ -756,8 +795,13 @@ export async function skillTool(args: Record<string, unknown>): Promise<unknown>
   if (!id && !(typeof args.name === 'string' && args.name.trim())) {
     throw new Error(`${SKILL_NON_RETRYABLE} skill read needs a non-empty id or name (e.g. id="linkedin-banner"); do not retry this call — use action="list" for ids`)
   }
-  const skill = id ? skills.find((s) => s.id === id) : skills.find((s) => s.name === args.name)
-  if (!skill) throw new Error(`unknown skill ${JSON.stringify(id || args.name)} — available: ${skills.map((s) => `${s.name} (${s.id})`).join(', ')}`)
+  // #733: a read resolves by id OR display name (either field); hiding (#673) only affects entry points / pick-lists,
+  // never the agent's own read by id or name.
+  const keys = [id, typeof args.name === 'string' ? args.name.trim() : ''].filter(Boolean)
+  const norm = (v: string) => v.trim().toLowerCase()
+  const skill = skills.find((s) => keys.includes(s.id)) ?? skills.find((s) => keys.includes(s.name))
+    ?? skills.find((s) => keys.some((k) => norm(k) === norm(s.id) || norm(k) === norm(s.name)))
+  if (!skill) throw new Error(`unknown skill ${JSON.stringify(id || args.name)} — available: ${listed.map((s) => `${s.name} (${s.id})`).join(', ')}`)
   if (args.path) {
     const content = skill.files?.[String(args.path)]
     if (content == null) throw new Error(`skill ${skill.name} has no file ${args.path}; files: ${Object.keys(skill.files ?? {}).join(', ') || '(none)'}`)
@@ -941,10 +985,17 @@ export function withPreset(skill: Skill, presetId?: string | null): Skill {
   return p?.prompt ? { ...skill, instructions: `${skill.instructions.trimEnd()}\n\n${p.prompt}` } : skill
 }
 
+/** #644 design: 「N 个模板」 = the thumbnails the dialog really shows — the Examples strip plus preset tiles with media
+ *  (same sources as SkillRunDialog). Presets without media add no thumbnail and are not counted. */
+export function skillThumbCount(skill: Skill): number {
+  return (skill.examples?.length ?? 0) + (skill.presets ?? []).filter((p) => !!(p.image || p.video)).length
+}
+
 /** #541/#581 — design-spec meta under the description. Real data only: template count from presets[];
  *  usage from local `loadSkillUsage` (never seeded). No presets and no usage → null. */
 export function skillMeta(skill: Skill): { templates: number; usage: number } | null {
-  const templates = skill.presets?.length ?? 0
+  // #569 ruling kept: effect skills (no presets) show no 「N 个模板」 line; template skills count real thumbnails (#644)
+  const templates = skill.presets?.length ? skillThumbCount(skill) : 0
   const usage = getSkillUsage(skill.id)
   if (!templates && !usage) return null
   return { templates, usage }
