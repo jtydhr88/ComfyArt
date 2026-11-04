@@ -10,7 +10,7 @@ SKILLS_TS = (ROOT / "src/skills.ts").read_text()
 
 UPGRADE = ["brand", "packaging", "poster", "product", "character", "social", "motion", "banner", "thumbnail"]
 EFFECT = {"poster", "banner", "thumbnail"}  # #641: thumbnail dialog parity → EFFECT_INPUTS
-TEMPLATE_COUNTS = {"product": 6, "brand": 6, "packaging": 5, "character": 8, "motion": 2}
+TEMPLATE_COUNTS = {"product": 6, "brand": 6, "packaging": 5, "character": 8, "motion": 0}
 
 
 def _entries() -> dict[str, str]:
@@ -43,7 +43,7 @@ def test_upgrade9_presets_examples_inputs_complete():
         e = entries[sid]
         assert "inputs:" in e, sid
         if sid in EFFECT:
-            assert "inputs: EFFECT_INPUTS" in e, sid
+            assert ("inputs: REF_CARD_INPUTS_687 }" if sid in ("poster", "banner", "interior") else "inputs: EFFECT_INPUTS }") in e, sid  # #687
             assert len(re.findall(r"\bP\('", e)) == 0, sid
             if sid == "thumbnail":
                 assert "titleCopy" not in e, sid
@@ -61,6 +61,9 @@ def test_upgrade9_presets_examples_inputs_complete():
             assert len(re.findall(r"Style: |Focus on |Template: ", body)) >= 2, sid
         else:
             n = TEMPLATE_COUNTS[sid]
+            if not n:  # #687: motion off-topic templates removed
+                assert "presets:" not in e and len(re.findall(r"\bP\('", e)) == 0, sid
+                continue
             assert len(re.findall(r"\bP\('", e)) == n, sid
             # Count only preset prompt prefixes, not instruction prose
             body = e.split("presets:", 1)[1].split("inputs:", 1)[0]

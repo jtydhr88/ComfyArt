@@ -73,6 +73,8 @@ export function SkillRunDialog({ skill, presetId, onClose, run = newProject }: {
   const [uploading, setUploading] = useState<string | null>(null)
   const [uploadError, setUploadError] = useState<string | null>(null)
   const [runError, setRunError] = useState(false)
+  // #687: required-field errors appear only after 开始制作 is clicked, never on open
+  const [tried, setTried] = useState(false)
   const [fav, setFav] = useState(() => loadFavourites().includes(skill.id))
   const [shared, setShared] = useState(false)
   const missing = missingInputs(skill, values)
@@ -90,7 +92,8 @@ export function SkillRunDialog({ skill, presetId, onClose, run = newProject }: {
   }
   const onFav = () => setFav(toggleFavourite(skill.id).includes(skill.id))
   const onStart = () => {
-    if (missing.length || uploading) return
+    if (uploading) return
+    if (missing.length) { setTried(true); document.getElementById(`skill-run-${missing[0]}`)?.focus(); return }
     setRunError(false)
     recordSkillUse(skill.id)
     try { run(skillRunParams(skill, values, preset)) } catch { setRunError(true) }
@@ -216,8 +219,9 @@ export function SkillRunDialog({ skill, presetId, onClose, run = newProject }: {
               const id = `skill-run-${f.key}`
               const label = <label className="ca-skillform__label" htmlFor={id}>{loc(f.label)}{f.required && <span className="ca-skillrun__req" aria-hidden="true"> *</span>}</label>
               const ph = f.placeholder ? loc(f.placeholder) : ''
-              const invalid = missing.includes(f.key)
-              const common = { id, 'data-testid': 'skill-run-field', 'data-key': f.key, 'data-type': f.type, required: f.required, 'aria-required': f.required || undefined, 'aria-invalid': invalid || undefined }
+              const invalid = tried && missing.includes(f.key)
+              const common = { id, 'data-testid': 'skill-run-field', 'data-key': f.key, 'data-type': f.type, required: f.required, 'aria-required': f.required || undefined, 'aria-invalid': invalid || undefined, ...(f.maxLength ? { 'data-maxlength': f.maxLength } : {}) }
+              const max = f.maxLength ? { maxLength: f.maxLength } : {}
               const fieldError = invalid ? (
                 <p className="ca-skillrun__fielderr" role="alert" data-testid="skill-run-field-error" data-key={f.key}>{t('skillRun.fieldRequired', loc(f.label))}</p>
               ) : uploadError === f.key ? (
@@ -238,18 +242,18 @@ export function SkillRunDialog({ skill, presetId, onClose, run = newProject }: {
               if (f.type === 'textarea') return (
                 <div key={f.key} className="ca-skillrun__field">
                   {label}
-                  <textarea {...common} className="ca-panel__prompt ca-panel__prompt--boxed" rows={3} placeholder={ph} value={values[f.key] ?? ''} onChange={(e) => set(f.key, e.target.value)} onKeyDown={stop} />
+                  <textarea {...common} className="ca-panel__prompt ca-panel__prompt--boxed" rows={3} placeholder={ph} {...max} value={values[f.key] ?? ''} onChange={(e) => set(f.key, e.target.value)} onKeyDown={stop} />
                   {fieldError}
                 </div>
               )
               if (f.type === 'image') return (
                 <div key={f.key} className="ca-skillrun__field">
                   {label}
-                  <div className="ca-gen__refs ca-skillrun__uploadwrap" {...common}>
+                  <div className="ca-gen__refs ca-skillrun__uploadwrap" {...common} data-accept={f.accept ?? 'image'}>
                     {values[f.key]
-                      ? <span className="ca-gen__ref"><img src={values[f.key]} alt="" /><button type="button" title={t('common.remove')} onClick={() => set(f.key, '')}>{Icons.close}</button></span>
+                      ? <span className="ca-gen__ref">{f.accept === 'video' ? <video src={values[f.key]} muted playsInline /> : <img src={values[f.key]} alt="" />}<button type="button" title={t('common.remove')} onClick={() => set(f.key, '')}>{Icons.close}</button></span>
                       : <label className="ca-skillrun__upload" data-testid="skill-run-upload"><span className="ca-icon">{Icons.uploadArrow}</span><span>{uploading === f.key ? t('skillRun.uploading') : t('skillRun.uploadHint')}</span>
-                          <input id={id} type="file" accept="image/*" hidden onChange={(e) => {
+                          <input id={id} type="file" accept={f.accept === 'video' ? 'video/*' : 'image/*'} hidden onChange={(e) => {
                             const file = e.target.files?.[0]; e.target.value = ''
                             if (!file) return
                             setUploading(f.key)
@@ -263,7 +267,7 @@ export function SkillRunDialog({ skill, presetId, onClose, run = newProject }: {
               return (
                 <div key={f.key} className="ca-skillrun__field">
                   {label}
-                  <input {...common} className="ca-panel__input" placeholder={ph} value={values[f.key] ?? ''} onChange={(e) => set(f.key, e.target.value)} onKeyDown={stop} />
+                  <input {...common} className="ca-panel__input" placeholder={ph} {...max} value={values[f.key] ?? ''} onChange={(e) => set(f.key, e.target.value)} onKeyDown={stop} />
                   {fieldError}
                 </div>
               )
@@ -272,7 +276,7 @@ export function SkillRunDialog({ skill, presetId, onClose, run = newProject }: {
           </div>
           <div className="ca-skillrun__foot">
             {runError && <p className="ca-skillrun__fielderr" role="alert" data-testid="skill-run-run-error">{t('skillRun.startFailed')}</p>}
-            <button type="button" className="ca-panel__primary ca-skillrun__go" data-testid="skill-run-go" disabled={missing.length > 0 || !!uploading}
+            <button type="button" className="ca-panel__primary ca-skillrun__go" data-testid="skill-run-go" disabled={!!uploading} data-missing={missing.length || undefined}
               onClick={onStart}>{t('skillRun.start')}</button>
           </div>
         </div>

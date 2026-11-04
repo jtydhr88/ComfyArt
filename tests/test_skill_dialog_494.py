@@ -37,7 +37,7 @@ NEARMISS = ("naive-illustration", "logo-abstract", "photo-split-poster", "ppt-vi
             "taobao-product", "before-after", "anim-2d", "creator-identity", "product-website", "studio-model",
             "youtube-channel-banner", "ai-model", "product-to-packaging", "game-art", "portrait-studio", "premium-website",
             "animated-poster", "pose-fission", "live-promo-decor", "linkedin-banner", "logo-animation", "restaurant-website", "clothing-swap")  # #641 thumbnail dialog parity → EFFECT_INPUTS
-COUNTS = {"product": 6, "brand": 6, "packaging": 5, "character": 8, "motion": 2,  # #569 template counts
+COUNTS = {"product": 6, "brand": 6, "packaging": 5, "character": 8, "motion": 0,  # #569 template counts
           "multi-angle": 0, "logo-material": 4, "meta-ads": 4, "mobile-ui": 4, "web-product": 4, "marketing-campaign": 4,  # #593 new-6; multi-angle → Upload+Additional (#691)
           "flash-cut-video": 3, "style-transfer": 3, "person-swap": 3, "commerce-strategist": 3, "lifestyle-scene": 3,
           "naive-illustration": 2, "logo-abstract": 2, "photo-split-poster": 2, "ppt-visual": 3, "promo-ecommerce": 2,
@@ -56,13 +56,13 @@ def test_every_field_is_bilingual_data(got):
     for sid, fields in got["fields"].items():
         assert fields, sid
         # #569: effect skills (upload + note) and character carry no required field, like the reference.
-        assert any(req for _, _, req, *_ in fields) == (sid not in EFFECT and sid not in NEARMISS and sid not in {"character", "social", "multi-angle"}), sid  # #635 social optional refs; #691 multi-angle upload optional
+        assert any(req for _, _, req, *_ in fields) == (sid not in EFFECT and sid not in NEARMISS and sid not in {"character", "social", "multi-angle", "brand", "packaging", "logo-material", "meta-ads", "marketing-campaign", "web-product", "mobile-ui"}), sid  # #687-1 reference-card fields optional  # #635 social optional refs; #691 multi-angle upload optional
         for key, typ, req, zh, en, ph in fields:
             assert typ in {"text", "textarea", "select", "image"} and zh and en, (sid, key)
             if req and typ in {"text", "textarea"}:
                 assert ph, (sid, key)
     keys = {sid: [f[0] for f in fs] for sid, fs in got["fields"].items()}
-    assert keys["poster"] != keys["brand"]  # each skill its own dialog
+    assert keys["poster"] != keys["product"] and keys["brand"] != keys["motion"]  # each skill its own dialog (#687: brand now = reference-card Upload + Additional, like poster)
 
 
 @needs_node
@@ -79,12 +79,12 @@ def test_builtin_preset_images_unique(got):
     imgs = [u for u in got["builtinPresetImgs"] if u]
     washed = [u for u in imgs if "569/wash/" in u or "541/wash/" in u]
     covers = [u for u in imgs if "494/covers-v4/" in u]
-    assert len(washed) == 27  # product 6 / brand 6 / packaging 5 + character 8 / motion 2
+    assert len(washed) == 25  # product 6 / brand 6 / packaging 5 + character 8 (#687: motion templates removed)
     assert all("raw.githubusercontent.com/ganjmeng/ComfyArt/" in u for u in washed)
-    assert sum("569/wash/character/templates/" in u for u in washed) == 8 and sum("569/wash/motion/templates/" in u for u in washed) == 2
+    assert sum("569/wash/character/templates/" in u for u in washed) == 8 and sum("569/wash/motion/templates/" in u for u in washed) == 0
     assert sum("541/wash/product/" in u for u in washed) == 6
     assert sum("541/wash/brand/" in u for u in washed) == 6 and sum("541/wash/packaging/" in u for u in washed) == 5
-    assert len(set(washed)) == 27  # no shared cover fallback across washed presets
+    assert len(set(washed)) == 25  # no shared cover fallback across washed presets
     assert len(covers) == 20  # 5 new × 4 presets → cover fallback (multi-angle has no presets since #691)
     assert len(set(covers)) == 5
 
@@ -92,8 +92,8 @@ def test_builtin_preset_images_unique(got):
 @needs_node
 def test_defaults_and_required(got):
     assert got["posterDefaults"] == {"file": "", "note": ""}  # #569 effect skill: upload + note only
-    assert got["brandDefaults"] == {"brandInfo": "", "brandAssets": "", "visual": ""}
-    assert got["brandMissing"] == ["brandInfo"] and got["brandFilled"] == []
+    assert got["brandDefaults"] == {"file": "", "note": ""}  # #687-1 Upload Files + Additional Details
+    assert got["brandMissing"] == [] and got["brandFilled"] == []
     assert got["posterPresets"] == 0
     assert got["cwDefaults"] == {"brief": ""}
     assert got["posterMissing"] == [] and got["posterFilled"] == []
@@ -141,7 +141,8 @@ def test_dialog_is_data_driven():
     assert "ca-skillrun__head" in DLG and "ca-skillrun__title" in DLG and "ca-skillrun__desc" in DLG
     for bad in ("'poster'", "'product'", "topic", "headline"):
         assert bad not in DLG, bad
-    assert "missing.length > 0" in DLG and "skillRunParams(skill, values, preset)" in DLG
+    # #687 — Start stays clickable; onStart gates on missing inputs and only then reveals errors (tried).
+    assert "if (missing.length) { setTried(true)" in DLG and "skillRunParams(skill, values, preset)" in DLG
     # 「详情」 keeps main's #484 edit page — no new detail route.
     assert "openSkillEditor(skill.id)" in DLG
 

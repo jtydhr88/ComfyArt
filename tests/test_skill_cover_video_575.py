@@ -35,10 +35,8 @@ def test_video_helpers_and_pending_scaffold():
     block = SKILL_VIDEO_PENDING_BLOCK()
     assert "SKILL_VIDEO_PENDING_NEW6 = [] as const" in block or "SKILL_VIDEO_PENDING_NEW6 = []" in block
     # #622 motion×2 wash-v1 pin (coexists with #623)
-    assert "WASH_575_MOTION_VIDEO" in SKILLS
-    assert "5a8d22ed88f732d38f8709a2c0740f074a400a89" in SKILLS
-    assert "575/wash/templates/01-poster-animation.mp4" in SKILLS
-    assert "575/wash/templates/02-first-to-last-frame-animation.mp4" in SKILLS
+    # #687: motion off-topic templates removed → their wash-v1 pin is gone too
+    assert "WASH_575_MOTION_VIDEO" not in SKILLS and "575/wash/templates/" not in SKILLS
     assert "TODO(design pin): motion" not in SKILLS
     for sid in (
         "multi-angle",

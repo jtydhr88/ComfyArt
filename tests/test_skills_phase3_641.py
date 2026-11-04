@@ -97,8 +97,8 @@ def test_thumbnail_dialog_states_and_shelf_ratio():
     assert 'data-testid="skill-run-preset-chip"' in dlg
     assert "setPreset(p.id)" in dlg  # chip switch stays in the dialog
     assert 'data-testid="skill-run-field-error"' in dlg
-    assert "missing.includes(f.key)" in dlg
-    assert 'disabled={missing.length > 0 || !!uploading}' in dlg
+    assert "tried && missing.includes(f.key)" in dlg  # #687: errors only after 开始制作 click
+    assert 'disabled={!!uploading}' in dlg and "setTried(true)" in dlg
     close = next(ln for ln in dlg.splitlines() if "skill-run-close" in ln)
     assert "disabled" not in close
     assert 'data-testid="skill-run-run-error"' in dlg

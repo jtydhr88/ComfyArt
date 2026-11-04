@@ -36,12 +36,11 @@ async def test_dialog_from_data_and_handoff(app_url, lang):  # noqa: F811
         assert await dlg.locator(".ca-skillrun__left").count() == 1
         assert await dlg.locator(".ca-skillrun__right").count() == 1
         keys = await dlg.get_by_test_id("skill-run-field").evaluate_all("fs => fs.map(f => f.dataset.key)")
-        assert keys == ["brandInfo", "brandAssets", "visual"]
+        assert keys == ["file", "note"]  # #687-1 reference-card Upload Files + Additional Details (both optional)
         assert await pg.get_by_test_id("skill-run-preset").count() == 6
         go = pg.get_by_test_id("skill-run-go")
-        assert await go.is_disabled()
-        await pg.locator('[data-testid="skill-run-field"][data-key="brandInfo"]').fill("Autumn launch")
         assert await go.is_enabled()
+        await pg.locator('[data-testid="skill-run-field"][data-key="note"]').fill("Autumn launch")
         await pg.get_by_test_id("skill-run-preset").nth(1).click()
         assert await pg.get_by_test_id("skill-run-current").inner_text()
         await go.click()
@@ -67,9 +66,9 @@ async def test_other_skill_has_other_fields(app_url):  # noqa: F811
     async with pw.async_playwright() as p:
         browser, pg = await _open(p, app_url, "en")
         assert await pg.locator('[data-skill="custom-workflow"]').count() == 0  # card removed (no Lovart card)
-        await pg.locator('[data-skill="brand"] .ca-swall__cover').click()
+        await pg.locator('[data-skill="product"] .ca-swall__cover').click()
         keys = await pg.get_by_test_id("skill-run-field").evaluate_all("fs => fs.map(f => f.dataset.key)")
-        assert keys and "note" not in keys  # brand has its own fields, not poster's
+        assert keys and "note" not in keys  # product has its own fields, not poster's (#687: brand now = Upload + Additional)
         await browser.close()
 
 

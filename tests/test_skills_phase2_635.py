@@ -61,8 +61,8 @@ def test_social_instructions_candid_and_rednote_coexist():
 
 def test_social_inputs_product_person_and_examples_kept():
     e = _entries()["social"]
-    assert "productRef" in e and "personRef" in e
-    assert "inputs: EFFECT_INPUTS" not in e
+    # #687-1: social dialog = reference-card Upload Files + Additional Details (product/person refs go via the upload)
+    assert "inputs: REF_CARD_INPUTS_687 }" in e and "productRef" not in e
     assert "examples: ex541(" in e  # RedNote carousel kept
     assert "cover: cover('social')" in e
 

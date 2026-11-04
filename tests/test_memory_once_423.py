@@ -146,6 +146,8 @@ def test_locales_only_add_memory_retrieved_430():
         "memoryDialog.partTitle.about", "memoryDialog.partTitle.work",
         "memoryDialog.partTitle.taste", "memoryDialog.partTitle.assets",
         "memoryDialog.stepOf", "memoryDialog.freeHint",
+        # #687: motion → Reference Video Remake positioning
+        "skills.motionPoster", "skills.desc.motion",
         # #570: to3d / upscale tool panel copy
         "toolPanel.reset", "toolPanel.useNow", "toolPanel.model", "toolPanel.mode", "toolPanel.faithful", "toolPanel.enhance", "toolPanel.resolution",
         # #423: 「已保存 N 条」 under the memory row
