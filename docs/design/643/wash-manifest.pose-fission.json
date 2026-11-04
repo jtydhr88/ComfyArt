@@ -164,7 +164,7 @@
       "slot": "examples",
       "index": 4,
       "source_path": "<lovart-gold ex04, not committed>",
-      "method": "local inpaint: kie i2i edit of gold; edit gain-matched to gold face luminance and face-shadow high-pass reduced to gold grain level; Pillow/numpy feathered-mask composite: face/hair ellipse x 40px ramp-to-0 at collar line (no clothing) + ONE small scene box (feather inside box, touches no clothing); all other pixels = gold",
+      "method": "local inpaint: kie i2i edit of gold, then Pillow feathered-mask composite (GaussianBlur) of face/hair ellipse + one scene rect; all other pixels = gold",
       "model": "gpt-image-2-5-flare-image-to-image",
       "refs": [
         "<lovart-gold ex04, not committed>",
@@ -179,41 +179,24 @@
           1110,
           560
         ],
-        "face_blur": 30,
-        "collar_clip_y": 480,
-        "collar_ramp_px": 40,
-        "scene_box": [
-          1255,
-          85,
-          1515,
-          375
+        "scene_rect": [
+          0,
+          0,
+          500,
+          1450
         ],
-        "box_feather": 22,
-        "scene": "small wrought-iron wall lamp on far facade, top-right (blur 2.5 to match DOF)",
-        "clothing_pixels": "100% gold (mask==0 pixels byte-identical to gold in PNG master)",
-        "area_pct_of_frame": {
-          "face_pct": 8.25,
-          "scene_pct": 2.38,
-          "total_pct": 10.62,
-          "weighted_pct": 7.39
-        }
+        "blur": 34,
+        "scene": "left background wall -> warmer ochre with window"
       },
       "path": "643/wash/pose-fission/examples/04.webp",
-      "sha256": "c67cc1887b5782a43eab826194163cbe75cd32a52b6faf523fa2ea0c09691776",
-      "meanAbs_vs_gold_report_only": 3.38,
-      "scene_pass": {
-        "model": "gpt-image-2-5-flare-image-to-image",
-        "input": "gold",
-        "prompt": "Edit this exact photo minimally; keep every other pixel... ONLY change: add one small black wrought-iron wall-mounted street lamp on the far facade at top-right. No text."
-      },
-      "tone": {
-        "edit_gain": 1.001,
-        "face_lum_delta_vs_gold": -1.26,
-        "face_shadow_hp_std_gold": 5.13,
-        "face_shadow_hp_std_out": 5.51,
-        "face_shadow_hp_std_edit_raw": 6.99,
-        "hp_reduce": 0.266
-      }
+      "sha256": "43f3e15efe2c5fe75b34e703ced8243cd3c5a72672ed36ea2e9b16cda35fe3ad",
+      "meanAbs_vs_gold_report_only": 7.71
     }
-  ]
+  ],
+  "reverts": {
+    "4": {
+      "restored_from": "f31a0b1cc3cef1023982673508eb9dfd51f6d3c6",
+      "reason": "Angela prefers the f31a0b1c ex04; byte-identical restore, no recomposite, no kie"
+    }
+  }
 }
