@@ -982,7 +982,9 @@ async def build_payload(session: aiohttp.ClientSession, schema: dict, inputs: di
             payload["aspect_ratio"] = _nearest(props["aspect_ratio"]["enum"], w / h)
         if props.get("resolution", {}).get("enum"):
             payload["resolution"] = _resolution(props["resolution"]["enum"], max(int(w), int(h)))
-    elif inputs.get("ratio") and props.get("aspect_ratio", {}).get("enum"):
+    if inputs.get("resolution") and str(inputs["resolution"]) in (props.get("resolution", {}).get("enum") or []):
+        payload["resolution"] = str(inputs["resolution"])  # #708: an explicit tier (skill pin) wins over the size guess
+    if not (w and h) and inputs.get("ratio") and props.get("aspect_ratio", {}).get("enum"):
         a, b = str(inputs["ratio"]).split(":")
         payload["aspect_ratio"] = _nearest(props["aspect_ratio"]["enum"], float(a) / float(b))
     await _media_fields(session, props, inputs, payload)

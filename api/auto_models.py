@@ -27,6 +27,15 @@ def load_table() -> dict:
         return json.load(f)["features"]
 
 
+def skill_pin(skill: str | None) -> dict | None:
+    """#708: a skill's explicitly registered model row (model, resolution, ratio, fallback), or None."""
+    if not skill:
+        return None
+    with open(TABLE, encoding="utf-8") as f:
+        row = (json.load(f).get("skills") or {}).get(str(skill))
+    return dict(row) if isinstance(row, dict) else None
+
+
 def tool_feature(tool: str) -> str | None:
     return next((f for f, spec in load_table().items() if spec["tool"] == tool or tool in (spec.get("masked") or {}).get("tools", [])), None)
 

@@ -1,6 +1,6 @@
 import logging
 
-from ..auto_models import UnregisteredModel, choose, load_table, note, registered, tool_feature
+from ..auto_models import UnregisteredModel, choose, load_table, note, registered, skill_pin, tool_feature
 from ..mcp_commands import submit_command
 from ..wavespeed import compact_models, grouped_models, load_config, model_details
 from ._context import BOT_CHAT_ID, PROJECT
@@ -79,12 +79,17 @@ async def _relay_run(action: str, args: dict, fallback_for: str, timeout: float)
             log.warning("model %r for %s is not registered; falling back to Auto", requested, action)
             args = {k: v for k, v in args.items() if k not in ("model", "auto_model")}
         choice = _auto_choice(action, args)
+        if choice and choice.get("category") == "skill_unregistered":
+            return _unregistered_block(choice)
         if requested:
             choice = {**(choice or {"model": "", "auto": True, "category": "auto",
                                     "reason": {"zh": "自动选择", "en": "Auto picked it"}}),
                       "requested_model": requested, "fallback_reason": _unregistered_reason(requested)}
         if choice and choice["auto"] and choice["category"] != "references" and "model" not in args and choice["model"] != load_config()["features"][tool_feature(action)]["default"]:
             args = {**args, "model": choice["model"], "auto_model": True} if "edit_model" not in choice else {**args, "edit_model": choice["edit_model"]}
+    if choice and choice.get("category") in ("skill", "skill_fallback"):
+        args = _pin_args(args, choice)
+    args.pop("skill", None)
     result = await submit_command(action, args, PROJECT.get(), timeout, chat=BOT_CHAT_ID.get())
     if choice and isinstance(result, dict) and not result.get("cancelled"):
         ran = result.get("model")
@@ -134,6 +139,9 @@ def _fallback_choice(action: str, args: dict, failed: str) -> dict | None:
     if not feature or not failed:
         return None
     clean = {k: v for k, v in args.items() if k not in ("model", "edit_model", "auto_model", "fallback_for")}
+    pin = _skill_row(action, clean)
+    if pin:
+        return _skill_fallback(clean, pin, failed)
     primary = _auto_choice(action, clean)
     if not primary:
         return None
@@ -165,6 +173,61 @@ def _same_model_block(model: str) -> dict:
             "note": f"没有用 {model} 再次提交。/ Did not submit {model} again."}
 
 
+
+def _skill_row(action: str, args: dict) -> dict | None:
+    """#708: the skill's pinned row when this call runs on that row's feature and names no model."""
+    pin = skill_pin(args.get("skill"))
+    if not pin or args.get("model") or _running_feature(action, args) != pin.get("feature"):
+        return None
+    return pin
+
+
+def _edit_ids() -> set:
+    return {m["id"] for m in load_config()["features"]["image_edit"]["models"]}
+
+
+def _skill_choice(args: dict, pin: dict) -> dict:
+    skill = str(args.get("skill"))
+    if pin["model"] not in _edit_ids():
+        # #712: never a silent switch to the feature default
+        log.error("skill %s pins %s, which is not in the catalog; not submitting", skill, pin["model"])
+        return {"model": pin["model"], "auto": True, "category": "skill_unregistered", "skill": skill,
+                "reason": {"zh": f"{skill} 固定的模型 {pin['model']} 不在模型列表里", "en": f"{pin['model']} pinned by {skill} is not in the model catalog"}}
+    return {"model": pin["model"], "auto": True, "category": "skill", "skill": skill, "edit_model": pin["model"],
+            "resolution": pin.get("resolution"), "ratio": pin.get("ratio"), "reason": {"zh": pin["zh"], "en": pin["en"]}}
+
+
+def _skill_fallback(args: dict, pin: dict, failed: str) -> dict | None:
+    """#708: the pinned fallback runs only after the pinned model failed; anything else is not switched."""
+    skill = str(args.get("skill"))
+    fb = pin.get("fallback")
+    if failed != pin["model"] or not fb or fb == failed:
+        return None
+    if fb not in _edit_ids():
+        log.error("skill %s fallback %s is not in the catalog; not submitting", skill, fb)
+        return None
+    log.warning("skill %s: %s failed; falling back to %s", skill, failed, fb)
+    return {"model": fb, "auto": True, "category": "skill_fallback", "skill": skill, "fallback": failed, "edit_model": fb,
+            "resolution": pin.get("resolution"), "ratio": pin.get("ratio"),
+            "reason": {"zh": f"{failed} 调用失败，按 {skill} 的登记改用备用模型 {fb}",
+                       "en": f"{failed} failed, so {skill}'s registered fallback {fb} was used"}}
+
+
+def _pin_args(args: dict, choice: dict) -> dict:
+    args = {k: v for k, v in args.items() if k not in ("model", "auto_model")}
+    args["edit_model"] = choice["edit_model"]
+    if choice.get("resolution"):
+        args["edit_resolution"] = choice["resolution"]
+    if choice.get("ratio") and not args.get("ratio"):
+        args["ratio"] = choice["ratio"]
+    return args
+
+
+def _unregistered_block(choice: dict) -> dict:
+    return {"status": "failed", "model": choice["model"], "error": choice["reason"]["en"],
+            "note": f"没有提交：{choice['reason']['zh']}。/ Not submitted: {choice['reason']['en']}."}
+
+
 def registered_ids(action: str) -> set[str]:
     """#734: model ids the catalog registers for this tool's feature (empty when the tool has no model feature)."""
     feature = tool_feature(action)
@@ -188,10 +251,13 @@ def _unregistered_reason(model: str) -> dict:
 
 
 def _auto_choice(action: str, args: dict) -> dict | None:
-    """#133: which model runs and why (user-named wins, else the Auto table)."""
+    """#133: which model runs and why (user-named wins, else the Auto table). #708: a skill pin wins over Auto."""
     feature = tool_feature(action)
     if not feature:
         return None
+    pin = _skill_row(action, args)
+    if pin:
+        return _skill_choice(args, pin)
     cfg = load_config()
     if action == "generate_image" and (args.get("refs") or args.get("base")):
         # refs/base run on image_edit (src/generate.ts). Auto (#133 ruling): 2+ refs -> the multi-reference row,
@@ -250,10 +316,11 @@ SPECS: dict[str, dict] = {
         "product, style); naming a reference in the prompt does not send it, only refs do. ref_modes: one mode per ref, same order, saying how to use it: content, style, "
         "composition, or a structure guide canny, lineart, depth, normal, pose, mlsd, scribble, softedge, seg, "
         "tile (structure guides also work on models with control instead of refs, e.g. Qwen Image 2512). "
-        "base: an image shape id to transform (image-to-image) with base_strength 0-100 (higher changes more).",
+        "base: an image shape id to transform (image-to-image) with base_strength 0-100 (higher changes more). "
+        "skill: the id of the skill you are running (e.g. pose-fission); a skill with a registered model runs on it.",
         {"prompt": {"type": "string"}, "model": _MODEL_AUTO, "ratio": {"type": "string"},
          "count": {"type": "integer"}, "refs": _IDS, "ref_modes": {"type": "array", "items": {"type": "string"}}, "base": {"type": "string"},
-         "base_strength": {"type": "integer"}, **_PLACE},
+         "base_strength": {"type": "integer"}, "skill": {"type": "string"}, **_PLACE},
         ["prompt"], approval="生成图像"),
     "generate_video": _tool(
         "Start generating a video. Returns ids at once; call wait_generation with them. first_frame / "

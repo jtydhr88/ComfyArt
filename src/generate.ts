@@ -214,7 +214,7 @@ async function generateGraph(shape: GeneratorShape): Promise<Built> {
     images.splice(cap)
     // reference images go to the image-edit feature; its default model is used unless the agent picked one
     return images.length
-      ? wsBuilt({ feature: 'image_edit', model: modelIn('image_edit', featureModelsOf(shape).image_edit), prompt, images, width, height, seed, negative_prompt, png: transparent, prep: refPrep.some(Boolean) ? refPrep : undefined })
+      ? wsBuilt({ feature: 'image_edit', model: modelIn('image_edit', featureModelsOf(shape).image_edit), prompt, images, width, height, ...(typeof shape.meta.editResolution === 'string' ? { resolution: shape.meta.editResolution } : {}), seed, negative_prompt, png: transparent, prep: refPrep.some(Boolean) ? refPrep : undefined })
       : wsBuilt({ feature: 'text_to_image', model: model.auto ? undefined : model.id, prompt, params: model.qualities?.includes(shape.props.quality) ? { quality: shape.props.quality } : undefined, width, height, seed: seedOf(shape) ?? undefined, negative_prompt, png: transparent })
   }
   // local diffusion models are gone: cloud image models are handled above
