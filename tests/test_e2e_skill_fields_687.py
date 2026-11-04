@@ -93,7 +93,7 @@ async def test_motion_featured_03_removed_687(app_url):  # noqa: F811
 
 
 async def test_old_draft_and_link_keys_open_empty_687(app_url):  # noqa: F811
-    """#687 decision: no old→new mapping. A stored old-key draft and an old-key link must not throw; dialogs open empty."""
+    """#687 decision: no old→new mapping. A stored old-key draft and an old-key link must not throw, must not lose existing content (stored draft kept intact); dialogs open empty."""
     import json
     from tests.lovart_fields_687 import OLD_KEYS_687
     async with pw.async_playwright() as p:
@@ -112,6 +112,9 @@ async def test_old_draft_and_link_keys_open_empty_687(app_url):  # noqa: F811
             assert vals == [[k, ""] for k, *_ in SPEC[sid]], (sid, vals)
             await pg.keyboard.press("Escape")
             await dlg.wait_for(state="detached")
+        # nothing is lost: the stored old draft is left intact (not wiped / rewritten) after opening the dialogs
+        kept = await pg.evaluate("localStorage.getItem('comfyart.skillDraft.brand')")
+        assert kept is not None and json.loads(kept) == OLD_KEYS_687["brand"], kept
         # old-key ?skill= handoff link: lands in a project without throwing
         await pg.goto(app_url + "?skill=brand&mode=agent&ask=Old%20brand&brandInfo=Old&brandAssets=%2Fview%3Ff%3Dold.png")
         await pg.wait_for_timeout(1500)
