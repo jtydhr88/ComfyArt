@@ -154,16 +154,16 @@ const feat637 = (id: string, ids: number[]) =>
   ids.map((n) => pinned(`637/wash/${id}/featured`, WASH_637, `${String(n).padStart(2, '0')}.webp`))
 const video637 = (id: string) => pinned(`637/wash/${id}`, WASH_637, 'example.mp4')
 // #643 Phase3-S4 true wash (kie offline) — thumbnail + NEW19 covers; batch1 examples wired (featured empty).
-const WASH_643 = '0be4350be224066cccf5e2929bfcb02e0bf8f7a9'
+const WASH_643 = '15e9bdad271dc2cb0ac1a1c8621927c161ca9299'
 const cover643 = (id: string) => pinned(`643/wash/${id}`, WASH_643, 'cover.webp')
 // #643 per-slot PRs: optional per-slot pin so each slot merges independently.
 const ex643 = (id: string, ids: number[], pin: string = WASH_643) =>
   ids.map((n) => pinned(`643/wash/${id}/examples`, pin, `${String(n).padStart(2, '0')}.webp`))
 const feat643 = (id: string, ids: number[]) =>
   ids.map((n) => pinned(`643/wash/${id}/featured`, WASH_643, `${String(n).padStart(2, '0')}.webp`))
-// #673 C group re-wash (design+QA PASS at docs/673-audit 44515872); pulled: promo ex01, ppt p07.
+// #673 C group re-wash; #743 pin → main merge 15e9bdad (#736 wash: ppt p07, promo ex01 platform, taobao cover+ex07).
 // logo carousel4; photo-split/ppt still1; promo still1; naive carousel4; featured = cover + examples.
-const WASH_673 = 'a4baa17bfb6eb984348a23b439a925f465a0ee53'
+const WASH_673 = '15e9bdad271dc2cb0ac1a1c8621927c161ca9299'
 const cover673 = (id: string) => pinned(`673/wash/${id}`, WASH_673, 'cover.webp')
 const ex673 = (id: string, ids: number[]) =>
   ids.map((n) => pinned(`673/wash/${id}/examples`, WASH_673, `${String(n).padStart(2, '0')}.webp`))
