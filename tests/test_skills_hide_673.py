@@ -1,4 +1,4 @@
-"""#673 — the 9 deferred Phase2 built-ins are a real hide list: not offered for new selection on any pick-list
+"""#673/#735 — Phase2 hide list (D-group 4 after #735 unhide of C): not offered for new selection on any pick-list
 (home featured / chips / + menu, Skills page, composer /, agent skill list + read) but still resolvable by id so
 saved sessions and cards keep opening. Real src/skills.ts through a node harness (tests/js/hide673). $0."""
 from __future__ import annotations
@@ -17,17 +17,21 @@ ROOT = Path(__file__).resolve().parents[1]
 needs_node = pytest.mark.skipif(not (ROOT / "node_modules/.bin/rolldown").exists() or not shutil.which("node"),
                                 reason="needs node + npm install")
 
-HIDDEN = ["naive-illustration", "logo-abstract", "photo-split-poster", "ppt-visual", "promo-ecommerce",
-          "yingzao", "crt-interface", "crayon-sketch", "fabric-collage"]
-# BUILTIN_SKILLS order on main eb0d60b1 with the 9 removed — the 40 must keep exactly this order.
-MAIN_ORDER_40 = [
+# #735 — C-group 5 unhidden; D-group 4 remain hidden until Phase4.
+HIDDEN = ["yingzao", "crt-interface", "crayon-sketch", "fabric-collage"]
+# Listed builtins after #735: Phase1 + Phase2 Soft (B+C) + Phase3 + interior. D stay in BUILTIN but filtered out.
+MAIN_ORDER_45 = [
     "product", "multi-angle", "brand", "character", "logo-material", "packaging", "motion", "meta-ads", "poster",
     "thumbnail", "mobile-ui", "social", "marketing-campaign", "web-product", "banner", "flash-cut-video",
-    "style-transfer", "person-swap", "commerce-strategist", "lifestyle-scene", "taobao-product", "before-after",
+    "style-transfer", "person-swap", "commerce-strategist", "lifestyle-scene",
+    "naive-illustration", "logo-abstract", "photo-split-poster", "ppt-visual", "promo-ecommerce",
+    "taobao-product", "before-after",
     "anim-2d", "creator-identity", "product-website", "studio-model", "youtube-channel-banner", "ai-model",
     "product-to-packaging", "game-art", "portrait-studio", "premium-website", "animated-poster", "pose-fission",
     "live-promo-decor", "linkedin-banner", "logo-animation", "restaurant-website", "clothing-swap", "interior",
 ]
+# Back-compat alias used by e2e imports.
+MAIN_ORDER_40 = MAIN_ORDER_45
 
 
 @lru_cache(maxsize=1)
@@ -39,16 +43,16 @@ def report() -> dict:
 
 
 @needs_node
-def test_hide_list_is_the_9_and_builtins_keep_all_49() -> None:
+def test_hide_list_is_the_4_d_and_builtins_keep_all_49() -> None:
     r = report()
     assert r["hidden"] == HIDDEN
     assert len(r["builtinAll"]) == 49 and set(HIDDEN) <= set(r["builtinAll"])  # nothing deleted
-    assert [i for i in r["builtinAll"] if i not in HIDDEN] == MAIN_ORDER_40
+    assert [i for i in r["builtinAll"] if i not in HIDDEN] == MAIN_ORDER_45
 
 
 @needs_node
-def test_listed_is_the_other_40_in_main_order() -> None:
-    assert report()["listed"] == MAIN_ORDER_40
+def test_listed_is_the_other_45_in_main_order() -> None:
+    assert report()["listed"] == MAIN_ORDER_45
 
 
 @needs_node
@@ -56,10 +60,10 @@ def test_category_chips_never_contain_hidden() -> None:
     r = report()
     for chip, ids in r["byChip"].items():
         assert not set(ids) & set(HIDDEN), (chip, ids)
-    assert r["byChip"]["forYou"] == MAIN_ORDER_40
+    assert r["byChip"]["forYou"] == MAIN_ORDER_45
     # every listed skill still lands in some category chip, in order
     for chip, ids in r["byChip"].items():
-        assert ids == [i for i in MAIN_ORDER_40 if i in ids], chip
+        assert ids == [i for i in MAIN_ORDER_45 if i in ids], chip
 
 
 @needs_node
@@ -70,7 +74,7 @@ def test_home_featured_never_contains_hidden() -> None:
 
 @needs_node
 def test_agent_list_excludes_hidden_and_keeps_order() -> None:
-    assert report()["agentList"] == MAIN_ORDER_40
+    assert report()["agentList"] == MAIN_ORDER_45
 
 
 @needs_node
@@ -107,7 +111,7 @@ COPY = {
 
 @needs_node
 @pytest.mark.parametrize("lang", ["zh", "en"])
-@pytest.mark.parametrize("sid", ["yingzao", "ppt-visual"])
+@pytest.mark.parametrize("sid", ["yingzao", "crt-interface"])
 def test_hidden_skill_refused_at_attach_with_plain_copy_and_no_submit(lang, sid) -> None:
     g = report()["guard"][lang][sid]
     # deep link ?skill= / try-it: no chip (the previous chip is cleared too), the copy is shown
