@@ -1,5 +1,17 @@
 {
  "_comment": "#133 product table v1, widened for #237 accuracy. Categories are first-match: logo, poster/text, anime/illustration, photoreal portrait/product/e-commerce, then character/product consistency, else the feature default. English keywords are whole words; Chinese keywords are substrings. A keyword preceded by a negation (no / don't / 不要 / 没有) does not count. exclude blanks a phrase before matching (portrait orientation, job title, context menu). also is a list of groups that all have to hit, so bare 'photorealistic' or '写实' is not enough for a landscape. 2+ reference images are not a category here: api/mcp_tools/canvas.py sends them to image_edit multi_reference (google/nano-banana-2.1/edit, #153) because refs run on the edit path. A model missing from the catalog falls back to the feature default (logged).",
+ "skills": {
+  "_comment": "#708/#712: per-skill model pins. Registered explicitly: the skill's model runs at its resolution; fallback runs only after the primary call fails (logged). A pinned model missing from the catalog is an error, never a silent switch to the feature default.",
+  "pose-fission": {
+   "feature": "image_edit",
+   "model": "google/nano-banana-pro/edit",
+   "resolution": "2k",
+   "ratio": "3:4",
+   "fallback": "google/nano-banana-2.1/edit",
+   "zh": "pose-fission 技能固定用 Nano Banana Pro 编辑（2K），同人同衣同景换姿态",
+   "en": "the pose-fission skill is pinned to Nano Banana Pro edit at 2K for same-person, same-scene pose changes"
+  }
+ },
  "features": {
   "text_to_image": {
    "tool": "generate_image",
