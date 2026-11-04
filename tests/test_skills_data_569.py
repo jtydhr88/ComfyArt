@@ -16,7 +16,7 @@ needs_node = pytest.mark.skipif(
     not (ROOT / "node_modules" / ".bin" / "rolldown").exists() or not shutil.which("node"), reason="needs node + npm install")
 
 EFFECT = ("poster", "banner", "interior", "thumbnail")  # #641: thumbnail dialog parity → no presets
-TEMPLATE = {"brand": 6, "packaging": 5, "character": 8, "product": 6, "motion": 2}
+TEMPLATE = {"brand": 6, "packaging": 5, "character": 8, "product": 6, "motion": 0}
 ASSETS = "https://raw.githubusercontent.com/ganjmeng/ComfyArt/bd043d4cff5019fc4117b5b2f3a33ae437015a28/569/wash"
 CHARACTER = [("角色转身板", "Character Turnaround Sheet", "01-character-turnaround-sheet"),
              ("表情动作板", "Expression & Pose Sheet", "02-expression-pose-sheet"),
@@ -62,7 +62,7 @@ def test_effect_skills_only_upload_and_note(got):
     for sid in EFFECT:
         f = got["skills"][sid]["inputs"]
         assert [(x["zh"], x["type"], x["required"]) for x in f] == [("上传文件", "image", False), ("补充描述", "textarea", False)], sid
-        assert f[1]["ph"]["zh"] == "有什么想补充的吗？" and f[1]["ph"]["en"], sid
+        assert f[1]["ph"]["zh"] == ("还有什么想补充的吗？" if sid in ("poster", "banner", "interior") else "有什么想补充的吗？") and f[1]["ph"]["en"], sid  # #687
         assert all(x["en"] for x in f), sid
 
 
@@ -84,9 +84,9 @@ def test_template_counts(got):
 
     for sid, n in TEMPLATE.items():
         s = got["skills"][sid]
-        assert len(s["presets"]) == n, sid
-        assert s["meta"] == {"templates": n, "usage": 0}, sid
-        assert len({p["id"] for p in s["presets"]}) == n and all(p["prompt"] and p["en"] and p["image"] for p in s["presets"]), sid
+        assert len(s["presets"] or []) == n, sid
+        assert s["meta"] == ({"templates": n, "usage": 0} if n else None), sid  # #687 motion: no templates → no meta line
+        assert len({p["id"] for p in s["presets"] or []}) == n and all(p["prompt"] and p["en"] and p["image"] for p in s["presets"] or []), sid
     assert "custom-workflow" not in got["skills"]
 
 
@@ -110,7 +110,8 @@ def test_template_skills_three_inputs(got):
 
 @needs_node
 def test_character_and_motion_wired_from_manifest(got):
-    for sid, rows in (("character", CHARACTER), ("motion", MOTION)):
+    assert not got["skills"]["motion"]["presets"]  # #687: off-topic motion templates removed
+    for sid, rows in (("character", CHARACTER),):
         ps = got["skills"][sid]["presets"]
         assert [(p["zh"], p["en"]) for p in ps] == [(z, e) for z, e, _ in rows], sid
         assert [p["image"] for p in ps] == [(f"{V31 if f in V31_FILES else CHARACTER_V2}/{f}@thumb.webp" if sid == "character" else f"{ASSETS}/{sid}/templates/{f}@thumb.webp" if f not in PINNED else

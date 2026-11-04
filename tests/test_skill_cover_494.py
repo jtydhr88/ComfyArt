@@ -127,10 +127,7 @@ def test_575_video_contract(got):
     assert got["bannerEx"][0] == f"https://raw.githubusercontent.com/ganjmeng/ComfyArt/{tip}/494/wash/videos/banner.mp4"
     assert len(got["thumbEx"]) == 7 and len(got["bannerEx"]) == 2
     motion_tip = "5a8d22ed88f732d38f8709a2c0740f074a400a89"
-    assert got["motionPresetVideos"] == [
-        f"https://raw.githubusercontent.com/ganjmeng/ComfyArt/{motion_tip}/575/wash/templates/01-poster-animation.mp4",
-        f"https://raw.githubusercontent.com/ganjmeng/ComfyArt/{motion_tip}/575/wash/templates/02-first-to-last-frame-animation.mp4",
-    ]
+    assert got["motionPresetVideos"] == []  # #687: off-topic motion templates (and their wash videos) removed
     # mutation: drop preset.video → null (red if wired URLs vanish)
     assert all(v and v.endswith(".mp4") for v in got["motionPresetVideos"])
     assert got["hoverCalls"] == ["play", "pause"] and got["hoverSeek"] == 0

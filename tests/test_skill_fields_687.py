@@ -10,7 +10,7 @@ from pathlib import Path
 
 import pytest
 
-from tests.lovart_fields_687 import MOTION_FEATURED_REMOVED, SPEC
+from tests.lovart_fields_687 import MOTION_FEATURED_REMOVED, NOTE_PH_ZH, REF12, SPEC
 
 ROOT = Path(__file__).resolve().parents[1]
 needs_node = pytest.mark.skipif(
@@ -38,5 +38,26 @@ def test_dialog_fields_match_lovart_spec_687(got, sid):
 @needs_node
 def test_motion_remake_template_and_featured03_removed_687(got):
     m = got["motion"]
-    assert m["templates"] >= 1  # 模板 = left template tiles + 当前模板 row
+    assert m["templates"] == 0 and m["presets"] == 0  # #687 decision: off-topic poster/first-last templates removed, none generated
     assert not any(MOTION_FEATURED_REMOVED in u for u in m["featured"]) and len(m["featured"]) == 3
+
+
+@needs_node
+def test_ref12_zh_placeholder_exact_687(got):
+    assert len(REF12) == 12
+    for sid in REF12:
+        assert got[sid]["fields"][1]["phZh"] == NOTE_PH_ZH, sid
+
+
+def test_typo_uploaded_file_are_uploaded_fixed_687():
+    assert "uploaded file are uploaded" not in (ROOT / "src/skills.ts").read_text()
+
+
+def test_motion_title_desc_remake_687():
+    import json
+    from tests.lovart_fields_687 import MOTION_DESC_EN, MOTION_TITLE
+    for lang in ("zh", "en"):
+        loc = json.loads((ROOT / f"src/locales/{lang}.json").read_text())
+        assert loc["skills.motionPoster"] == MOTION_TITLE[lang], lang
+        assert "lock a still" not in loc["skills.desc.motion"] and "海报" not in loc["skills.desc.motion"]
+    assert json.loads((ROOT / "src/locales/en.json").read_text())["skills.desc.motion"] == MOTION_DESC_EN

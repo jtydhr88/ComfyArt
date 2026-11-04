@@ -85,7 +85,7 @@ async def test_zoom_select_and_gating(app_url):  # noqa: F811
         btn_h = (await tile.get_by_test_id("skill-run-preset").evaluate(BOX))[1]
         assert btn_h == 288  # image 258 + gap 8 + title 22
 
-        assert await pg.get_by_test_id("skill-run-go").is_disabled()  # productImage required, empty
+        assert await pg.get_by_test_id("skill-run-go").get_attribute("data-missing") == "1"  # productImage required, empty (#687: validated on click)
         await browser.close()
 
 

@@ -73,6 +73,8 @@ export function SkillRunDialog({ skill, presetId, onClose, run = newProject }: {
   const [uploading, setUploading] = useState<string | null>(null)
   const [uploadError, setUploadError] = useState<string | null>(null)
   const [runError, setRunError] = useState(false)
+  // #687: required-field errors appear only after 开始制作 is clicked, never on open
+  const [tried, setTried] = useState(false)
   const [fav, setFav] = useState(() => loadFavourites().includes(skill.id))
   const [shared, setShared] = useState(false)
   const missing = missingInputs(skill, values)
@@ -90,7 +92,8 @@ export function SkillRunDialog({ skill, presetId, onClose, run = newProject }: {
   }
   const onFav = () => setFav(toggleFavourite(skill.id).includes(skill.id))
   const onStart = () => {
-    if (missing.length || uploading) return
+    if (uploading) return
+    if (missing.length) { setTried(true); document.getElementById(`skill-run-${missing[0]}`)?.focus(); return }
     setRunError(false)
     recordSkillUse(skill.id)
     try { run(skillRunParams(skill, values, preset)) } catch { setRunError(true) }
@@ -216,7 +219,7 @@ export function SkillRunDialog({ skill, presetId, onClose, run = newProject }: {
               const id = `skill-run-${f.key}`
               const label = <label className="ca-skillform__label" htmlFor={id}>{loc(f.label)}{f.required && <span className="ca-skillrun__req" aria-hidden="true"> *</span>}</label>
               const ph = f.placeholder ? loc(f.placeholder) : ''
-              const invalid = missing.includes(f.key)
+              const invalid = tried && missing.includes(f.key)
               const common = { id, 'data-testid': 'skill-run-field', 'data-key': f.key, 'data-type': f.type, required: f.required, 'aria-required': f.required || undefined, 'aria-invalid': invalid || undefined, ...(f.maxLength ? { 'data-maxlength': f.maxLength } : {}) }
               const max = f.maxLength ? { maxLength: f.maxLength } : {}
               const fieldError = invalid ? (
@@ -273,7 +276,7 @@ export function SkillRunDialog({ skill, presetId, onClose, run = newProject }: {
           </div>
           <div className="ca-skillrun__foot">
             {runError && <p className="ca-skillrun__fielderr" role="alert" data-testid="skill-run-run-error">{t('skillRun.startFailed')}</p>}
-            <button type="button" className="ca-panel__primary ca-skillrun__go" data-testid="skill-run-go" disabled={missing.length > 0 || !!uploading}
+            <button type="button" className="ca-panel__primary ca-skillrun__go" data-testid="skill-run-go" disabled={!!uploading} data-missing={missing.length || undefined}
               onClick={onStart}>{t('skillRun.start')}</button>
           </div>
         </div>

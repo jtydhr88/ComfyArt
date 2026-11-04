@@ -95,7 +95,7 @@ def test_rev2_cells_pinned(got):
     # packaging re-pinned to manifest c26cfad (mockup dropped; same 5 image blobs as 1014ef2)
     assert all(u == R541.format("c26cfaddc5e12c8652b151ef09ad12c47b2062a0", "packaging", "packaging", i) for i, u in k.items() if i != "shelf")
     assert k["shelf"] == R541.format("35c819e64b38cc7d64dcd814ae8b86133976fc8a", "packaging", "packaging", "shelf")  # retail-shelf re-wash
-    assert got["presets"]["motion"] == 2 and got["presets"]["poster"] == 0  # #569: motion 2 templates, poster effect-only
+    assert got["presets"]["motion"] == 0 and got["presets"]["poster"] == 0  # #687: motion templates removed; poster effect-only
 
 
 @needs_node

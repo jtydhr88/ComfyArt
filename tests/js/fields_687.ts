@@ -9,5 +9,6 @@ console.log(JSON.stringify(Object.fromEntries(BUILTIN_SKILLS.map((s) => [s.id, {
   fields: (s.inputs ?? []).map((f) => ({ key: f.key, type: f.type, required: !!f.required, accept: f.accept ?? (f.type === 'image' ? 'image' : null), maxLength: f.maxLength ?? null,
     zh: f.label.zh, en: f.label.en ?? null, phZh: f.placeholder?.zh ?? null, phEn: f.placeholder?.en ?? null })),
   templates: (s.presets ?? []).filter((p) => !!(p.image || p.video)).length,
+  presets: (s.presets ?? []).length,
   featured: s.featured ?? [],
 }]))))

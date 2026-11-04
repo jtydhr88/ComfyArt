@@ -51,9 +51,13 @@ async def _check(pg, sid, lang):
         if typ == "image":
             assert g["fileAccept"] == ("video/*" if acc == "video" else "image/*"), (sid, key)
     go = pg.get_by_test_id("skill-run-go")
-    assert await go.is_enabled() == (not any(w[2] for w in want)), sid  # required fields gate Start
+    assert await go.is_enabled(), sid  # #687: Start always clickable; validation runs on click
+    assert await dlg.get_by_test_id("skill-run-field-error").count() == 0, sid  # no errors on open
     if sid == "motion":
-        assert await dlg.get_by_test_id("skill-run-current").count() == 1  # 模板 row (template picked on the left)
+        assert await dlg.get_by_test_id("skill-run-current").count() == 0  # #687: off-topic templates removed → no 模板 row
+        assert await dlg.get_by_test_id("skill-run-preset").count() == 0
+        from tests.lovart_fields_687 import MOTION_TITLE
+        assert MOTION_TITLE[lang] in await dlg.inner_text()
     return dlg
 
 
@@ -85,4 +89,51 @@ async def test_motion_featured_03_removed_687(app_url):  # noqa: F811
         await pg.get_by_test_id("home-featured-card").first.wait_for()
         html = await pg.content()
         assert "580/featured-v1/motion/03.webp" not in html
+        await browser.close()
+
+
+async def test_old_draft_and_link_keys_open_empty_687(app_url):  # noqa: F811
+    """#687 decision: no old→new mapping. A stored old-key draft and an old-key link must not throw; dialogs open empty."""
+    import json
+    from tests.lovart_fields_687 import OLD_KEYS_687
+    async with pw.async_playwright() as p:
+        browser, pg = await _page(p, "en", "dark")
+        errors: list[str] = []
+        pg.on("pageerror", lambda e: errors.append(str(e)))
+        await pg.add_init_script("localStorage.setItem('comfyart.skillDraft.brand', " + json.dumps(json.dumps(OLD_KEYS_687["brand"])) + ")")
+        qs = "&".join(f"{k}=x" for k in [*OLD_KEYS_687["brand"], *OLD_KEYS_687["motion"]])
+        await pg.goto(app_url + "?" + qs)
+        await pg.get_by_test_id("rail-skills").click()
+        await pg.get_by_test_id("skills-wall").wait_for()
+        for sid in ("brand", "motion"):
+            dlg = await _check(pg, sid, "en")
+            vals = await dlg.evaluate("""d => [...d.querySelectorAll('[data-testid="skill-run-field"]')].map(f =>
+                [f.dataset.key, f.matches('input,textarea') ? f.value : (f.querySelector('img,video') ? 'media' : '')])""")
+            assert vals == [[k, ""] for k, *_ in SPEC[sid]], (sid, vals)
+            await pg.keyboard.press("Escape")
+            await dlg.wait_for(state="detached")
+        # old-key ?skill= handoff link: lands in a project without throwing
+        await pg.goto(app_url + "?skill=brand&mode=agent&ask=Old%20brand&brandInfo=Old&brandAssets=%2Fview%3Ff%3Dold.png")
+        await pg.wait_for_timeout(1500)
+        assert not errors, errors
+        await browser.close()
+
+
+async def test_motion_validates_only_after_start_click_687(app_url):  # noqa: F811
+    async with pw.async_playwright() as p:
+        browser, pg = await _page(p, "zh", "light")
+        await pg.goto(app_url)
+        await pg.get_by_test_id("rail-skills").click()
+        await pg.get_by_test_id("skills-wall").wait_for()
+        dlg = await _check(pg, "motion", "zh")
+        url0 = pg.url
+        await pg.get_by_test_id("skill-run-go").click()
+        errs = await dlg.get_by_test_id("skill-run-field-error").evaluate_all("es => es.map(e => e.dataset.key)")
+        assert errs == ["refVideo", "remakeBrief"], errs
+        assert pg.url == url0  # nothing started
+        await dlg.locator('[data-testid="skill-run-field"][data-key="remakeBrief"]').fill("swap product")
+        errs = await dlg.get_by_test_id("skill-run-field-error").evaluate_all("es => es.map(e => e.dataset.key)")
+        assert errs == ["refVideo"], errs
+        if SHOTS:
+            await pg.screenshot(path=str(Path(SHOTS) / "skill-fields-motion-after-start-zh-light.png"))
         await browser.close()
