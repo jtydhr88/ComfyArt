@@ -961,6 +961,12 @@ async def run(provider, *, session, turn, emit, handle, base: str, model: str, t
 # ---------------------------------------------------------------------------
 
 
+_PRICE_ERROR_NOTE = {
+    "zh": "[non-retryable] 价格检查失败（{err}），本次付费调用未发出，未扣费。",
+    "en": "[non-retryable] The price check failed ({err}); this paid call was not sent and nothing was charged.",
+}
+
+
 def paid_key(ctx: RunContext, name: str, args: dict, call_id: str = "") -> str:
     """Per-call idempotency id: the step plus the model's tool_call id. Two calls with identical
     params are two calls (4 images = 4 calls); only the SAME call replayed after a checkpoint is
@@ -989,8 +995,11 @@ async def paid_gate(ctx: RunContext, name: str, args: dict, emit_confirm,
         try:
             p = await ctx.pricer(name, args)
             price = float(p) if p is not None else 0.0
-        except Exception:
+        except Exception as e:
+            # #732: fail CLOSED. A pricing error (e.g. the old ModuleNotFoundError in bot/local_llm.py) used to
+            # fall through with price 0.0, so the budget check passed and the paid call went out unpriced.
             _log.exception("[ComfyArt/agent] pricing %s failed", name)
+            return "skip", _PRICE_ERROR_NOTE[lk].format(err=type(e).__name__), 0.0
     if not ctx.budget.can_afford(price):
         if confirm_policy(ctx.mode, "paid_confirm") == "skip":
             ctx.pending_stop = Stop(StopReason.BUDGET, "unattended_skipped", dimension="credits",

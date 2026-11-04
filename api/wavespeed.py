@@ -1078,7 +1078,7 @@ def valid_confirm_credits(v) -> bool:
 
 def migrate_confirm_prefs(data: dict) -> tuple[int, bool]:
     """Return (credits, dirty). dirty=True when a legacy confirm_usd value must be rewritten."""
-    from ComfyArt.bot.run_budget import ui_credits
+    from ..bot.run_budget import ui_credits
     if not isinstance(data, dict):
         return DEFAULT_CONFIRM_CREDITS, False
     if "confirm_credits" in data and valid_confirm_credits(data["confirm_credits"]):
@@ -2436,7 +2436,7 @@ async def wavespeed_confirm_put(request: web.Request) -> web.Response:
         v = body.get("confirm_usd")
         if not valid_confirm_usd(v):
             return error("confirm_usd must be a number from 0 to 1000 (0 = always confirm)", 400)
-        from ComfyArt.bot.run_budget import ui_credits
+        from ..bot.run_budget import ui_credits
         credits = ui_credits(float(v))
     else:
         return error(
