@@ -1236,6 +1236,7 @@
   "sidePanel.shape": "Shape",
   "sidePanel.show": "Show",
   "sidePanel.unlock": "Unlock",
+  "skills.hiddenUnavailable": "This skill is temporarily unavailable. You can still view this conversation; pick another skill to continue.",
   "skills.bannerDesign": "Banner Design",
   "skills.brandIdentity": "Brand Identity",
   "skills.characterSheet": "Character Sheet",

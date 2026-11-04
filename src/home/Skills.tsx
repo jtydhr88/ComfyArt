@@ -10,7 +10,7 @@ import {
   importLanding,
   loadFavourites,
   loadSkillUsage,
-  loadSkills,
+  loadListedSkills,
   recordSkillUse,
   skillDescription,
   skillAuthor,
@@ -162,7 +162,7 @@ export function Skills() {
   const startDirect = (s: Skill) => { recordSkillUse(s.id); setUsageMap(loadSkillUsage()); newProject({ skill: s.id }) }
   const tryCard = (s: Skill) => (hasSkillDialog(s) ? setRunning({ id: s.id, preset: null }) : startDirect(s))
 
-  useEffect(() => { void loadSkills().then(setSkills) }, [])
+  useEffect(() => { void loadListedSkills().then(setSkills) }, [])
   useEffect(() => {
     if (!menu) return
     const off = (e: PointerEvent) => { if (!menuRef.current?.contains(e.target as Node)) setMenu(false) }
@@ -352,7 +352,7 @@ export function Skills() {
             const landing = importLanding(skill, skipped)
             openSkillEditor(landing.id)
             if (landing.skipped) showMemoryToast(landing.skipped, 'info')
-            void loadSkills().then(setSkills)
+            void loadListedSkills().then(setSkills)
           }}
         />
       )}

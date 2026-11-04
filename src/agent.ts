@@ -16,7 +16,7 @@ import { OWNER_DEFAULT, WORKSPACE_DEFAULT } from './memoryStore'
 import { directSettings, modelOf } from './models'
 import { COMMENT, type CommentShape } from './shapes/CommentShape'
 import { GENERATOR, type GeneratorShape } from './shapes/GeneratorShape'
-import type { Skill } from './skills'
+import { blockHiddenSkill, type Skill } from './skills'
 import { t } from './i18n'
 
 export type AgentMode = 'agent' | 'image' | 'video'
@@ -95,6 +95,8 @@ export function canvasNodesFromEditor(editor: Editor): { nodes: SnapshotNode[]; 
 }
 
 export async function sendToAgent(editor: Editor, text: string, refs: RefShape[], skill: Skill | null, kits: LibraryItem[] = [], docs: ChatDoc[] = [], context = '', opts?: { runMode?: 'interactive' | 'unattended'; chip?: string }) {
+  // #673 safety net: a hidden (deferred) skill never starts a run — no request at all; the composer shows the notice.
+  if (blockHiddenSkill(skill)) return
   const linked = linkedKit(editor.getDocumentSettings().meta.brandKit)
   if (linked && !kits.some((k) => k.id === linked.id)) kits = [...kits, linked]
   const frame = refLinkedOf(editor) ? refFrameOf(editor) : null

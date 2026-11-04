@@ -99,7 +99,7 @@ def test_b_washed_mounted_deferred_still_empty_assets():
 def test_home_skills_same_source_and_chips():
     assert "skillChips(" in HOME and "matchesSkillChip(" in HOME
     assert "skillChips(" in SKILLS_PAGE and "matchesSkillChip(" in SKILLS_PAGE
-    assert "loadSkills(" in HOME and "loadSkills(" in SKILLS_PAGE
+    assert "loadListedSkills(" in HOME and "loadListedSkills(" in SKILLS_PAGE  # #673: listed (hide-list filtered) source
     assert "skillFeaturedCases(" in HOME
     assert "HOME_SKILL_ROW" in HOME
     # website chip source: Phase1 website skills (ppt-visual C HOLD — may stay out of mount)

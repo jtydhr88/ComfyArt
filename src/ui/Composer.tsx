@@ -11,7 +11,7 @@ import { botEnabledAtom, loadProviders, loadSettings, messagesAtom, providerLabe
 import { errorText } from '../jobs'
 import { KIND_LABELS, libraryAtom } from '../library'
 import type { AudioShape } from '../shapes/EmbedShapes'
-import { loadSkills, saveSkill, skillAtom, skillCreatorAtom, type Skill } from '../skills'
+import { loadListedSkills, saveSkill, skillAtom, skillCreatorAtom, skillNoticeAtom, type Skill } from '../skills'
 import { AssetGrid } from './AssetPicker'
 import { schedulesOpenAtom } from '../schedules'
 import { AgentExtras, AgentItems, shortLabel, useCurrentAgent } from './AgentPicker'
@@ -90,6 +90,7 @@ export function Composer({ editor, busy, onError }: { editor: Editor; busy: bool
   const listLoading = useValue('agent list loading', () => providersStateAtom.get().state === 'loading', [])
   const agentLoading = mode === 'agent' && listLoading  // #294: no sending to an Agent until the list has arrived
   const skill = useValue(skillAtom)
+  const skillNotice = useValue(skillNoticeAtom)  // #673
   const skillCreator = useValue(skillCreatorAtom)
   const extra = useValue(extraRefsAtom)
   const kits = useValue(kitsAtom)
@@ -118,7 +119,7 @@ export function Composer({ editor, busy, onError }: { editor: Editor; busy: bool
   const at = /(?:^|\s)@(\S*)$/.exec(draft)
 
   useEffect(() => {
-    if (menu === 'skills' || slash) void loadSkills().then(setSkills)
+    if (menu === 'skills' || slash) void loadListedSkills().then(setSkills)
   }, [menu, !!slash])
 
   // #362: load 素材 for @ menu (no model group). Fail soft → empty 素材 group.
@@ -144,7 +145,7 @@ export function Composer({ editor, busy, onError }: { editor: Editor; busy: bool
     extraRefsAtom.set(next.extra)
     setHidden(next.hidden)
   }
-  const useSkill = (s: Skill) => { skillAtom.set(s); setMenu(null); if (slash) draftAtom.set('') }
+  const useSkill = (s: Skill) => { skillNoticeAtom.set(null); skillAtom.set(s); setMenu(null); if (slash) draftAtom.set('') }
 
   const fail = (e: unknown) => onError(errorText(e))
   const upload = (files: FileList | null) => uploadRefs(editor, Array.from(files ?? [])).catch(fail)
@@ -197,7 +198,7 @@ export function Composer({ editor, busy, onError }: { editor: Editor; busy: bool
     void go()
   }
 
-  const filtered = slash ? skills.filter((s) => s.name.includes(slash[1])) : skills
+  const filtered = slash ? skills.filter((s) => s.name.toLowerCase().includes(slash[1].toLowerCase())) : skills  // #673: '/ppt' finds PPT
   // #362 @ menu: exactly 参考 → 本项目 → 素材. NO model group (voids old Assets/Model fake-align).
   const atQ = (at?.[1] ?? '').toLowerCase()
   const atRefs = at ? library.filter((k) => k.name.toLowerCase().includes(atQ) && !kits.some((x) => x.id === k.id)) : []
@@ -225,10 +226,16 @@ export function Composer({ editor, busy, onError }: { editor: Editor; busy: bool
     >
       {/* #371 P1-mascot: left-top peek; idle static frame 0; --play/--typing animate */}
       <ArtiMascot busy={busy} typing={typing} />
+      {skillNotice && (
+        <div className="ca-chat__hint ca-composer__notice" role="status" data-testid="skill-hidden-notice">
+          <span className="ca-menu__grow">{skillNotice}</span>
+          <button type="button" className="ca-history__del" title={t('common.close')} data-testid="skill-hidden-notice-close" onClick={() => skillNoticeAtom.set(null)}>{Icons.close}</button>
+        </div>
+      )}
       {(slash && filtered.length > 0) && (
-        <div className="ca-menu ca-composer__suggest">
+        <div className="ca-menu ca-composer__suggest" data-testid="slash-menu">
           {filtered.slice(0, 8).map((s) => (
-            <button key={s.id} type="button" className="ca-menu__item" onClick={() => useSkill(s)}>
+            <button key={s.id} data-skill={s.id} type="button" className="ca-menu__item" onClick={() => useSkill(s)}>
               <span className="ca-icon">{Icons.skill}</span><span className="ca-menu__grow">{s.name}</span>
             </button>
           ))}

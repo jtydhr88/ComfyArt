@@ -89,17 +89,19 @@ def _featured_from_data():
         # skillFeaturedCases: featured[] first, else still examples (e.g. #643 NEW19 ex643)
         if (m and m.group(1) != "[]") or re.search(r"examples: ex\d+\(", p):
             out.add(p.split("'", 1)[0])
-    return out
+    h = src[src.index("= [", src.index("export const HIDDEN_BUILTIN_SKILL_IDS")) + 3:]
+    hidden = set(re.findall(r"'([a-z0-9-]+)'", h[:h.index("]")]))  # #673 hide list
+    return out - hidden
 
 
 # Fixed expectation (#689 follow-up): pinned id list so a skill silently dropping out of the
 # feed fails here; _featured_from_data() is only a drift guard against src/skills.ts.
-FEED_EXPECTED = frozenset({
+FEED_EXPECTED = frozenset({  # #673: 9 deferred ids hidden
     "anim-2d", "banner", "before-after", "brand", "character", "clothing-swap", "commerce-strategist", "creator-identity",
-    "flash-cut-video", "interior", "lifestyle-scene", "linkedin-banner", "logo-abstract",
+    "flash-cut-video", "interior", "lifestyle-scene", "linkedin-banner",
     "logo-material", "marketing-campaign", "meta-ads", "mobile-ui", "motion", "multi-angle",
-    "naive-illustration", "packaging", "person-swap", "photo-split-poster", "portrait-studio", "poster",
-    "ppt-visual", "product", "product-website", "promo-ecommerce", "social", "style-transfer",
+    "packaging", "person-swap", "portrait-studio", "poster",
+    "product", "product-website", "social", "style-transfer",
     "taobao-product", "thumbnail", "web-product", "youtube-channel-banner",
     "animated-poster",  # #643 per-slot PR (examples wired => in feed)
     "premium-website",  # #643 per-slot PR (examples wired => in feed)
@@ -112,7 +114,7 @@ FEED_EXPECTED = frozenset({
     "ai-model",  # #643 per-slot PR (examples wired => in feed)
     "pose-fission",  # #643 per-slot PR (examples wired => in feed)
 })
-FEED_MIN = 45  # +#643 … + live-promo-decor + ai-model + pose-fission
+FEED_MIN = 40  # #673: 45 minus 5 hidden deferred; +#643 … + live-promo-decor + ai-model + pose-fission
 
 
 FEATURED_DIRS = ("/580/featured-v1/", "/580/featured-v2/", "/637/wash/", "/636/wash/", "/643/wash/")

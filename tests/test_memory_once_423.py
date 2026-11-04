@@ -154,6 +154,8 @@ def test_locales_only_add_memory_retrieved_430():
         "home.skillsFavourites", "home.skillsExplore", "home.skillsPersonal",
         "home.skillsAuthorPersonal", "home.skillsCommunity", "home.skillsViews",
         "home.skills", "home.skillsCreate",
+        # #673: 隐藏技能的直显提示（旧链接/重新生成/试用）
+        "skills.hiddenUnavailable",
         # #509: 配乐时长提示、空风格拦截、自定义配乐工作流文案（非记忆文案）
         "audio.needMusicPrompt", "audio.needLyrics", "audio.durationByLyrics",
         "customWorkflows.action.music", "customWorkflows.musicGone", "customWorkflows.group.audio",

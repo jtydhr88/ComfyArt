@@ -237,6 +237,22 @@ export const PHASE2_DEFERRED_SKILL_IDS = [
   'yingzao', 'crt-interface', 'crayon-sketch', 'fabric-collage',
 ] as const
 export const PHASE2_DEFERRED_SKILL_ID_SET: ReadonlySet<string> = new Set(PHASE2_DEFERRED_SKILL_IDS)
+/** #673 — HIDE LIST (not a delete). Built-in skills listed here are kept in BUILTIN_SKILLS (data, assets, lookup by id
+ *  all intact, so saved sessions / cards that reference them still open) but are NOT listed anywhere a user or the agent
+ *  picks a skill for new work: home featured waterfall + quick-start + category chips, Skills page, 「+ → 技能」 menu,
+ *  composer 「/」 picker, and the agent `skill` tool (list + read).
+ *  TO RE-LIST A SKILL: once it is washed in #673 and Angela gives PASS, delete its id from this array. Nothing else to change. */
+export const HIDDEN_BUILTIN_SKILL_IDS: readonly string[] = [
+  'naive-illustration', 'logo-abstract', 'photo-split-poster', 'ppt-visual', 'promo-ecommerce',
+  'yingzao', 'crt-interface', 'crayon-sketch', 'fabric-collage',
+]
+export const HIDDEN_BUILTIN_SKILL_ID_SET: ReadonlySet<string> = new Set(HIDDEN_BUILTIN_SKILL_IDS)
+/** #673 — true when a skill may be offered for NEW selection. Personal (custom) skills are always listed. */
+export const isListedSkill = (s: Pick<Skill, 'id' | 'custom'>): boolean => !!s.custom || !HIDDEN_BUILTIN_SKILL_ID_SET.has(s.id)
+export const listedSkills = <T extends Pick<Skill, 'id' | 'custom'>>(skills: T[]): T[] => skills.filter(isListedSkill)
+/** #673 — the plain sentence a user sees when an old session / card / link starts a hidden skill. */
+export const hiddenSkillNotice = (skill: Pick<Skill, 'id' | 'custom'> | null | undefined): string | null =>
+  skill && !isListedSkill(skill) ? t('skills.hiddenUnavailable') : null
 
 /** #640 Phase3-S1 — 19 NEW ids (upgrade `thumbnail` is not listed here). PRODUCT-LOCK-PHASE3 + PHASE3-HARDEN-DIFF. Skill Creator → #650.
  *  #642 Phase3-S3 — NEW19 field parity Upload+Additional (NEARMISS_INPUTS); media wash → #643; no competitor strings in src). */
@@ -505,6 +521,22 @@ export const BUILTIN_SKILLS: Skill[] = orderBuiltins([
 ])
 
 export const skillAtom = atom<Skill | null>('skill', null)
+/** #673 — the plain sentence shown in the composer when a hidden skill is attached from an old session / card / link. */
+export const skillNoticeAtom = atom<string | null>('skill notice', null)
+/** #673 — the one place a skill reaches the composer from saved work (deep link, resend, try-it). A hidden skill is
+ *  refused: no chip, the notice is shown, and the caller must not send (no agent turn, no paid submit, no request). */
+export function attachSkill(s: Skill | null): boolean {
+  if (s && hiddenSkillNotice(s)) { skillAtom.set(null); skillNoticeAtom.set(hiddenSkillNotice(s)); return false }
+  skillNoticeAtom.set(null)
+  skillAtom.set(s)
+  return true
+}
+/** #673 — same refusal for a send that already holds a skill (safety net in sendToAgent). True = blocked. */
+export function blockHiddenSkill(s: Pick<Skill, 'id' | 'custom'> | null | undefined): boolean {
+  const notice = hiddenSkillNotice(s)
+  if (notice) skillNoticeAtom.set(notice)
+  return !!notice
+}
 
 const listFiles = (dir: string) => listUserFiles(`${ROOT}/${dir}`.replace(/\/$/, ''), true)
 const read = (path: string) => readUserText(`${ROOT}/${path}`)
@@ -550,6 +582,11 @@ export async function loadSkills(): Promise<Skill[]> {
   }
   const custom = await Promise.all([...byId].filter(([, paths]) => paths.includes('SKILL.md')).map(([id, paths]) => readSkill(id, paths)))
   return [...custom.filter((s): s is Skill => !!s), ...BUILTIN_SKILLS]
+}
+
+/** #673 — what pickers show (home, Skills page, + menu, / picker, agent list). Lookups by id keep using loadSkills(). */
+export async function loadListedSkills(): Promise<Skill[]> {
+  return listedSkills(await loadSkills())
 }
 
 export async function saveSkill(skill: Skill) {
@@ -729,7 +766,8 @@ export const SKILL_NON_RETRYABLE = '[non-retryable]'
 
 export async function skillTool(args: Record<string, unknown>): Promise<unknown> {
   const skills = await loadSkills()
-  if (args.action === 'list') return { skills: skills.map((s) => ({ id: s.id, name: s.name, description: s.description ?? '', custom: !!s.custom })) }
+  const listed = listedSkills(skills)
+  if (args.action === 'list') return { skills: listed.map((s) => ({ id: s.id, name: s.name, description: s.description ?? '', custom: !!s.custom })) }
   const id = args.id ? String(args.id) : ''
   if (args.action === 'save') {
     if (!args.name && !id) throw new Error('save needs a name or id')
@@ -756,8 +794,11 @@ export async function skillTool(args: Record<string, unknown>): Promise<unknown>
   if (!id && !(typeof args.name === 'string' && args.name.trim())) {
     throw new Error(`${SKILL_NON_RETRYABLE} skill read needs a non-empty id or name (e.g. id="linkedin-banner"); do not retry this call — use action="list" for ids`)
   }
-  const skill = id ? skills.find((s) => s.id === id) : skills.find((s) => s.name === args.name)
-  if (!skill) throw new Error(`unknown skill ${JSON.stringify(id || args.name)} — available: ${skills.map((s) => `${s.name} (${s.id})`).join(', ')}`)
+  const hit = id ? skills.find((s) => s.id === id) : skills.find((s) => s.name === args.name)
+  // #673: a hidden built-in is not available for new selection (still resolvable by id for saved sessions via loadSkills).
+  if (hit && !isListedSkill(hit)) throw new Error(`${SKILL_NON_RETRYABLE} ${t('skills.hiddenUnavailable')}`)  // #673 design: user-facing copy only — no id, no retry hints
+  const skill = hit
+  if (!skill) throw new Error(`unknown skill ${JSON.stringify(id || args.name)} — available: ${listed.map((s) => `${s.name} (${s.id})`).join(', ')}`)
   if (args.path) {
     const content = skill.files?.[String(args.path)]
     if (content == null) throw new Error(`skill ${skill.name} has no file ${args.path}; files: ${Object.keys(skill.files ?? {}).join(', ') || '(none)'}`)
