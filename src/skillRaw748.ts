@@ -42,6 +42,7 @@ function toInput(q: RawInput, ours?: Record<string, Loc>): SkillInput {
 export const PENDING_WASH = 'comfyart:pending-wash'
 export const isPendingWash = (u?: string | null) => u === PENDING_WASH
 const WASH = (wash as { examples: Record<string, (string | null)[]> }).examples
+const WASH_T = (wash as { templates?: Record<string, (string | null)[]> }).templates ?? {}
 
 /** #751 — example card left = exactly the raw highlights, 1:1 slot → asset (src/data/wash-748.json).
  *  video slot = the skill's own washed video; image slot = its own washed still, else PENDING_WASH + pendingWash. */
@@ -70,11 +71,11 @@ export function applyRaw748(skill: Skill): Skill {
   if (!tpls.length) return { ...skill, name, description }
   const presets = tpls.map((t, i): SkillPreset => {
     const old = skill.presets?.[i]
-    const isVideo = t.media[0]?.type === 'video'
-    const image = old?.image ?? PENDING_WASH // the template's own wash (1:1), else the unified placeholder
+    const image = old?.image ?? WASH_T[skill.id]?.[i] ?? PENDING_WASH // the template's OWN wash (1:1, fixed per card), else the unified placeholder
     const stack = t.depth > 1 ? Array.from({ length: t.depth }, (_, j) => (j === 0 ? image : PENDING_WASH)) : undefined
     const pendingWash = Array.from({ length: t.depth }, (_, j) => j).filter((j) => (j === 0 ? image : PENDING_WASH) === PENDING_WASH)
-    const vid = old?.video ?? (isVideo ? skill.video : undefined)
+    // #751 HOLD: only a template's own video; the skill-level video is never shared across template cards
+    const vid = old?.video
     return {
       id: old?.id ?? `t${i + 1}`, name: t.name,
       prompt: loc(ours.templates?.[i + 1]?.prompt) ?? `Template: ${t.name.en}. Follow this template's own inputs.`,

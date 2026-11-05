@@ -128,7 +128,7 @@ def test_575_video_contract(got):
     assert got["bannerEx"][0] == f"https://raw.githubusercontent.com/ganjmeng/ComfyArt/{tip}/494/wash/videos/banner.mp4"
     assert len(got["thumbEx"]) == 1 and len(got["bannerEx"]) == 1  # #748 raw highlights: 1 video each (convert)
     motion_tip = "5a8d22ed88f732d38f8709a2c0740f074a400a89"
-    assert got["motionPresetVideos"] == [f"https://raw.githubusercontent.com/ganjmeng/ComfyArt/{tip}/494/wash/videos/motion.mp4"] * 2  # #748 raw: 2 templates; our wash video is the placeholder (WASH-TODO)
+    assert got["motionPresetVideos"] == [None, None]  # #751 HOLD: skill-level video no longer shared onto template cards (each card keeps its OWN cover)  # #748 raw: 2 templates; our wash video is the placeholder (WASH-TODO)
     # mutation: drop preset.video → null (red if wired URLs vanish)
     assert all(v and v.endswith(".mp4") for v in got["motionPresetVideos"])
     assert got["hoverCalls"] == ["play", "pause"] and got["hoverSeek"] == 0

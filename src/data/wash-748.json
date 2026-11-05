@@ -1,5 +1,5 @@
 {
-  "_doc": "#751 per-slot wash map for example cards: index = raw highlight slot (1:1). null image slot = pendingWash (unified placeholder); null video slot = the skill's own washed video. Only this file changes when a slot is washed.",
+  "_doc": "#751 per-slot wash map for example cards: index = raw highlight slot (1:1). null image slot = pendingWash (unified placeholder); null video slot = the skill's own washed video. Only this file changes when a slot is washed. templates: skill id → each template card's OWN cover (1:1 by template index); missing = pendingWash.",
   "examples": {
     "poster-differentiated-compiler": [
       "https://raw.githubusercontent.com/ganjmeng/ComfyArt/6d864bd2dd53b9f5b487829f2834d94be013b0a5/541/wash/poster/examples/1.webp",
@@ -91,6 +91,12 @@
       null,
       null,
       null
+    ]
+  },
+  "templates": {
+    "motion-poster-generator": [
+      "https://raw.githubusercontent.com/ganjmeng/ComfyArt/bd043d4cff5019fc4117b5b2f3a33ae437015a28/569/wash/motion/templates/01-poster-animation@thumb.webp",
+      "https://raw.githubusercontent.com/ganjmeng/ComfyArt/bd043d4cff5019fc4117b5b2f3a33ae437015a28/569/wash/motion/templates/02-first-to-last-frame-animation@thumb.webp"
     ]
   }
 }

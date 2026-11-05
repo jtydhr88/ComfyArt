@@ -46,6 +46,8 @@ async def test_skillrun_748(app_url, sid, lang, theme):  # noqa: F811
         tiles = dlg.get_by_test_id("skill-run-preset")
         n = await tiles.count()
         if n >= 2:
+            MEDIA = "els => els.map(t => [...t.querySelectorAll('.ca-skillrun__presetimg > img, .ca-skillrun__presetimg > video, .ca-skillrun__presetimg > [data-pending-wash]')].map(e => e.getAttribute('src') || 'pending'))"
+            before = await tiles.evaluate_all(MEDIA)
             name0 = await dlg.get_by_test_id("skill-run-current-name").inner_text()
             await tiles.nth(1).hover()
             await pg.wait_for_timeout(400)
@@ -54,6 +56,7 @@ async def test_skillrun_748(app_url, sid, lang, theme):  # noqa: F811
                 await pg.screenshot(path=_shot(f"748-{sid}-{lang}-{theme}-hover.png"))
             await tiles.nth(1).click()
             want = await tiles.nth(1).locator(".ca-skillrun__presetname").inner_text()
+            assert await tiles.evaluate_all(MEDIA) == before, sid  # #751 HOLD: each card keeps its OWN cover; selection never reassigns media
             assert await dlg.get_by_test_id("skill-run-current-name").inner_text() == want  # click drives name
             cur = dlg.get_by_test_id("skill-run-current-thumb")
             if not await tiles.nth(1).locator(".ca-skillrun__presetimg > img").count():  # #751 HOLD: unwashed slot → unified placeholder, no fake image
