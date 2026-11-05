@@ -10,7 +10,7 @@ from pathlib import Path
 
 import pytest
 
-from tests.lovart_fields_687 import MOTION_FEATURED_REMOVED, RAW_748, REF12, SPEC
+from tests.lovart_fields_687 import MOTION_FEATURED_REMOVED, OURS_PH, RAW_748, REF12, SPEC
 
 ROOT = Path(__file__).resolve().parents[1]
 needs_node = pytest.mark.skipif(
@@ -46,9 +46,9 @@ def test_motion_remake_template_and_featured03_removed_687(got):
 @needs_node
 def test_ref12_zh_placeholder_exact_687(got):
     assert len(REF12) == 11  # #748 Final: 11 example cards (logo-material-explorer raw ready)
-    for sid in REF12:  # our generic zh placeholder (reference copy → COPY-REWRITE.md)
+    for sid in REF12:  # #751 HOLD: our filled zh placeholder (COPY-REWRITE.md → copy-748.json), never a reference string
         q = RAW_748[sid]["inputs"][1]
-        assert got[sid]["fields"][1]["phZh"] == f"请填写{q['label']['zh']}", sid
+        assert got[sid]["fields"][1]["phZh"] == OURS_PH(sid)[q["key"]]["zh"], sid
 
 
 def test_typo_uploaded_file_are_uploaded_fixed_687():

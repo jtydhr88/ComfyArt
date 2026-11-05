@@ -24,6 +24,47 @@ COPY: list = []
 WASH: list = []
 
 
+def load_ours(path: Path) -> dict:
+    """#751 product rewrite (our own zh/en) keyed by (skill, slot); TODO rows are skipped."""
+    out = {}
+    if not path.is_file():
+        return out
+    for line in path.read_text().splitlines():
+        cells = [c.strip() for c in line.strip().strip("|").split("|")]
+        if len(cells) == 4 and line.startswith("| ") and cells[0] not in ("skill", "---") and cells[2] != "TODO":
+            out[(cells[0], cells[1])] = (cells[2], cells[3])
+    return out
+
+
+SINGLE_PROMPT = "{{user_requirement}}"  # raw 1:1 for the example (single-form) cards — never a product lead sentence
+
+
+def ours_json(skills: dict, ours: dict) -> dict:
+    """Runtime copy (src/data/copy-748.json): description, placeholders, prompts — ours only, never reference text."""
+    braces = lambda t: re.sub(r"(?<!\{)\{(\w+)\}(?!\})", r"{{\1}}", t)
+    out = {}
+    for (sid, slot), (zh, en) in ours.items():
+        if re.search(r"lovart", zh + en, re.I):
+            raise ConvertError(f"reference brand string in ours copy: {sid} / {slot}")
+        o = out.setdefault(sid, {})
+        m = re.fullmatch(r"template (\d+) (.+)", slot)
+        tgt = o.setdefault("templates", {}).setdefault(m.group(1), {}) if m else o
+        rest = m.group(2) if m else slot.removeprefix("form ")
+        if rest == "skill description":
+            tgt["description"] = {"zh": zh, "en": en}
+        elif rest == "description":
+            tgt["description"] = {"zh": zh, "en": en}
+        elif rest == "prompt (inputTemplate)":
+            if not m and skills.get(sid, {}).get("kind") == "example":
+                zh = en = SINGLE_PROMPT
+            tgt["prompt"] = {"zh": " ".join(braces(zh).split()), "en": " ".join(braces(en).split())}
+        elif rest.endswith(" placeholder"):
+            tgt.setdefault("placeholders", {})[rest.removesuffix(" placeholder")] = {"zh": zh, "en": en}
+        else:
+            raise ConvertError(f"unknown copy slot: {sid} / {slot}")
+    return out
+
+
 def _ratio(w, h):
     return round(w / h, 4) if w and h else None
 
@@ -73,6 +114,8 @@ def final_table(index: str) -> list[dict]:
     return rows
 
 
+# product display overrides (our naming, not reference copy) — #751 HOLD: brand zh = 品牌视觉识别
+TITLE_OVERRIDE = {"brand-identity-director": {"zh": "品牌视觉识别"}}
 EXT_REQUIRED = {"character-sheet-design": 1}  # sid -> own templates that MUST be merged (c67ac2aa layout: raw/../own/)
 
 
@@ -131,7 +174,7 @@ def convert(raw: Path) -> dict:
         c = d.get("content") or {}
         ci = c.get("i18n") or {}
         _copy(sid, "skill description", (ci.get("zh") or {}).get("description") or d.get("description"), (ci.get("en") or {}).get("description"))
-        s = {"source": "reference", "kind": r["card"], "title": {"zh": r["zh"], "en": r["en"]}, "assetDir": r["assetDir"]}
+        s = {"source": "reference", "kind": r["card"], "title": {"zh": r["zh"], "en": r["en"], **TITLE_OVERRIDE.get(sid, {})}, "assetDir": r["assetDir"]}
         if r["card"] == "template":
             tpls = []
             members = [(m, False) for m in d.get("collectionMembers") or []] + [(m, True) for m in load_ext(raw, sid)]  # INDEX rule: raw + own ext
@@ -174,11 +217,23 @@ def check_own(skills: dict, own_ids: list[str], feed_ids: frozenset = frozenset(
             raise ConvertError(f"own id collides with a reference feed skillKey: {oid!r}")
 
 
+def check_dupes(skills: dict, ids: list[str]) -> None:
+    """#751 QA: every skills.ts id appears once; a second Final id (e.g. another packaging-design-director) hard-fails."""
+    seen: dict = {}
+    for i in ids:
+        seen[i] = seen.get(i, 0) + 1
+    dup = sorted(i for i, n in seen.items() if n > 1)
+    if dup:
+        kind = "Final skill id" if any(d in skills for d in dup) else "id"
+        raise ConvertError(f"duplicate {kind} in skills.ts: {dup}")
+
+
 if __name__ == "__main__":
     raw = Path(sys.argv[1] if len(sys.argv) > 1 else "/workspace/lovart-inputs/raw")
     assert "quarantine" not in str(raw)
     skills = convert(raw)
-    src = (ROOT / "src/skills.ts").read_text()
+    src = Path(os.environ.get("SKILLS_TS") or ROOT / "src/skills.ts").read_text()
+    check_dupes(skills, re.findall(r"\{ id: '([^']+)'", src))  # entry path: duplicates must fail BEFORE the set() below hides them
     own = sorted(set(re.findall(r"\{ id: '([^']+)'", src)) - set(skills))
     feed = frozenset(re.sub(r"-<masked>-<masked>$", "", x["skillKey"]) for x in json.loads((raw / "feed-list.json").read_text())["cards"] if x.get("skillKey"))
     check_own(skills, own, feed)
@@ -191,11 +246,16 @@ if __name__ == "__main__":
     (ROOT / "src/data/skills-748.json").write_text(json.dumps({"source": "scripts/convert_raw_748.py (structure only)", "skills": skills}, ensure_ascii=False, indent=2) + "\n")
     d = ROOT / "docs/design/748"
     d.mkdir(parents=True, exist_ok=True)
-    (d / "COPY-REWRITE.md").write_text("\n".join(["# #748 COPY-REWRITE checklist (keys only)", "",
+    ours = load_ours(Path(os.environ.get("COPY_OURS_IN") or d / "COPY-REWRITE.md"))
+    (d / "COPY-REWRITE.md").write_text("\n".join(["# #748 COPY-REWRITE checklist (ComfyArt own copy)", "",
         "Reference copy is NOT in this repo (originals: review-assets `lovart-raw/2026-11-05/COPY-REWRITE-originals.md`).",
-        "Product writes our own zh/en per row; until then the app uses our generic copy.", "",
+        "zh/en below are OUR product rewrite (#751); TODO = generic copy. Single-form prompts are `{{user_requirement}}` only (raw 1:1).", "",
         "| skill | slot | zh (ours) | en (ours) |", "|---|---|---|---|"] +
-        [f"| {a} | {b} | TODO | TODO |" for a, b, c, e in COPY]) + "\n")
+        [f"| {a} | {b} | {' | '.join(ours.get((a, b), ('TODO', 'TODO')))} |" for a, b, c, e in COPY]) + "\n")
+    keys = {(a, b) for a, b, c, e in COPY}
+    if set(ours) - keys:
+        raise ConvertError(f"ours copy rows not in checklist: {sorted(set(ours) - keys)[:3]}")
+    (ROOT / "src/data/copy-748.json").write_text(json.dumps(ours_json(skills, ours), ensure_ascii=False, indent=2) + "\n")
     orig = os.environ.get("COPY_ORIGINALS_OUT")  # never inside the repo
     if orig:
         assert not Path(orig).resolve().is_relative_to(ROOT.resolve())

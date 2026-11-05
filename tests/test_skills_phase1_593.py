@@ -41,7 +41,7 @@ def test_new6_production_instructions_and_presets():
         head, _, rest = e.partition("inputs:")
         assert "cover: cover(" in head and "featured: feedCovers(" in head, sid
         assert f"video: video594('{sid}')" in head, sid  # #623 hover video wired
-        assert "quickStartCoverFit: 'contain'" in head and "examples: ex594(" in head, sid
+        assert "quickStartCoverFit: 'contain'" in head and "examples: ex" not in head, sid  # #751 HOLD: Final examples come from raw + src/data/wash-748.json (1:1, pendingWash), no hand list
         if sid == "universal-multi-angle-grid":
             # #691/#687: reference-card parity → Upload + Additional only, no presets
             assert "presets:" not in head and "inputs: MULTI_ANGLE_INPUTS }" in e, sid
@@ -84,4 +84,4 @@ def test_multi_angle_upload_additional_parity_691():
     assert "inputs: MULTI_ANGLE_INPUTS }" in e and "presets:" not in e and "pure 90° side profile" in e
     assert "angleBrief" not in e and "subjectImage" not in e and "VISUAL" not in e
     assert "Additional notes" in e and "neutral seamless" in e
-    assert "examples: ex594('universal-multi-angle-grid', [1, 2, 3, 4])" in e  # example media untouched
+    assert "ex594(" not in e  # #751 HOLD: example media = wash-748.json (1:1), no hand list

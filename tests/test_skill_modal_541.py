@@ -139,7 +139,7 @@ def test_examples_carousel_is_data_driven(got):
     assert ".ca-skillrun__stage" in CSS and "aspect-ratio: 704 / 506" in CSS and "object-fit: contain" in CSS
     assert ".ca-skillrun__stage img, .ca-skillrun__stage video" in CSS
     assert ".ca-skillrun__thumb img, .ca-skillrun__thumb video" in CSS
-    assert "<SkillExamples examples={skill.media?.length ? examples : skill.examples} />" in DLG and "from './SkillExamples'" in DLG
+    assert "<SkillExamples examples={skill.media?.length ? examples : skill.examples} pendingWash={skill.pendingWash} />" in DLG and "from './SkillExamples'" in DLG
 
 
 EX541 = {"interior-architectural-visualization": ("535d9568d1b8ca25e300fa32db1eca887889ba88", [1, 2, 3, 4]), "poster-differentiated-compiler": ("6d864bd2dd53b9f5b487829f2834d94be013b0a5", [1, 2, 3, 4, 5]),

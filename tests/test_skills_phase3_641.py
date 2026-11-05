@@ -62,9 +62,9 @@ def test_thumbnail_inputs_media_and_effect_inputs():
     assert "inputs: EFFECT_INPUTS" in e
     assert "cover: cover643('cover-design-director')" in e
     assert "featured: feat643('cover-design-director'" in e
-    assert "ex643('cover-design-director'" in e
+    assert "ex643('cover-design-director'" not in e  # #751 HOLD: Final examples come from raw + src/data/wash-748.json (1:1, pendingWash), no hand list
     assert "video: video('cover-design-director')" in e
-    assert "examples: [video('cover-design-director'), ...ex643(" in e
+    assert "...ex643(" not in e  # #751 HOLD: cover left = raw video only
     assert "quickStartCover: quickStartCover('cover-design-director')" in e
     assert "WASH_643" in SKILLS_TS and "643/wash" in SKILLS_TS
 

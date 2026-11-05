@@ -2,6 +2,13 @@ import { useState } from 'react'
 
 import { t } from '../i18n'
 import { filmstripIndexLabel, isSkillMediaVideo } from '../skills'
+import { isPendingWash } from '../skillRaw748'
+import { Icons } from './icons'
+
+/** #751 — a slot whose wash has not landed: the existing empty-state grey plate + image icon (one per slot, never a real still). */
+export function PendingWash({ stage }: { stage?: boolean }) {
+  return <div className="ca-skillrun__pending" data-pending-wash="1" data-stage={stage || undefined} data-testid="skill-run-pending-wash" aria-label={t('skillRun.noExamples')}><span className="ca-icon">{Icons.image}</span></div>
+}
 
 /** #541 「效果示例」: 704×506 contain-centred stage + thumbnail strip.
  *  #593: numbered filmstrip so left-column examples match dual-column gold UX.
@@ -9,6 +16,7 @@ import { filmstripIndexLabel, isSkillMediaVideo } from '../skills'
  *  #575: examples may mix stills and short mp4 — stage muted-loops the current clip; leave selection → next still/video.
  *  #641: empty list → 「暂无示例」. Stage skeleton and retry stay inside this section. */
 function ExampleMedia({ src, stage }: { src: string; stage?: boolean }) {
+  if (isPendingWash(src)) return <PendingWash stage={stage} />
   if (isSkillMediaVideo(src)) {
     return (
       <video
@@ -29,6 +37,12 @@ function ExampleMedia({ src, stage }: { src: string; stage?: boolean }) {
 
 /** Local frame load: skeleton until the current still/video is ready; failure offers retry. Cached media resolves in the ref. */
 function StageFrame({ src }: { src: string }) {
+  return isPendingWash(src)
+    ? <div className="ca-skillrun__stage" data-testid="skill-run-example-stage" data-media="image" data-state="pending-wash"><PendingWash stage /></div>
+    : <LoadedStage src={src} />
+}
+
+function LoadedStage({ src }: { src: string }) {
   const [attempt, setAttempt] = useState(0)
   const token = `${attempt}:${src}`
   const [readyFor, setReadyFor] = useState('')
@@ -83,7 +97,7 @@ function StageFrame({ src }: { src: string }) {
   )
 }
 
-export function SkillExamples({ examples }: { examples?: string[] }) {
+export function SkillExamples({ examples, pendingWash }: { examples?: string[]; pendingWash?: number[] }) {
   const [at, setAt] = useState(0)
   if (examples && !examples.length) {
     return (
@@ -96,7 +110,7 @@ export function SkillExamples({ examples }: { examples?: string[] }) {
   if (!examples?.length) return null
   const cur = examples[Math.min(at, examples.length - 1)]
   return (
-    <section className="ca-skillrun__examples" data-testid="skill-run-examples" data-count={examples.length}>
+    <section className="ca-skillrun__examples" data-testid="skill-run-examples" data-count={examples.length} data-pending-wash={pendingWash?.length ?? 0}>
       <div className="ca-skillrun__section">{t('skillRun.examples')}</div>
       <StageFrame key={cur} src={cur} />
       {examples.length > 1 && (
@@ -104,7 +118,7 @@ export function SkillExamples({ examples }: { examples?: string[] }) {
           {examples.map((src, i) => (
             <button key={`${src}-${i}`} type="button" role="tab" aria-selected={i === at} data-on={i === at || undefined}
               className="ca-skillrun__thumb" data-testid="skill-run-example-thumb" data-index={i + 1}
-              data-media={isSkillMediaVideo(src) ? 'video' : 'image'}
+              data-media={isSkillMediaVideo(src) ? 'video' : 'image'} data-pending-wash={pendingWash?.includes(i) || undefined}
               onClick={() => setAt(i)}>
               <ExampleMedia src={src} />
               <span className="ca-skillrun__thumbnum" aria-hidden="true">{filmstripIndexLabel(i + 1)}</span>

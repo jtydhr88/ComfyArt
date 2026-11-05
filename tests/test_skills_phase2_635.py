@@ -63,7 +63,7 @@ def test_social_inputs_product_person_and_examples_kept():
     e = _entries()["rednote-cover-maker"]
     # #687-1: social dialog = reference-card Upload Files + Additional Details (product/person refs go via the upload)
     assert "inputs: REF_CARD_INPUTS_687 }" in e and "productRef" not in e
-    assert "examples: ex541(" in e  # RedNote carousel kept
+    assert "examples: ex541(" not in e  # #751 HOLD: RedNote carousel = raw highlights + wash-748.json (10 washed 1:1)
     assert "cover: cover('rednote-cover-maker')" in e
 
 

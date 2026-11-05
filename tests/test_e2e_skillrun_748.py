@@ -55,9 +55,13 @@ async def test_skillrun_748(app_url, sid, lang, theme):  # noqa: F811
             await tiles.nth(1).click()
             want = await tiles.nth(1).locator(".ca-skillrun__presetname").inner_text()
             assert await dlg.get_by_test_id("skill-run-current-name").inner_text() == want  # click drives name
-            thumb = await dlg.get_by_test_id("skill-run-current-thumb").locator("img").get_attribute("src")
-            tile_img = await tiles.nth(1).locator(".ca-skillrun__presetimg > img").get_attribute("src")
-            assert thumb == tile_img
+            cur = dlg.get_by_test_id("skill-run-current-thumb")
+            if not await tiles.nth(1).locator(".ca-skillrun__presetimg > img").count():  # #751 HOLD: unwashed slot → unified placeholder, no fake image
+                assert await cur.locator("img").count() == 0 and await cur.locator("[data-pending-wash]").count() == 1
+            else:
+                thumb = await cur.locator("img").get_attribute("src")
+                tile_img = await tiles.nth(1).locator(".ca-skillrun__presetimg > img").get_attribute("src")
+                assert thumb == tile_img
             if sid == "motion-poster-generator":  # #748 raw: per-template form — 首尾帧动画 adds its own start_frame upload
                 assert await dlg.locator("#skill-run-start_frame").count() == 1
                 await tiles.nth(0).click()

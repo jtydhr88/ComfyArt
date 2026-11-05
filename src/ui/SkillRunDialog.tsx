@@ -14,7 +14,8 @@ import { t } from '../i18n'
 import { useEscape } from './escape'
 import { Icons } from './icons'
 import { openSkillEditor } from './SkillsDialog'
-import { SkillExamples } from './SkillExamples'
+import { PendingWash, SkillExamples } from './SkillExamples'
+import { isPendingWash } from '../skillRaw748'
 
 /** #622 — template tile: still thumb + optional preset.video muted hover/focus loop (no-video unchanged). */
 function PresetTile({ skill, item, preset: p, on, onPick, onZoom }: {
@@ -40,7 +41,7 @@ function PresetTile({ skill, item, preset: p, on, onPick, onZoom }: {
         onBlur={videoSrc ? stop : undefined}
       >
         <span className="ca-skillrun__presetimg">
-          {img ? <img src={img} alt="" /> : <span className="ca-icon">{Icons.skill}</span>}
+          {isPendingWash(img) ? <PendingWash /> : img ? <img src={img} alt="" /> : <span className="ca-icon">{Icons.skill}</span>}
           {videoSrc && (
             <video
               ref={videoRef}
@@ -56,7 +57,9 @@ function PresetTile({ skill, item, preset: p, on, onPick, onZoom }: {
           )}
           {/* #748 stack-expand: thumbs fan out on hover, collapse when selected (timings = CSS vars). */}
           {stack.length > 0 && <span className="ca-skillrun__stack" aria-hidden="true" data-testid="skill-run-stack" style={{ '--n': Math.min(stack.length, 5) } as React.CSSProperties}>
-            {stack.slice(0, 5).map((src, i) => <img key={i} src={src} alt="" style={{ '--i': i } as React.CSSProperties} />)}
+            {stack.slice(0, 5).map((src, i) => isPendingWash(src)
+              ? <span key={i} className="ca-skillrun__pending" data-pending-wash="1" style={{ '--i': i } as React.CSSProperties}><span className="ca-icon">{Icons.image}</span></span>
+              : <img key={i} src={src} alt="" style={{ '--i': i } as React.CSSProperties} />)}
           </span>}
           <span className="ca-skillrun__pick">{t('skillRun.select')}</span>
           {on && <span className="ca-skillrun__check" aria-hidden="true"><span className="ca-icon">{Icons.check}</span></span>}
@@ -99,7 +102,7 @@ function SkillMediaLeft({ skill, preset, onPick, onZoom }: {
             }
             return (
               <div className="ca-skillrun__templates" data-left={examples.length ? (presetTiles.length ? 'both' : 'examples') : 'templates'}>
-                <SkillExamples examples={skill.media?.length ? examples : skill.examples} />
+                <SkillExamples examples={skill.media?.length ? examples : skill.examples} pendingWash={skill.pendingWash} />
                 {!!presetTiles.length && (
                   <div role="radiogroup" data-testid="skill-run-presets">
                     <div className="ca-skillrun__section">{t('skillRun.templates')}</div>
@@ -215,7 +218,7 @@ export function SkillRunDialog({ skill: baseSkill, presetId, onClose, run = newP
                   const usage = sel?.usedCount ?? 0  // our per-template stats; 0 ⇒ hidden
                   return <div className="ca-skillrun__currentrow" data-testid="skill-run-current-row" data-media={sel?.type}>
                   <span className="ca-skillrun__currentthumb" data-testid="skill-run-current-thumb">
-                    {thumb ? <img src={thumb} alt="" /> : <span className="ca-icon">{Icons.skill}</span>}
+                    {thumb && !isPendingWash(thumb) ? <img src={thumb} alt="" /> : <span className="ca-icon" data-pending-wash={thumb ? '1' : undefined}>{thumb ? Icons.image : Icons.skill}</span>}
                   </span>
                   <span className="ca-skillrun__currentname" data-testid="skill-run-current-name">{loc(sel?.name ?? chosen.name)}</span>
                   {usage > 0 && <span className="ca-skillrun__currentusage" data-testid="skill-run-current-usage">{t('skillRun.usageCount', String(usage))}</span>}

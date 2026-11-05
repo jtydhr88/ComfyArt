@@ -90,7 +90,7 @@ def test_phase1_media_and_no_demo_placeholder():
         assert "lovart" not in e.lower(), sid
     for sid in PHASE1_NEW:
         e = entries[sid]
-        assert "examples: ex594(" in e, sid
+        assert "examples: ex" not in e, sid  # #751 HOLD: Final examples come from raw + src/data/wash-748.json (1:1, pendingWash), no hand list
         assert "quickStartCoverFit: 'contain'" in e, sid
 
 

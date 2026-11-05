@@ -1,0 +1,806 @@
+{
+  "cover-design-director": {
+    "description": {
+      "zh": "为视频、文章和专辑设计吸睛封面与缩略图",
+      "en": "Design eye-catching covers and thumbnails for videos, articles and albums."
+    },
+    "placeholders": {
+      "user_requirement": {
+        "zh": "还有其他要求吗？可补充尺寸、风格、文案等。",
+        "en": "Any other requirements? Add size, style, copy, etc."
+      }
+    },
+    "prompt": {
+      "zh": "{{user_requirement}}",
+      "en": "{{user_requirement}}"
+    }
+  },
+  "poster-differentiated-compiler": {
+    "description": {
+      "zh": "从创意构思到成稿，一站完成海报设计",
+      "en": "Take a poster from first idea to finished artwork in one flow."
+    },
+    "placeholders": {
+      "user_requirement": {
+        "zh": "还有其他要求吗？可补充尺寸、风格、文案等。",
+        "en": "Any other requirements? Add size, style, copy, etc."
+      }
+    },
+    "prompt": {
+      "zh": "{{user_requirement}}",
+      "en": "{{user_requirement}}"
+    }
+  },
+  "meta-ads-creative-director": {
+    "description": {
+      "zh": "为 Facebook、Instagram 等社媒投放制作并优化电商广告素材",
+      "en": "Produce and refine e-commerce ad creatives for Facebook, Instagram and other social placements."
+    },
+    "placeholders": {
+      "user_requirement": {
+        "zh": "还有其他要求吗？可补充尺寸、风格、文案等。",
+        "en": "Any other requirements? Add size, style, copy, etc."
+      }
+    },
+    "prompt": {
+      "zh": "{{user_requirement}}",
+      "en": "{{user_requirement}}"
+    }
+  },
+  "marketing-campaign-generator": {
+    "description": {
+      "zh": "按各平台原生风格生成整套营销物料，不止 Instagram",
+      "en": "Generate a full campaign styled natively for each platform, not just Instagram."
+    },
+    "placeholders": {
+      "user_requirement": {
+        "zh": "还有其他要求吗？可补充尺寸、风格、文案等。",
+        "en": "Any other requirements? Add size, style, copy, etc."
+      }
+    },
+    "prompt": {
+      "zh": "{{user_requirement}}",
+      "en": "{{user_requirement}}"
+    }
+  },
+  "banner-design-director": {
+    "description": {
+      "zh": "可直接上线、裁切安全的横幅版式",
+      "en": "Launch-ready banner layouts with safe crop zones."
+    },
+    "placeholders": {
+      "user_requirement": {
+        "zh": "还有其他要求吗？可补充尺寸、风格、文案等。",
+        "en": "Any other requirements? Add size, style, copy, etc."
+      }
+    },
+    "prompt": {
+      "zh": "{{user_requirement}}",
+      "en": "{{user_requirement}}"
+    }
+  },
+  "character-sheet-design": {
+    "description": {
+      "zh": "统一角色的长相、服装与身材比例，生成可复用的角色参考",
+      "en": "Build reusable character references with consistent face, outfit and proportions."
+    },
+    "templates": {
+      "1": {
+        "description": {
+          "zh": "角色三视图板，1 张",
+          "en": "1 character turnaround sheet"
+        },
+        "placeholders": {
+          "character_info": {
+            "zh": "描述角色外貌和需要沿用的设定；上传了清晰参考图可不填，缺少关键信息时会再询问。",
+            "en": "Describe the character's look and what must stay the same. Optional if you upload a clear reference; we'll ask if anything key is missing."
+          },
+          "visual_direction": {
+            "zh": "写下想要或不想要的视觉效果；没有可不填。",
+            "en": "Note any visual effects you want or want to avoid. Optional."
+          }
+        },
+        "prompt": {
+          "zh": "生成 1 张成年写实角色三视图板：正面、侧面、背面全身像并排。全程以同一个已确认的角色为准，长相、身材比例和未要求更改的服装保持不变；所有视图合在一张板上。 {{character_info}} {{visual_direction}}",
+          "en": "Generate 1 turnaround sheet of an adult photorealistic character: full-body front, side and back views side by side. Base every view on the same approved character; keep face, body proportions and any outfit not requested to change identical. All views go on a single sheet. {{character_info}} {{visual_direction}}"
+        }
+      },
+      "2": {
+        "description": {
+          "zh": "表情与动作板，1 张",
+          "en": "1 expression and pose sheet"
+        },
+        "placeholders": {
+          "character_info": {
+            "zh": "描述角色外貌和需要沿用的设定；上传了清晰参考图可不填，缺少关键信息时会再询问。",
+            "en": "Describe the character's look and what must stay the same. Optional if you upload a clear reference; we'll ask if anything key is missing."
+          },
+          "visual_direction": {
+            "zh": "写下想要或不想要的视觉效果；没有可不填。",
+            "en": "Note any visual effects you want or want to avoid. Optional."
+          }
+        },
+        "prompt": {
+          "zh": "生成 1 张成年写实角色表情动作板：1 个身份参考像，加 6 种表情和 3 个动作。全程以同一个已确认的角色为准，长相、身材比例和未要求更改的服装保持不变；所有视图合在一张板上。 {{character_info}} {{visual_direction}}",
+          "en": "Generate 1 expression and pose sheet of an adult photorealistic character: one identity reference, 6 expressions and 3 poses. Base every view on the same approved character; keep face, body proportions and any outfit not requested to change identical. All views go on a single sheet. {{character_info}} {{visual_direction}}"
+        }
+      },
+      "3": {
+        "description": {
+          "zh": "建模细节参考板，1 张",
+          "en": "1 modeling detail sheet"
+        },
+        "placeholders": {
+          "character_info": {
+            "zh": "描述角色外貌和需要沿用的设定；上传了清晰参考图可不填，缺少关键信息时会再询问。",
+            "en": "Describe the character's look and what must stay the same. Optional if you upload a clear reference; we'll ask if anything key is missing."
+          },
+          "visual_direction": {
+            "zh": "写下想要或不想要的视觉效果；没有可不填。",
+            "en": "Note any visual effects you want or want to avoid. Optional."
+          }
+        },
+        "prompt": {
+          "zh": "生成 1 张成年写实角色建模参考板：三视图参考，加造型结构、材质和衔接处的局部特写。全程以同一个已确认的角色为准，长相、身材比例和未要求更改的服装保持不变；所有视图合在一张板上。 {{character_info}} {{visual_direction}}",
+          "en": "Generate 1 modeling reference sheet of an adult photorealistic character: turnaround views plus close-ups of structure, materials and joins. Base every view on the same approved character; keep face, body proportions and any outfit not requested to change identical. All views go on a single sheet. {{character_info}} {{visual_direction}}"
+        }
+      },
+      "4": {
+        "description": {
+          "zh": "服装与形态变化板，1 张",
+          "en": "1 outfit and form variant sheet"
+        },
+        "placeholders": {
+          "character_info": {
+            "zh": "描述角色外貌和需要沿用的设定；上传了清晰参考图可不填，缺少关键信息时会再询问。",
+            "en": "Describe the character's look and what must stay the same. Optional if you upload a clear reference; we'll ask if anything key is missing."
+          },
+          "visual_direction": {
+            "zh": "写下想要或不想要的视觉效果；没有可不填。",
+            "en": "Note any visual effects you want or want to avoid. Optional."
+          }
+        },
+        "prompt": {
+          "zh": "生成 1 张成年写实角色变化板：同一角色的 3 套服装或形态。全程以同一个已确认的角色为准，长相、身材比例和未要求更改的服装保持不变；所有视图合在一张板上。 {{character_info}} {{visual_direction}}",
+          "en": "Generate 1 variant sheet of an adult photorealistic character: the same character in 3 outfits or forms. Base every view on the same approved character; keep face, body proportions and any outfit not requested to change identical. All views go on a single sheet. {{character_info}} {{visual_direction}}"
+        }
+      },
+      "5": {
+        "description": {
+          "zh": "道具使用板，1 张",
+          "en": "1 prop usage sheet"
+        },
+        "placeholders": {
+          "character_info": {
+            "zh": "描述角色外貌和需要沿用的设定；上传了清晰参考图可不填，缺少关键信息时会再询问。",
+            "en": "Describe the character's look and what must stay the same. Optional if you upload a clear reference; we'll ask if anything key is missing."
+          },
+          "visual_direction": {
+            "zh": "写下想要或不想要的视觉效果；没有可不填。",
+            "en": "Note any visual effects you want or want to avoid. Optional."
+          }
+        },
+        "prompt": {
+          "zh": "生成 1 张成年写实角色道具板：角色手持并使用同一件道具的几个典型动作；道具按角色设定选取，形状和用法前后一致。全程以同一个已确认的角色为准，长相、身材比例和未要求更改的服装保持不变；所有视图合在一张板上。 {{character_info}} {{visual_direction}}",
+          "en": "Generate 1 prop sheet of an adult photorealistic character: several typical poses holding and using one prop. Pick the prop to fit the character, and keep its shape and use consistent. Base every view on the same approved character; keep face, body proportions and any outfit not requested to change identical. All views go on a single sheet. {{character_info}} {{visual_direction}}"
+        }
+      },
+      "6": {
+        "description": {
+          "zh": "基础角色板，1 张",
+          "en": "1 basic character sheet"
+        },
+        "placeholders": {
+          "character_info": {
+            "zh": "描述角色外貌和需要沿用的设定；上传了清晰参考图可不填，缺少关键信息时会再询问。",
+            "en": "Describe the character's look and what must stay the same. Optional if you upload a clear reference; we'll ask if anything key is missing."
+          },
+          "visual_direction": {
+            "zh": "写下想要或不想要的视觉效果；没有可不填。",
+            "en": "Note any visual effects you want or want to avoid. Optional."
+          }
+        },
+        "prompt": {
+          "zh": "生成 1 张成年写实角色基础板：三视图、标准半身像和 4 种表情。全程以同一个已确认的角色为准，长相、身材比例和未要求更改的服装保持不变；所有视图合在一张板上。 {{character_info}} {{visual_direction}}",
+          "en": "Generate 1 basic sheet of an adult photorealistic character: turnaround views, a standard half-body shot and 4 expressions. Base every view on the same approved character; keep face, body proportions and any outfit not requested to change identical. All views go on a single sheet. {{character_info}} {{visual_direction}}"
+        }
+      },
+      "7": {
+        "description": {
+          "zh": "完整技术设定板，1 张",
+          "en": "1 full technical character sheet"
+        },
+        "placeholders": {
+          "character_info": {
+            "zh": "描述角色外貌和需要沿用的设定；上传了清晰参考图可不填，缺少关键信息时会再询问。",
+            "en": "Describe the character's look and what must stay the same. Optional if you upload a clear reference; we'll ask if anything key is missing."
+          },
+          "visual_direction": {
+            "zh": "写下想要或不想要的视觉效果；没有可不填。",
+            "en": "Note any visual effects you want or want to avoid. Optional."
+          }
+        },
+        "prompt": {
+          "zh": "生成 1 张成年写实角色完整设定板：主视图、角色档案、色板、剪影、表情、头部细节、动作、服装细节和手势。全程以同一个已确认的角色为准，长相、身材比例和未要求更改的服装保持不变；所有视图合在一张板上。 {{character_info}} {{visual_direction}}",
+          "en": "Generate 1 full technical sheet of an adult photorealistic character: main view, profile notes, color palette, silhouette, expressions, head details, poses, outfit details and hand gestures. Base every view on the same approved character; keep face, body proportions and any outfit not requested to change identical. All views go on a single sheet. {{character_info}} {{visual_direction}}"
+        }
+      },
+      "8": {
+        "description": {
+          "zh": "时装大片角色板，1 张",
+          "en": "1 editorial fashion sheet"
+        },
+        "placeholders": {
+          "character_info": {
+            "zh": "描述角色外貌和需要沿用的设定；上传了清晰参考图可不填，缺少关键信息时会再询问。",
+            "en": "Describe the character's look and what must stay the same. Optional if you upload a clear reference; we'll ask if anything key is missing."
+          },
+          "visual_direction": {
+            "zh": "写下想要或不想要的视觉效果；没有可不填。",
+            "en": "Note any visual effects you want or want to avoid. Optional."
+          }
+        },
+        "prompt": {
+          "zh": "生成 1 张成年写实角色时装大片板：以参考角色为模特的高端时装广告风格，同一人的全身站姿、半身和面部特写，五官、发型、身材一致；柔光影棚，浅色纯净背景，画面不含文字和标志。 {{character_info}} {{visual_direction}}",
+          "en": "Generate 1 editorial fashion sheet of an adult photorealistic character: the reference character modeling in a high-end fashion ad style, with full-body standing, half-body and face close-up of the same person; consistent face, hair and build; soft studio light, plain light backdrop, no text or logos. {{character_info}} {{visual_direction}}"
+        }
+      }
+    }
+  },
+  "logo-material-explorer": {
+    "description": {
+      "zh": "为标志打造高级 3D 材质效果，图形保持不变",
+      "en": "Render your logo in premium 3D materials while keeping its shape intact."
+    },
+    "placeholders": {
+      "user_requirement": {
+        "zh": "还有其他要求吗？可补充尺寸、风格、文案等。",
+        "en": "Any other requirements? Add size, style, copy, etc."
+      }
+    },
+    "prompt": {
+      "zh": "{{user_requirement}}",
+      "en": "{{user_requirement}}"
+    }
+  },
+  "mobile-app-visual-design": {
+    "description": {
+      "zh": "为 iOS、Android 等平台建立移动端视觉体系",
+      "en": "Build mobile visual systems for iOS, Android and beyond."
+    },
+    "placeholders": {
+      "user_requirement": {
+        "zh": "还有其他要求吗？可补充尺寸、风格、文案等。",
+        "en": "Any other requirements? Add size, style, copy, etc."
+      }
+    },
+    "prompt": {
+      "zh": "{{user_requirement}}",
+      "en": "{{user_requirement}}"
+    }
+  },
+  "web-product-visual-design": {
+    "description": {
+      "zh": "为网页产品确立统一、可扩展的视觉方向，并在核心页面与组件中验证",
+      "en": "Set a unified, scalable visual direction for a web product and prove it on key pages and components."
+    },
+    "placeholders": {
+      "user_requirement": {
+        "zh": "还有其他要求吗？可补充尺寸、风格、文案等。",
+        "en": "Any other requirements? Add size, style, copy, etc."
+      }
+    },
+    "prompt": {
+      "zh": "{{user_requirement}}",
+      "en": "{{user_requirement}}"
+    }
+  },
+  "universal-multi-angle-grid": {
+    "description": {
+      "zh": "为商品或人物生成多角度展示图",
+      "en": "Generate multi-angle views of a product or person."
+    },
+    "placeholders": {
+      "user_requirement": {
+        "zh": "还有其他要求吗？可补充尺寸、风格、文案等。",
+        "en": "Any other requirements? Add size, style, copy, etc."
+      }
+    },
+    "prompt": {
+      "zh": "{{user_requirement}}",
+      "en": "{{user_requirement}}"
+    }
+  },
+  "interior-architectural-visualization": {
+    "description": {
+      "zh": "把建筑与室内设计构想转化为真实、统一的效果呈现。适用于住宅、办公、餐饮、酒店、零售、工作室、公共及商业空间的室内外效果、平面布局、材质研究、家具布置与灯光方案；需求模糊或不完整时，会先通过结构化提问补齐信息再生成。",
+      "en": "Turn architecture and interior concepts into realistic, consistent visuals. Covers interiors, exteriors, floor plans, material studies, furniture layouts and lighting concepts for homes, offices, restaurants, hotels, retail, studios, public and commercial spaces. If the brief is vague or incomplete, it first asks structured questions to fill the gaps before generating."
+    },
+    "placeholders": {
+      "user_requirement": {
+        "zh": "还有其他要求吗？可补充尺寸、风格、文案等。",
+        "en": "Any other requirements? Add size, style, copy, etc."
+      }
+    },
+    "prompt": {
+      "zh": "{{user_requirement}}",
+      "en": "{{user_requirement}}"
+    }
+  },
+  "packaging-design-director": {
+    "description": {
+      "zh": "从视觉方向到系列延展，按需求完成包装设计",
+      "en": "Packaging design on demand, from visual direction to full product ranges."
+    },
+    "templates": {
+      "1": {
+        "description": {
+          "zh": "包装主视面设计，1 张",
+          "en": "1 front panel design"
+        },
+        "placeholders": {
+          "product_info": {
+            "zh": "简单说明是什么商品、用什么包装形式；如已有品牌文案、尺寸或主款要求也可写上。",
+            "en": "Say what the product is and how it's packaged. Add any existing brand copy, sizes or master-design needs."
+          },
+          "visual_direction": {
+            "zh": "写下想要或不想要的视觉效果；没有可不填。",
+            "en": "Note any visual effects you want or want to avoid. Optional."
+          }
+        },
+        "prompt": {
+          "zh": "生成 1 张包装主视面确认稿：按已确认的包装结构，突出品牌标志、品名、主图形、配色和信息层级，便于确认主款视觉。 {{product_info}} {{visual_direction}}",
+          "en": "Generate 1 front-panel approval image: following the confirmed pack structure, feature the brand mark, product name, key graphic, colors and information hierarchy so the master design can be signed off. {{product_info}} {{visual_direction}}"
+        }
+      },
+      "2": {
+        "description": {
+          "zh": "包装视觉方向板，3 张",
+          "en": "3 packaging direction boards"
+        },
+        "placeholders": {
+          "product_info": {
+            "zh": "简单说明是什么商品、用什么包装形式；如已有品牌文案、尺寸或主款要求也可写上。",
+            "en": "Say what the product is and how it's packaged. Add any existing brand copy, sizes or master-design needs."
+          },
+          "visual_direction": {
+            "zh": "写下想要或不想要的视觉效果；没有可不填。",
+            "en": "Note any visual effects you want or want to avoid. Optional."
+          }
+        },
+        "prompt": {
+          "zh": "生成 3 张 16:9 包装方向板，每张用九宫格呈现一种思路：结构、正反面信息、标志、配色、材质和使用场景；三张基于同一份产品信息。 示例中的品牌与包装信息仅用于演示，复用模板时不会自动带入。 {{product_info}} {{visual_direction}}",
+          "en": "Generate 3 packaging direction boards at 16:9. Each uses a 3x3 grid for one approach: structure, front and back info, logo, color, materials and in-use scene. All three use the same product info. Sample brand and packaging details are for demo only and are not carried over when the template is reused. {{product_info}} {{visual_direction}}"
+        }
+      },
+      "3": {
+        "description": {
+          "zh": "单品 SKU 图 3 张 + 系列合照 1 张",
+          "en": "3 single-SKU images + 1 range shot"
+        },
+        "placeholders": {
+          "product_info": {
+            "zh": "简单说明是什么商品、用什么包装形式；如已有品牌文案、尺寸或主款要求也可写上。",
+            "en": "Say what the product is and how it's packaged. Add any existing brand copy, sizes or master-design needs."
+          },
+          "visual_direction": {
+            "zh": "写下想要或不想要的视觉效果；没有可不填。",
+            "en": "Note any visual effects you want or want to avoid. Optional."
+          }
+        },
+        "prompt": {
+          "zh": "生成 3 个 SKU 的包装图各 1 张，再加 1 张系列合照，共 4 张；SKU 名称与信息按确认清单，只改动已批准的变量，若沿用原主款需注明。 示例中的品牌与包装信息仅用于演示，复用模板时不会自动带入。 {{product_info}} {{visual_direction}}",
+          "en": "Generate one pack image for each of 3 SKUs plus 1 range shot, 4 images total. Use SKU names and details from the approved list and change only approved variables; note it if the original master is reused. Sample brand and packaging details are for demo only and are not carried over when the template is reused. {{product_info}} {{visual_direction}}"
+        }
+      },
+      "4": {
+        "description": {
+          "zh": "包装概念面板/结构示意，1 张",
+          "en": "1 concept panel / structure diagram"
+        },
+        "placeholders": {
+          "product_info": {
+            "zh": "简单说明是什么商品、用什么包装形式；如已有品牌文案、尺寸或主款要求也可写上。",
+            "en": "Say what the product is and how it's packaged. Add any existing brand copy, sizes or master-design needs."
+          },
+          "visual_direction": {
+            "zh": "写下想要或不想要的视觉效果；没有可不填。",
+            "en": "Note any visual effects you want or want to avoid. Optional."
+          }
+        },
+        "prompt": {
+          "zh": "生成 1 张包装概念面板或展开图，基于已批准主款，标明正反面、折边、开口和信息分区；未核实的尺寸注明待供应商确认，附交接说明，不作为可直接印刷的刀版。 示例中的品牌与包装信息仅用于演示，复用模板时不会自动带入。 {{product_info}} {{visual_direction}}",
+          "en": "Generate 1 concept panel or unfolded layout based on the approved master, marking front, back, folds, opening and info zones. Flag unverified sizes for supplier confirmation, add handoff notes, and do not present it as a print-ready dieline. Sample brand and packaging details are for demo only and are not carried over when the template is reused. {{product_info}} {{visual_direction}}"
+        }
+      },
+      "5": {
+        "description": {
+          "zh": "包装货架陈列图，1 张",
+          "en": "1 shelf display image"
+        },
+        "placeholders": {
+          "product_info": {
+            "zh": "简单说明是什么商品、用什么包装形式；如已有品牌文案、尺寸或主款要求也可写上。",
+            "en": "Say what the product is and how it's packaged. Add any existing brand copy, sizes or master-design needs."
+          },
+          "visual_direction": {
+            "zh": "写下想要或不想要的视觉效果；没有可不填。",
+            "en": "Note any visual effects you want or want to avoid. Optional."
+          }
+        },
+        "prompt": {
+          "zh": "生成 1 张货架陈列图，使用已批准的主款和 SKU 包装，按真实结构、容量和陈列方式摆放；渲染时不改动标志、版式、开口和包装形态。 示例中的品牌与包装信息仅用于演示，复用模板时不会自动带入。 {{product_info}} {{visual_direction}}",
+          "en": "Generate 1 shelf display image with the approved master and SKU packs, arranged by their real structure, size and display method. Keep logo, layout, opening and pack shape unchanged in the render. Sample brand and packaging details are for demo only and are not carried over when the template is reused. {{product_info}} {{visual_direction}}"
+        }
+      }
+    }
+  },
+  "motion-poster-generator": {
+    "description": {
+      "zh": "让现有海报动起来，主体、文字和构图保持不变",
+      "en": "Bring an existing poster to life while keeping its subject, text and layout."
+    },
+    "templates": {
+      "1": {
+        "description": {
+          "zh": "动态海报视频，1 条",
+          "en": "1 motion poster video"
+        },
+        "placeholders": {
+          "motion_brief": {
+            "zh": "写下哪些要动、哪些保持不动；不填则自动规划。",
+            "en": "Say what should move and what should stay still. Leave blank to plan it automatically."
+          },
+          "visual_direction": {
+            "zh": "描述想要的画面效果，或附上参考；没有可不填。",
+            "en": "Describe the look you want or attach a reference. Optional."
+          }
+        },
+        "prompt": {
+          "zh": "根据上传的静态海报生成 1 条动态视频：先找出适合运动的元素并给出方案确认；有具体要求时按要求精细控制，否则自动规划，无需逐层设置。构图、主体、文字、标志和信息层级保持不变，确认时长、画幅和音效后生成，最后停在完整清晰的画面上。 运动要求: {{motion_brief}} 画面效果: {{visual_direction}}",
+          "en": "Generate 1 motion video from the uploaded static poster. Identify elements that can move safely and propose a plan for approval; follow detailed instructions if given, otherwise plan automatically with no per-layer setup. Keep layout, subject, text, logos and hierarchy intact; confirm length, ratio and sound, then finish on a full, legible still frame. Motion: {{motion_brief}} Look: {{visual_direction}}"
+        }
+      },
+      "2": {
+        "description": {
+          "zh": "首尾帧可控的动态海报视频，1 条",
+          "en": "1 start/end-frame motion poster video"
+        },
+        "placeholders": {
+          "motion_brief": {
+            "zh": "写下哪些要动、哪些保持不动；不填则自动规划。",
+            "en": "Say what should move and what should stay still. Leave blank to plan it automatically."
+          },
+          "visual_direction": {
+            "zh": "描述想要的画面效果，或附上参考；没有可不填。",
+            "en": "Describe the look you want or attach a reference. Optional."
+          }
+        },
+        "prompt": {
+          "zh": "生成 1 条首尾帧可控的动态海报视频：以原稿作为结束画面，再采用或设计同一镜头更早的状态作为起始画面。两帧主体、视角、风格和色彩一致；先确认首尾帧、必要调整、时长、画幅和音效，再生成连贯运动。文字、标志和层级不变，不拼接无关画面，最后完整定格。 运动要求: {{motion_brief}} 画面效果: {{visual_direction}}",
+          "en": "Generate 1 motion poster video with controlled start and end frames. Use the original as the end frame, then use or design an earlier moment of the same shot as the start. Keep subject, viewpoint, style and colors consistent; confirm both frames, any adjustments, length, ratio and sound before generating smooth motion. Keep text, logos and hierarchy, avoid cutting to unrelated images, and end on a full still frame. Motion: {{motion_brief}} Look: {{visual_direction}}"
+        }
+      }
+    }
+  },
+  "product-tvc-advertisement-generator": {
+    "description": {
+      "zh": "基于真实商品和卖点，制作完整的商业广告片",
+      "en": "Make a finished commercial from your real product and its confirmed benefits."
+    },
+    "templates": {
+      "1": {
+        "description": {
+          "zh": "产品广告片，1 条",
+          "en": "1 product commercial"
+        },
+        "placeholders": {
+          "product_info": {
+            "zh": "写上商品名称、已确认的卖点和实际用法；没有可不填。",
+            "en": "Add the product name, confirmed benefits and how it's actually used. Optional."
+          },
+          "brief": {
+            "zh": "写上投放渠道、文案、时长或配乐要求；未定的可先不填，稍后确认。",
+            "en": "Add channel, copy, length or music needs. Leave anything undecided for later."
+          },
+          "visual_direction": {
+            "zh": "描述想要的画面效果，或附上参考；没有可不填。",
+            "en": "Describe the look you want or attach a reference. Optional."
+          }
+        },
+        "prompt": {
+          "zh": "生成 1 条美妆产品广告片。基于真实商品和已确认卖点完成广告叙事与成片，商品外形、标识和使用方式保持一致，不虚构性能或看不到的结构。重点呈现包装外观、看得见的质感和有依据的用法，不虚构功效或使用前后对比。 商品信息: {{product_info}} 其他要求: {{brief}} 画面效果: {{visual_direction}}",
+          "en": "Generate 1 beauty product commercial. Build the story and final cut on real product facts and confirmed benefits; keep its shape, branding and usage accurate, and don't make up performance or unseen parts. Focus on the packaging, visible texture and supported usage; no made-up effects or before-and-after claims. Product: {{product_info}} Requirements: {{brief}} Look: {{visual_direction}}"
+        }
+      },
+      "2": {
+        "description": {
+          "zh": "产品广告片，1 条",
+          "en": "1 product commercial"
+        },
+        "placeholders": {
+          "product_info": {
+            "zh": "写上商品名称、已确认的卖点和实际用法；没有可不填。",
+            "en": "Add the product name, confirmed benefits and how it's actually used. Optional."
+          },
+          "brief": {
+            "zh": "写上投放渠道、文案、时长或配乐要求；未定的可先不填，稍后确认。",
+            "en": "Add channel, copy, length or music needs. Leave anything undecided for later."
+          },
+          "visual_direction": {
+            "zh": "描述想要的画面效果，或附上参考；没有可不填。",
+            "en": "Describe the look you want or attach a reference. Optional."
+          }
+        },
+        "prompt": {
+          "zh": "生成 1 条服装产品广告片。基于真实商品和已确认卖点完成广告叙事与成片，商品外形、标识和使用方式保持一致，不虚构性能或看不到的结构。展示服装剪裁、图案和确认过的穿搭场景，款式保持一致，不猜测面料成分。 商品信息: {{product_info}} 其他要求: {{brief}} 画面效果: {{visual_direction}}",
+          "en": "Generate 1 fashion product commercial. Build the story and final cut on real product facts and confirmed benefits; keep its shape, branding and usage accurate, and don't make up performance or unseen parts. Show the cut, pattern and approved styling; keep the garment the same and don't guess the fabric content. Product: {{product_info}} Requirements: {{brief}} Look: {{visual_direction}}"
+        }
+      },
+      "3": {
+        "description": {
+          "zh": "产品广告片，1 条",
+          "en": "1 product commercial"
+        },
+        "placeholders": {
+          "product_info": {
+            "zh": "写上商品名称、已确认的卖点和实际用法；没有可不填。",
+            "en": "Add the product name, confirmed benefits and how it's actually used. Optional."
+          },
+          "brief": {
+            "zh": "写上投放渠道、文案、时长或配乐要求；未定的可先不填，稍后确认。",
+            "en": "Add channel, copy, length or music needs. Leave anything undecided for later."
+          },
+          "visual_direction": {
+            "zh": "描述想要的画面效果，或附上参考；没有可不填。",
+            "en": "Describe the look you want or attach a reference. Optional."
+          }
+        },
+        "prompt": {
+          "zh": "生成 1 条食品饮料产品广告片。基于真实商品和已确认卖点完成广告叙事与成片，商品外形、标识和使用方式保持一致，不虚构性能或看不到的结构。展示真实包装、食物外观和有依据的食用场景，不虚构配料、营养或健康功效。 商品信息: {{product_info}} 其他要求: {{brief}} 画面效果: {{visual_direction}}",
+          "en": "Generate 1 food and beverage product commercial. Build the story and final cut on real product facts and confirmed benefits; keep its shape, branding and usage accurate, and don't make up performance or unseen parts. Show the real pack, how the food looks and supported serving moments; no made-up ingredients, nutrition or health claims. Product: {{product_info}} Requirements: {{brief}} Look: {{visual_direction}}"
+        }
+      },
+      "4": {
+        "description": {
+          "zh": "产品广告片，1 条",
+          "en": "1 product commercial"
+        },
+        "placeholders": {
+          "product_info": {
+            "zh": "写上商品名称、已确认的卖点和实际用法；没有可不填。",
+            "en": "Add the product name, confirmed benefits and how it's actually used. Optional."
+          },
+          "brief": {
+            "zh": "写上投放渠道、文案、时长或配乐要求；未定的可先不填，稍后确认。",
+            "en": "Add channel, copy, length or music needs. Leave anything undecided for later."
+          },
+          "visual_direction": {
+            "zh": "描述想要的画面效果，或附上参考；没有可不填。",
+            "en": "Describe the look you want or attach a reference. Optional."
+          }
+        },
+        "prompt": {
+          "zh": "生成 1 条数码产品广告片。基于真实商品和已确认卖点完成广告叙事与成片，商品外形、标识和使用方式保持一致，不虚构性能或看不到的结构。展示经核实的外观、按键和功能，屏幕画面、接口和操作都要有素材支撑。 商品信息: {{product_info}} 其他要求: {{brief}} 画面效果: {{visual_direction}}",
+          "en": "Generate 1 consumer tech product commercial. Build the story and final cut on real product facts and confirmed benefits; keep its shape, branding and usage accurate, and don't make up performance or unseen parts. Show verified looks, controls and features; any screen, port or action must come from real assets. Product: {{product_info}} Requirements: {{brief}} Look: {{visual_direction}}"
+        }
+      },
+      "5": {
+        "description": {
+          "zh": "产品广告片，1 条",
+          "en": "1 product commercial"
+        },
+        "placeholders": {
+          "product_info": {
+            "zh": "写上商品名称、已确认的卖点和实际用法；没有可不填。",
+            "en": "Add the product name, confirmed benefits and how it's actually used. Optional."
+          },
+          "brief": {
+            "zh": "写上投放渠道、文案、时长或配乐要求；未定的可先不填，稍后确认。",
+            "en": "Add channel, copy, length or music needs. Leave anything undecided for later."
+          },
+          "visual_direction": {
+            "zh": "描述想要的画面效果，或附上参考；没有可不填。",
+            "en": "Describe the look you want or attach a reference. Optional."
+          }
+        },
+        "prompt": {
+          "zh": "生成 1 条家居产品广告片。基于真实商品和已确认卖点完成广告叙事与成片，商品外形、标识和使用方式保持一致，不虚构性能或看不到的结构。重点呈现包装外观、看得见的质感和有依据的用法，不虚构功效或使用前后对比。 商品信息: {{product_info}} 其他要求: {{brief}} 画面效果: {{visual_direction}}",
+          "en": "Generate 1 home decor product commercial. Build the story and final cut on real product facts and confirmed benefits; keep its shape, branding and usage accurate, and don't make up performance or unseen parts. Focus on the packaging, visible texture and supported usage; no made-up effects or before-and-after claims. Product: {{product_info}} Requirements: {{brief}} Look: {{visual_direction}}"
+        }
+      },
+      "6": {
+        "description": {
+          "zh": "产品广告片，1 条",
+          "en": "1 product commercial"
+        },
+        "placeholders": {
+          "product_info": {
+            "zh": "写上商品名称、已确认的卖点和实际用法；没有可不填。",
+            "en": "Add the product name, confirmed benefits and how it's actually used. Optional."
+          },
+          "brief": {
+            "zh": "写上投放渠道、文案、时长或配乐要求；未定的可先不填，稍后确认。",
+            "en": "Add channel, copy, length or music needs. Leave anything undecided for later."
+          },
+          "visual_direction": {
+            "zh": "描述想要的画面效果，或附上参考；没有可不填。",
+            "en": "Describe the look you want or attach a reference. Optional."
+          }
+        },
+        "prompt": {
+          "zh": "生成 1 条户外产品广告片。基于真实商品和已确认卖点完成广告叙事与成片，商品外形、标识和使用方式保持一致，不虚构性能或看不到的结构。重点呈现包装外观、看得见的质感和有依据的用法，不虚构功效或使用前后对比。 商品信息: {{product_info}} 其他要求: {{brief}} 画面效果: {{visual_direction}}",
+          "en": "Generate 1 outdoor product commercial. Build the story and final cut on real product facts and confirmed benefits; keep its shape, branding and usage accurate, and don't make up performance or unseen parts. Focus on the packaging, visible texture and supported usage; no made-up effects or before-and-after claims. Product: {{product_info}} Requirements: {{brief}} Look: {{visual_direction}}"
+        }
+      },
+      "7": {
+        "description": {
+          "zh": "产品广告片，1 条",
+          "en": "1 product commercial"
+        },
+        "placeholders": {
+          "product_info": {
+            "zh": "写上商品名称、已确认的卖点和实际用法；没有可不填。",
+            "en": "Add the product name, confirmed benefits and how it's actually used. Optional."
+          },
+          "brief": {
+            "zh": "写上投放渠道、文案、时长或配乐要求；未定的可先不填，稍后确认。",
+            "en": "Add channel, copy, length or music needs. Leave anything undecided for later."
+          },
+          "visual_direction": {
+            "zh": "描述想要的画面效果，或附上参考；没有可不填。",
+            "en": "Describe the look you want or attach a reference. Optional."
+          }
+        },
+        "prompt": {
+          "zh": "生成 1 条SaaS产品广告片。基于真实商品和已确认卖点完成广告叙事与成片，商品外形、标识和使用方式保持一致，不虚构性能或看不到的结构。展示经核实的外观、按键和功能，屏幕画面、接口和操作都要有素材支撑。 商品信息: {{product_info}} 其他要求: {{brief}} 画面效果: {{visual_direction}}",
+          "en": "Generate 1 SaaS product commercial. Build the story and final cut on real product facts and confirmed benefits; keep its shape, branding and usage accurate, and don't make up performance or unseen parts. Show verified looks, controls and features; any screen, port or action must come from real assets. Product: {{product_info}} Requirements: {{brief}} Look: {{visual_direction}}"
+        }
+      }
+    }
+  },
+  "brand-identity-director": {
+    "description": {
+      "zh": "发散标志方向，打磨出统一的品牌视觉识别",
+      "en": "Explore logo directions and refine them into one consistent brand identity."
+    },
+    "templates": {
+      "1": {
+        "description": {
+          "zh": "标志方向提案 3 张 + 选定方案的标志规范板 1 张",
+          "en": "3 logo direction boards + 1 guideline board for the chosen logo"
+        },
+        "placeholders": {
+          "brand_info": {
+            "zh": "简单写下品牌名和主营业务；已有定位或确认过的文案也可补充。",
+            "en": "Give the brand name and what it does. Add any positioning or approved copy you have."
+          },
+          "visual_direction": {
+            "zh": "写下想要或不想要的视觉效果；没有可不填。",
+            "en": "Note any visual effects you want or want to avoid. Optional."
+          }
+        },
+        "prompt": {
+          "zh": "按已确认的品牌方向，为餐饮服务品牌生成 3 张标志方向提案；选定一个后，再生成 1 张标志规范板，包含主标志、横竖组合、黑白稿和基础使用示例。品牌文字须一字不差，沿用已有标志时不超出授权范围，品牌名与资料以实际项目为准。 {{brand_info}} {{visual_direction}}",
+          "en": "Following the confirmed brand direction, generate 3 logo direction boards for a food service brand. Once one is chosen, generate 1 logo guideline board with the main mark, horizontal and stacked lockups, black-and-white versions and basic usage examples. Spell the brand name exactly, reuse existing marks only within their license, and use the real project's name and details. {{brand_info}} {{visual_direction}}"
+        }
+      },
+      "2": {
+        "description": {
+          "zh": "标志方向提案 3 张 + 选定方案的标志规范板 1 张",
+          "en": "3 logo direction boards + 1 guideline board for the chosen logo"
+        },
+        "placeholders": {
+          "brand_info": {
+            "zh": "简单写下品牌名和主营业务；已有定位或确认过的文案也可补充。",
+            "en": "Give the brand name and what it does. Add any positioning or approved copy you have."
+          },
+          "visual_direction": {
+            "zh": "写下想要或不想要的视觉效果；没有可不填。",
+            "en": "Note any visual effects you want or want to avoid. Optional."
+          }
+        },
+        "prompt": {
+          "zh": "按已确认的品牌方向，为服饰配件品牌生成 3 张标志方向提案；选定一个后，再生成 1 张标志规范板，包含主标志、横竖组合、黑白稿和基础使用示例。品牌文字须一字不差，沿用已有标志时不超出授权范围，品牌名与资料以实际项目为准。 {{brand_info}} {{visual_direction}}",
+          "en": "Following the confirmed brand direction, generate 3 logo direction boards for a fashion and accessories brand. Once one is chosen, generate 1 logo guideline board with the main mark, horizontal and stacked lockups, black-and-white versions and basic usage examples. Spell the brand name exactly, reuse existing marks only within their license, and use the real project's name and details. {{brand_info}} {{visual_direction}}"
+        }
+      },
+      "3": {
+        "description": {
+          "zh": "标志方向提案 3 张 + 选定方案的标志规范板 1 张",
+          "en": "3 logo direction boards + 1 guideline board for the chosen logo"
+        },
+        "placeholders": {
+          "brand_info": {
+            "zh": "简单写下品牌名和主营业务；已有定位或确认过的文案也可补充。",
+            "en": "Give the brand name and what it does. Add any positioning or approved copy you have."
+          },
+          "visual_direction": {
+            "zh": "写下想要或不想要的视觉效果；没有可不填。",
+            "en": "Note any visual effects you want or want to avoid. Optional."
+          }
+        },
+        "prompt": {
+          "zh": "按已确认的品牌方向，为美妆个护品牌生成 3 张标志方向提案；选定一个后，再生成 1 张标志规范板，包含主标志、横竖组合、黑白稿和基础使用示例。品牌文字须一字不差，沿用已有标志时不超出授权范围，品牌名与资料以实际项目为准。 {{brand_info}} {{visual_direction}}",
+          "en": "Following the confirmed brand direction, generate 3 logo direction boards for a beauty and personal care brand. Once one is chosen, generate 1 logo guideline board with the main mark, horizontal and stacked lockups, black-and-white versions and basic usage examples. Spell the brand name exactly, reuse existing marks only within their license, and use the real project's name and details. {{brand_info}} {{visual_direction}}"
+        }
+      },
+      "4": {
+        "description": {
+          "zh": "标志方向提案 3 张 + 选定方案的标志规范板 1 张",
+          "en": "3 logo direction boards + 1 guideline board for the chosen logo"
+        },
+        "placeholders": {
+          "brand_info": {
+            "zh": "简单写下品牌名和主营业务；已有定位或确认过的文案也可补充。",
+            "en": "Give the brand name and what it does. Add any positioning or approved copy you have."
+          },
+          "visual_direction": {
+            "zh": "写下想要或不想要的视觉效果；没有可不填。",
+            "en": "Note any visual effects you want or want to avoid. Optional."
+          }
+        },
+        "prompt": {
+          "zh": "按已确认的品牌方向，为食品饮料品牌生成 3 张标志方向提案；选定一个后，再生成 1 张标志规范板，包含主标志、横竖组合、黑白稿和基础使用示例。品牌文字须一字不差，沿用已有标志时不超出授权范围，品牌名与资料以实际项目为准。 {{brand_info}} {{visual_direction}}",
+          "en": "Following the confirmed brand direction, generate 3 logo direction boards for a food and beverage brand. Once one is chosen, generate 1 logo guideline board with the main mark, horizontal and stacked lockups, black-and-white versions and basic usage examples. Spell the brand name exactly, reuse existing marks only within their license, and use the real project's name and details. {{brand_info}} {{visual_direction}}"
+        }
+      },
+      "5": {
+        "description": {
+          "zh": "标志方向提案 3 张 + 选定方案的标志规范板 1 张",
+          "en": "3 logo direction boards + 1 guideline board for the chosen logo"
+        },
+        "placeholders": {
+          "brand_info": {
+            "zh": "简单写下品牌名和主营业务；已有定位或确认过的文案也可补充。",
+            "en": "Give the brand name and what it does. Add any positioning or approved copy you have."
+          },
+          "visual_direction": {
+            "zh": "写下想要或不想要的视觉效果；没有可不填。",
+            "en": "Note any visual effects you want or want to avoid. Optional."
+          }
+        },
+        "prompt": {
+          "zh": "按已确认的品牌方向，为宠物用品品牌生成 3 张标志方向提案；选定一个后，再生成 1 张标志规范板，包含主标志、横竖组合、黑白稿和基础使用示例。品牌文字须一字不差，沿用已有标志时不超出授权范围，品牌名与资料以实际项目为准。 {{brand_info}} {{visual_direction}}",
+          "en": "Following the confirmed brand direction, generate 3 logo direction boards for a pet supplies brand. Once one is chosen, generate 1 logo guideline board with the main mark, horizontal and stacked lockups, black-and-white versions and basic usage examples. Spell the brand name exactly, reuse existing marks only within their license, and use the real project's name and details. {{brand_info}} {{visual_direction}}"
+        }
+      },
+      "6": {
+        "description": {
+          "zh": "标志方向提案 3 张 + 选定方案的标志规范板 1 张",
+          "en": "3 logo direction boards + 1 guideline board for the chosen logo"
+        },
+        "placeholders": {
+          "brand_info": {
+            "zh": "简单写下品牌名和主营业务；已有定位或确认过的文案也可补充。",
+            "en": "Give the brand name and what it does. Add any positioning or approved copy you have."
+          },
+          "visual_direction": {
+            "zh": "写下想要或不想要的视觉效果；没有可不填。",
+            "en": "Note any visual effects you want or want to avoid. Optional."
+          }
+        },
+        "prompt": {
+          "zh": "按已确认的品牌方向，为家居生活品牌生成 3 张标志方向提案；选定一个后，再生成 1 张标志规范板，包含主标志、横竖组合、黑白稿和基础使用示例。品牌文字须一字不差，沿用已有标志时不超出授权范围，品牌名与资料以实际项目为准。 {{brand_info}} {{visual_direction}}",
+          "en": "Following the confirmed brand direction, generate 3 logo direction boards for a home and lifestyle brand. Once one is chosen, generate 1 logo guideline board with the main mark, horizontal and stacked lockups, black-and-white versions and basic usage examples. Spell the brand name exactly, reuse existing marks only within their license, and use the real project's name and details. {{brand_info}} {{visual_direction}}"
+        }
+      }
+    }
+  },
+  "rednote-cover-maker": {
+    "description": {
+      "zh": "专为小红书打造，提升点击、收藏与关注",
+      "en": "Made for RedNote: more clicks, saves and follows."
+    },
+    "placeholders": {
+      "user_requirement": {
+        "zh": "还有其他要求吗？可补充尺寸、风格、文案等。",
+        "en": "Any other requirements? Add size, style, copy, etc."
+      }
+    },
+    "prompt": {
+      "zh": "{{user_requirement}}",
+      "en": "{{user_requirement}}"
+    }
+  }
+}

@@ -63,7 +63,7 @@ def test_effect_skills_only_upload_and_note(got):
     for sid in EFFECT:
         f = got["skills"][sid]["inputs"]
         assert [(x["zh"], x["type"], x["required"]) for x in f] == [("上传文件", "image", True), ("补充描述", "textarea", True)], sid  # #748 Final example form
-        assert f[1]["ph"]["zh"] == "请填写补充描述"  # #748 measured: one zh placeholder on every example-class card and f[1]["ph"]["en"], sid  # #687
+        assert f[1]["ph"]["zh"] == json.loads((ROOT / "src/data/copy-748.json").read_text())[sid]["placeholders"]["user_requirement"]["zh"]  # #751 HOLD: our filled copy  # #748 measured: one zh placeholder on every example-class card and f[1]["ph"]["en"], sid  # #687
         assert all(x["en"] for x in f), sid
 
 

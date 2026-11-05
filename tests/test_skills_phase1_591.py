@@ -60,7 +60,7 @@ def test_new_skills_cut2_skeleton_and_website_categories():
         assert "cover: cover(" in head and "featured: feedCovers(" in head, sid
         assert f"video: video594('{sid}')" in head, sid
         assert "quickStartCoverFit: 'contain'" in head, sid
-        assert "examples: ex594(" in head, sid
+        assert "examples: ex594(" not in head and "ex594" not in head, sid  # #751 HOLD: Final examples come from raw + src/data/wash-748.json (1:1, pendingWash), no hand list
 
 
 def test_locale_titles_and_descriptions_for_new_ids():

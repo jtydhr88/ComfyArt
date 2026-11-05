@@ -24,7 +24,7 @@ def _entries() -> dict[str, str]:
 def test_wash_594_pin_and_paths():
     assert f"const WASH_594 = '{WASH_594}'" in SKILLS_TS
     assert "494/covers-v4" in SKILLS_TS and "580/featured-v2" in SKILLS_TS
-    assert "594/wash/" in SKILLS_TS and "ex594" in SKILLS_TS
+    assert "594/wash/" in SKILLS_TS and "ex594(" not in SKILLS_TS  # #751 HOLD: Final examples = raw + wash-748.json (1:1, pendingWash)
     assert "WASH_623_NEW6_VIDEO" in SKILLS_TS
     assert "d03ea7938877d084c201a94ef51f943dd0e061b9" in SKILLS_TS
     assert "video594" in SKILLS_TS and "594/wash/videos/" in SKILLS_TS
@@ -33,7 +33,7 @@ def test_wash_594_pin_and_paths():
         head = e.split("inputs:", 1)[0]
         assert f"cover: cover('{sid}')" in head
         assert f"featured: feedCovers('{sid}')" in head
-        assert f"examples: ex594('{sid}', [1, 2, 3{'' if sid == 'logo-material-explorer' else ', 4'}])" in head  # #748: logo-material left = video + 3
+        assert "examples: ex" not in head  # #751 HOLD: Final examples = raw + wash-748.json (1:1, pendingWash)
         assert "quickStartCoverFit: 'contain'" in head
         assert f"video: video594('{sid}')" in head  # #623
         assert "lovart" not in head.lower()
