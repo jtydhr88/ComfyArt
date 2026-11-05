@@ -35,7 +35,7 @@ def test_view_path_stays_inside_the_folder(fresh_user_dir):
 
 async def test_attachments_are_downscaled_and_bad_kit_images_skipped(fresh_user_dir):
     src = _image(fresh_user_dir)
-    refs = bot_send.parse_refs([{"src": src, "id": "shape:a", "name": "poster"}])
+    refs = bot_send.parse_refs([{"src": src, "id": "shape:a", "name": "poster-differentiated-compiler"}])
     kits = bot_send.parse_kits([{"name": "Brand", "description": "Brand kit", "images": [src, "/api/view?filename=missing.png&type=output"]}])
     attachments, lines = await bot_send.prepare_attachments(refs, kits)
     assert len(attachments) == 2 and attachments[0]["media_type"] == "image/jpeg"

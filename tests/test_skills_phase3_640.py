@@ -18,7 +18,7 @@ PHASE3_NEW = [
     "live-promo-decor", "linkedin-banner", "logo-animation", "restaurant-website", "clothing-swap",
 ]
 DROPPED_13 = [
-    "app-listing-kit", "ip-logo", "magazine-postcard", "poster", "talking-collage", "brand",
+    "app-listing-kit", "ip-logo", "magazine-postcard", "poster-differentiated-compiler", "talking-collage", "brand-identity-director",
     "anime-official-site", "cinematic-snapshot", "zhixian-poster", "cartoon-ip-extend",
     "culture-creative", "new-chinese-mobile", "portfolio-site",
 ]
@@ -28,7 +28,7 @@ DROPPED_MUST_ABSENT = [
     "anime-official-site", "cinematic-snapshot", "zhixian-poster", "cartoon-ip-extend",
     "culture-creative", "new-chinese-mobile", "portfolio-site",
 ]
-UNTOUCHED = ["interior"]  # custom-workflow removed (no Lovart card)
+UNTOUCHED = ["interior-architectural-visualization"]  # custom-workflow removed (no Lovart card)
 NEW_CATEGORY = {
     "taobao-product": "ecommerce",
     "before-after": "ads",
@@ -84,7 +84,7 @@ def _entries() -> dict[str, str]:
 def test_phase3_ids_match_hard_lock_thumbnail_kept_untouched_no_dropped_no_skill_creator():
     ids = list(_entries())
     assert set(PHASE3_NEW) <= set(ids)
-    assert "thumbnail" in ids
+    assert "cover-design-director" in ids
     assert all(u in ids for u in UNTOUCHED)
     assert len(ids) == 49  # 31 prior + 19 NEW
     assert "PHASE3_NEW_SKILL_IDS" in SKILLS_TS
@@ -94,7 +94,7 @@ def test_phase3_ids_match_hard_lock_thumbnail_kept_untouched_no_dropped_no_skill
         assert d not in ids, d
     # Dropped Phase3 board ids must not appear as Phase3 NEW constants
     for d in DROPPED_13:
-        if d in ("poster", "brand"):
+        if d in ("poster-differentiated-compiler", "brand-identity-director"):
             continue  # Phase1 keep
         assert f"'{d}'" not in SKILLS_TS.split("PHASE3_NEW_SKILL_IDS", 1)[1].split("] as const", 1)[0]
 
@@ -126,8 +126,8 @@ def test_new_skills_cut2_skeleton_categories_and_website_chip_sources():
     for sid in WEBSITE_NEW:
         assert "category: 'website'" in entries[sid]
     # upgrade thumbnail still social + present
-    assert "category: 'social'" in entries["thumbnail"]
-    assert ("#640 Phase3-S1 upgrade slot" in SKILLS_TS) or ("#641 Phase3-S2" in SKILLS_TS and "thumbnail" in SKILLS_TS)
+    assert "category: 'social'" in entries["cover-design-director"]
+    assert ("#640 Phase3-S1 upgrade slot" in SKILLS_TS) or ("#641 Phase3-S2" in SKILLS_TS and "cover-design-director" in SKILLS_TS)
 
 
 def test_locale_titles_descriptions_categories_for_new_ids():

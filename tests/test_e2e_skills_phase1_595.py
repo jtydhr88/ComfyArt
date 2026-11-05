@@ -13,7 +13,7 @@ pw = pytest.importorskip("playwright.async_api")
 ROOT = Path(__file__).resolve().parent.parent
 pytestmark = pytest.mark.skipif(not any((ROOT / "dist").glob("*")), reason="needs built dist/")
 
-HOT_QUICK = ["product", "multi-angle", "brand", "character", "logo-material", "packaging"]
+HOT_QUICK = ["product-tvc-advertisement-generator", "universal-multi-angle-grid", "brand-identity-director", "character-sheet-design", "logo-material-explorer", "packaging-design-director"]
 
 
 async def _open_home(p, app_url, lang="zh"):  # noqa: F811
@@ -37,8 +37,8 @@ async def test_home_quickstart_hot_order_and_website_chip(app_url):  # noqa: F81
         assert await pg.get_by_test_id("home-chip-website").count() == 1
         await pg.get_by_test_id("home-chip-website").click()
         shown = await pg.get_by_test_id("home-skill-card").evaluate_all("els => els.map(e => e.dataset.skill)")
-        assert set(shown) <= {"mobile-ui", "web-product", "ppt-visual", "product-website", "premium-website", "restaurant-website"}  # + #634 ppt-visual, #640 NEW19 website skills
-        assert "mobile-ui" in shown and "web-product" in shown
+        assert set(shown) <= {"mobile-app-visual-design", "web-product-visual-design", "ppt-visual", "product-website", "premium-website", "restaurant-website"}  # + #634 ppt-visual, #640 NEW19 website skills
+        assert "mobile-app-visual-design" in shown and "web-product-visual-design" in shown
         await browser.close()
 
 
@@ -46,10 +46,10 @@ async def test_multi_angle_carousel_and_brand_dialog_to_agent(app_url):  # noqa:
     async with pw.async_playwright() as p:
         browser, pg = await _open_home(p, app_url, "en")
         # new6: horizontal examples carousel; #691 right pane = exactly Upload then Additional, zero preset UI
-        await pg.locator('[data-testid="home-skill-card"][data-skill="multi-angle"]').click()
+        await pg.locator('[data-testid="home-skill-card"][data-skill="universal-multi-angle-grid"]').click()
         dlg = pg.get_by_test_id("skill-run-dialog")
         await dlg.wait_for()
-        assert await dlg.get_attribute("data-skill") == "multi-angle"
+        assert await dlg.get_attribute("data-skill") == "universal-multi-angle-grid"
         await pg.get_by_test_id("skill-run-example-thumb").first.wait_for()
         assert await pg.get_by_test_id("skill-run-examples").count() == 1
         assert await pg.get_by_test_id("skill-run-example-thumb").count() >= 2
@@ -58,17 +58,18 @@ async def test_multi_angle_carousel_and_brand_dialog_to_agent(app_url):  # noqa:
         assert await pg.get_by_test_id("skill-run-preset").count() == 0
         assert await pg.get_by_test_id("skill-run-preset-chips").count() == 0
         fields = pg.get_by_test_id("skill-run-field")
-        assert await fields.evaluate_all("fs => fs.map(f => [f.dataset.key, f.dataset.type])") == [["file", "image"], ["note", "textarea"]]
-        assert await pg.locator('[data-key="note"]').get_attribute("placeholder") == "Anything you want to add? Uploading a reference image is recommended"
+        assert await fields.evaluate_all("fs => fs.map(f => [f.dataset.key, f.dataset.type])") == [["user_image", "image"], ["user_requirement", "textarea"]]  # #748 Final raw example form
+        from tests.lovart_fields_687 import SPEC
+        assert await pg.locator('[data-key="user_requirement"]').get_attribute("placeholder") == SPEC["universal-multi-angle-grid"][1][7]  # our generic copy (long copy → COPY-REWRITE.md)
         assert await dlg.locator('[data-testid="skill-run-current"]').count() == 0  # #691 option 2: no current-template row
         await pg.keyboard.press("Escape")
         await dlg.wait_for(state="hidden")
         # Phase1 upgrade skill: dialog → new Agent project (AC ≥1)
-        await pg.locator('[data-testid="home-skill-card"][data-skill="brand"]').click()
+        await pg.locator('[data-testid="home-skill-card"][data-skill="brand-identity-director"]').click()
         await dlg.wait_for()
-        await pg.locator('[data-testid="skill-run-field"][data-key="note"]').fill("Autumn launch kit")  # #687-1 Additional Details
+        await pg.locator('[data-testid="skill-run-field"][data-key="brand_info"]').fill("Autumn launch kit")  # #687-1 Additional Details
         await pg.get_by_test_id("skill-run-go").click()
-        await pg.wait_for_url(re.compile(r"[?&]skill=brand"), timeout=10_000)
+        await pg.wait_for_url(re.compile(r"[?&]skill=brand-identity-director"), timeout=10_000)
         assert "mode=agent" in pg.url
         await browser.close()
 
@@ -78,7 +79,7 @@ async def test_multi_angle_upload_reaches_handoff_ref_691(app_url):  # noqa: F81
     from pathlib import Path
     async with pw.async_playwright() as p:
         browser, pg = await _open_home(p, app_url, "en")
-        await pg.locator('[data-testid="home-skill-card"][data-skill="multi-angle"]').click()
+        await pg.locator('[data-testid="home-skill-card"][data-skill="universal-multi-angle-grid"]').click()
         dlg = pg.get_by_test_id("skill-run-dialog")
         await dlg.wait_for()
         await dlg.locator('input[type="file"]').set_input_files(str(Path(__file__).parent / "fixtures/ma_subject_691.png"))
@@ -88,16 +89,16 @@ async def test_multi_angle_upload_reaches_handoff_ref_691(app_url):  # noqa: F81
         assert await thumb.locator("img").count() == 1 and await thumb.get_by_title("Remove").count() == 1  # thumbnail + delete
         if os.environ.get("SHOTS_691"):
             await dlg.locator(".ca-skillrun__right").screenshot(path=os.environ["SHOTS_691"] + "/05-right-pane-after-upload-en.png")
-        await pg.locator('[data-key="note"]').fill("PDP, white seamless")
+        await pg.locator('[data-key="user_requirement"]').fill("PDP, white seamless")
         navs: list[str] = []
         pg.on("framenavigated", lambda f: navs.append(f.url))
         await pg.get_by_test_id("skill-run-go").click()
         for _ in range(50):
-            if any("skill=multi-angle" in u for u in navs):
+            if any("skill=universal-multi-angle-grid" in u for u in navs):
                 break
             await pg.wait_for_timeout(200)
-        u = next(u for u in navs if "skill=multi-angle" in u)
-        assert re.search(r"[?&]ref=[^&]*skill-multi-angle-ma_subject_691\.png", u), u
+        u = next(u for u in navs if "skill=universal-multi-angle-grid" in u)
+        assert re.search(r"[?&]ref=[^&]*skill-universal-multi-angle-grid-ma_subject_691\.png", u), u
         assert "mode=agent" in u and "PDP" in u
         await browser.close()
 
@@ -108,8 +109,8 @@ async def test_thumbnail_right_pane_upload_then_additional(app_url):  # noqa: F8
         from test_e2e_skill_cards_494 import _open
         from test_e2e_skill_modal_541 import _modal
         browser, pg = await _open(p, app_url, "en")  # skills wall (thumbnail is not a home quick-start card)
-        dlg = await _modal(pg, "thumbnail")
-        assert await dlg.get_attribute("data-skill") == "thumbnail"
+        dlg = await _modal(pg, "cover-design-director")
+        assert await dlg.get_attribute("data-skill") == "cover-design-director"
         right = dlg.locator(".ca-skillrun__right")
         await right.locator('[data-testid="skill-run-field"]').first.wait_for()
         fields = await right.locator('[data-testid="skill-run-field"]').evaluate_all(

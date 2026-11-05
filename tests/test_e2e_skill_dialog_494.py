@@ -20,31 +20,32 @@ async def test_dialog_from_data_and_handoff(app_url, lang):  # noqa: F811
     async with pw.async_playwright() as p:
         browser, pg = await _open(p, app_url, lang)
         # #569: poster is an effect skill (upload + note, no presets); preset/required handoff runs on brand.
-        await pg.locator('[data-skill="poster"] .ca-swall__cover').click()
+        await pg.locator('[data-skill="poster-differentiated-compiler"] .ca-swall__cover').click()
         dlg = pg.get_by_test_id("skill-run-dialog")
         await dlg.wait_for()
-        assert await dlg.get_attribute("data-skill") == "poster"
+        assert await dlg.get_attribute("data-skill") == "poster-differentiated-compiler"
         keys = await dlg.get_by_test_id("skill-run-field").evaluate_all("fs => fs.map(f => f.dataset.key)")
-        assert keys == ["file", "note"]
+        assert keys == ["user_image", "user_requirement"]  # #748 Final example form (raw)
         assert await pg.get_by_test_id("skill-run-preset").count() == 0
-        assert await pg.get_by_test_id("skill-run-go").is_enabled()
+        assert await pg.get_by_test_id("skill-run-go").evaluate("b => !b.disabled")  # #748: required raw fields → aria-disabled look, still clickable
+        assert await pg.get_by_test_id("skill-run-go").get_attribute("aria-disabled") == "true"
         await pg.keyboard.press("Escape")
-        await pg.locator('[data-skill="brand"] .ca-swall__cover').click()
+        await pg.locator('[data-skill="brand-identity-director"] .ca-swall__cover').click()
         dlg = pg.get_by_test_id("skill-run-dialog")
         await dlg.wait_for()
-        assert await dlg.get_attribute("data-skill") == "brand"
+        assert await dlg.get_attribute("data-skill") == "brand-identity-director"
         assert await dlg.locator(".ca-skillrun__left").count() == 1
         assert await dlg.locator(".ca-skillrun__right").count() == 1
         keys = await dlg.get_by_test_id("skill-run-field").evaluate_all("fs => fs.map(f => f.dataset.key)")
-        assert keys == ["brief", "assets", "visual"]  # #748 measured: brand is template-class
+        assert keys == ["brand_info", "subject_image", "visual_direction"]  # #748 Final raw: brand template[0] form
         assert await pg.get_by_test_id("skill-run-preset").count() == 6
         go = pg.get_by_test_id("skill-run-go")
-        assert await go.get_attribute("aria-disabled") == "true"  # #748 required brief empty
-        await pg.locator('[data-testid="skill-run-field"][data-key="brief"]').fill("Autumn launch")
+        assert await go.get_attribute("aria-disabled") == "true"  # #748 required brand_info empty
+        await pg.locator('[data-testid="skill-run-field"][data-key="brand_info"]').fill("Autumn launch")
         await pg.get_by_test_id("skill-run-preset").nth(1).click()
         assert await pg.get_by_test_id("skill-run-current").inner_text()
         await go.click()
-        await pg.wait_for_url(re.compile(r"[?&]skill=brand"), timeout=10_000)
+        await pg.wait_for_url(re.compile(r"[?&]skill=brand-identity-director"), timeout=10_000)
         assert "preset=handmade" in pg.url and "mode=agent" in pg.url
         await browser.close()
 
@@ -52,13 +53,13 @@ async def test_dialog_from_data_and_handoff(app_url, lang):  # noqa: F811
 async def test_title_and_hover_try_open_same_dialog(app_url):  # noqa: F811
     async with pw.async_playwright() as p:
         browser, pg = await _open(p, app_url, "zh")
-        card = pg.locator('[data-skill="poster"]')
+        card = pg.locator('[data-skill="poster-differentiated-compiler"]')
         await card.hover()
         await card.get_by_test_id("skills-card-try").click()
-        assert await pg.get_by_test_id("skill-run-dialog").get_attribute("data-skill") == "poster"
+        assert await pg.get_by_test_id("skill-run-dialog").get_attribute("data-skill") == "poster-differentiated-compiler"
         await pg.keyboard.press("Escape")
         await card.locator(".ca-swall__title").click()
-        assert await pg.get_by_test_id("skill-run-dialog").get_attribute("data-skill") == "poster"
+        assert await pg.get_by_test_id("skill-run-dialog").get_attribute("data-skill") == "poster-differentiated-compiler"
         await browser.close()
 
 
@@ -66,7 +67,7 @@ async def test_other_skill_has_other_fields(app_url):  # noqa: F811
     async with pw.async_playwright() as p:
         browser, pg = await _open(p, app_url, "en")
         assert await pg.locator('[data-skill="custom-workflow"]').count() == 0  # card removed (no Lovart card)
-        await pg.locator('[data-skill="product"] .ca-swall__cover').click()
+        await pg.locator('[data-skill="product-tvc-advertisement-generator"] .ca-swall__cover').click()
         keys = await pg.get_by_test_id("skill-run-field").evaluate_all("fs => fs.map(f => f.dataset.key)")
         assert keys and "note" not in keys  # product has its own fields, not poster's (#687: brand now = Upload + Additional)
         await browser.close()
@@ -75,7 +76,7 @@ async def test_other_skill_has_other_fields(app_url):  # noqa: F811
 async def test_detail_opens_edit_form(app_url):  # noqa: F811
     async with pw.async_playwright() as p:
         browser, pg = await _open(p, app_url, "zh")
-        await pg.locator('[data-skill="poster"] .ca-swall__cover').click()
+        await pg.locator('[data-skill="poster-differentiated-compiler"] .ca-swall__cover').click()
         # #687 P0: builtin poster no longer exposes 「详情」 → editor (SKILL.md).
         await pg.get_by_test_id("skill-run-dialog").wait_for()
         assert await pg.get_by_test_id("skill-run-detail").count() == 0
@@ -87,7 +88,7 @@ async def test_builtin_has_no_detail_editor_687(app_url):  # noqa: F811
     async with pw.async_playwright() as p:
         for lang in ("zh", "en"):
             browser, pg = await _open(p, app_url, lang)
-            for sid in ("poster", "product", "packaging"):
+            for sid in ("poster-differentiated-compiler", "product-tvc-advertisement-generator", "packaging-design-director"):
                 await pg.locator(f'[data-skill="{sid}"] .ca-swall__cover').click()
                 await pg.get_by_test_id("skill-run-dialog").wait_for()
                 assert await pg.get_by_test_id("skill-run-detail").count() == 0

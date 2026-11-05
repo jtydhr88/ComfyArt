@@ -14,14 +14,14 @@ CSS = (ROOT / "src/styles/home.css").read_text()
 ZH = json.loads((ROOT / "src/locales/zh.json").read_text())
 EN = json.loads((ROOT / "src/locales/en.json").read_text())
 
-PHASE1_NEW = ["multi-angle", "logo-material", "meta-ads", "mobile-ui", "web-product", "marketing-campaign"]
+PHASE1_NEW = ["universal-multi-angle-grid", "logo-material-explorer", "meta-ads-creative-director", "mobile-app-visual-design", "web-product-visual-design", "marketing-campaign-generator"]
 NEW_CATEGORY = {
-    "multi-angle": "ecommerce",
-    "logo-material": "branding",
-    "meta-ads": "ads",
-    "mobile-ui": "website",
-    "web-product": "website",
-    "marketing-campaign": "ads",
+    "universal-multi-angle-grid": "ecommerce",
+    "logo-material-explorer": "branding",
+    "meta-ads-creative-director": "ads",
+    "mobile-app-visual-design": "website",
+    "web-product-visual-design": "website",
+    "marketing-campaign-generator": "ads",
 }
 
 
@@ -42,7 +42,7 @@ def test_new6_production_instructions_and_presets():
         assert "cover: cover(" in head and "featured: feedCovers(" in head, sid
         assert f"video: video594('{sid}')" in head, sid  # #623 hover video wired
         assert "quickStartCoverFit: 'contain'" in head and "examples: ex594(" in head, sid
-        if sid == "multi-angle":
+        if sid == "universal-multi-angle-grid":
             # #691/#687: reference-card parity → Upload + Additional only, no presets
             assert "presets:" not in head and "inputs: MULTI_ANGLE_INPUTS }" in e, sid
         else:
@@ -74,14 +74,14 @@ def test_dual_column_dialog_start_making_and_numbered_filmstrip():
 
 def test_website_chip_still_lit():
     assert "category: 'website'" in SKILLS_TS
-    for sid in ("mobile-ui", "web-product"):
+    for sid in ("mobile-app-visual-design", "web-product-visual-design"):
         assert f"id: '{sid}'" in SKILLS_TS
 
 
 def test_multi_angle_upload_additional_parity_691():
     # #691/#687: right pane exactly Upload then Additional; prompt defaults live in instructions, notes feed the ask
-    e = _entries()["multi-angle"]
+    e = _entries()["universal-multi-angle-grid"]
     assert "inputs: MULTI_ANGLE_INPUTS }" in e and "presets:" not in e and "pure 90° side profile" in e
     assert "angleBrief" not in e and "subjectImage" not in e and "VISUAL" not in e
     assert "Additional notes" in e and "neutral seamless" in e
-    assert "examples: ex594('multi-angle', [1, 2, 3, 4])" in e  # example media untouched
+    assert "examples: ex594('universal-multi-angle-grid', [1, 2, 3, 4])" in e  # example media untouched

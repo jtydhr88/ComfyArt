@@ -12,12 +12,12 @@ SKILLS_PAGE = (ROOT / "src/home/Skills.tsx").read_text()
 DIALOG = (ROOT / "src/ui/SkillRunDialog.tsx").read_text()
 
 PHASE1 = [
-    "product", "multi-angle", "brand", "character", "logo-material", "packaging",
-    "motion", "meta-ads", "poster", "thumbnail", "mobile-ui", "social",
-    "marketing-campaign", "web-product", "banner",
+    "product-tvc-advertisement-generator", "universal-multi-angle-grid", "brand-identity-director", "character-sheet-design", "logo-material-explorer", "packaging-design-director",
+    "motion-poster-generator", "meta-ads-creative-director", "poster-differentiated-compiler", "cover-design-director", "mobile-app-visual-design", "rednote-cover-maker",
+    "marketing-campaign-generator", "web-product-visual-design", "banner-design-director",
 ]
-UNTOUCHED = ["interior"]  # custom-workflow removed (no Lovart card)
-PHASE1_NEW = ["multi-angle", "logo-material", "meta-ads", "mobile-ui", "web-product", "marketing-campaign"]
+UNTOUCHED = ["interior-architectural-visualization"]  # custom-workflow removed (no Lovart card)
+PHASE1_NEW = ["universal-multi-angle-grid", "logo-material-explorer", "meta-ads-creative-director", "mobile-app-visual-design", "web-product-visual-design", "marketing-campaign-generator"]
 
 
 def _entries() -> dict[str, str]:
@@ -56,8 +56,8 @@ def test_builtins_mount_phase1_plus_untouched_no_voided_dupes():
 def test_website_chip_source_and_home_skills_same_data():
     # website categories on the two NEW website skills
     entries = _entries()
-    assert "category: 'website'" in entries["mobile-ui"]
-    assert "category: 'website'" in entries["web-product"]
+    assert "category: 'website'" in entries["mobile-app-visual-design"]
+    assert "category: 'website'" in entries["web-product-visual-design"]
     assert "SKILL_CATEGORY_ORDER" in SKILLS_TS and "'website'" in SKILLS_TS
     # Home + Skills Explore both pull skillChips / matchesSkillChip / loadSkills — same source
     assert "skillChips(" in HOME and "matchesSkillChip(" in HOME
@@ -80,8 +80,8 @@ def test_phase1_media_and_no_demo_placeholder():
     for sid in PHASE1:
         e = entries[sid]
         head = e.split("inputs:", 1)[0]
-        if sid == "thumbnail":  # #643 (#659) true wash re-pinned cover + featured
-            assert "cover: cover643('thumbnail')" in head and "featured: feat643('thumbnail'" in head, sid
+        if sid == "cover-design-director":  # #643 (#659) true wash re-pinned cover + featured
+            assert "cover: cover643('cover-design-director')" in head and "featured: feat643('cover-design-director'" in head, sid
         else:
             assert "cover: cover(" in head, sid
             assert "featured: feedCovers(" in head, sid

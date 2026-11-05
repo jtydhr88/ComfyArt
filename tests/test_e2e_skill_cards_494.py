@@ -73,7 +73,7 @@ async def test_cards_chips_bookmark(app_url, lang, theme):  # noqa: F811
         assert chips == (zh_chips if lang == "zh" else en_chips)
         assert await pg.get_by_test_id("skills-chip-website").count() == 1  # #591 mobile-ui/web-product
         await pg.get_by_test_id("skills-chip-ecommerce").click()
-        assert sorted(await cards.evaluate_all("cs => cs.map(c => c.dataset.skill)")) == ["ai-model", "clothing-swap", "commerce-strategist", "lifestyle-scene", "live-promo-decor", "multi-angle", "packaging", "person-swap", "pose-fission", "product", "product-to-packaging", "promo-ecommerce", "studio-model", "taobao-product"]  # #634 + #640 Phase3 ecommerce builtins
+        assert sorted(await cards.evaluate_all("cs => cs.map(c => c.dataset.skill)")) == sorted(["ai-model", "clothing-swap", "commerce-strategist", "lifestyle-scene", "live-promo-decor", "universal-multi-angle-grid", "packaging-design-director", "person-swap", "pose-fission", "product-tvc-advertisement-generator", "product-to-packaging", "promo-ecommerce", "studio-model", "taobao-product"])  # #634 + #640 Phase3 ecommerce builtins
         await _shot(pg, f"chip-ecommerce-{lang}-{theme}")
         await pg.get_by_test_id("skills-chip-forYou").click()
         assert await pg.locator('[data-skill="custom-workflow"]').count() == 0  # removed: no Lovart card
@@ -91,7 +91,7 @@ async def test_cards_chips_bookmark(app_url, lang, theme):  # noqa: F811
             "c => { const e = document.createElement('span'); e.className = 'ca-swall__placeholder'; c.append(e);"
             " const p = document.createElement('i'); p.style.color = 'var(--ca-text-2)'; e.parentNode.append(p);"
             " const ok = getComputedStyle(e).color === getComputedStyle(p).color; p.remove(); e.remove(); return ok }")
-        poster = pg.locator('[data-skill="poster"]')
+        poster = pg.locator('[data-skill="poster-differentiated-compiler"]')
         src = await poster.get_by_test_id("skills-card-cover").get_attribute("src")
         assert "494/covers-v3/poster.webp" in (src or "")
         assert await pg.evaluate("s => fetch(s).then(r => r.status)", src) == 200
@@ -110,9 +110,9 @@ async def test_cards_chips_bookmark(app_url, lang, theme):  # noqa: F811
         before = pg.url
         await poster.get_by_test_id("skills-card-bookmark").click()
         assert pg.url == before  # bookmark only toggles favourite
-        assert "poster" in await pg.evaluate("localStorage.getItem('comfyart.skillFavourites')")
+        assert "poster-differentiated-compiler" in await pg.evaluate("localStorage.getItem('comfyart.skillFavourites')")
         await pg.get_by_test_id("skills-tab-favourites").click()
-        assert await cards.evaluate_all("cs => cs.map(c => c.dataset.skill)") == ["poster"]
+        assert await cards.evaluate_all("cs => cs.map(c => c.dataset.skill)") == ["poster-differentiated-compiler"]
         await browser.close()
 
 

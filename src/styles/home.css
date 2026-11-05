@@ -772,7 +772,7 @@ body { background: var(--ca-float); }
   border-radius: 12px; overflow: hidden; background: var(--ca-hover);
 }
 /* #641 thumbnail shelf card: YouTube 16:9 cover. Other skills keep 231/173. */
-.ca-swall__card[data-skill="thumbnail"] .ca-swall__cover { aspect-ratio: 16 / 9; }
+.ca-swall__card[data-skill="cover-design-director"] .ca-swall__cover { aspect-ratio: 16 / 9; }
 .ca-swall__cover img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 300ms ease; }
 /* #594/#602 — dual media-fit on Skills wall: contain + light-gray plate for Phase1 new6 boards */
 .ca-swall__cover[data-fit="contain"] { background: var(--ca-field); }
@@ -1252,14 +1252,14 @@ body { background: var(--ca-float); }
 .ca-skillrun__presetselect::-ms-expand { display: none; }
 
 /* #748 — SkillRunDialog static polish per design measure 2026-11-05 (packaging + motion first).
- * TODO(#748): timings are placeholders until design posts measured durations/easing from reference frame capture. */
+ * Timings: design measure on #751 comment 6646945899. */
 .ca-skillrun {
-  --ca-skillrun-select-dur: 150ms;              /* TODO(#748) selected ring / ✓ transition */
-  --ca-skillrun-select-ease: cubic-bezier(.4, 0, .2, 1); /* TODO(#748) */
-  --ca-skillrun-hover-dur: 150ms;               /* TODO(#748) 「选择」 capsule + zoom icon */
-  --ca-skillrun-hover-ease: cubic-bezier(.4, 0, .2, 1);  /* TODO(#748) */
-  --ca-skillrun-stack-dur: 240ms;               /* TODO(#748) stack spread / collapse */
-  --ca-skillrun-stack-ease: cubic-bezier(.2, 0, 0, 1);   /* TODO(#748) */
+  --ca-skillrun-select-dur: 0ms;                /* design #751 c6646945899: stroke / ✓ / 当前模板 instant snap */
+  --ca-skillrun-select-ease: linear;
+  --ca-skillrun-hover-dur: 100ms;               /* design: 「选择」 capsule fade */
+  --ca-skillrun-hover-ease: ease-out;
+  --ca-skillrun-stack-dur: 400ms;               /* design: stack expand / collapse */
+  --ca-skillrun-stack-ease: cubic-bezier(.25, .1, .25, 1);
   --ca-skillrun-stack-step: 0px;                /* TODO(#748) per-layer offset when collapsed */
   --ca-skillrun-ring: #1a1a1a;
 }

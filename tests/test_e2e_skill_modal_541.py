@@ -29,7 +29,7 @@ async def _modal(pg, skill):
 async def test_geometry(app_url, lang):  # noqa: F811
     async with pw.async_playwright() as p:
         browser, pg = await _open(p, app_url, lang)
-        dlg = await _modal(pg, "brand")  # #569: poster has no tiles now; brand is the template-grid fixture
+        dlg = await _modal(pg, "brand-identity-director")  # #569: poster has no tiles now; brand is the template-grid fixture
         assert (await dlg.evaluate(BOX))[:2] == [1112, 820]
         assert (await dlg.locator(".ca-skillrun__left").evaluate(BOX))[0] == 752
         assert (await dlg.locator(".ca-skillrun__right").evaluate(BOX))[0] == 360
@@ -54,11 +54,11 @@ async def test_geometry(app_url, lang):  # noqa: F811
 async def test_zoom_select_and_gating(app_url):  # noqa: F811
     async with pw.async_playwright() as p:
         browser, pg = await _open(p, app_url, "zh")
-        await _modal(pg, "product")
-        assert await pg.locator(".ca-skillrun__tile").count() == 6  # tiles follow presets[]
+        await _modal(pg, "product-tvc-advertisement-generator")
+        assert await pg.locator(".ca-skillrun__tile").count() == 7  # tiles follow presets[] (#748 raw: 7)
         ids = await pg.get_by_test_id("skill-run-preset").evaluate_all("bs => bs.map(b => b.dataset.preset)")
-        assert ids == ["white", "lifestyle", "detail", "electronics", "food", "beauty"]
-        assert await pg.get_by_test_id("skill-run-meta").inner_text() == "6 个模板"
+        assert ids == ["white", "lifestyle", "detail", "electronics", "food", "beauty", "t7"]  # #748: 7th raw template
+        assert await pg.get_by_test_id("skill-run-meta").inner_text() == "7 个模板"
         tile = pg.locator(".ca-skillrun__tile").nth(1)
         await tile.hover()
         z = tile.get_by_test_id("skill-run-zoom")
@@ -96,13 +96,13 @@ STAGE = """() => { const st = document.querySelector('[data-testid=skill-run-exa
           st: [a.x, a.y, a.width, a.height], img: [c.x, c.y, c.width, c.height], nat: [i.naturalWidth, i.naturalHeight]} }"""
 
 
-@pytest.mark.parametrize("skill,portrait", [("poster", True), ("social", True), ("interior", True), ("thumbnail", False)])  # #569: character examples removed
+@pytest.mark.parametrize("skill,portrait", [("poster-differentiated-compiler", True), ("rednote-cover-maker", True), ("interior-architectural-visualization", True), ("cover-design-director", False)])  # #569: character examples removed
 async def test_example_stage_contain_no_crop(app_url, skill, portrait):  # noqa: F811
     """Lovart stage: whole image visible (contain), centered, on #f4f4f4 - portrait must not overflow/crop."""
     async with pw.async_playwright() as p:
         browser, pg = await _open(p, app_url, "zh", "light")
         await _modal(pg, skill)
-        if skill in ("thumbnail", "banner"):  # #575 lead example is the wash mp4 → select the first still
+        if skill in ("cover-design-director", "banner-design-director"):  # #575 lead example is the wash mp4 → select the first still
             await pg.locator('[data-testid="skill-run-example-thumb"][data-media="image"]').first.click()
         await pg.wait_for_function("() => { const i = document.querySelector('[data-testid=skill-run-example-stage] img');"
                                    " return i && i.complete && i.naturalWidth > 0 }", timeout=60000)

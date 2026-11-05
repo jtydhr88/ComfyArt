@@ -10,7 +10,7 @@ SKILLS_TS = (ROOT / "src/skills.ts").read_text()
 SKILLS = (ROOT / "src/home/Skills.tsx").read_text()
 CSS = (ROOT / "src/styles/home.css").read_text()
 
-PHASE1_NEW = ["multi-angle", "logo-material", "meta-ads", "mobile-ui", "web-product", "marketing-campaign"]
+PHASE1_NEW = ["universal-multi-angle-grid", "logo-material-explorer", "meta-ads-creative-director", "mobile-app-visual-design", "web-product-visual-design", "marketing-campaign-generator"]
 WASH_594 = "cc76d743d416c3d9a9a6852d811a7a80caf40319"
 
 
@@ -33,7 +33,7 @@ def test_wash_594_pin_and_paths():
         head = e.split("inputs:", 1)[0]
         assert f"cover: cover('{sid}')" in head
         assert f"featured: feedCovers('{sid}')" in head
-        assert f"examples: ex594('{sid}', [1, 2, 3, 4])" in head
+        assert f"examples: ex594('{sid}', [1, 2, 3{'' if sid == 'logo-material-explorer' else ', 4'}])" in head  # #748: logo-material left = video + 3
         assert "quickStartCoverFit: 'contain'" in head
         assert f"video: video594('{sid}')" in head  # #623
         assert "lovart" not in head.lower()

@@ -10,7 +10,7 @@ from pathlib import Path
 
 import pytest
 
-from tests.lovart_fields_687 import MOTION_FEATURED_REMOVED, NOTE_PH_ZH, REF12, SPEC
+from tests.lovart_fields_687 import MOTION_FEATURED_REMOVED, RAW_748, REF12, SPEC
 
 ROOT = Path(__file__).resolve().parents[1]
 needs_node = pytest.mark.skipif(
@@ -37,16 +37,18 @@ def test_dialog_fields_match_lovart_spec_687(got, sid):
 
 @needs_node
 def test_motion_remake_template_and_featured03_removed_687(got):
-    m = got["motion"]
-    assert m["templates"] == 0 and m["presets"] == 0  # #687 decision: off-topic poster/first-last templates removed, none generated
+    m = got["motion-poster-generator"]
+    # #748 RAW READY overrides #687's "no motion templates": raw has 2 (海报动效 / 首尾帧动画)
+    assert m["presets"] == 2
     assert not any(MOTION_FEATURED_REMOVED in u for u in m["featured"]) and len(m["featured"]) == 3
 
 
 @needs_node
 def test_ref12_zh_placeholder_exact_687(got):
-    assert len(REF12) == 12
-    for sid in REF12:
-        assert got[sid]["fields"][1]["phZh"] == NOTE_PH_ZH, sid
+    assert len(REF12) == 11  # #748 Final: 11 example cards (logo-material-explorer raw ready)
+    for sid in REF12:  # our generic zh placeholder (reference copy → COPY-REWRITE.md)
+        q = RAW_748[sid]["inputs"][1]
+        assert got[sid]["fields"][1]["phZh"] == f"请填写{q['label']['zh']}", sid
 
 
 def test_typo_uploaded_file_are_uploaded_fixed_687():
@@ -62,5 +64,5 @@ def test_motion_title_desc_remake_687():
     for lang in ("zh", "en"):
         loc = json.loads((ROOT / f"src/locales/{lang}.json").read_text())
         assert loc["skills.motionPoster"] == MOTION_TITLE[lang], lang
-        assert "lock a still" not in loc["skills.desc.motion"] and "海报" not in loc["skills.desc.motion"]
-    assert json.loads((ROOT / "src/locales/en.json").read_text())["skills.desc.motion"] == MOTION_DESC_EN
+        assert "lock a still" not in loc["skills.desc.motion-poster-generator"] and "海报" not in loc["skills.desc.motion-poster-generator"]
+    assert json.loads((ROOT / "src/locales/en.json").read_text())["skills.desc.motion-poster-generator"] == MOTION_DESC_EN

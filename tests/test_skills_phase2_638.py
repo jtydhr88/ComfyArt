@@ -12,13 +12,13 @@ SKILLS_PAGE = (ROOT / "src/home/Skills.tsx").read_text()
 DIALOG = (ROOT / "src/ui/SkillRunDialog.tsx").read_text()
 
 PHASE1 = [
-    "product", "multi-angle", "brand", "character", "logo-material", "packaging",
-    "motion", "meta-ads", "poster", "thumbnail", "mobile-ui", "social",
-    "marketing-campaign", "web-product", "banner",
+    "product-tvc-advertisement-generator", "universal-multi-angle-grid", "brand-identity-director", "character-sheet-design", "logo-material-explorer", "packaging-design-director",
+    "motion-poster-generator", "meta-ads-creative-director", "poster-differentiated-compiler", "cover-design-director", "mobile-app-visual-design", "rednote-cover-maker",
+    "marketing-campaign-generator", "web-product-visual-design", "banner-design-director",
 ]
 # Soft order: A social + B NEW5 + #735 C NEW5 (washed)
 PHASE2_MOUNT = [
-    "flash-cut-video", "style-transfer", "person-swap", "social",
+    "flash-cut-video", "style-transfer", "person-swap", "rednote-cover-maker",
     "commerce-strategist", "lifestyle-scene",
     "naive-illustration", "logo-abstract", "photo-split-poster", "ppt-visual", "promo-ecommerce",
 ]
@@ -31,7 +31,7 @@ PHASE2_C = [
 ]
 PHASE2_DEFERRED_C = PHASE2_C  # historical name; C is mounted after #735
 PHASE2_DEFERRED_D = ["yingzao", "crt-interface", "crayon-sketch", "fabric-collage"]
-UNTOUCHED = ["interior"]  # custom-workflow removed (no Lovart card)
+UNTOUCHED = ["interior-architectural-visualization"]  # custom-workflow removed (no Lovart card)
 
 
 def _entries() -> dict[str, str]:
@@ -50,7 +50,7 @@ def _const_ids(name: str) -> list[str]:
 def test_phase2_soft_mount_constants():
     assert _const_ids("PHASE2_SKILL_IDS") == PHASE2_MOUNT
     assert len(PHASE2_MOUNT) == 11 and len(set(PHASE2_MOUNT)) == 11
-    assert "social" in PHASE2_MOUNT and "fashion-ugc" not in PHASE2_MOUNT
+    assert "rednote-cover-maker" in PHASE2_MOUNT and "fashion-ugc" not in PHASE2_MOUNT
     deferred = _const_ids("PHASE2_DEFERRED_SKILL_IDS")
     assert deferred == PHASE2_DEFERRED_D  # #735: only D deferred
     # D must not be in Soft mount; C is mounted
@@ -76,7 +76,7 @@ def test_order_builtins_phase1_then_phase2_b_then_deferred():
     assert _const_ids("PHASE1_SKILL_IDS") == PHASE1
     assert _const_ids("PHASE2_SKILL_IDS") == PHASE2_MOUNT
     # No duplicate mount of social as a second id
-    assert ids.count("social") == 1
+    assert ids.count("rednote-cover-maker") == 1
 
 
 def test_b_washed_mounted_deferred_still_empty_assets():
@@ -107,8 +107,8 @@ def test_home_skills_same_source_and_chips():
     assert "HOME_SKILL_ROW" in HOME
     # website chip source: Phase1 website skills (ppt-visual C HOLD — may stay out of mount)
     entries = _entries()
-    assert "category: 'website'" in entries["mobile-ui"]
-    assert "category: 'website'" in entries["web-product"]
+    assert "category: 'website'" in entries["mobile-app-visual-design"]
+    assert "category: 'website'" in entries["web-product-visual-design"]
     assert "category: 'website'" in entries["ppt-visual"]  # #735 mounted (website chip)
     assert "'website'" in SKILLS_TS
 
@@ -116,7 +116,7 @@ def test_home_skills_same_source_and_chips():
 def test_dialog_agent_handoff_and_social_fashion_ugc_regression():
     assert "mode: 'agent'" in SKILLS_TS
     assert "skillRunParams" in DIALOG
-    social = _entries()["social"]
+    social = _entries()["rednote-cover-maker"]
     presets = re.findall(r"\bP\('([^']+)'", social)
     assert "ugc-feed" in presets and "ugc-story" in presets
     assert "Fashion UGC" in social or "fashion UGC" in social.lower()

@@ -39,12 +39,12 @@ def test_video_helpers_and_pending_scaffold():
     assert "WASH_575_MOTION_VIDEO" not in SKILLS and "575/wash/templates/" not in SKILLS
     assert "TODO(design pin): motion" not in SKILLS
     for sid in (
-        "multi-angle",
-        "logo-material",
-        "meta-ads",
-        "mobile-ui",
-        "web-product",
-        "marketing-campaign",
+        "universal-multi-angle-grid",
+        "logo-material-explorer",
+        "meta-ads-creative-director",
+        "mobile-app-visual-design",
+        "web-product-visual-design",
+        "marketing-campaign-generator",
     ):
         assert f"video: video594('{sid}')" in SKILLS, sid
         assert sid not in block.split("=", 1)[-1].split("as const")[0] or "[]" in block
@@ -138,11 +138,11 @@ def test_mutation_new6_video_pin_must_stay():
     assert "WASH_623_NEW6_VIDEO" in SKILLS
     assert "d03ea7938877d084c201a94ef51f943dd0e061b9" in SKILLS
     for sid in (
-        "multi-angle",
-        "logo-material",
-        "meta-ads",
-        "mobile-ui",
-        "web-product",
-        "marketing-campaign",
+        "universal-multi-angle-grid",
+        "logo-material-explorer",
+        "meta-ads-creative-director",
+        "mobile-app-visual-design",
+        "web-product-visual-design",
+        "marketing-campaign-generator",
     ):
         assert f"video: video594('{sid}')" in SKILLS, sid

@@ -53,9 +53,8 @@ async def _check(pg, sid, lang):
     go = pg.get_by_test_id("skill-run-go")
     assert await go.evaluate("b => !b.disabled"), sid  # #748: template-class shows aria-disabled look but stays clickable; #687: Start always clickable; validation runs on click
     assert await dlg.get_by_test_id("skill-run-field-error").count() == 0, sid  # no errors on open
-    if sid == "motion":
-        assert await dlg.get_by_test_id("skill-run-current").count() == 0  # #687: off-topic templates removed → no 模板 row
-        assert await dlg.get_by_test_id("skill-run-preset").count() == 0
+    if sid == "motion-poster-generator":
+        assert await dlg.get_by_test_id("skill-run-preset").count() == 2  # #748 raw: 海报动效 + 首尾帧动画
         from tests.lovart_fields_687 import MOTION_TITLE
         assert MOTION_TITLE[lang] in await dlg.inner_text()
     return dlg
@@ -70,7 +69,7 @@ async def test_skill_dialog_fields_match_lovart_687(app_url, lang, theme):  # no
         await pg.goto(app_url)
         await pg.get_by_test_id("rail-skills").click()
         await pg.get_by_test_id("skills-wall").wait_for()
-        for sid in [*CHANGED, "product", "thumbnail", "multi-angle"]:
+        for sid in [*CHANGED, "product-tvc-advertisement-generator", "cover-design-director", "universal-multi-angle-grid"]:
             dlg = await _check(pg, sid, lang)
             if SHOTS and sid in CHANGED:
                 Path(SHOTS).mkdir(parents=True, exist_ok=True)
@@ -100,12 +99,12 @@ async def test_old_draft_and_link_keys_open_empty_687(app_url):  # noqa: F811
         browser, pg = await _page(p, "en", "dark")
         errors: list[str] = []
         pg.on("pageerror", lambda e: errors.append(str(e)))
-        await pg.add_init_script("localStorage.setItem('comfyart.skillDraft.brand', " + json.dumps(json.dumps(OLD_KEYS_687["brand"])) + ")")
-        qs = "&".join(f"{k}=x" for k in [*OLD_KEYS_687["brand"], *OLD_KEYS_687["motion"]])
+        await pg.add_init_script("localStorage.setItem('comfyart.skillDraft.brand', " + json.dumps(json.dumps(OLD_KEYS_687["brand-identity-director"])) + ")")
+        qs = "&".join(f"{k}=x" for k in [*OLD_KEYS_687["brand-identity-director"], *OLD_KEYS_687["motion-poster-generator"]])
         await pg.goto(app_url + "?" + qs)
         await pg.get_by_test_id("rail-skills").click()
         await pg.get_by_test_id("skills-wall").wait_for()
-        for sid in ("brand", "motion"):
+        for sid in ("brand-identity-director", "motion-poster-generator"):
             dlg = await _check(pg, sid, "en")
             vals = await dlg.evaluate("""d => [...d.querySelectorAll('[data-testid="skill-run-field"]')].map(f =>
                 [f.dataset.key, f.matches('input,textarea') ? f.value : (f.querySelector('img,video') ? 'media' : '')])""")
@@ -114,7 +113,7 @@ async def test_old_draft_and_link_keys_open_empty_687(app_url):  # noqa: F811
             await dlg.wait_for(state="detached")
         # nothing is lost: the stored old draft is left intact (not wiped / rewritten) after opening the dialogs
         kept = await pg.evaluate("localStorage.getItem('comfyart.skillDraft.brand')")
-        assert kept is not None and json.loads(kept) == OLD_KEYS_687["brand"], kept
+        assert kept is not None and json.loads(kept) == OLD_KEYS_687["brand-identity-director"], kept
         # old-key ?skill= handoff link: lands in a project without throwing
         await pg.goto(app_url + "?skill=brand&mode=agent&ask=Old%20brand&brandInfo=Old&brandAssets=%2Fview%3Ff%3Dold.png")
         await pg.wait_for_timeout(1500)
@@ -128,16 +127,16 @@ async def test_motion_validates_only_after_start_click_687(app_url):  # noqa: F8
         await pg.goto(app_url)
         await pg.get_by_test_id("rail-skills").click()
         await pg.get_by_test_id("skills-wall").wait_for()
-        dlg = await _check(pg, "motion", "zh")
+        dlg = await _check(pg, "motion-poster-generator", "zh")
         url0 = pg.url
         await pg.get_by_test_id("skill-run-go").click(force=True)  # #748 aria-disabled look, still clickable
         errs = await dlg.get_by_test_id("skill-run-field-error").evaluate_all("es => es.map(e => e.dataset.key)")
-        REQ = [r[0] for r in SPEC["motion"] if r[2]]  # #748 measured keys
+        REQ = [r[0] for r in SPEC["motion-poster-generator"] if r[2]]  # #748 measured keys
         assert errs == REQ, errs
         assert pg.url == url0  # nothing started
-        await dlg.locator(f'[data-testid="skill-run-field"][data-key="{[r for r in SPEC["motion"] if r[1] != "image"][0][0]}"]').fill("swap product")
+        await dlg.locator(f'[data-testid="skill-run-field"][data-key="{[r for r in SPEC["motion-poster-generator"] if r[1] != "image"][0][0]}"]').fill("swap product")
         errs = await dlg.get_by_test_id("skill-run-field-error").evaluate_all("es => es.map(e => e.dataset.key)")
-        assert errs == [r[0] for r in SPEC["motion"] if r[2] and r[1] == "image"], errs
+        assert errs == [r[0] for r in SPEC["motion-poster-generator"] if r[2] and r[1] == "image"], errs
         if SHOTS:
             await pg.screenshot(path=str(Path(SHOTS) / "skill-fields-motion-after-start-zh-light.png"))
         await browser.close()

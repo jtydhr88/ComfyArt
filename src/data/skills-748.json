@@ -1,0 +1,2213 @@
+{
+  "source": "scripts/convert_raw_748.py (structure only)",
+  "skills": {
+    "cover-design-director": {
+      "source": "reference",
+      "kind": "example",
+      "title": {
+        "zh": "封面设计总监",
+        "en": "Cover Design Director"
+      },
+      "assetDir": "thumbnail",
+      "coverMode": "single",
+      "highlights": [
+        {
+          "type": "video",
+          "ratio": 1.3333
+        }
+      ],
+      "inputs": [
+        {
+          "key": "user_image",
+          "type": "image",
+          "required": true,
+          "label": {
+            "zh": "上传文件",
+            "en": "Upload Files"
+          },
+          "maxCount": 1,
+          "maxSizeMb": 10
+        },
+        {
+          "key": "user_requirement",
+          "type": "text",
+          "required": true,
+          "label": {
+            "zh": "补充描述",
+            "en": "Additional Details"
+          },
+          "maxLength": 500
+        }
+      ]
+    },
+    "poster-differentiated-compiler": {
+      "source": "reference",
+      "kind": "example",
+      "title": {
+        "zh": "海报设计",
+        "en": "Poster Design"
+      },
+      "assetDir": "poster",
+      "coverMode": "single",
+      "highlights": [
+        {
+          "type": "image",
+          "ratio": 0.6667
+        },
+        {
+          "type": "image",
+          "ratio": 0.75
+        },
+        {
+          "type": "image",
+          "ratio": 0.6664
+        },
+        {
+          "type": "image",
+          "ratio": 0.6667
+        },
+        {
+          "type": "image",
+          "ratio": 0.5625
+        }
+      ],
+      "inputs": [
+        {
+          "key": "user_image",
+          "type": "image",
+          "required": true,
+          "label": {
+            "zh": "上传文件",
+            "en": "Upload Files"
+          },
+          "maxCount": 1,
+          "maxSizeMb": 10
+        },
+        {
+          "key": "user_requirement",
+          "type": "text",
+          "required": true,
+          "label": {
+            "zh": "补充描述",
+            "en": "Additional Details"
+          },
+          "maxLength": 500
+        }
+      ]
+    },
+    "meta-ads-creative-director": {
+      "source": "reference",
+      "kind": "example",
+      "title": {
+        "zh": "Meta广告创意",
+        "en": "Meta Ads Creative"
+      },
+      "assetDir": "meta-ads",
+      "coverMode": "single",
+      "highlights": [
+        {
+          "type": "image",
+          "ratio": 1.7778
+        },
+        {
+          "type": "image",
+          "ratio": 1.7778
+        },
+        {
+          "type": "image",
+          "ratio": 1.7778
+        },
+        {
+          "type": "image",
+          "ratio": 1.7778
+        }
+      ],
+      "inputs": [
+        {
+          "key": "user_image",
+          "type": "image",
+          "required": true,
+          "label": {
+            "zh": "上传文件",
+            "en": "Upload Files"
+          },
+          "maxCount": 1,
+          "maxSizeMb": 10
+        },
+        {
+          "key": "user_requirement",
+          "type": "text",
+          "required": true,
+          "label": {
+            "zh": "补充描述",
+            "en": "Additional Details"
+          },
+          "maxLength": 500
+        }
+      ]
+    },
+    "marketing-campaign-generator": {
+      "source": "reference",
+      "kind": "example",
+      "title": {
+        "zh": "营销活动生成器",
+        "en": "Marketing Campaign Generator"
+      },
+      "assetDir": "marketing-campaign",
+      "coverMode": "single",
+      "highlights": [
+        {
+          "type": "video",
+          "ratio": 1.3333
+        },
+        {
+          "type": "image",
+          "ratio": 5.1167
+        },
+        {
+          "type": "image",
+          "ratio": 8.5542
+        },
+        {
+          "type": "image",
+          "ratio": 6.3958
+        },
+        {
+          "type": "image",
+          "ratio": 5.1167
+        },
+        {
+          "type": "image",
+          "ratio": 5.1167
+        },
+        {
+          "type": "image",
+          "ratio": 7.475
+        },
+        {
+          "type": "image",
+          "ratio": 4.2014
+        }
+      ],
+      "inputs": [
+        {
+          "key": "user_image",
+          "type": "image",
+          "required": true,
+          "label": {
+            "zh": "上传文件",
+            "en": "Upload Files"
+          },
+          "maxCount": 1,
+          "maxSizeMb": 10
+        },
+        {
+          "key": "user_requirement",
+          "type": "text",
+          "required": true,
+          "label": {
+            "zh": "补充描述",
+            "en": "Additional Details"
+          },
+          "maxLength": 500
+        }
+      ]
+    },
+    "banner-design-director": {
+      "source": "reference",
+      "kind": "example",
+      "title": {
+        "zh": "横幅设计",
+        "en": "Banner Design"
+      },
+      "assetDir": "banner",
+      "coverMode": "single",
+      "highlights": [
+        {
+          "type": "video",
+          "ratio": 1.3333
+        }
+      ],
+      "inputs": [
+        {
+          "key": "user_image",
+          "type": "image",
+          "required": true,
+          "label": {
+            "zh": "上传文件",
+            "en": "Upload Files"
+          },
+          "maxCount": 1,
+          "maxSizeMb": 10
+        },
+        {
+          "key": "user_requirement",
+          "type": "text",
+          "required": true,
+          "label": {
+            "zh": "补充描述",
+            "en": "Additional Details"
+          },
+          "maxLength": 500
+        }
+      ]
+    },
+    "character-sheet-design": {
+      "source": "reference",
+      "kind": "template",
+      "title": {
+        "zh": "真人角色设定与参考板",
+        "en": "Realistic Human Character Design & Reference Sheets"
+      },
+      "assetDir": "character",
+      "templates": [
+        {
+          "name": {
+            "zh": "角色转身板",
+            "en": "Character Turnaround Sheet"
+          },
+          "depth": 1,
+          "media": [
+            {
+              "type": "image",
+              "ratio": 1.0
+            }
+          ],
+          "inputs": [
+            {
+              "key": "subject_image",
+              "type": "image",
+              "required": false,
+              "label": {
+                "zh": "角色参考图片",
+                "en": "Character reference images"
+              },
+              "maxCount": 9,
+              "maxSizeMb": 10
+            },
+            {
+              "key": "character_info",
+              "type": "text",
+              "required": false,
+              "label": {
+                "zh": "角色资料",
+                "en": "Character information"
+              },
+              "maxLength": 200
+            },
+            {
+              "key": "visual_direction",
+              "type": "text",
+              "required": false,
+              "label": {
+                "zh": "视觉呈现方式",
+                "en": "Visual direction"
+              },
+              "maxLength": 200
+            }
+          ]
+        },
+        {
+          "name": {
+            "zh": "表情动作板",
+            "en": "Expression & Pose Sheet"
+          },
+          "depth": 1,
+          "media": [
+            {
+              "type": "image",
+              "ratio": 1.7778
+            }
+          ],
+          "inputs": [
+            {
+              "key": "subject_image",
+              "type": "image",
+              "required": false,
+              "label": {
+                "zh": "角色参考图片",
+                "en": "Character reference images"
+              },
+              "maxCount": 9,
+              "maxSizeMb": 10
+            },
+            {
+              "key": "character_info",
+              "type": "text",
+              "required": false,
+              "label": {
+                "zh": "角色资料",
+                "en": "Character information"
+              },
+              "maxLength": 200
+            },
+            {
+              "key": "visual_direction",
+              "type": "text",
+              "required": false,
+              "label": {
+                "zh": "视觉呈现方式",
+                "en": "Visual direction"
+              },
+              "maxLength": 200
+            }
+          ]
+        },
+        {
+          "name": {
+            "zh": "建模细节参考板",
+            "en": "Modeling Detail Reference Sheet"
+          },
+          "depth": 1,
+          "media": [
+            {
+              "type": "image",
+              "ratio": 1.7778
+            }
+          ],
+          "inputs": [
+            {
+              "key": "subject_image",
+              "type": "image",
+              "required": false,
+              "label": {
+                "zh": "角色参考图片",
+                "en": "Character reference images"
+              },
+              "maxCount": 9,
+              "maxSizeMb": 10
+            },
+            {
+              "key": "character_info",
+              "type": "text",
+              "required": false,
+              "label": {
+                "zh": "角色资料",
+                "en": "Character information"
+              },
+              "maxLength": 200
+            },
+            {
+              "key": "visual_direction",
+              "type": "text",
+              "required": false,
+              "label": {
+                "zh": "视觉呈现方式",
+                "en": "Visual direction"
+              },
+              "maxLength": 200
+            }
+          ]
+        },
+        {
+          "name": {
+            "zh": "服装/形态变体板",
+            "en": "Outfit / Form Variation Sheet"
+          },
+          "depth": 1,
+          "media": [
+            {
+              "type": "image",
+              "ratio": 1.0
+            }
+          ],
+          "inputs": [
+            {
+              "key": "subject_image",
+              "type": "image",
+              "required": false,
+              "label": {
+                "zh": "角色参考图片",
+                "en": "Character reference images"
+              },
+              "maxCount": 9,
+              "maxSizeMb": 10
+            },
+            {
+              "key": "character_info",
+              "type": "text",
+              "required": false,
+              "label": {
+                "zh": "角色资料",
+                "en": "Character information"
+              },
+              "maxLength": 200
+            },
+            {
+              "key": "visual_direction",
+              "type": "text",
+              "required": false,
+              "label": {
+                "zh": "视觉呈现方式",
+                "en": "Visual direction"
+              },
+              "maxLength": 200
+            }
+          ]
+        },
+        {
+          "name": {
+            "zh": "道具互动板",
+            "en": "Prop Interaction Sheet"
+          },
+          "depth": 1,
+          "media": [
+            {
+              "type": "image",
+              "ratio": 1.0
+            }
+          ],
+          "inputs": [
+            {
+              "key": "subject_image",
+              "type": "image",
+              "required": false,
+              "label": {
+                "zh": "角色参考图片",
+                "en": "Character reference images"
+              },
+              "maxCount": 9,
+              "maxSizeMb": 10
+            },
+            {
+              "key": "character_info",
+              "type": "text",
+              "required": false,
+              "label": {
+                "zh": "角色资料",
+                "en": "Character information"
+              },
+              "maxLength": 200
+            },
+            {
+              "key": "visual_direction",
+              "type": "text",
+              "required": false,
+              "label": {
+                "zh": "视觉呈现方式",
+                "en": "Visual direction"
+              },
+              "maxLength": 200
+            }
+          ]
+        },
+        {
+          "name": {
+            "zh": "基础角色板",
+            "en": "Basic Character Sheet"
+          },
+          "depth": 1,
+          "media": [
+            {
+              "type": "image",
+              "ratio": 1.7778
+            }
+          ],
+          "inputs": [
+            {
+              "key": "subject_image",
+              "type": "image",
+              "required": false,
+              "label": {
+                "zh": "角色参考图片",
+                "en": "Character reference images"
+              },
+              "maxCount": 9,
+              "maxSizeMb": 10
+            },
+            {
+              "key": "character_info",
+              "type": "text",
+              "required": false,
+              "label": {
+                "zh": "角色资料",
+                "en": "Character information"
+              },
+              "maxLength": 200
+            },
+            {
+              "key": "visual_direction",
+              "type": "text",
+              "required": false,
+              "label": {
+                "zh": "视觉呈现方式",
+                "en": "Visual direction"
+              },
+              "maxLength": 200
+            }
+          ]
+        },
+        {
+          "name": {
+            "zh": "完整技术角色板",
+            "en": "Complete Technical Character Sheet"
+          },
+          "depth": 1,
+          "media": [
+            {
+              "type": "image",
+              "ratio": 1.7778
+            }
+          ],
+          "inputs": [
+            {
+              "key": "subject_image",
+              "type": "image",
+              "required": false,
+              "label": {
+                "zh": "角色参考图片",
+                "en": "Character reference images"
+              },
+              "maxCount": 9,
+              "maxSizeMb": 10
+            },
+            {
+              "key": "character_info",
+              "type": "text",
+              "required": false,
+              "label": {
+                "zh": "角色资料",
+                "en": "Character information"
+              },
+              "maxLength": 200
+            },
+            {
+              "key": "visual_direction",
+              "type": "text",
+              "required": false,
+              "label": {
+                "zh": "视觉呈现方式",
+                "en": "Visual direction"
+              },
+              "maxLength": 200
+            }
+          ]
+        }
+      ]
+    },
+    "logo-material-explorer": {
+      "source": "reference",
+      "kind": "example",
+      "title": {
+        "zh": "徽标材质探索器",
+        "en": "Logo Material Explorer"
+      },
+      "assetDir": "logo-material",
+      "coverMode": "single",
+      "highlights": [
+        {
+          "type": "video",
+          "ratio": 1.3333
+        },
+        {
+          "type": "image",
+          "ratio": 1.0
+        },
+        {
+          "type": "image",
+          "ratio": 1.0
+        }
+      ],
+      "inputs": [
+        {
+          "key": "user_image",
+          "type": "image",
+          "required": true,
+          "label": {
+            "zh": "上传文件",
+            "en": "Upload Files"
+          },
+          "maxCount": 1,
+          "maxSizeMb": 10
+        },
+        {
+          "key": "user_requirement",
+          "type": "text",
+          "required": true,
+          "label": {
+            "zh": "补充描述",
+            "en": "Additional Details"
+          },
+          "maxLength": 500
+        }
+      ]
+    },
+    "mobile-app-visual-design": {
+      "source": "reference",
+      "kind": "example",
+      "title": {
+        "zh": "移动应用视觉设计",
+        "en": "Mobile APP Visual Design"
+      },
+      "assetDir": "mobile-ui",
+      "coverMode": "single",
+      "highlights": [
+        {
+          "type": "image",
+          "ratio": 1.7778
+        },
+        {
+          "type": "image",
+          "ratio": 1.7778
+        },
+        {
+          "type": "image",
+          "ratio": 2.9767
+        },
+        {
+          "type": "image",
+          "ratio": 2.0
+        },
+        {
+          "type": "image",
+          "ratio": 2.0
+        },
+        {
+          "type": "image",
+          "ratio": 2.0
+        },
+        {
+          "type": "image",
+          "ratio": 1.7778
+        },
+        {
+          "type": "image",
+          "ratio": 2.0
+        },
+        {
+          "type": "image",
+          "ratio": 1.7778
+        },
+        {
+          "type": "image",
+          "ratio": 1.7778
+        },
+        {
+          "type": "image",
+          "ratio": 2.0
+        },
+        {
+          "type": "image",
+          "ratio": 1.5
+        },
+        {
+          "type": "image",
+          "ratio": 1.7778
+        }
+      ],
+      "inputs": [
+        {
+          "key": "user_image",
+          "type": "image",
+          "required": true,
+          "label": {
+            "zh": "上传文件",
+            "en": "Upload Files"
+          },
+          "maxCount": 1,
+          "maxSizeMb": 10
+        },
+        {
+          "key": "user_requirement",
+          "type": "text",
+          "required": true,
+          "label": {
+            "zh": "补充描述",
+            "en": "Additional Details"
+          },
+          "maxLength": 500
+        }
+      ]
+    },
+    "web-product-visual-design": {
+      "source": "reference",
+      "kind": "example",
+      "title": {
+        "zh": "Web产品视觉设计",
+        "en": "Web Product Visual Design"
+      },
+      "assetDir": "web-product",
+      "coverMode": "single",
+      "highlights": [
+        {
+          "type": "image",
+          "ratio": 1.6
+        },
+        {
+          "type": "image",
+          "ratio": 0.5625
+        },
+        {
+          "type": "image",
+          "ratio": 1.7778
+        },
+        {
+          "type": "image",
+          "ratio": 1.5
+        },
+        {
+          "type": "image",
+          "ratio": 1.7778
+        },
+        {
+          "type": "image",
+          "ratio": 1.7778
+        },
+        {
+          "type": "image",
+          "ratio": 1.7778
+        },
+        {
+          "type": "image",
+          "ratio": 1.7778
+        },
+        {
+          "type": "image",
+          "ratio": 1.7778
+        }
+      ],
+      "inputs": [
+        {
+          "key": "user_image",
+          "type": "image",
+          "required": true,
+          "label": {
+            "zh": "上传文件",
+            "en": "Upload Files"
+          },
+          "maxCount": 1,
+          "maxSizeMb": 10
+        },
+        {
+          "key": "user_requirement",
+          "type": "text",
+          "required": true,
+          "label": {
+            "zh": "补充描述",
+            "en": "Additional Details"
+          },
+          "maxLength": 500
+        }
+      ]
+    },
+    "universal-multi-angle-grid": {
+      "source": "reference",
+      "kind": "example",
+      "title": {
+        "zh": "多角度图像生成器",
+        "en": "Multi-Angle Image Generator"
+      },
+      "assetDir": "multi-angle",
+      "coverMode": "carousel",
+      "highlights": [
+        {
+          "type": "image",
+          "ratio": 0.75
+        },
+        {
+          "type": "image",
+          "ratio": 0.75
+        },
+        {
+          "type": "image",
+          "ratio": 0.75
+        },
+        {
+          "type": "image",
+          "ratio": 0.75
+        },
+        {
+          "type": "image",
+          "ratio": 0.75
+        },
+        {
+          "type": "image",
+          "ratio": 0.75
+        },
+        {
+          "type": "image",
+          "ratio": 0.75
+        },
+        {
+          "type": "image",
+          "ratio": 0.75
+        },
+        {
+          "type": "image",
+          "ratio": 0.75
+        },
+        {
+          "type": "image",
+          "ratio": 0.75
+        },
+        {
+          "type": "image",
+          "ratio": 0.75
+        }
+      ],
+      "inputs": [
+        {
+          "key": "user_image",
+          "type": "image",
+          "required": true,
+          "label": {
+            "zh": "上传文件",
+            "en": "Upload Files"
+          },
+          "maxCount": 1,
+          "maxSizeMb": 10
+        },
+        {
+          "key": "user_requirement",
+          "type": "text",
+          "required": true,
+          "label": {
+            "zh": "补充描述",
+            "en": "Additional Details"
+          },
+          "maxLength": 500
+        }
+      ]
+    },
+    "interior-architectural-visualization": {
+      "source": "reference",
+      "kind": "example",
+      "title": {
+        "zh": "室内与建筑可视化",
+        "en": "Interior & Architectural Visualization"
+      },
+      "assetDir": "interior",
+      "coverMode": "carousel",
+      "highlights": [
+        {
+          "type": "image",
+          "ratio": 0.8
+        },
+        {
+          "type": "image",
+          "ratio": 0.8
+        },
+        {
+          "type": "image",
+          "ratio": 0.8
+        },
+        {
+          "type": "image",
+          "ratio": 1.0
+        }
+      ],
+      "inputs": [
+        {
+          "key": "user_image",
+          "type": "image",
+          "required": true,
+          "label": {
+            "zh": "上传文件",
+            "en": "Upload Files"
+          },
+          "maxCount": 1,
+          "maxSizeMb": 10
+        },
+        {
+          "key": "user_requirement",
+          "type": "text",
+          "required": true,
+          "label": {
+            "zh": "补充描述",
+            "en": "Additional Details"
+          },
+          "maxLength": 500
+        }
+      ]
+    },
+    "packaging-design-director": {
+      "source": "reference",
+      "kind": "template",
+      "title": {
+        "zh": "品牌包装设计系统",
+        "en": "Brand Packaging Design System"
+      },
+      "assetDir": "packaging",
+      "templates": [
+        {
+          "name": {
+            "zh": "主款包装设计",
+            "en": "Master Packaging Design"
+          },
+          "depth": 1,
+          "media": [
+            {
+              "type": "image",
+              "ratio": 0.75
+            }
+          ],
+          "inputs": [
+            {
+              "key": "product_info",
+              "type": "text",
+              "required": true,
+              "label": {
+                "zh": "商品与包装资料",
+                "en": "Product and packaging information"
+              },
+              "maxLength": 200
+            },
+            {
+              "key": "subject_image",
+              "type": "image",
+              "required": false,
+              "label": {
+                "zh": "商品与包装素材",
+                "en": "Product and packaging assets"
+              },
+              "maxCount": 9,
+              "maxSizeMb": 10
+            },
+            {
+              "key": "visual_direction",
+              "type": "text",
+              "required": false,
+              "label": {
+                "zh": "视觉呈现方式",
+                "en": "Visual direction"
+              },
+              "maxLength": 200
+            }
+          ]
+        },
+        {
+          "name": {
+            "zh": "包装视觉方向",
+            "en": "Packaging Visual Direction"
+          },
+          "depth": 3,
+          "media": [
+            {
+              "type": "image",
+              "ratio": 1.7822
+            },
+            {
+              "type": "image",
+              "ratio": 1.7778
+            },
+            {
+              "type": "image",
+              "ratio": 1.7778
+            }
+          ],
+          "inputs": [
+            {
+              "key": "product_info",
+              "type": "text",
+              "required": true,
+              "label": {
+                "zh": "商品与包装资料",
+                "en": "Product and packaging information"
+              },
+              "maxLength": 200
+            },
+            {
+              "key": "subject_image",
+              "type": "image",
+              "required": false,
+              "label": {
+                "zh": "商品与包装素材",
+                "en": "Product and packaging assets"
+              },
+              "maxCount": 9,
+              "maxSizeMb": 10
+            },
+            {
+              "key": "visual_direction",
+              "type": "text",
+              "required": false,
+              "label": {
+                "zh": "视觉呈现方式",
+                "en": "Visual direction"
+              },
+              "maxLength": 200
+            }
+          ]
+        },
+        {
+          "name": {
+            "zh": "多 SKU 包装系列",
+            "en": "Multi-SKU Packaging Series"
+          },
+          "depth": 4,
+          "media": [
+            {
+              "type": "image",
+              "ratio": 0.75
+            },
+            {
+              "type": "image",
+              "ratio": 0.75
+            },
+            {
+              "type": "image",
+              "ratio": 0.75
+            },
+            {
+              "type": "image",
+              "ratio": 1.7778
+            }
+          ],
+          "inputs": [
+            {
+              "key": "product_info",
+              "type": "text",
+              "required": true,
+              "label": {
+                "zh": "商品与包装资料",
+                "en": "Product and packaging information"
+              },
+              "maxLength": 200
+            },
+            {
+              "key": "subject_image",
+              "type": "image",
+              "required": false,
+              "label": {
+                "zh": "商品与包装素材",
+                "en": "Product and packaging assets"
+              },
+              "maxCount": 9,
+              "maxSizeMb": 10
+            },
+            {
+              "key": "visual_direction",
+              "type": "text",
+              "required": false,
+              "label": {
+                "zh": "视觉呈现方式",
+                "en": "Visual direction"
+              },
+              "maxLength": 200
+            }
+          ]
+        },
+        {
+          "name": {
+            "zh": "包装面板与结构示意",
+            "en": "Packaging Panels & Structural Diagram"
+          },
+          "depth": 1,
+          "media": [
+            {
+              "type": "image",
+              "ratio": 1.7778
+            }
+          ],
+          "inputs": [
+            {
+              "key": "product_info",
+              "type": "text",
+              "required": true,
+              "label": {
+                "zh": "商品与包装资料",
+                "en": "Product and packaging information"
+              },
+              "maxLength": 200
+            },
+            {
+              "key": "subject_image",
+              "type": "image",
+              "required": false,
+              "label": {
+                "zh": "商品与包装素材",
+                "en": "Product and packaging assets"
+              },
+              "maxCount": 9,
+              "maxSizeMb": 10
+            },
+            {
+              "key": "visual_direction",
+              "type": "text",
+              "required": false,
+              "label": {
+                "zh": "视觉呈现方式",
+                "en": "Visual direction"
+              },
+              "maxLength": 200
+            }
+          ]
+        },
+        {
+          "name": {
+            "zh": "包装货架展示",
+            "en": "Packaging Shelf Display"
+          },
+          "depth": 1,
+          "media": [
+            {
+              "type": "image",
+              "ratio": 1.7822
+            }
+          ],
+          "inputs": [
+            {
+              "key": "product_info",
+              "type": "text",
+              "required": true,
+              "label": {
+                "zh": "商品与包装资料",
+                "en": "Product and packaging information"
+              },
+              "maxLength": 200
+            },
+            {
+              "key": "subject_image",
+              "type": "image",
+              "required": false,
+              "label": {
+                "zh": "商品与包装素材",
+                "en": "Product and packaging assets"
+              },
+              "maxCount": 9,
+              "maxSizeMb": 10
+            },
+            {
+              "key": "visual_direction",
+              "type": "text",
+              "required": false,
+              "label": {
+                "zh": "视觉呈现方式",
+                "en": "Visual direction"
+              },
+              "maxLength": 200
+            }
+          ]
+        }
+      ]
+    },
+    "motion-poster-generator": {
+      "source": "reference",
+      "kind": "template",
+      "title": {
+        "zh": "动态海报",
+        "en": "Motion Poster"
+      },
+      "assetDir": "motion",
+      "templates": [
+        {
+          "name": {
+            "zh": "海报动效",
+            "en": "Poster Animation"
+          },
+          "depth": 1,
+          "media": [
+            {
+              "type": "video",
+              "ratio": 1.3347
+            }
+          ],
+          "inputs": [
+            {
+              "key": "source_image",
+              "type": "image",
+              "required": true,
+              "label": {
+                "zh": "静态原稿",
+                "en": "Source artwork"
+              },
+              "maxCount": 1,
+              "maxSizeMb": 10
+            },
+            {
+              "key": "motion_brief",
+              "type": "text",
+              "required": false,
+              "label": {
+                "zh": "动态要求",
+                "en": "Motion requirements"
+              },
+              "maxLength": 200
+            },
+            {
+              "key": "visual_direction",
+              "type": "text",
+              "required": false,
+              "label": {
+                "zh": "视觉呈现方式",
+                "en": "Visual direction"
+              },
+              "maxLength": 200
+            }
+          ]
+        },
+        {
+          "name": {
+            "zh": "首尾帧动画",
+            "en": "First-to-Last Frame Animation"
+          },
+          "depth": 1,
+          "media": [
+            {
+              "type": "video",
+              "ratio": 0.5625
+            }
+          ],
+          "inputs": [
+            {
+              "key": "source_image",
+              "type": "image",
+              "required": true,
+              "label": {
+                "zh": "静态原稿（最终定格画面）",
+                "en": "Source artwork (final frame)"
+              },
+              "maxCount": 1,
+              "maxSizeMb": 10
+            },
+            {
+              "key": "start_frame",
+              "type": "image",
+              "required": false,
+              "label": {
+                "zh": "首帧图片（选填）",
+                "en": "First-frame image (optional)"
+              },
+              "maxCount": 1,
+              "maxSizeMb": 10
+            },
+            {
+              "key": "motion_brief",
+              "type": "text",
+              "required": false,
+              "label": {
+                "zh": "动态要求",
+                "en": "Motion requirements"
+              },
+              "maxLength": 200
+            },
+            {
+              "key": "visual_direction",
+              "type": "text",
+              "required": false,
+              "label": {
+                "zh": "视觉呈现方式",
+                "en": "Visual direction"
+              },
+              "maxLength": 200
+            }
+          ]
+        }
+      ]
+    },
+    "product-tvc-advertisement-generator": {
+      "source": "reference",
+      "kind": "template",
+      "title": {
+        "zh": "产品广告片",
+        "en": "Product Commercial"
+      },
+      "assetDir": "product",
+      "templates": [
+        {
+          "name": {
+            "zh": "美妆",
+            "en": "Beauty"
+          },
+          "depth": 1,
+          "media": [
+            {
+              "type": "video",
+              "ratio": 1.7778
+            }
+          ],
+          "inputs": [
+            {
+              "key": "product_images",
+              "type": "image",
+              "required": true,
+              "label": {
+                "zh": "商品图片",
+                "en": "Product images"
+              },
+              "maxCount": 9,
+              "maxSizeMb": 10
+            },
+            {
+              "key": "product_info",
+              "type": "text",
+              "required": false,
+              "label": {
+                "zh": "商品资料",
+                "en": "Product information"
+              },
+              "maxLength": 200
+            },
+            {
+              "key": "brand_assets",
+              "type": "image",
+              "required": false,
+              "label": {
+                "zh": "品牌素材（选填）",
+                "en": "Brand assets (optional)"
+              },
+              "maxCount": 9,
+              "maxSizeMb": 10
+            },
+            {
+              "key": "brief",
+              "type": "text",
+              "required": false,
+              "label": {
+                "zh": "补充要求",
+                "en": "Additional requirements"
+              },
+              "maxLength": 200
+            },
+            {
+              "key": "visual_direction",
+              "type": "text",
+              "required": false,
+              "label": {
+                "zh": "视觉呈现方式",
+                "en": "Visual direction"
+              },
+              "maxLength": 200
+            }
+          ]
+        },
+        {
+          "name": {
+            "zh": "服装",
+            "en": "Fashion"
+          },
+          "depth": 1,
+          "media": [
+            {
+              "type": "video",
+              "ratio": 1.7778
+            }
+          ],
+          "inputs": [
+            {
+              "key": "product_images",
+              "type": "image",
+              "required": true,
+              "label": {
+                "zh": "商品图片",
+                "en": "Product images"
+              },
+              "maxCount": 9,
+              "maxSizeMb": 10
+            },
+            {
+              "key": "product_info",
+              "type": "text",
+              "required": false,
+              "label": {
+                "zh": "商品资料",
+                "en": "Product information"
+              },
+              "maxLength": 200
+            },
+            {
+              "key": "brand_assets",
+              "type": "image",
+              "required": false,
+              "label": {
+                "zh": "品牌素材（选填）",
+                "en": "Brand assets (optional)"
+              },
+              "maxCount": 9,
+              "maxSizeMb": 10
+            },
+            {
+              "key": "brief",
+              "type": "text",
+              "required": false,
+              "label": {
+                "zh": "补充要求",
+                "en": "Additional requirements"
+              },
+              "maxLength": 200
+            },
+            {
+              "key": "visual_direction",
+              "type": "text",
+              "required": false,
+              "label": {
+                "zh": "视觉呈现方式",
+                "en": "Visual direction"
+              },
+              "maxLength": 200
+            }
+          ]
+        },
+        {
+          "name": {
+            "zh": "食品饮料",
+            "en": "Food & Beverage"
+          },
+          "depth": 1,
+          "media": [
+            {
+              "type": "video",
+              "ratio": 1.7778
+            }
+          ],
+          "inputs": [
+            {
+              "key": "product_images",
+              "type": "image",
+              "required": true,
+              "label": {
+                "zh": "商品图片",
+                "en": "Product images"
+              },
+              "maxCount": 9,
+              "maxSizeMb": 10
+            },
+            {
+              "key": "product_info",
+              "type": "text",
+              "required": false,
+              "label": {
+                "zh": "商品资料",
+                "en": "Product information"
+              },
+              "maxLength": 200
+            },
+            {
+              "key": "brand_assets",
+              "type": "image",
+              "required": false,
+              "label": {
+                "zh": "品牌素材（选填）",
+                "en": "Brand assets (optional)"
+              },
+              "maxCount": 9,
+              "maxSizeMb": 10
+            },
+            {
+              "key": "brief",
+              "type": "text",
+              "required": false,
+              "label": {
+                "zh": "补充要求",
+                "en": "Additional requirements"
+              },
+              "maxLength": 200
+            },
+            {
+              "key": "visual_direction",
+              "type": "text",
+              "required": false,
+              "label": {
+                "zh": "视觉呈现方式",
+                "en": "Visual direction"
+              },
+              "maxLength": 200
+            }
+          ]
+        },
+        {
+          "name": {
+            "zh": "数码",
+            "en": "Electronics"
+          },
+          "depth": 1,
+          "media": [
+            {
+              "type": "video",
+              "ratio": 1.7778
+            }
+          ],
+          "inputs": [
+            {
+              "key": "product_images",
+              "type": "image",
+              "required": true,
+              "label": {
+                "zh": "商品图片",
+                "en": "Product images"
+              },
+              "maxCount": 9,
+              "maxSizeMb": 10
+            },
+            {
+              "key": "product_info",
+              "type": "text",
+              "required": false,
+              "label": {
+                "zh": "商品资料",
+                "en": "Product information"
+              },
+              "maxLength": 200
+            },
+            {
+              "key": "brand_assets",
+              "type": "image",
+              "required": false,
+              "label": {
+                "zh": "品牌素材（选填）",
+                "en": "Brand assets (optional)"
+              },
+              "maxCount": 9,
+              "maxSizeMb": 10
+            },
+            {
+              "key": "brief",
+              "type": "text",
+              "required": false,
+              "label": {
+                "zh": "补充要求",
+                "en": "Additional requirements"
+              },
+              "maxLength": 200
+            },
+            {
+              "key": "visual_direction",
+              "type": "text",
+              "required": false,
+              "label": {
+                "zh": "视觉呈现方式",
+                "en": "Visual direction"
+              },
+              "maxLength": 200
+            }
+          ]
+        },
+        {
+          "name": {
+            "zh": "家居",
+            "en": "Home Decor"
+          },
+          "depth": 1,
+          "media": [
+            {
+              "type": "video",
+              "ratio": 1.7778
+            }
+          ],
+          "inputs": [
+            {
+              "key": "product_images",
+              "type": "image",
+              "required": true,
+              "label": {
+                "zh": "商品图片",
+                "en": "Product images"
+              },
+              "maxCount": 9,
+              "maxSizeMb": 10
+            },
+            {
+              "key": "product_info",
+              "type": "text",
+              "required": false,
+              "label": {
+                "zh": "商品资料",
+                "en": "Product information"
+              },
+              "maxLength": 200
+            },
+            {
+              "key": "brand_assets",
+              "type": "image",
+              "required": false,
+              "label": {
+                "zh": "品牌素材（选填）",
+                "en": "Brand assets (optional)"
+              },
+              "maxCount": 9,
+              "maxSizeMb": 10
+            },
+            {
+              "key": "brief",
+              "type": "text",
+              "required": false,
+              "label": {
+                "zh": "补充要求",
+                "en": "Additional requirements"
+              },
+              "maxLength": 200
+            },
+            {
+              "key": "visual_direction",
+              "type": "text",
+              "required": false,
+              "label": {
+                "zh": "视觉呈现方式",
+                "en": "Visual direction"
+              },
+              "maxLength": 200
+            }
+          ]
+        },
+        {
+          "name": {
+            "zh": "户外",
+            "en": "Outdoor"
+          },
+          "depth": 1,
+          "media": [
+            {
+              "type": "video",
+              "ratio": 1.7778
+            }
+          ],
+          "inputs": [
+            {
+              "key": "product_images",
+              "type": "image",
+              "required": true,
+              "label": {
+                "zh": "商品图片",
+                "en": "Product images"
+              },
+              "maxCount": 9,
+              "maxSizeMb": 10
+            },
+            {
+              "key": "product_info",
+              "type": "text",
+              "required": false,
+              "label": {
+                "zh": "商品资料",
+                "en": "Product information"
+              },
+              "maxLength": 200
+            },
+            {
+              "key": "brand_assets",
+              "type": "image",
+              "required": false,
+              "label": {
+                "zh": "品牌素材（选填）",
+                "en": "Brand assets (optional)"
+              },
+              "maxCount": 9,
+              "maxSizeMb": 10
+            },
+            {
+              "key": "brief",
+              "type": "text",
+              "required": false,
+              "label": {
+                "zh": "补充要求",
+                "en": "Additional requirements"
+              },
+              "maxLength": 200
+            },
+            {
+              "key": "visual_direction",
+              "type": "text",
+              "required": false,
+              "label": {
+                "zh": "视觉呈现方式",
+                "en": "Visual direction"
+              },
+              "maxLength": 200
+            }
+          ]
+        },
+        {
+          "name": {
+            "zh": "软件",
+            "en": "SaaS"
+          },
+          "depth": 1,
+          "media": [
+            {
+              "type": "video",
+              "ratio": 1.7778
+            }
+          ],
+          "inputs": [
+            {
+              "key": "product_images",
+              "type": "image",
+              "required": true,
+              "label": {
+                "zh": "商品图片",
+                "en": "Product images"
+              },
+              "maxCount": 9,
+              "maxSizeMb": 10
+            },
+            {
+              "key": "product_info",
+              "type": "text",
+              "required": false,
+              "label": {
+                "zh": "商品资料",
+                "en": "Product information"
+              },
+              "maxLength": 200
+            },
+            {
+              "key": "brand_assets",
+              "type": "image",
+              "required": false,
+              "label": {
+                "zh": "品牌素材（选填）",
+                "en": "Brand assets (optional)"
+              },
+              "maxCount": 9,
+              "maxSizeMb": 10
+            },
+            {
+              "key": "brief",
+              "type": "text",
+              "required": false,
+              "label": {
+                "zh": "补充要求",
+                "en": "Additional requirements"
+              },
+              "maxLength": 200
+            },
+            {
+              "key": "visual_direction",
+              "type": "text",
+              "required": false,
+              "label": {
+                "zh": "视觉呈现方式",
+                "en": "Visual direction"
+              },
+              "maxLength": 200
+            }
+          ]
+        }
+      ]
+    },
+    "brand-identity-director": {
+      "source": "reference",
+      "kind": "template",
+      "title": {
+        "zh": "Logo 系统",
+        "en": "Logo System"
+      },
+      "assetDir": "brand",
+      "templates": [
+        {
+          "name": {
+            "zh": "餐饮服务",
+            "en": "Food Service"
+          },
+          "depth": 4,
+          "media": [
+            {
+              "type": "image",
+              "ratio": 1.0
+            },
+            {
+              "type": "image",
+              "ratio": 1.0
+            },
+            {
+              "type": "image",
+              "ratio": 1.0
+            },
+            {
+              "type": "image",
+              "ratio": 1.7778
+            }
+          ],
+          "inputs": [
+            {
+              "key": "brand_info",
+              "type": "text",
+              "required": true,
+              "label": {
+                "zh": "品牌资料",
+                "en": "Brand information"
+              },
+              "maxLength": 200
+            },
+            {
+              "key": "subject_image",
+              "type": "image",
+              "required": false,
+              "label": {
+                "zh": "品牌素材",
+                "en": "Brand assets"
+              },
+              "maxCount": 9,
+              "maxSizeMb": 10
+            },
+            {
+              "key": "visual_direction",
+              "type": "text",
+              "required": false,
+              "label": {
+                "zh": "视觉呈现方式",
+                "en": "Visual direction"
+              },
+              "maxLength": 200
+            }
+          ]
+        },
+        {
+          "name": {
+            "zh": "服装配饰",
+            "en": "Fashion & Accessories"
+          },
+          "depth": 4,
+          "media": [
+            {
+              "type": "image",
+              "ratio": 1.0
+            },
+            {
+              "type": "image",
+              "ratio": 1.0
+            },
+            {
+              "type": "image",
+              "ratio": 1.0
+            },
+            {
+              "type": "image",
+              "ratio": 1.7778
+            }
+          ],
+          "inputs": [
+            {
+              "key": "brand_info",
+              "type": "text",
+              "required": true,
+              "label": {
+                "zh": "品牌资料",
+                "en": "Brand information"
+              },
+              "maxLength": 200
+            },
+            {
+              "key": "subject_image",
+              "type": "image",
+              "required": false,
+              "label": {
+                "zh": "品牌素材",
+                "en": "Brand assets"
+              },
+              "maxCount": 9,
+              "maxSizeMb": 10
+            },
+            {
+              "key": "visual_direction",
+              "type": "text",
+              "required": false,
+              "label": {
+                "zh": "视觉呈现方式",
+                "en": "Visual direction"
+              },
+              "maxLength": 200
+            }
+          ]
+        },
+        {
+          "name": {
+            "zh": "美妆个护",
+            "en": "Beauty & Personal Care"
+          },
+          "depth": 4,
+          "media": [
+            {
+              "type": "image",
+              "ratio": 0.9366
+            },
+            {
+              "type": "image",
+              "ratio": 0.7656
+            },
+            {
+              "type": "image",
+              "ratio": 0.8915
+            },
+            {
+              "type": "image",
+              "ratio": 1.7778
+            }
+          ],
+          "inputs": [
+            {
+              "key": "brand_info",
+              "type": "text",
+              "required": true,
+              "label": {
+                "zh": "品牌资料",
+                "en": "Brand information"
+              },
+              "maxLength": 200
+            },
+            {
+              "key": "subject_image",
+              "type": "image",
+              "required": false,
+              "label": {
+                "zh": "品牌素材",
+                "en": "Brand assets"
+              },
+              "maxCount": 9,
+              "maxSizeMb": 10
+            },
+            {
+              "key": "visual_direction",
+              "type": "text",
+              "required": false,
+              "label": {
+                "zh": "视觉呈现方式",
+                "en": "Visual direction"
+              },
+              "maxLength": 200
+            }
+          ]
+        },
+        {
+          "name": {
+            "zh": "食品饮料",
+            "en": "Food & Beverage"
+          },
+          "depth": 4,
+          "media": [
+            {
+              "type": "image",
+              "ratio": 1.0
+            },
+            {
+              "type": "image",
+              "ratio": 1.0
+            },
+            {
+              "type": "image",
+              "ratio": 1.0
+            },
+            {
+              "type": "image",
+              "ratio": 1.7822
+            }
+          ],
+          "inputs": [
+            {
+              "key": "brand_info",
+              "type": "text",
+              "required": true,
+              "label": {
+                "zh": "品牌资料",
+                "en": "Brand information"
+              },
+              "maxLength": 200
+            },
+            {
+              "key": "subject_image",
+              "type": "image",
+              "required": false,
+              "label": {
+                "zh": "品牌素材",
+                "en": "Brand assets"
+              },
+              "maxCount": 9,
+              "maxSizeMb": 10
+            },
+            {
+              "key": "visual_direction",
+              "type": "text",
+              "required": false,
+              "label": {
+                "zh": "视觉呈现方式",
+                "en": "Visual direction"
+              },
+              "maxLength": 200
+            }
+          ]
+        },
+        {
+          "name": {
+            "zh": "宠物用品",
+            "en": "Pet Supplies"
+          },
+          "depth": 4,
+          "media": [
+            {
+              "type": "image",
+              "ratio": 1.0
+            },
+            {
+              "type": "image",
+              "ratio": 1.0
+            },
+            {
+              "type": "image",
+              "ratio": 1.0
+            },
+            {
+              "type": "image",
+              "ratio": 1.0
+            }
+          ],
+          "inputs": [
+            {
+              "key": "brand_info",
+              "type": "text",
+              "required": true,
+              "label": {
+                "zh": "品牌资料",
+                "en": "Brand information"
+              },
+              "maxLength": 200
+            },
+            {
+              "key": "subject_image",
+              "type": "image",
+              "required": false,
+              "label": {
+                "zh": "品牌素材",
+                "en": "Brand assets"
+              },
+              "maxCount": 9,
+              "maxSizeMb": 10
+            },
+            {
+              "key": "visual_direction",
+              "type": "text",
+              "required": false,
+              "label": {
+                "zh": "视觉呈现方式",
+                "en": "Visual direction"
+              },
+              "maxLength": 200
+            }
+          ]
+        },
+        {
+          "name": {
+            "zh": "家居生活",
+            "en": "Home & Lifestyle"
+          },
+          "depth": 4,
+          "media": [
+            {
+              "type": "image",
+              "ratio": 1.5
+            },
+            {
+              "type": "image",
+              "ratio": 1.5
+            },
+            {
+              "type": "image",
+              "ratio": 1.5
+            },
+            {
+              "type": "image",
+              "ratio": 1.7822
+            }
+          ],
+          "inputs": [
+            {
+              "key": "brand_info",
+              "type": "text",
+              "required": true,
+              "label": {
+                "zh": "品牌资料",
+                "en": "Brand information"
+              },
+              "maxLength": 200
+            },
+            {
+              "key": "subject_image",
+              "type": "image",
+              "required": false,
+              "label": {
+                "zh": "品牌素材",
+                "en": "Brand assets"
+              },
+              "maxCount": 9,
+              "maxSizeMb": 10
+            },
+            {
+              "key": "visual_direction",
+              "type": "text",
+              "required": false,
+              "label": {
+                "zh": "视觉呈现方式",
+                "en": "Visual direction"
+              },
+              "maxLength": 200
+            }
+          ]
+        }
+      ]
+    },
+    "rednote-cover-maker": {
+      "source": "reference",
+      "kind": "example",
+      "title": {
+        "zh": "小红书封面制作器",
+        "en": "RedNote Cover Maker"
+      },
+      "assetDir": "social",
+      "coverMode": "single",
+      "highlights": [
+        {
+          "type": "image",
+          "ratio": 0.75
+        },
+        {
+          "type": "image",
+          "ratio": 0.75
+        },
+        {
+          "type": "image",
+          "ratio": 0.75
+        },
+        {
+          "type": "image",
+          "ratio": 0.75
+        },
+        {
+          "type": "image",
+          "ratio": 0.75
+        },
+        {
+          "type": "image",
+          "ratio": 0.75
+        },
+        {
+          "type": "image",
+          "ratio": 0.75
+        },
+        {
+          "type": "image",
+          "ratio": 0.75
+        },
+        {
+          "type": "image",
+          "ratio": 0.75
+        },
+        {
+          "type": "image",
+          "ratio": 0.75
+        }
+      ],
+      "inputs": [
+        {
+          "key": "user_image",
+          "type": "image",
+          "required": true,
+          "label": {
+            "zh": "上传文件",
+            "en": "Upload Files"
+          },
+          "maxCount": 1,
+          "maxSizeMb": 10
+        },
+        {
+          "key": "user_requirement",
+          "type": "text",
+          "required": true,
+          "label": {
+            "zh": "补充描述",
+            "en": "Additional Details"
+          },
+          "maxLength": 500
+        }
+      ]
+    }
+  }
+}

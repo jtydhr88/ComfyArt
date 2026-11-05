@@ -78,10 +78,10 @@ def test_i18n_keys():
 def test_usage_empty_then_record(got):
     assert got["emptyUsage"] == {}
     assert got["productUses"] == 2 and got["posterUses"] == 1
-    assert got["after"] == {"product": 2, "poster": 1}
+    assert got["after"] == {"product-tvc-advertisement-generator": 2, "poster-differentiated-compiler": 1}
     # product has 6 templates; before record, usage 0 still returns templates-only meta
-    assert got["metaProductBefore"] == {"templates": 6, "usage": 0}
-    assert got["metaProductAfter"] == {"templates": 6, "usage": 2}
+    assert got["metaProductBefore"] == {"templates": 7, "usage": 0}
+    assert got["metaProductAfter"] == {"templates": 7, "usage": 2}
     # poster: no presets → usage-only meta after record
     assert got["metaPosterAfter"] == {"templates": 0, "usage": 1}
     assert got["metaEmptySkill"] is None
@@ -89,11 +89,11 @@ def test_usage_empty_then_record(got):
 
 @needs_node
 def test_meta_labels_and_share(got):
-    assert got["zhJoined"] == "已使用 2 次 · 6 个模板"
+    assert got["zhJoined"] == "已使用 2 次 · 7 个模板"
     assert got["zhUsageOnly"] == "已使用 1 次"
     assert got["zhTemplatesOnly"] == "6 个模板"
-    assert got["enJoined"] == "Used 2 times · 6 templates"
-    assert got["share"] == "https://app.example/comfyart/?skill=product"
+    assert got["enJoined"] == "Used 2 times · 7 templates"
+    assert got["share"] == "https://app.example/comfyart/?skill=product-tvc-advertisement-generator"
     assert "skill=poster" in got["sharePlain"] and got["sharePlain"].startswith("https://")
     assert got["share"]  # non-empty
     assert got["tShareZh"] == "分享"
@@ -101,7 +101,7 @@ def test_meta_labels_and_share(got):
 
 @needs_node
 def test_favourite_is_membership_not_count(got):
-    assert got["favs"] == ["product"]
+    assert got["favs"] == ["product-tvc-advertisement-generator"]
     # no numeric favorite source anywhere in card/dialog markup strings
     assert "skills-card-fav-count" not in SKILLS
     assert "favouriteCount" not in DLG

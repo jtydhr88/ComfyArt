@@ -37,7 +37,7 @@ def _shot(name):
 
 
 @pytest.mark.parametrize("lang,theme", [("zh", "light"), ("en", "light"), ("zh", "dark"), ("en", "dark")])
-@pytest.mark.parametrize("sid", ["packaging", "motion"])
+@pytest.mark.parametrize("sid", ["packaging-design-director", "motion-poster-generator"])
 async def test_skillrun_748(app_url, sid, lang, theme):  # noqa: F811
     async with pw.async_playwright() as p:
         browser, pg, dlg = await _open(p, app_url, sid, lang, theme)
@@ -58,7 +58,13 @@ async def test_skillrun_748(app_url, sid, lang, theme):  # noqa: F811
             thumb = await dlg.get_by_test_id("skill-run-current-thumb").locator("img").get_attribute("src")
             tile_img = await tiles.nth(1).locator(".ca-skillrun__presetimg > img").get_attribute("src")
             assert thumb == tile_img
-            assert await dlg.get_by_test_id("skill-run-current-usage").count() == 1
+            if sid == "motion-poster-generator":  # #748 raw: per-template form — 首尾帧动画 adds its own start_frame upload
+                assert await dlg.locator("#skill-run-start_frame").count() == 1
+                await tiles.nth(0).click()
+                assert await dlg.locator("#skill-run-start_frame").count() == 0
+                await tiles.nth(1).click()
+            assert await dlg.get_by_test_id("skill-run-current-usage").count() == 0  # usedCount 0 ⇒ usage line hidden
+            assert await dlg.get_by_test_id("skill-run-meta").get_attribute("data-used") == "0"  # follows the selected template
             await pg.mouse.move(5, 5)
         # video media plays (preset hover video or example stage video)
         vids = dlg.locator("video")

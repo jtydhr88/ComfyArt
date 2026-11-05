@@ -6,7 +6,7 @@
  *  No skill ids are named here. 「详情」 keeps main's #484 edit page (openSkillEditor). */
 import { useRef, useState } from 'react'
 
-import { uploadSkillImage, isSkillMediaVideo, loc, loadFavourites, missingInputs, presetImage, recordSkillUse, skillAuthor, skillCover, skillCoverVideoHover, skillMeta, skillMetaLabel, skillDefaults, skillDescription, skillPreset, skillRunParams, skillShareUrl, skillMedia, selectedMedia, getSkillUsage, toggleFavourite, type SkillMediaItem, type Skill, type SkillPreset } from '../skills'
+import { uploadSkillImage, isSkillMediaVideo, loc, loadFavourites, missingInputs, presetImage, recordSkillUse, skillAuthor, skillCover, skillCoverVideoHover, skillMeta, skillMetaLabel, skillDefaults, skillDescription, skillPreset, skillRunParams, skillShareUrl, skillMedia, selectedMedia, withTemplateInputs, recordTemplateUse, toggleFavourite, type SkillMediaItem, type Skill, type SkillPreset } from '../skills'
 import { newProject } from '../projects'
 import { BRAND } from '../brand'
 import { copyText } from '../clipboard'
@@ -115,13 +115,15 @@ function SkillMediaLeft({ skill, preset, onPick, onZoom }: {
             )
 }
 
-export function SkillRunDialog({ skill, presetId, onClose, run = newProject }: {
+export function SkillRunDialog({ skill: baseSkill, presetId, onClose, run = newProject }: {
   skill: Skill; presetId?: string | null; onClose: () => void
   /** injectable for tests; default leaves for a new project exactly like main's card click */
   run?: (params: Record<string, string | string[]>) => void
 }) {
+  const [preset, setPreset] = useState(() => skillPreset(baseSkill, presetId)?.id ?? null)
+  // #748 — the right form is per template: switching templates switches inputs[] (values kept by key).
+  const skill = withTemplateInputs(baseSkill, preset)
   const [values, setValues] = useState(() => skillDefaults(skill))
-  const [preset, setPreset] = useState(() => skillPreset(skill, presetId)?.id ?? null)
   const [uploading, setUploading] = useState<string | null>(null)
   const [uploadError, setUploadError] = useState<string | null>(null)
   const [runError, setRunError] = useState(false)
@@ -133,7 +135,7 @@ export function SkillRunDialog({ skill, presetId, onClose, run = newProject }: {
   const chosen = skillPreset(skill, preset)
   const author = skillAuthor(skill)
   const desc = skillDescription(skill)
-  const meta = skillMeta(skill)
+  const metaBase = skillMeta(skill)
   const [zoom, setZoom] = useState<string | null>(null)
   const set = (key: string, v: string) => setValues((cur) => ({ ...cur, [key]: v }))
   const stop = (e: React.KeyboardEvent) => e.stopPropagation()
@@ -148,7 +150,7 @@ export function SkillRunDialog({ skill, presetId, onClose, run = newProject }: {
     if (missing.length) { setTried(true); document.getElementById(`skill-run-${missing[0]}`)?.focus(); return }
     setRunError(false)
     recordSkillUse(skill.id)
-    try { run(skillRunParams(skill, values, preset)) } catch { setRunError(true) }
+    try { run(skillRunParams(skill, values, preset)); if (preset) recordTemplateUse(skill.id, preset) } catch { setRunError(true) }
   }
   useEscape(true, onClose)
   return (
@@ -185,7 +187,8 @@ export function SkillRunDialog({ skill, presetId, onClose, run = newProject }: {
               </div>
             </div>
             {desc && <p className="ca-skillrun__desc" data-testid="skill-run-desc">{desc}</p>}
-            {meta && <p className="ca-skillrun__meta" data-testid="skill-run-meta">{skillMetaLabel(meta)}</p>}
+            {(() => { const sel = selectedMedia(skill, preset); const meta = sel ? (sel.usedCount || metaBase?.templates ? { templates: metaBase?.templates ?? 0, usage: sel.usedCount ?? 0 } : null) : metaBase
+              return meta && <p className="ca-skillrun__meta" data-testid="skill-run-meta" data-used={sel?.usedCount}>{skillMetaLabel(meta)}</p> })()}
           </header>
           <SkillMediaLeft skill={skill} preset={preset} onPick={setPreset} onZoom={setZoom} />
         </div>
@@ -209,13 +212,13 @@ export function SkillRunDialog({ skill, presetId, onClose, run = newProject }: {
                   // #748: name / thumb / usage from the SELECTED media item (click only — hover never changes this row).
                   const sel = selectedMedia(skill, chosen.id)
                   const thumb = sel ? (sel.type === 'video' ? sel.cover : sel.type === 'stack' ? (sel.children?.[0]?.url ?? sel.url) : sel.url) : presetImage(skill, chosen)
-                  const usage = sel?.usage ?? getSkillUsage(skill.id)
+                  const usage = sel?.usedCount ?? 0  // our per-template stats; 0 ⇒ hidden
                   return <div className="ca-skillrun__currentrow" data-testid="skill-run-current-row" data-media={sel?.type}>
                   <span className="ca-skillrun__currentthumb" data-testid="skill-run-current-thumb">
                     {thumb ? <img src={thumb} alt="" /> : <span className="ca-icon">{Icons.skill}</span>}
                   </span>
                   <span className="ca-skillrun__currentname" data-testid="skill-run-current-name">{loc(sel?.name ?? chosen.name)}</span>
-                  <span className="ca-skillrun__currentusage" data-testid="skill-run-current-usage">{t('skillRun.usageCount', String(usage))}</span>
+                  {usage > 0 && <span className="ca-skillrun__currentusage" data-testid="skill-run-current-usage">{t('skillRun.usageCount', String(usage))}</span>}
                   <span className="ca-skillrun__currenthint">{t('skillRun.pickLeft')}</span>
                 </div>
                 })()}
@@ -271,7 +274,7 @@ export function SkillRunDialog({ skill, presetId, onClose, run = newProject }: {
               if (f.type === 'image') return (
                 <div key={f.key} className="ca-skillrun__field">
                   {label}
-                  <div className="ca-gen__refs ca-skillrun__uploadwrap" {...common} data-accept={f.accept ?? 'image'}>
+                  <div className="ca-gen__refs ca-skillrun__uploadwrap" {...common} id={undefined} data-accept={f.accept ?? 'image'}>
                     {values[f.key]
                       ? <span className="ca-gen__ref">{f.accept === 'video' ? <video src={values[f.key]} muted playsInline /> : <img src={values[f.key]} alt="" />}<button type="button" title={t('common.remove')} onClick={() => set(f.key, '')}>{Icons.close}</button></span>
                       : <label className="ca-skillrun__upload" data-testid="skill-run-upload"><span className="ca-icon">{Icons.uploadArrow}</span><span>{uploading === f.key ? t('skillRun.uploading') : t('skillRun.uploadHint')}</span>

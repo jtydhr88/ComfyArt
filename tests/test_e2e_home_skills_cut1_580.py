@@ -71,9 +71,9 @@ async def test_cut1_1920_five_columns(app_url):  # noqa: F811
 
 # #595 Phase1 mount: upgrade9 + new6 + interior (custom-workflow has no featured[]). featured-v1 (cut1) + featured-v2 (new6).
 PHASE1_FEATURED = {
-    "product", "multi-angle", "brand", "character", "logo-material", "packaging",
-    "motion", "meta-ads", "poster", "thumbnail", "mobile-ui", "social",
-    "marketing-campaign", "web-product", "banner", "interior",
+    "product-tvc-advertisement-generator", "universal-multi-angle-grid", "brand-identity-director", "character-sheet-design", "logo-material-explorer", "packaging-design-director",
+    "motion-poster-generator", "meta-ads-creative-director", "poster-differentiated-compiler", "cover-design-director", "mobile-app-visual-design", "rednote-cover-maker",
+    "marketing-campaign-generator", "web-product-visual-design", "banner-design-director", "interior-architectural-visualization",
 }
 
 
@@ -97,12 +97,12 @@ def _featured_from_data():
 # Fixed expectation (#689 follow-up): pinned id list so a skill silently dropping out of the
 # feed fails here; _featured_from_data() is only a drift guard against src/skills.ts.
 FEED_EXPECTED = frozenset({  # #735: D-group 4 hidden; C unhidden into feed
-    "anim-2d", "banner", "before-after", "brand", "character", "clothing-swap", "commerce-strategist", "creator-identity",
-    "flash-cut-video", "interior", "lifestyle-scene", "linkedin-banner",
-    "logo-abstract", "logo-material", "marketing-campaign", "meta-ads", "mobile-ui", "motion", "multi-angle",
-    "naive-illustration", "packaging", "person-swap", "photo-split-poster", "portrait-studio", "poster", "ppt-visual",
-    "product", "product-website", "promo-ecommerce", "social", "style-transfer",
-    "taobao-product", "thumbnail", "web-product", "youtube-channel-banner",
+    "anim-2d", "banner-design-director", "before-after", "brand-identity-director", "character-sheet-design", "clothing-swap", "commerce-strategist", "creator-identity",
+    "flash-cut-video", "interior-architectural-visualization", "lifestyle-scene", "linkedin-banner",
+    "logo-abstract", "logo-material-explorer", "marketing-campaign-generator", "meta-ads-creative-director", "mobile-app-visual-design", "motion-poster-generator", "universal-multi-angle-grid",
+    "naive-illustration", "packaging-design-director", "person-swap", "photo-split-poster", "portrait-studio", "poster-differentiated-compiler", "ppt-visual",
+    "product-tvc-advertisement-generator", "product-website", "promo-ecommerce", "rednote-cover-maker", "style-transfer",
+    "taobao-product", "cover-design-director", "web-product-visual-design", "youtube-channel-banner",
     "animated-poster",  # #643 per-slot PR (examples wired => in feed)
     "premium-website",  # #643 per-slot PR (examples wired => in feed)
     "studio-model",  # #643 per-slot PR (examples wired => in feed)
@@ -133,10 +133,10 @@ def _check_tiles(tiles):
     assert len(tiles) > len(PHASE1_FEATURED)  # second round follows
     n = len(PHASE1_FEATURED)
     assert len(set(skills[:n])) == n  # first round: one per skill
-    first_char = next(t for t in tiles if t["skill"] == "character")
+    first_char = next(t for t in tiles if t["skill"] == "character-sheet-design")
     assert "/580/featured-v1/character/01.webp" in first_char["img"]  # #588 featured[] supersedes featuredPreset
     # #595 hot mount: first featured tile is the first Phase1 hot id with featured (product)
-    assert skills[0] == "product"
+    assert skills[0] == "product-tvc-advertisement-generator"
 
 
 def _check_columns(m):

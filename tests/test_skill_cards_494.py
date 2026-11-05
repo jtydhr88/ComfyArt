@@ -4,6 +4,7 @@ from __future__ import annotations
 import hashlib
 import json
 import re
+from tests.skill_ids_748 import asset_dir
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -19,8 +20,8 @@ ICONS = (ROOT / "src/ui/icons.tsx").read_text()
 ZH = json.loads((ROOT / "src/locales/zh.json").read_text())
 EN = json.loads((ROOT / "src/locales/en.json").read_text())
 COVERS = ROOT / "public/skills"
-REAL = ["poster", "social", "brand", "packaging", "thumbnail", "banner", "character", "product", "motion",
-        "multi-angle", "logo-material", "meta-ads", "mobile-ui", "web-product", "marketing-campaign",
+REAL = ["poster-differentiated-compiler", "rednote-cover-maker", "brand-identity-director", "packaging-design-director", "cover-design-director", "banner-design-director", "character-sheet-design", "product-tvc-advertisement-generator", "motion-poster-generator",
+        "universal-multi-angle-grid", "logo-material-explorer", "meta-ads-creative-director", "mobile-app-visual-design", "web-product-visual-design", "marketing-campaign-generator",
         "flash-cut-video", "style-transfer", "person-swap", "commerce-strategist", "lifestyle-scene",
         "naive-illustration", "logo-abstract", "photo-split-poster", "ppt-visual", "promo-ecommerce",
         "yingzao", "crt-interface", "crayon-sketch", "fabric-collage",
@@ -29,15 +30,15 @@ REAL = ["poster", "social", "brand", "packaging", "thumbnail", "banner", "charac
         "studio-model", "youtube-channel-banner", "ai-model", "product-to-packaging",
         "game-art", "portrait-studio", "premium-website", "animated-poster", "pose-fission",
         "live-promo-decor", "linkedin-banner", "logo-animation", "restaurant-website", "clothing-swap",
-        "interior"]  # custom-workflow removed (no Lovart card)
-PHASE1_HOT = ["brand", "packaging", "poster", "product", "character", "social", "motion", "banner", "thumbnail",
-              "multi-angle", "logo-material", "meta-ads", "mobile-ui", "web-product", "marketing-campaign"]
-COVERED = ["poster", "social", "brand", "packaging", "thumbnail", "banner", "character", "product", "motion", "interior"]  # local public/skills; phase1_new=#594 cover(); phase2_b=#637 cover637(); phase2_c=#636 cover673()
+        "interior-architectural-visualization"]  # custom-workflow removed (no Lovart card)
+PHASE1_HOT = ["brand-identity-director", "packaging-design-director", "poster-differentiated-compiler", "product-tvc-advertisement-generator", "character-sheet-design", "rednote-cover-maker", "motion-poster-generator", "banner-design-director", "cover-design-director",
+              "universal-multi-angle-grid", "logo-material-explorer", "meta-ads-creative-director", "mobile-app-visual-design", "web-product-visual-design", "marketing-campaign-generator"]
+COVERED = ["poster-differentiated-compiler", "rednote-cover-maker", "brand-identity-director", "packaging-design-director", "cover-design-director", "banner-design-director", "character-sheet-design", "product-tvc-advertisement-generator", "motion-poster-generator", "interior-architectural-visualization"]  # local public/skills; phase1_new=#594 cover(); phase2_b=#637 cover637(); phase2_c=#636 cover673()
 # Product ruling (#494 18:26 + AC comment 23:15): 3 skills have no category and appear only under 为你推荐.
-CATEGORY = {"poster": "ads", "social": "social", "brand": "branding", "packaging": "ecommerce", "thumbnail": "social",
-            "banner": "ads", "character": None, "product": "ecommerce", "motion": "ads",
-            "multi-angle": "ecommerce", "logo-material": "branding", "meta-ads": "ads",
-            "mobile-ui": "website", "web-product": "website", "marketing-campaign": "ads",
+CATEGORY = {"poster-differentiated-compiler": "ads", "rednote-cover-maker": "social", "brand-identity-director": "branding", "packaging-design-director": "ecommerce", "cover-design-director": "social",
+            "banner-design-director": "ads", "character-sheet-design": None, "product-tvc-advertisement-generator": "ecommerce", "motion-poster-generator": "ads",
+            "universal-multi-angle-grid": "ecommerce", "logo-material-explorer": "branding", "meta-ads-creative-director": "ads",
+            "mobile-app-visual-design": "website", "web-product-visual-design": "website", "marketing-campaign-generator": "ads",
             "flash-cut-video": "ads", "style-transfer": "branding", "person-swap": "ecommerce",
             "commerce-strategist": "ecommerce", "lifestyle-scene": "ecommerce",
             "naive-illustration": "social", "logo-abstract": "branding", "photo-split-poster": "ads",
@@ -50,9 +51,9 @@ CATEGORY = {"poster": "ads", "social": "social", "brand": "branding", "packaging
             "portrait-studio": "social", "premium-website": "website", "animated-poster": "ads",
             "pose-fission": "ecommerce", "live-promo-decor": "ecommerce", "linkedin-banner": "social",
             "logo-animation": "branding", "restaurant-website": "website", "clothing-swap": "ecommerce",
-            "interior": None}
+            "interior-architectural-visualization": None}
 
-REF9_687 = ("brand", "packaging", "character", "logo-material", "meta-ads", "marketing-campaign", "web-product", "mobile-ui", "social")
+REF9_687 = ("brand-identity-director", "packaging-design-director", "character-sheet-design", "logo-material-explorer", "meta-ads-creative-director", "marketing-campaign-generator", "web-product-visual-design", "mobile-app-visual-design", "rednote-cover-maker")
 
 
 def _builtin_block() -> str:
@@ -76,7 +77,7 @@ def test_categories_live_in_data():
     for sid, entry in _entries().items():
         m = re.search(r"category: '(\w+)'", entry)
         assert (m.group(1) if m else None) == CATEGORY[sid], sid
-    assert not re.search(r"\bcategory\s*[:=]|\.category\b|'poster'|'product'", SKILLS)  # components never map ids → categories
+    assert not re.search(r"\bcategory\s*[:=]|\.category\b", SKILLS)  # components never map ids → categories
     assert "skillChips(explore)" in SKILLS and "matchesSkillChip" in SKILLS
 
 
@@ -96,23 +97,23 @@ def test_fake_wall_meta_gone():
 
 def test_presets_and_inputs_schema():
     for sid, e in _entries().items():
-        assert len(re.findall(r"\bP\('", e)) == {"product": 6, "brand": 6, "packaging": 5, "character": 8, "motion": 0, "multi-angle": 0, "logo-material": 4, "meta-ads": 4, "mobile-ui": 4, "web-product": 4, "marketing-campaign": 4, "flash-cut-video": 3, "style-transfer": 3, "person-swap": 3, "commerce-strategist": 3, "lifestyle-scene": 3, "naive-illustration": 2, "logo-abstract": 2, "photo-split-poster": 2, "ppt-visual": 3, "promo-ecommerce": 2, "yingzao": 2, "crt-interface": 3, "crayon-sketch": 2, "fabric-collage": 2, "social": 2, "taobao-product": 3, "before-after": 3, "anim-2d": 2, "creator-identity": 3, "product-website": 2, "studio-model": 3, "youtube-channel-banner": 2, "ai-model": 3, "product-to-packaging": 3, "game-art": 3, "portrait-studio": 2, "premium-website": 2, "animated-poster": 2, "pose-fission": 3, "live-promo-decor": 3, "linkedin-banner": 2, "logo-animation": 2, "restaurant-website": 2, "clothing-swap": 3}.get(sid, 0), sid  # #541/#569 + #593 + #634 + #635 + #640 Phase3
+        assert len(re.findall(r"\bP\('", e)) == {"product-tvc-advertisement-generator": 6, "brand-identity-director": 6, "packaging-design-director": 5, "character-sheet-design": 8, "motion-poster-generator": 0, "universal-multi-angle-grid": 0, "logo-material-explorer": 4, "meta-ads-creative-director": 4, "mobile-app-visual-design": 4, "web-product-visual-design": 4, "marketing-campaign-generator": 4, "flash-cut-video": 3, "style-transfer": 3, "person-swap": 3, "commerce-strategist": 3, "lifestyle-scene": 3, "naive-illustration": 2, "logo-abstract": 2, "photo-split-poster": 2, "ppt-visual": 3, "promo-ecommerce": 2, "yingzao": 2, "crt-interface": 3, "crayon-sketch": 2, "fabric-collage": 2, "rednote-cover-maker": 2, "taobao-product": 3, "before-after": 3, "anim-2d": 2, "creator-identity": 3, "product-website": 2, "studio-model": 3, "youtube-channel-banner": 2, "ai-model": 3, "product-to-packaging": 3, "game-art": 3, "portrait-studio": 2, "premium-website": 2, "animated-poster": 2, "pose-fission": 3, "live-promo-decor": 3, "linkedin-banner": 2, "logo-animation": 2, "restaurant-website": 2, "clothing-swap": 3}.get(sid, 0), sid  # #541/#569 + #593 + #634 + #635 + #640 Phase3
         # #494-2: required inputs now also carry a zh/en placeholder after the flag → ", true" (was ", true)").
         # #569: effect skills share EFFECT_INPUTS (upload + note, none required); character's Lovart fields are optional too.
-        if sid == "thumbnail":
+        if sid == "cover-design-director":
             assert "inputs: EFFECT_INPUTS }" in e, sid
-        elif sid in REF9_687 or sid in ("poster", "banner", "interior"):  # #687: 12 reference cards aligned
+        elif sid in REF9_687 or sid in ("poster-differentiated-compiler", "banner-design-director", "interior-architectural-visualization"):  # #687: 12 reference cards aligned
             assert "inputs: REF_CARD_INPUTS_687 }" in e, sid  # #687-1: Upload Files + Additional Details (500), optional
-        elif sid == "motion":
+        elif sid == "motion-poster-generator":
             assert "inputs: MOTION_REMAKE_INPUTS_687 }" in e, sid  # #687-3: Reference Video Remake
-        elif sid == "multi-angle":
+        elif sid == "universal-multi-angle-grid":
             # #691: Upload + Additional, upload optional (no required fields)
             assert "inputs: MULTI_ANGLE_INPUTS }" in e and ", true" not in e, sid
         elif sid in ("naive-illustration", "logo-abstract", "photo-split-poster", "ppt-visual", "promo-ecommerce") or sid in NEW19:
             # #636 C nearMiss Examples-only right rail; #664 NEW19 dialog field parity (Upload + Additional)
             assert "inputs: NEARMISS_INPUTS" in e, sid
         else:
-            assert "inputs: [" in e and (", true" in e) == (sid != "character"), f"{sid} required input"
+            assert "inputs: [" in e and (", true" in e) == (sid != "character-sheet-design"), f"{sid} required input"
     # AC 11 was "preset prompts and input en copy are step 2"; #494-2 lands them: every preset has an en prompt and
     # every input label has zh + en (updated, not removed).
     assert "prompt?: string" in SKILLS_TS
@@ -120,9 +121,9 @@ def test_presets_and_inputs_schema():
     assert "label: { zh, en }," in SKILLS_TS and "label: { zh }," not in SKILLS_TS
     for sid, e in _entries().items():
         assert len(re.findall(r"\bwashPreset\(", e)) == 0, sid  # #569: 494 preset washes retired
-        assert len(re.findall(r"\bwash569\(", e)) == {"character": 8, "motion": 0}.get(sid, 0), sid  # #569 manifest washes
-        assert len(re.findall(r"\bwashProduct541\(", e)) == (6 if sid == "product" else 0), sid  # #541 product 6
-        assert len(re.findall(r"\bP\('[^']*', '[^']*', '[^']*', '(?:Style: |Focus on |Motion: |Template: )", e)) == {"product": 6, "brand": 6, "packaging": 5, "character": 8, "motion": 0, "multi-angle": 0, "logo-material": 4, "meta-ads": 4, "mobile-ui": 4, "web-product": 4, "marketing-campaign": 4, "flash-cut-video": 3, "style-transfer": 3, "person-swap": 3, "commerce-strategist": 3, "lifestyle-scene": 3, "naive-illustration": 2, "logo-abstract": 2, "photo-split-poster": 2, "ppt-visual": 3, "promo-ecommerce": 2, "yingzao": 2, "crt-interface": 3, "crayon-sketch": 2, "fabric-collage": 2, "social": 2, "taobao-product": 3, "before-after": 3, "anim-2d": 2, "creator-identity": 3, "product-website": 2, "studio-model": 3, "youtube-channel-banner": 2, "ai-model": 3, "product-to-packaging": 3, "game-art": 3, "portrait-studio": 2, "premium-website": 2, "animated-poster": 2, "pose-fission": 3, "live-promo-decor": 3, "linkedin-banner": 2, "logo-animation": 2, "restaurant-website": 2, "clothing-swap": 3}.get(sid, 0), sid  # en prompt body, counted per preset (logo-animation instructions also say "Motion: ") (#593 + #634 + #635 + #640)
+        assert len(re.findall(r"\bwash569\(", e)) == {"character-sheet-design": 8, "motion-poster-generator": 0}.get(sid, 0), sid  # #569 manifest washes
+        assert len(re.findall(r"\bwashProduct541\(", e)) == (6 if sid == "product-tvc-advertisement-generator" else 0), sid  # #541 product 6
+        assert len(re.findall(r"\bP\('[^']*', '[^']*', '[^']*', '(?:Style: |Focus on |Motion: |Template: )", e)) == {"product-tvc-advertisement-generator": 6, "brand-identity-director": 6, "packaging-design-director": 5, "character-sheet-design": 8, "motion-poster-generator": 0, "universal-multi-angle-grid": 0, "logo-material-explorer": 4, "meta-ads-creative-director": 4, "mobile-app-visual-design": 4, "web-product-visual-design": 4, "marketing-campaign-generator": 4, "flash-cut-video": 3, "style-transfer": 3, "person-swap": 3, "commerce-strategist": 3, "lifestyle-scene": 3, "naive-illustration": 2, "logo-abstract": 2, "photo-split-poster": 2, "ppt-visual": 3, "promo-ecommerce": 2, "yingzao": 2, "crt-interface": 3, "crayon-sketch": 2, "fabric-collage": 2, "rednote-cover-maker": 2, "taobao-product": 3, "before-after": 3, "anim-2d": 2, "creator-identity": 3, "product-website": 2, "studio-model": 3, "youtube-channel-banner": 2, "ai-model": 3, "product-to-packaging": 3, "game-art": 3, "portrait-studio": 2, "premium-website": 2, "animated-poster": 2, "pose-fission": 3, "live-promo-decor": 3, "linkedin-banner": 2, "logo-animation": 2, "restaurant-website": 2, "clothing-swap": 3}.get(sid, 0), sid  # en prompt body, counted per preset (logo-animation instructions also say "Motion: ") (#593 + #634 + #635 + #640)
     # names/descriptions keep coming from locale keys (AC 1)
     for e in _entries().values():
         assert re.match(r"[\w-]+', name: t\('skills\.\w+'\)", e)
@@ -132,22 +133,22 @@ def test_covers_ten_webps_with_source_manifest():
     man = json.loads((COVERS / "covers.json").read_text())
     files = sorted(p.relative_to(COVERS).as_posix() for p in COVERS.rglob("*") if p.is_file())
     local_covered = list(COVERED)  # legacy local public/skills; new6 are remote-only
-    assert files == sorted(["covers.json"] + [f"{s}/cover.webp" for s in local_covered])
+    assert files == sorted(["covers.json"] + [f"{asset_dir(s)}/cover.webp" for s in local_covered])
     assert man["encoder"] == "Pillow==13.0.0" and man["size"] == [462, 346]
-    assert set(man["covers"]) == set(local_covered)
+    assert set(man["covers"]) == {asset_dir(s) for s in local_covered}
     for sid, c in man["covers"].items():
         assert hashlib.sha256((COVERS / sid / "cover.webp").read_bytes()).hexdigest() == c["sha256"], sid
         assert re.fullmatch(r"[0-9a-f]{64}", c["source_sha256"]) and c["source"] == f"494/covers/{sid}/1.png"
         assert (COVERS / sid / "cover.webp").read_bytes()[8:12] == b"WEBP"
     assert "PILLOW = \"13.0.0\"" in (ROOT / "scripts/skill_covers_494.py").read_text()
-    phase1_new = ["multi-angle", "logo-material", "meta-ads", "mobile-ui", "web-product", "marketing-campaign"]
+    phase1_new = ["universal-multi-angle-grid", "logo-material-explorer", "meta-ads-creative-director", "mobile-app-visual-design", "web-product-visual-design", "marketing-campaign-generator"]
     # #637 Phase2-S4 B NEW5: remote cover637 wash pins (not local public/skills COVERED)
     phase2_b = ["flash-cut-video", "style-transfer", "person-swap", "commerce-strategist", "lifestyle-scene"]
     phase2_c = ["naive-illustration", "logo-abstract", "photo-split-poster", "ppt-visual", "promo-ecommerce"]
     for sid, e in _entries().items():
         head = e.split("inputs:", 1)[0]
-        if sid == "thumbnail":
-            assert "cover: cover643('thumbnail')" in head, sid  # #643 true-wash cover
+        if sid == "cover-design-director":
+            assert "cover: cover643('cover-design-director')" in head, sid  # #643 true-wash cover
         elif sid in COVERED or sid in phase1_new:
             assert f"cover: cover('{sid}')" in head, sid  # #581 + #594 covers-v4 pins
         elif sid in phase2_b:

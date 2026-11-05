@@ -3,8 +3,8 @@ const r: Record<string, unknown> = {}
 const old = { id: 'old-skill', name: 'o', instructions: '', custom: true }
 r.noImage = skillCover(old)
 r.ownImage = skillCover({ ...old, images: { 'r.png': 'input/r.png' } })
-r.custom = skillCover(BUILTIN_SKILLS.find((s) => s.id === 'interior')!)
-r.customNoCover = skillCover({ ...BUILTIN_SKILLS.find((s) => s.id === 'interior')!, cover: undefined }) // #581: fallback still null
+r.custom = skillCover(BUILTIN_SKILLS.find((s) => s.id === 'interior-architectural-visualization')!)
+r.customNoCover = skillCover({ ...BUILTIN_SKILLS.find((s) => s.id === 'interior-architectural-visualization')!, cover: undefined }) // #581: fallback still null
 r.builtinCovers = Object.fromEntries(BUILTIN_SKILLS.map((s) => [s.id, skillCover(s)?.src ?? null]))
 r.chips = skillChips(BUILTIN_SKILLS)
 r.byChip = Object.fromEntries((r.chips as string[]).map((c) => [c, BUILTIN_SKILLS.filter((s) => matchesSkillChip(s, c as never)).map((s) => s.id)]))
@@ -12,7 +12,7 @@ r.byChip = Object.fromEntries((r.chips as string[]).map((c) => [c, BUILTIN_SKILL
 r.builtinVideos = Object.fromEntries(BUILTIN_SKILLS.map((s) => [s.id, skillVideo(s)]))
 r.noVideo = skillVideo(old)
 r.customVideo = skillVideo({ ...old, cover: undefined })
-r.videoMutated = skillVideo({ ...BUILTIN_SKILLS.find((s) => s.id === 'poster')!, video: undefined })
+r.videoMutated = skillVideo({ ...BUILTIN_SKILLS.find((s) => s.id === 'poster-differentiated-compiler')!, video: undefined })
 // #575 — media detector + hover contract + pending new6 + thumbnail/banner example lead mp4
 r.isVideo = {
   mp4: isSkillMediaVideo('https://x.test/a.mp4'),
@@ -23,9 +23,9 @@ r.isVideo = {
   undef: isSkillMediaVideo(undefined),
 }
 r.pendingNew6 = [...SKILL_VIDEO_PENDING_NEW6]
-r.thumbEx = BUILTIN_SKILLS.find((s) => s.id === 'thumbnail')!.examples
-r.bannerEx = BUILTIN_SKILLS.find((s) => s.id === 'banner')!.examples
-r.motionPresetVideos = (BUILTIN_SKILLS.find((s) => s.id === 'motion')!.presets ?? []).map((p) => p.video ?? null)
+r.thumbEx = BUILTIN_SKILLS.find((s) => s.id === 'cover-design-director')!.examples
+r.bannerEx = BUILTIN_SKILLS.find((s) => s.id === 'banner-design-director')!.examples
+r.motionPresetVideos = (BUILTIN_SKILLS.find((s) => s.id === 'motion-poster-generator')!.presets ?? []).map((p) => p.video ?? null)
 // hover: enter plays; leave pauses + seeks 0; null is no-op
 const calls: string[] = []
 const fake = {
