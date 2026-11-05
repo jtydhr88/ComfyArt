@@ -45,29 +45,29 @@ const QUICK_TESTID: Record<QuickId, string> = {
 /** Phase1 skill suggestions (3 per pill). Soft thirds reuse family when map has only 2. */
 const QUICK: { id: QuickId; icon: keyof typeof Icons; label: string; suggests: StarterSuggest[] }[] = [
   { id: 'ecommerce', icon: 'assets', label: t('home.quickEcommerce'), suggests: [
-    { skillId: 'product', labelKey: 'home.starter.product' },
-    { skillId: 'packaging', labelKey: 'home.starter.packaging' },
-    { skillId: 'multi-angle', labelKey: 'home.starter.multiAngle' },
+    { skillId: 'product-tvc-advertisement-generator', labelKey: 'home.starter.product' },
+    { skillId: 'packaging-design-director', labelKey: 'home.starter.packaging' },
+    { skillId: 'universal-multi-angle-grid', labelKey: 'home.starter.multiAngle' },
   ] },
   { id: 'social', icon: 'grid', label: t('home.quickSocial'), suggests: [
-    { skillId: 'social', labelKey: 'home.starter.social' },
-    { skillId: 'thumbnail', labelKey: 'home.starter.thumbnail' },
-    { skillId: 'social', labelKey: 'home.starter.socialAlt' },
+    { skillId: 'rednote-cover-maker', labelKey: 'home.starter.social' },
+    { skillId: 'cover-design-director', labelKey: 'home.starter.thumbnail' },
+    { skillId: 'rednote-cover-maker', labelKey: 'home.starter.socialAlt' },
   ] },
   { id: 'brand', icon: 'palette', label: t('home.quickBrand'), suggests: [
-    { skillId: 'brand', labelKey: 'home.starter.brand' },
-    { skillId: 'logo-material', labelKey: 'home.starter.logoMaterial' },
-    { skillId: 'brand', labelKey: 'home.starter.brandAlt' },
+    { skillId: 'brand-identity-director', labelKey: 'home.starter.brand' },
+    { skillId: 'logo-material-explorer', labelKey: 'home.starter.logoMaterial' },
+    { skillId: 'brand-identity-director', labelKey: 'home.starter.brandAlt' },
   ] },
   { id: 'creative', icon: 'effects', label: t('home.quickCreative'), suggests: [
-    { skillId: 'poster', labelKey: 'home.starter.poster' },
-    { skillId: 'banner', labelKey: 'home.starter.banner' },
-    { skillId: 'meta-ads', labelKey: 'home.starter.metaAds' },
+    { skillId: 'poster-differentiated-compiler', labelKey: 'home.starter.poster' },
+    { skillId: 'banner-design-director', labelKey: 'home.starter.banner' },
+    { skillId: 'meta-ads-creative-director', labelKey: 'home.starter.metaAds' },
   ] },
   { id: 'website', icon: 'page', label: t('home.quickWebsite'), suggests: [
-    { skillId: 'mobile-ui', labelKey: 'home.starter.mobileUi' },
-    { skillId: 'web-product', labelKey: 'home.starter.webProduct' },
-    { skillId: 'web-product', labelKey: 'home.starter.webProductAlt' },
+    { skillId: 'mobile-app-visual-design', labelKey: 'home.starter.mobileUi' },
+    { skillId: 'web-product-visual-design', labelKey: 'home.starter.webProduct' },
+    { skillId: 'web-product-visual-design', labelKey: 'home.starter.webProductAlt' },
   ] },
 ]
 

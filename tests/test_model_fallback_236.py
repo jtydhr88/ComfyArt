@@ -100,7 +100,7 @@ def test_fallback_allowed_follows_the_cap_and_a_decline():
     paid_guard.after_call("c", "generate_image", {"prompt": "p"}, {"ids": ["g"]}, True)
     assert not paid_guard.fallback_allowed("c", "generate_image", {"prompt": "p"})
     paid_guard.TURNS.clear()
-    paid_guard.begin_turn("c", text="poster", provider_text="poster", lang="en")
+    paid_guard.begin_turn("c", text="poster-differentiated-compiler", provider_text="poster-differentiated-compiler", lang="en")
     paid_guard.after_call("c", "generate_image", {}, {"cancelled": True, "status": "declined"}, True)
     assert not paid_guard.fallback_allowed("c", "generate_image", {"prompt": "p"})
     assert paid_guard.fallback_allowed("no-such-turn", "generate_image", {"prompt": "p"})

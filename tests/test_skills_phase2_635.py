@@ -26,14 +26,14 @@ def _instructions(entry: str) -> str:
 
 def test_no_fashion_ugc_id_and_social_present():
     ids = list(_entries())
-    assert "social" in ids
+    assert "rednote-cover-maker" in ids
     assert "fashion-ugc" not in ids
     assert "fashion_ugc" not in ids
     assert "#635" in SKILLS_TS and "Fashion UGC" in SKILLS_TS
 
 
 def test_social_fashion_ugc_presets_at_least_two():
-    e = _entries()["social"]
+    e = _entries()["rednote-cover-maker"]
     presets = re.findall(r"\bP\('([^']+)',\s*'([^']*)',\s*'([^']*)'", e)
     assert len(presets) >= 2, presets
     ids = {p[0] for p in presets}
@@ -49,7 +49,7 @@ def test_social_fashion_ugc_presets_at_least_two():
 
 
 def test_social_instructions_candid_and_rednote_coexist():
-    instr = _instructions(_entries()["social"])
+    instr = _instructions(_entries()["rednote-cover-maker"])
     low = instr.lower()
     assert "you are a production" in low
     assert ("candid" in low) or ("off-duty" in low) or ("off duty" in low)
@@ -60,11 +60,11 @@ def test_social_instructions_candid_and_rednote_coexist():
 
 
 def test_social_inputs_product_person_and_examples_kept():
-    e = _entries()["social"]
+    e = _entries()["rednote-cover-maker"]
     # #687-1: social dialog = reference-card Upload Files + Additional Details (product/person refs go via the upload)
     assert "inputs: REF_CARD_INPUTS_687 }" in e and "productRef" not in e
-    assert "examples: ex541(" in e  # RedNote carousel kept
-    assert "cover: cover('social')" in e
+    assert "examples: ex541(" not in e  # #751 HOLD: RedNote carousel = raw highlights + wash-748.json (10 washed 1:1)
+    assert "cover: cover('rednote-cover-maker')" in e
 
 
 def test_dialog_to_agent_path_still_wired():
@@ -73,7 +73,7 @@ def test_dialog_to_agent_path_still_wired():
     assert "skillRunParams" in DLG and "onStart" in DLG
     assert "mode: 'agent'" in (ROOT / "src/skills.ts").read_text()
     assert "skill-run-dialog" in DLG or "ca-skillrun" in DLG
-    assert "inputs:" in _entries()["social"]
+    assert "inputs:" in _entries()["rednote-cover-maker"]
 
 
 def test_no_lovart_string_under_src_skills():

@@ -16,7 +16,7 @@ PHASE2_NEW = [
     "naive-illustration", "logo-abstract", "photo-split-poster", "ppt-visual", "promo-ecommerce",
     "yingzao", "crt-interface", "crayon-sketch", "fabric-collage",
 ]
-UNTOUCHED = ["interior"]  # custom-workflow removed (no Lovart card)
+UNTOUCHED = ["interior-architectural-visualization"]  # custom-workflow removed (no Lovart card)
 NEW_CATEGORY = {
     "flash-cut-video": "ads",
     "style-transfer": "branding",
@@ -61,7 +61,7 @@ def _entries() -> dict[str, str]:
 def test_phase2_ids_present_social_kept_untouched_and_no_skill_creator():
     ids = list(_entries())
     assert set(PHASE2_NEW) <= set(ids)
-    assert "social" in ids
+    assert "rednote-cover-maker" in ids
     assert all(u in ids for u in UNTOUCHED)
     assert len(ids) == 49  # #640 Phase3-S1: 31 prior + 19 NEW
     assert "skill-creator" not in ids and "fashion-ugc" not in ids

@@ -44,7 +44,9 @@ def _skill_names(lang):
     """id -> display name in `lang` (skills.ts name: t('key') + src/locales)."""
     loc = json.loads((ROOT / f"src/locales/{lang}.json").read_text())
     src = (ROOT / "src/skills.ts").read_text()
-    return {m[0]: loc[m[1]] for m in re.findall(r"\{ id: '([a-z0-9-]+)', name: t\('([\w.]+)'\)", src)}
+    from tests.skill_ids_748 import TITLE  # #748 Final 16 display names come from raw titles
+    names = {m[0]: loc[m[1]] for m in re.findall(r"\{ id: '([a-z0-9-]+)', name: t\('([\w.]+)'\)", src)}
+    return {**names, **{k: v[lang] for k, v in TITLE.items() if k in names}}
 
 
 async def _slash(pg, q):
@@ -76,7 +78,7 @@ async def test_composer_slash_picker_hides_deferred(app_url, lang, theme):  # no
         for h in HIDDEN:  # searching a hidden skill by its own name never offers it
             got = await _slash(pg, names[h].split()[0])
             assert not set(got) & set(HIDDEN), (h, got)
-        for sid in ("poster", "brand", "product"):  # other skills still found by name
+        for sid in ("poster-differentiated-compiler", "brand-identity-director", "product-tvc-advertisement-generator"):  # other skills still found by name
             assert sid in await _slash(pg, names[sid].split()[0]), sid
         await browser.close()
 

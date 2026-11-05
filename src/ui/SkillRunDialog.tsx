@@ -6,7 +6,7 @@
  *  No skill ids are named here. 「详情」 keeps main's #484 edit page (openSkillEditor). */
 import { useRef, useState } from 'react'
 
-import { uploadSkillImage, isSkillMediaVideo, loc, loadFavourites, missingInputs, presetImage, presetVideo, recordSkillUse, skillAuthor, skillCover, skillCoverVideoHover, skillMeta, skillMetaLabel, skillDefaults, skillDescription, skillPreset, skillRunParams, skillShareUrl, toggleFavourite, type Skill, type SkillPreset } from '../skills'
+import { uploadSkillImage, isSkillMediaVideo, loc, loadFavourites, missingInputs, presetImage, recordSkillUse, skillAuthor, skillCover, skillCoverVideoHover, skillMeta, skillMetaLabel, skillDefaults, skillDescription, skillPreset, skillRunParams, skillShareUrl, skillMedia, selectedMedia, withTemplateInputs, recordTemplateUse, toggleFavourite, type SkillMediaItem, type Skill, type SkillPreset } from '../skills'
 import { newProject } from '../projects'
 import { BRAND } from '../brand'
 import { copyText } from '../clipboard'
@@ -14,21 +14,24 @@ import { t } from '../i18n'
 import { useEscape } from './escape'
 import { Icons } from './icons'
 import { openSkillEditor } from './SkillsDialog'
-import { SkillExamples } from './SkillExamples'
+import { PendingWash, SkillExamples } from './SkillExamples'
+import { isPendingWash } from '../skillRaw748'
 
 /** #622 — template tile: still thumb + optional preset.video muted hover/focus loop (no-video unchanged). */
-function PresetTile({ skill, preset: p, on, onPick, onZoom }: {
-  skill: Skill; preset: SkillPreset; on: boolean
+function PresetTile({ skill, item, preset: p, on, onPick, onZoom }: {
+  skill: Skill; item: SkillMediaItem; preset: SkillPreset; on: boolean
   onPick: () => void; onZoom: (src: string) => void
 }) {
-  const img = presetImage(skill, p)
-  const videoSrc = presetVideo(skill, p)
+  // #748: tile media comes from the media[] item (image / video / stack), never from component constants.
+  const img = item.type === 'video' ? (item.cover ?? presetImage(skill, p)) : item.url || presetImage(skill, p)
+  const videoSrc = item.type === 'video' ? item.url : null
   const videoRef = useRef<HTMLVideoElement>(null)
   const play = () => skillCoverVideoHover(videoRef.current, 'enter')
   const stop = () => skillCoverVideoHover(videoRef.current, 'leave')
   const zoomSrc = videoSrc || img
+  const stack = item.type === 'stack' ? (item.children ?? []).map((c) => c.url) : []
   return (
-    <div className="ca-skillrun__tile" data-on={on || undefined} data-has-video={videoSrc ? '1' : undefined}>
+    <div className="ca-skillrun__tile" data-stack={stack.length ? stack.length : undefined} data-on={on || undefined} data-has-video={videoSrc ? '1' : undefined}>
       <button type="button" role="radio" aria-checked={on} data-on={on || undefined}
         className="ca-skillrun__preset" data-testid="skill-run-preset" data-preset={p.id}
         onClick={onPick}
@@ -38,7 +41,7 @@ function PresetTile({ skill, preset: p, on, onPick, onZoom }: {
         onBlur={videoSrc ? stop : undefined}
       >
         <span className="ca-skillrun__presetimg">
-          {img ? <img src={img} alt="" /> : <span className="ca-icon">{Icons.skill}</span>}
+          {isPendingWash(img) ? <PendingWash /> : img ? <img src={img} alt="" /> : <span className="ca-icon">{Icons.skill}</span>}
           {videoSrc && (
             <video
               ref={videoRef}
@@ -52,6 +55,12 @@ function PresetTile({ skill, preset: p, on, onPick, onZoom }: {
               aria-hidden="true"
             />
           )}
+          {/* #748 stack-expand: thumbs fan out on hover, collapse when selected (timings = CSS vars). */}
+          {stack.length > 0 && <span className="ca-skillrun__stack" aria-hidden="true" data-testid="skill-run-stack" style={{ '--n': Math.min(stack.length, 5) } as React.CSSProperties}>
+            {stack.slice(0, 5).map((src, i) => isPendingWash(src)
+              ? <span key={i} className="ca-skillrun__pending" data-pending-wash="1" style={{ '--i': i } as React.CSSProperties}><span className="ca-icon">{Icons.image}</span></span>
+              : <img key={i} src={src} alt="" style={{ '--i': i } as React.CSSProperties} />)}
+          </span>}
           <span className="ca-skillrun__pick">{t('skillRun.select')}</span>
           {on && <span className="ca-skillrun__check" aria-hidden="true"><span className="ca-icon">{Icons.check}</span></span>}
         </span>
@@ -63,13 +72,61 @@ function PresetTile({ skill, preset: p, on, onPick, onZoom }: {
   )
 }
 
-export function SkillRunDialog({ skill, presetId, onClose, run = newProject }: {
+/** #748 — ONE left renderer for examples carousel + template picker; branches on the media[] data only:
+ *  items without presetId → examples carousel, items with presetId → template grid (image / video / stack). */
+function SkillMediaLeft({ skill, preset, onPick, onZoom }: {
+  skill: Skill; preset: string | null; onPick: (id: string) => void; onZoom: (src: string) => void
+}) {
+            const media = skillMedia(skill)
+            const examples = media.filter((m) => !m.presetId).map((m) => m.url)
+            const tiles = media.flatMap((m) => { const p = skill.presets?.find((x) => x.id === m.presetId); return p ? [{ m, p }] : [] })
+            const presetTiles = tiles.map((x) => x.p)
+            // #641: thumbnail (presetChips) with an explicit empty list still shows 「暂无示例」.
+            const showEmptyExamples = !!skill.presetChips && Array.isArray(skill.examples) && skill.examples.length === 0
+            const coverSrc = skillCover(skill)?.src ?? null
+            // #637: Examples-only left when examples drive the gold shape; 「模板」 grid only for real preset media
+            // (never invent Examples / 模板 from cover). Cover alone → dedicated main-preview hero.
+            if (!examples.length && !presetTiles.length && !showEmptyExamples) {
+              if (!coverSrc) return null
+              return (
+                <div className="ca-skillrun__templates" data-left="cover" data-testid="skill-run-cover-preview">
+                  <div
+                    className="ca-skillrun__stage ca-skillrun__coverstage"
+                    data-testid="skill-run-cover-stage"
+                    data-media="image"
+                  >
+                    <img src={coverSrc} alt="" data-testid="skill-run-cover-img" />
+                  </div>
+                </div>
+              )
+            }
+            return (
+              <div className="ca-skillrun__templates" data-left={examples.length ? (presetTiles.length ? 'both' : 'examples') : 'templates'}>
+                <SkillExamples examples={skill.media?.length ? examples : skill.examples} pendingWash={skill.pendingWash} />
+                {!!presetTiles.length && (
+                  <div role="radiogroup" data-testid="skill-run-presets">
+                    <div className="ca-skillrun__section">{t('skillRun.templates')}</div>
+                    <div className="ca-skillrun__grid">
+                      {tiles.map(({ m, p }) => (
+                        <PresetTile key={p.id} skill={skill} item={m} preset={p} on={preset === p.id}
+                          onPick={() => onPick(p.id)} onZoom={onZoom} />
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            )
+}
+
+export function SkillRunDialog({ skill: baseSkill, presetId, onClose, run = newProject }: {
   skill: Skill; presetId?: string | null; onClose: () => void
   /** injectable for tests; default leaves for a new project exactly like main's card click */
   run?: (params: Record<string, string | string[]>) => void
 }) {
+  const [preset, setPreset] = useState(() => skillPreset(baseSkill, presetId)?.id ?? null)
+  // #748 — the right form is per template: switching templates switches inputs[] (values kept by key).
+  const skill = withTemplateInputs(baseSkill, preset)
   const [values, setValues] = useState(() => skillDefaults(skill))
-  const [preset, setPreset] = useState(() => skillPreset(skill, presetId)?.id ?? null)
   const [uploading, setUploading] = useState<string | null>(null)
   const [uploadError, setUploadError] = useState<string | null>(null)
   const [runError, setRunError] = useState(false)
@@ -81,7 +138,7 @@ export function SkillRunDialog({ skill, presetId, onClose, run = newProject }: {
   const chosen = skillPreset(skill, preset)
   const author = skillAuthor(skill)
   const desc = skillDescription(skill)
-  const meta = skillMeta(skill)
+  const metaBase = skillMeta(skill)
   const [zoom, setZoom] = useState<string | null>(null)
   const set = (key: string, v: string) => setValues((cur) => ({ ...cur, [key]: v }))
   const stop = (e: React.KeyboardEvent) => e.stopPropagation()
@@ -96,7 +153,7 @@ export function SkillRunDialog({ skill, presetId, onClose, run = newProject }: {
     if (missing.length) { setTried(true); document.getElementById(`skill-run-${missing[0]}`)?.focus(); return }
     setRunError(false)
     recordSkillUse(skill.id)
-    try { run(skillRunParams(skill, values, preset)) } catch { setRunError(true) }
+    try { run(skillRunParams(skill, values, preset)); if (preset) recordTemplateUse(skill.id, preset) } catch { setRunError(true) }
   }
   useEscape(true, onClose)
   return (
@@ -133,47 +190,10 @@ export function SkillRunDialog({ skill, presetId, onClose, run = newProject }: {
               </div>
             </div>
             {desc && <p className="ca-skillrun__desc" data-testid="skill-run-desc">{desc}</p>}
-            {meta && <p className="ca-skillrun__meta" data-testid="skill-run-meta">{skillMetaLabel(meta)}</p>}
+            {(() => { const sel = selectedMedia(skill, preset); const meta = sel ? (sel.usedCount || metaBase?.templates ? { templates: metaBase?.templates ?? 0, usage: sel.usedCount ?? 0 } : null) : metaBase
+              return meta && <p className="ca-skillrun__meta" data-testid="skill-run-meta" data-used={sel?.usedCount}>{skillMetaLabel(meta)}</p> })()}
           </header>
-          {(() => {
-            const examples = skill.examples ?? []
-            const presetTiles = (skill.presets ?? []).filter((p) => !!(p.image || p.video))
-            // #641: thumbnail (presetChips) with an explicit empty list still shows 「暂无示例」.
-            const showEmptyExamples = !!skill.presetChips && Array.isArray(skill.examples) && skill.examples.length === 0
-            const coverSrc = skillCover(skill)?.src ?? null
-            // #637: Examples-only left when examples drive the gold shape; 「模板」 grid only for real preset media
-            // (never invent Examples / 模板 from cover). Cover alone → dedicated main-preview hero.
-            if (!examples.length && !presetTiles.length && !showEmptyExamples) {
-              if (!coverSrc) return null
-              return (
-                <div className="ca-skillrun__templates" data-left="cover" data-testid="skill-run-cover-preview">
-                  <div
-                    className="ca-skillrun__stage ca-skillrun__coverstage"
-                    data-testid="skill-run-cover-stage"
-                    data-media="image"
-                  >
-                    <img src={coverSrc} alt="" data-testid="skill-run-cover-img" />
-                  </div>
-                </div>
-              )
-            }
-            return (
-              <div className="ca-skillrun__templates" data-left={examples.length ? (presetTiles.length ? 'both' : 'examples') : 'templates'}>
-                <SkillExamples examples={skill.examples} />
-                {!!presetTiles.length && (
-                  <div role="radiogroup" data-testid="skill-run-presets">
-                    <div className="ca-skillrun__section">{t('skillRun.templates')}</div>
-                    <div className="ca-skillrun__grid">
-                      {presetTiles.map((p) => (
-                        <PresetTile key={p.id} skill={skill} preset={p} on={preset === p.id}
-                          onPick={() => setPreset(p.id)} onZoom={setZoom} />
-                      ))}
-                    </div>
-                  </div>
-                )}
-              </div>
-            )
-          })()}
+          <SkillMediaLeft skill={skill} preset={preset} onPick={setPreset} onZoom={setZoom} />
         </div>
         <div className="ca-skillrun__right">
           <div className="ca-skillrun__righthead">
@@ -182,7 +202,7 @@ export function SkillRunDialog({ skill, presetId, onClose, run = newProject }: {
           </div>
           <div className="ca-skillrun__body">
             {chosen && (() => {
-              const presetTiles = (skill.presets ?? []).filter((p) => !!(p.image || p.video))
+              const presetTiles = skillMedia(skill).filter((m) => m.presetId && skill.presets?.some((p) => p.id === m.presetId))
               const pickOnLeft = presetTiles.length > 0
               // #636 PRODUCT HARD LOCK: C5 nearMiss Examples-only → remove entire 「当前模板」 row.
               // Presets are default params only; never expose as select. FieldSelect+custom chevron
@@ -191,13 +211,20 @@ export function SkillRunDialog({ skill, presetId, onClose, run = newProject }: {
               return (
               <div className="ca-skillrun__current" data-testid="skill-run-current">
                 <span className="ca-skillrun__currentlabel">{t('skillRun.currentTemplate')}</span>
-                <div className="ca-skillrun__currentrow">
-                  <span className="ca-skillrun__currentthumb">
-                    {presetImage(skill, chosen) ? <img src={presetImage(skill, chosen)!} alt="" /> : <span className="ca-icon">{Icons.skill}</span>}
+                {(() => {
+                  // #748: name / thumb / usage from the SELECTED media item (click only — hover never changes this row).
+                  const sel = selectedMedia(skill, chosen.id)
+                  const thumb = sel ? (sel.type === 'video' ? sel.cover : sel.type === 'stack' ? (sel.children?.[0]?.url ?? sel.url) : sel.url) : presetImage(skill, chosen)
+                  const usage = sel?.usedCount ?? 0  // our per-template stats; 0 ⇒ hidden
+                  return <div className="ca-skillrun__currentrow" data-testid="skill-run-current-row" data-media={sel?.type}>
+                  <span className="ca-skillrun__currentthumb" data-testid="skill-run-current-thumb">
+                    {thumb && !isPendingWash(thumb) ? <img src={thumb} alt="" /> : <span className="ca-icon" data-pending-wash={thumb ? '1' : undefined}>{thumb ? Icons.image : Icons.skill}</span>}
                   </span>
-                  <span className="ca-skillrun__currentname">{loc(chosen.name)}</span>
+                  <span className="ca-skillrun__currentname" data-testid="skill-run-current-name">{loc(sel?.name ?? chosen.name)}</span>
+                  {usage > 0 && <span className="ca-skillrun__currentusage" data-testid="skill-run-current-usage">{t('skillRun.usageCount', String(usage))}</span>}
                   <span className="ca-skillrun__currenthint">{t('skillRun.pickLeft')}</span>
                 </div>
+                })()}
               </div>
               )
             })()}
@@ -250,7 +277,7 @@ export function SkillRunDialog({ skill, presetId, onClose, run = newProject }: {
               if (f.type === 'image') return (
                 <div key={f.key} className="ca-skillrun__field">
                   {label}
-                  <div className="ca-gen__refs ca-skillrun__uploadwrap" {...common} data-accept={f.accept ?? 'image'}>
+                  <div className="ca-gen__refs ca-skillrun__uploadwrap" {...common} id={undefined} data-accept={f.accept ?? 'image'}>
                     {values[f.key]
                       ? <span className="ca-gen__ref">{f.accept === 'video' ? <video src={values[f.key]} muted playsInline /> : <img src={values[f.key]} alt="" />}<button type="button" title={t('common.remove')} onClick={() => set(f.key, '')}>{Icons.close}</button></span>
                       : <label className="ca-skillrun__upload" data-testid="skill-run-upload"><span className="ca-icon">{Icons.uploadArrow}</span><span>{uploading === f.key ? t('skillRun.uploading') : t('skillRun.uploadHint')}</span>
@@ -277,7 +304,7 @@ export function SkillRunDialog({ skill, presetId, onClose, run = newProject }: {
           </div>
           <div className="ca-skillrun__foot">
             {runError && <p className="ca-skillrun__fielderr" role="alert" data-testid="skill-run-run-error">{t('skillRun.startFailed')}</p>}
-            <button type="button" className="ca-panel__primary ca-skillrun__go" data-testid="skill-run-go" disabled={!!uploading} data-missing={missing.length || undefined}
+            <button type="button" className="ca-panel__primary ca-skillrun__go" data-testid="skill-run-go" disabled={!!uploading} aria-disabled={missing.length > 0 || undefined} data-missing={missing.length || undefined}
               onClick={onStart}>{t('skillRun.start')}</button>
           </div>
         </div>

@@ -27,14 +27,14 @@ SHOTS = os.environ.get("QA644_SHOTS")
 NOTICE = '[data-testid="skill-hidden-notice"]'
 LOC = {lg: json.loads((ROOT / f"src/locales/{lg}.json").read_text()) for lg in ("zh", "en")}
 HARDLOCK_20 = [
-    "thumbnail", "taobao-product", "before-after", "anim-2d", "creator-identity", "product-website", "studio-model",
+    "cover-design-director", "taobao-product", "before-after", "anim-2d", "creator-identity", "product-website", "studio-model",
     "youtube-channel-banner", "ai-model", "product-to-packaging", "game-art", "portrait-studio", "premium-website",
     "animated-poster", "pose-fission", "live-promo-decor", "linkedin-banner", "logo-animation", "restaurant-website",
     "clothing-swap",
 ]
 # #640 (locked 11-02) "Dropped from old draft (勿再落地)": never a Phase3 slot. poster/brand stay as Phase1 skills.
 DROPPED_13 = [
-    "app-listing-kit", "ip-logo", "magazine-postcard", "poster", "talking-collage", "brand", "anime-official-site",
+    "app-listing-kit", "ip-logo", "magazine-postcard", "poster-differentiated-compiler", "talking-collage", "brand-identity-director", "anime-official-site",
     "cinematic-snapshot", "zhixian-poster", "cartoon-ip-extend", "culture-creative", "new-chinese-mobile", "portfolio-site",
 ]
 LR4 = ["taobao-product", "before-after", "linkedin-banner", "clothing-swap"]
@@ -159,13 +159,13 @@ async def _ids(pg, sel):
 @pytest.mark.parametrize("lang,theme", [("zh", "light"), ("en", "dark")])
 async def test_phase3_skill_ids_mounted_match_hardlock_20(app_url, lang, theme):  # noqa: F811
     from test_skills_phase3_640 import NEW_CATEGORY
-    cat = {**NEW_CATEGORY, "thumbnail": "social"}
+    cat = {**NEW_CATEGORY, "cover-design-director": "social"}
     assert sorted(cat) == sorted(HARDLOCK_20) and len(HARDLOCK_20) == 20
     # PHASE3-HARDEN-DIFF.md is not in the repo: the literal list above IS the table (19 NEW + thumbnail), and it must
     # equal the code's PHASE3_NEW_SKILL_IDS + thumbnail (pending 技术经理 confirmation of the doc).
     import re
     block = re.search(r"PHASE3_NEW_SKILL_IDS\b[^=]*=\s*\[(.*?)\]", (ROOT / "src/skills.ts").read_text(), re.S).group(1)
-    assert ["thumbnail", *re.findall(r"'([\w-]+)'", block)] == HARDLOCK_20
+    assert ["cover-design-director", *re.findall(r"'([\w-]+)'", block)] == HARDLOCK_20
     async with pw.async_playwright() as p:
         browser, pg = await _page(p, lang, theme)
         await pg.goto(app_url)
@@ -175,7 +175,7 @@ async def test_phase3_skill_ids_mounted_match_hardlock_20(app_url, lang, theme):
         p3 = {i for i in home if i in cat or i in HIDDEN}
         assert p3 == set(HARDLOCK_20), (sorted(set(HARDLOCK_20) - p3), sorted(p3 - set(HARDLOCK_20)))  # none missing / extra
         assert not p3 & set(DROPPED_13)
-        assert not set(home) & (set(DROPPED_13) - {"poster", "brand"})   # the 11 cut ids are not mounted at all
+        assert not set(home) & (set(DROPPED_13) - {"poster-differentiated-compiler", "brand-identity-director"})   # the 11 cut ids are not mounted at all
         assert await pg.locator('[data-testid^="home-chip-"]').count() == 6
         await pg.get_by_test_id("rail-skills").click()
         await pg.get_by_test_id("skills-wall").wait_for()
@@ -189,7 +189,7 @@ async def test_phase3_skill_ids_mounted_match_hardlock_20(app_url, lang, theme):
             mine = [i for i in ids if i in cat]
             if c == "forYou":
                 assert mine == HARDLOCK_20, mine            # exactly the 20, table order
-                assert not set(mine) & set(DROPPED_13) and not set(ids) & (set(DROPPED_13) - {"poster", "brand"})
+                assert not set(mine) & set(DROPPED_13) and not set(ids) & (set(DROPPED_13) - {"poster-differentiated-compiler", "brand-identity-director"})
             else:
                 assert sorted(mine) == sorted(k for k, v in cat.items() if v == c) and len(mine) == HARDLOCK_CHIP[c], (c, mine)
         await browser.close()
@@ -228,21 +228,22 @@ async def test_thumbnail_upgrade_skill_regression(app_url, fake_agent, lang, the
         await pg.get_by_test_id("rail-skills").click()
         await pg.get_by_test_id("skills-wall").wait_for()
         await pg.get_by_test_id("skills-chip-social").click()
-        card = pg.locator('[data-testid="skills-wall"] [data-testid="skills-wall-card"][data-skill="thumbnail"]')
+        card = pg.locator('[data-testid="skills-wall"] [data-testid="skills-wall-card"][data-skill="cover-design-director"]')
         await card.wait_for()
         src = await card.locator("img, video").first.get_attribute("src") or ""
         assert "643/wash/thumbnail/" in src, src                    # live cover from the #643 wash pin
         await card.hover()
         await card.get_by_test_id("skills-card-try").click()
-        dlg = pg.locator('[data-testid="skill-run-dialog"][data-skill="thumbnail"]')
+        dlg = pg.locator('[data-testid="skill-run-dialog"][data-skill="cover-design-director"]')
         await dlg.wait_for(timeout=10000)
-        assert await dlg.get_by_test_id("skill-run-example-thumb").count() == 7  # video lead + 6 examples
+        assert await dlg.get_by_test_id("skill-run-example-thumb").count() == 0  # #748 raw highlights: 1 video → single stage, no thumb strip
+        assert await dlg.get_by_test_id("skill-run-example-stage-video").count() == 1
         assert await dlg.get_by_test_id("skill-run-meta").count() == 0          # effect skill: no 'N templates' line
         await _assert_template_label(pg, dlg, lang)
         await pg.keyboard.press("Escape")
         await browser.close()
         browser, pg = await _page(p, lang, theme)
-        await pg.goto(app_url + f"?project=p644thumb{lang}&new=1&skill=thumbnail&mode=agent")
+        await pg.goto(app_url + f"?project=p644thumb{lang}&new=1&skill=cover-design-director&mode=agent")
         await pg.locator(".ca-composer__input").wait_for()
         await _dismiss(pg)
         await pg.get_by_test_id("composer-skill-chip").wait_for(timeout=10000)  # listed skill → chip, never the #673 notice

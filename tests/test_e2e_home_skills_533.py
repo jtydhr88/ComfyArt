@@ -61,7 +61,7 @@ async def test_home_skills_open_dialog(app_url, lang, theme):  # noqa: F811
         # featured → dialog with that preset
         await pg.get_by_test_id("home-featured").scroll_into_view_if_needed()
         # #588: featured tiles are the skill's washed case images (featured[]), so pick a template-type skill's tile
-        card = pg.locator('[data-testid="home-featured-card"][data-skill="brand"]').first
+        card = pg.locator('[data-testid="home-featured-card"][data-skill="brand-identity-director"]').first
         skill = await card.get_attribute("data-skill")
         await card.click()
         await dlg.wait_for()

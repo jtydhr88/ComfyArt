@@ -1,5 +1,6 @@
 """#580 cut 2 — source/data contract: three image slots, special cards constant, tabs, tokens."""
 from pathlib import Path
+from tests.skill_ids_748 import asset_dir
 ROOT = Path(__file__).resolve().parents[1]
 HOME = (ROOT / "src/home/Home.tsx").read_text()
 LAYOUT = (ROOT / "src/home/featuredLayout.ts").read_text()
@@ -32,8 +33,8 @@ def test_tokens_and_full_bleed_css():
 def test_featured_v1_and_collages_pinned_590():
     c = "0e92302302de2102ab6f66aa7633a40945a381c7"
     assert f"const FEED_V1 = '{c}'" in SKILLS
-    for sid in ("poster", "social", "brand", "packaging", "thumbnail", "banner", "character", "product", "motion", "interior"):
-        assert f"{sid}: ['580/featured-v1/{sid}', FEED_V1, ['01.webp', '02.webp', '03.webp', '04.webp']]" in SKILLS
+    for sid in ("poster-differentiated-compiler", "rednote-cover-maker", "brand-identity-director", "packaging-design-director", "cover-design-director", "banner-design-director", "character-sheet-design", "product-tvc-advertisement-generator", "motion-poster-generator", "interior-architectural-visualization"):
+        assert f"'{sid}': ['580/featured-v1/{asset_dir(sid)}', FEED_V1, ['01.webp', '02.webp', '03.webp', '04.webp']]" in SKILLS
     assert "inspiration@thumb.webp" in SKILLS and "connector@thumb.webp" in SKILLS
 
 

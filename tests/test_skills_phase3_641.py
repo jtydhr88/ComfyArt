@@ -27,7 +27,7 @@ def _instructions(entry: str) -> str:
 
 def test_no_youtube_thumbnail_id_and_thumbnail_present():
     ids = list(_entries())
-    assert "thumbnail" in ids
+    assert "cover-design-director" in ids
     assert "youtube-thumbnail" not in ids
     assert "youtube_thumbnail" not in ids
     assert "#641" in SKILLS_TS and "Phase3-S2" in SKILLS_TS
@@ -35,7 +35,7 @@ def test_no_youtube_thumbnail_id_and_thumbnail_present():
 
 
 def test_thumbnail_dialog_parity_upload_additional():
-    e = _entries()["thumbnail"]
+    e = _entries()["cover-design-director"]
     assert len(re.findall(r"\bP\('", e)) == 0, e
     assert "presets:" not in e
     assert "presetChips" not in e
@@ -45,7 +45,7 @@ def test_thumbnail_dialog_parity_upload_additional():
 
 
 def test_thumbnail_instructions_yt_ctr_triad():
-    instr = _instructions(_entries()["thumbnail"])
+    instr = _instructions(_entries()["cover-design-director"])
     low = instr.lower()
     assert "you are a production" in low
     assert "youtube" in low and "16:9" in low
@@ -57,15 +57,15 @@ def test_thumbnail_instructions_yt_ctr_triad():
 
 
 def test_thumbnail_inputs_media_and_effect_inputs():
-    e = _entries()["thumbnail"]
+    e = _entries()["cover-design-director"]
     assert "titleCopy" not in e
     assert "inputs: EFFECT_INPUTS" in e
-    assert "cover: cover643('thumbnail')" in e
-    assert "featured: feat643('thumbnail'" in e
-    assert "ex643('thumbnail'" in e
-    assert "video: video('thumbnail')" in e
-    assert "examples: [video('thumbnail'), ...ex643(" in e
-    assert "quickStartCover: quickStartCover('thumbnail')" in e
+    assert "cover: cover643('cover-design-director')" in e
+    assert "featured: feat643('cover-design-director'" in e
+    assert "ex643('cover-design-director'" not in e  # #751 HOLD: Final examples come from raw + src/data/wash-748.json (1:1, pendingWash), no hand list
+    assert "video: video('cover-design-director')" in e
+    assert "...ex643(" not in e  # #751 HOLD: cover left = raw video only
+    assert "quickStartCover: quickStartCover('cover-design-director')" in e
     assert "WASH_643" in SKILLS_TS and "643/wash" in SKILLS_TS
 
 
@@ -74,7 +74,7 @@ def test_dialog_to_agent_path_still_wired():
     assert 'data-testid="skill-run-go"' in dlg
     assert "skillRunParams" in dlg and "onStart" in dlg
     assert "mode: 'agent'" in SKILLS_TS
-    assert "inputs:" in _entries()["thumbnail"]
+    assert "inputs:" in _entries()["cover-design-director"]
 
 
 def test_no_lovart_string_under_src_skills():
@@ -84,7 +84,7 @@ def test_no_lovart_string_under_src_skills():
 def test_locales_desc_mentions_youtube():
     assert "YouTube" in ZH or "youtube" in ZH.lower()
     assert "YouTube" in EN
-    assert "skills.desc.thumbnail" in ZH and "skills.desc.thumbnail" in EN
+    assert "skills.desc.cover-design-director" in ZH and "skills.desc.cover-design-director" in EN
 
 
 def test_thumbnail_dialog_states_and_shelf_ratio():
@@ -111,7 +111,7 @@ def test_thumbnail_dialog_states_and_shelf_ratio():
     assert '"skillRun.noExamples": "暂无示例"' in ZH
     assert '"skillRun.noExamples": "No examples yet"' in EN
     assert "aspect-ratio: 231 / 173" in css
-    assert '.ca-swall__card[data-skill="thumbnail"] .ca-swall__cover { aspect-ratio: 16 / 9; }' in css
+    assert '.ca-swall__card[data-skill="cover-design-director"] .ca-swall__cover { aspect-ratio: 16 / 9; }' in css
     assert 'data-skill={skill.id}' in wall
     assert "skills-card-author" in wall and "skills-card-usage" in wall and "skills-card-video" in wall
     assert "Lovart" not in dlg and "lovart" not in dlg

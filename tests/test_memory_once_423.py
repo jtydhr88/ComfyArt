@@ -8,6 +8,7 @@ from pathlib import Path
 
 import pytest
 
+from tests.skill_ids_748 import FINAL_IDS, asset_dir
 from ComfyArt.api.bot_turns import _TurnState, _apply_event, memory_updated_block
 from ComfyArt.bot.providers import BotEvent, TurnHandle
 
@@ -148,6 +149,8 @@ def test_locales_only_add_memory_retrieved_430():
         "memoryDialog.stepOf", "memoryDialog.freeHint",
         # #687: motion → Reference Video Remake positioning
         "skills.motionPoster", "skills.desc.motion",
+        # #751: Final-16 zh display names (INDEX / product-confirmed)
+        "skills.logoMaterialExplorer", "skills.packagingDesign",
         # #570: to3d / upscale tool panel copy
         "toolPanel.reset", "toolPanel.useNow", "toolPanel.model", "toolPanel.mode", "toolPanel.faithful", "toolPanel.enhance", "toolPanel.resolution",
         # #423: 「已保存 N 条」 under the memory row
@@ -197,6 +200,12 @@ def test_locales_only_add_memory_retrieved_430():
         for d in (cur, base):  # #463 skill import copy is its own namespace, not memory copy
             for k in [k for k in d if k.startswith("skillsImport.")]:
                 d.pop(k)
+            # #751 Final-16 hard cut: only Final skillKeys (+ their old assetDir aliases) leave the cat/desc check
+            final_slugs = set(FINAL_IDS) | {asset_dir(sid) for sid in FINAL_IDS}
+            for k in [k for k in d if k.startswith(("skills.cat.", "skills.desc."))]:
+                slug = k.split(".", 2)[-1]
+                if slug in final_slugs:
+                    d.pop(k)
         assert cur == base
     zh, en = json.loads(_src("src/locales/zh.json")), json.loads(_src("src/locales/en.json"))
     assert zh["chatMessage.memoryUpdated"] == "记忆已更新" and en["chatMessage.memoryUpdated"] == "Memory updated"

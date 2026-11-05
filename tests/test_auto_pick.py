@@ -96,7 +96,7 @@ def test_choose_raises_directly():
 def test_edit_table_and_one_ref():
     assert run("edit_image", id="shape:a", prompt="change the sign text")["model_choice"]["model"] == default("image_edit")
     assert run("edit_image", id="shape:a", prompt="new background, keep the same person")["model_choice"]["model"] == "google/nano-banana-2.1/edit"
-    choice = run("generate_image", prompt="poster", refs=["shape:r"])["model_choice"]
+    choice = run("generate_image", prompt="poster-differentiated-compiler", refs=["shape:r"])["model_choice"]
     assert choice["model"] == default("image_edit") and choice["category"] == "references"
     assert "model" not in SENT[-1][1] and "edit_model" not in SENT[-1][1]
 

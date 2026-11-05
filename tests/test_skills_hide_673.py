@@ -21,14 +21,14 @@ needs_node = pytest.mark.skipif(not (ROOT / "node_modules/.bin/rolldown").exists
 HIDDEN = ["yingzao", "crt-interface", "crayon-sketch", "fabric-collage"]
 # Listed builtins after #735: Phase1 + Phase2 Soft (B+C) + Phase3 + interior. D stay in BUILTIN but filtered out.
 MAIN_ORDER_45 = [
-    "product", "multi-angle", "brand", "character", "logo-material", "packaging", "motion", "meta-ads", "poster",
-    "thumbnail", "mobile-ui", "social", "marketing-campaign", "web-product", "banner", "flash-cut-video",
+    "product-tvc-advertisement-generator", "universal-multi-angle-grid", "brand-identity-director", "character-sheet-design", "logo-material-explorer", "packaging-design-director", "motion-poster-generator", "meta-ads-creative-director", "poster-differentiated-compiler",
+    "cover-design-director", "mobile-app-visual-design", "rednote-cover-maker", "marketing-campaign-generator", "web-product-visual-design", "banner-design-director", "flash-cut-video",
     "style-transfer", "person-swap", "commerce-strategist", "lifestyle-scene",
     "naive-illustration", "logo-abstract", "photo-split-poster", "ppt-visual", "promo-ecommerce",
     "taobao-product", "before-after",
     "anim-2d", "creator-identity", "product-website", "studio-model", "youtube-channel-banner", "ai-model",
     "product-to-packaging", "game-art", "portrait-studio", "premium-website", "animated-poster", "pose-fission",
-    "live-promo-decor", "linkedin-banner", "logo-animation", "restaurant-website", "clothing-swap", "interior",
+    "live-promo-decor", "linkedin-banner", "logo-animation", "restaurant-website", "clothing-swap", "interior-architectural-visualization",
 ]
 # Back-compat alias used by e2e imports.
 MAIN_ORDER_40 = MAIN_ORDER_45
@@ -90,7 +90,7 @@ def test_agent_read_of_hidden_resolves_by_id_and_by_name_733(sid) -> None:
 @needs_node
 def test_agent_read_listed_still_works_and_unknown_lists_only_listed() -> None:
     r = report()
-    assert r["listedReadId"] == "poster"
+    assert r["listedReadId"] == "poster-differentiated-compiler"
     err = r["unknown"]["error"]
     assert err.startswith("unknown skill") and not any(f"({h})" in err for h in HIDDEN)
 
@@ -125,7 +125,7 @@ def test_hidden_skill_refused_at_attach_with_plain_copy_and_no_submit(lang, sid)
 def test_listed_skill_still_attaches_and_clears_notice(lang) -> None:
     g = report()["guard"][lang]
     assert g["notice"] == COPY[lang]
-    assert g["listed"] == {"attached": True, "chip": "poster", "notice": None, "blocked": False}
+    assert g["listed"] == {"attached": True, "chip": "poster-differentiated-compiler", "notice": None, "blocked": False}
 
 
 @needs_node

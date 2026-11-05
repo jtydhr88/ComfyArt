@@ -772,7 +772,7 @@ body { background: var(--ca-float); }
   border-radius: 12px; overflow: hidden; background: var(--ca-hover);
 }
 /* #641 thumbnail shelf card: YouTube 16:9 cover. Other skills keep 231/173. */
-.ca-swall__card[data-skill="thumbnail"] .ca-swall__cover { aspect-ratio: 16 / 9; }
+.ca-swall__card[data-skill="cover-design-director"] .ca-swall__cover { aspect-ratio: 16 / 9; }
 .ca-swall__cover img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 300ms ease; }
 /* #594/#602 — dual media-fit on Skills wall: contain + light-gray plate for Phase1 new6 boards */
 .ca-swall__cover[data-fit="contain"] { background: var(--ca-field); }
@@ -1250,3 +1250,69 @@ body { background: var(--ca-float); }
   padding-right: 32px;
 }
 .ca-skillrun__presetselect::-ms-expand { display: none; }
+
+/* #748 — SkillRunDialog static polish per design measure 2026-11-05 (packaging + motion first).
+ * Timings: design measure on #751 comment 6646945899. */
+.ca-skillrun {
+  --ca-skillrun-select-dur: 0ms;                /* design #751 c6646945899: stroke / ✓ / 当前模板 instant snap */
+  --ca-skillrun-select-ease: linear;
+  --ca-skillrun-hover-dur: 100ms;               /* design: 「选择」 capsule fade */
+  --ca-skillrun-hover-ease: ease-out;
+  --ca-skillrun-stack-dur: 400ms;               /* design: stack expand / collapse */
+  --ca-skillrun-stack-ease: cubic-bezier(.25, .1, .25, 1);
+  --ca-skillrun-stack-step: 0px;                /* TODO(#748) per-layer offset when collapsed */
+  --ca-skillrun-ring: #1a1a1a;
+}
+.ca-skillrun__presetimg, .ca-skillrun__presetimg::after { border-radius: 8px; }
+.ca-skillrun__presetimg::after { transition: box-shadow var(--ca-skillrun-select-dur) var(--ca-skillrun-select-ease); }
+.ca-skillrun__preset[data-on] .ca-skillrun__presetimg::after { box-shadow: inset 0 0 0 1.5px var(--ca-skillrun-ring); }
+.ca-skillrun__check { background: var(--ca-skillrun-ring); color: #fff; }
+:root[data-theme="dark"] .ca-skillrun { --ca-skillrun-ring: var(--ca-text); }
+.ca-skillrun__presetname { transition: color var(--ca-skillrun-select-dur) var(--ca-skillrun-select-ease); }
+.ca-skillrun__zoom, .ca-skillrun__pick {
+  transition: opacity var(--ca-skillrun-hover-dur) var(--ca-skillrun-hover-ease), transform var(--ca-skillrun-hover-dur) var(--ca-skillrun-hover-ease);
+}
+/* stack-expand (design geometry 11-05): rest = 4-layer pile, top −2°, back layers ±5°..±8°;
+ * hover = fan to a row of 4–5 cards, rotation 0, gap 6–12px; selected → collapses back. Durations = TODO vars. */
+.ca-skillrun { --ca-skillrun-stack-gap: 8px; --ca-skillrun-stack-w: 56%; }
+.ca-skillrun__stack { position: absolute; inset: 10%; z-index: 1; pointer-events: none; }
+.ca-skillrun__stack > * {
+  position: absolute; top: 0; bottom: 0; left: calc((100% - var(--ca-skillrun-stack-w)) / 2); width: var(--ca-skillrun-stack-w);
+  height: 100%; object-fit: cover; border-radius: 6px; box-shadow: 0 2px 6px rgb(0 0 0 / .18);
+  z-index: calc(10 - var(--i)); transform: rotate(var(--r, 0deg));
+  transition: left var(--ca-skillrun-stack-dur) var(--ca-skillrun-stack-ease), width var(--ca-skillrun-stack-dur) var(--ca-skillrun-stack-ease), transform var(--ca-skillrun-stack-dur) var(--ca-skillrun-stack-ease);
+}
+.ca-skillrun__stack > *:nth-child(1) { --r: -2deg; }
+.ca-skillrun__stack > *:nth-child(2) { --r: 5deg; }
+.ca-skillrun__stack > *:nth-child(3) { --r: -7deg; }
+.ca-skillrun__stack > *:nth-child(4) { --r: 8deg; }
+.ca-skillrun__stack > *:nth-child(n+5) { --r: -5deg; }
+.ca-skillrun__preset:not([data-on]):hover .ca-skillrun__stack,
+.ca-skillrun__preset:not([data-on]):focus-visible .ca-skillrun__stack { inset: 10% 6px; }
+.ca-skillrun__preset:not([data-on]):hover .ca-skillrun__stack > *,
+.ca-skillrun__preset:not([data-on]):focus-visible .ca-skillrun__stack > * {
+  --w: calc((100% - (var(--n, 4) - 1) * var(--ca-skillrun-stack-gap)) / var(--n, 4));
+  width: var(--w); left: calc(var(--i) * (var(--w) + var(--ca-skillrun-stack-gap))); transform: none;
+}
+/* 「选择」 capsule ≈52×22 white top-right; expand icon ≈14×15 top-left; selected: 1px rgb(120,120,120) + dark ✓ replaces capsule */
+.ca-skillrun__pick { min-width: 52px; height: 22px; padding: 0 10px; box-sizing: border-box; border-radius: 11px; background: #fff; color: #1a1a1a; top: 8px; right: 8px; display: inline-flex; align-items: center; justify-content: center; }
+.ca-skillrun__preset[data-on] .ca-skillrun__pick { opacity: 0 !important; }
+.ca-skillrun__zoom { top: 8px; left: 8px; }
+.ca-skillrun__zoom .ca-icon, .ca-skillrun__zoom svg { width: 14px; height: 15px; }
+.ca-skillrun__preset[data-on] .ca-skillrun__presetimg::after { box-shadow: inset 0 0 0 1px var(--ca-skillrun-selected-stroke); }
+.ca-skillrun { --ca-skillrun-selected-stroke: rgb(120 120 120); }
+/* #748 dark selected: ✓ glyph must contrast its light badge; stroke reads on dark tiles */
+:root[data-theme="dark"] .ca-skillrun__check { background: #fff; color: #111; opacity: 1 !important; box-shadow: 0 0 0 1px rgb(0 0 0 / .45), 0 1px 3px rgb(0 0 0 / .5); }
+:root[data-theme="dark"] .ca-skillrun__check .ca-icon svg { stroke-width: 3; }
+:root[data-theme="dark"] .ca-skillrun__preset[data-on] .ca-skillrun__presetimg::after { box-shadow: inset 0 0 0 1.5px var(--ca-text); }
+/* right panel: label→control 8, field gap 24; text 36h grey; Start disabled light grey until required filled */
+.ca-skillrun__body > .ca-skillform { gap: 24px; }
+.ca-skillrun .ca-skillform .ca-skillrun__field > .ca-panel__input { background: var(--ca-field); border: 0; }
+.ca-skillrun__current .ca-skillrun__currentrow { background: var(--ca-float, #fff); box-shadow: inset 0 0 0 1px var(--ca-border); }
+.ca-skillrun__go[aria-disabled="true"] { background: var(--ca-hover, #ececec); color: var(--ca-muted, #a3a3a3); cursor: not-allowed; }
+/* #751 pendingWash: unwashed slot = the empty-state grey plate + image icon (same tokens as .ca-mem-empty__badge). */
+.ca-skillrun__pending { display: flex; align-items: center; justify-content: center; width: 100%; height: 100%; background: var(--ca-hover); color: var(--ca-muted); border-radius: inherit; }
+.ca-skillrun__pending .ca-icon { width: 20px; height: 20px; opacity: .8; }
+.ca-skillrun__pending[data-stage] { min-height: 240px; border-radius: 12px; }
+.ca-skillrun__pending[data-stage] .ca-icon { width: 32px; height: 32px; }
+.ca-skillrun__stack .ca-skillrun__pending { position: absolute; }

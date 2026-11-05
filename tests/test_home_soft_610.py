@@ -47,23 +47,23 @@ def test_retire_prompt_fill_primary():
 
 def test_phase1_suggestion_skill_ids():
     # ecommerce → product / packaging / multi-angle
-    assert "{ skillId: 'product'" in HOME
-    assert "{ skillId: 'packaging'" in HOME
-    assert "{ skillId: 'multi-angle'" in HOME
+    assert "{ skillId: 'product-tvc-advertisement-generator'" in HOME
+    assert "{ skillId: 'packaging-design-director'" in HOME
+    assert "{ skillId: 'universal-multi-angle-grid'" in HOME
     # social → social / thumbnail (+ soft alt social)
-    assert HOME.count("{ skillId: 'social'") >= 2
-    assert "{ skillId: 'thumbnail'" in HOME
+    assert HOME.count("{ skillId: 'rednote-cover-maker'") >= 2
+    assert "{ skillId: 'cover-design-director'" in HOME
     # brand → brand / logo-material
-    assert "{ skillId: 'logo-material'" in HOME
+    assert "{ skillId: 'logo-material-explorer'" in HOME
     # creative pick 3 from phase1 ads family
-    assert "{ skillId: 'poster'" in HOME
-    assert "{ skillId: 'banner'" in HOME
-    assert "{ skillId: 'meta-ads'" in HOME
+    assert "{ skillId: 'poster-differentiated-compiler'" in HOME
+    assert "{ skillId: 'banner-design-director'" in HOME
+    assert "{ skillId: 'meta-ads-creative-director'" in HOME
     # website → mobile-ui / web-product
-    assert "{ skillId: 'mobile-ui'" in HOME
-    assert "{ skillId: 'web-product'" in HOME
+    assert "{ skillId: 'mobile-app-visual-design'" in HOME
+    assert "{ skillId: 'web-product-visual-design'" in HOME
     # character stays forYou-only — not in starter suggests
-    assert "skillId: 'character'" not in HOME
+    assert "skillId: 'character-sheet-design'" not in HOME
 
 
 def test_breakdown_not_in_five_pill_row():

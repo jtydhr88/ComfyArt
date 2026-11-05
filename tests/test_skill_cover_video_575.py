@@ -39,12 +39,12 @@ def test_video_helpers_and_pending_scaffold():
     assert "WASH_575_MOTION_VIDEO" not in SKILLS and "575/wash/templates/" not in SKILLS
     assert "TODO(design pin): motion" not in SKILLS
     for sid in (
-        "multi-angle",
-        "logo-material",
-        "meta-ads",
-        "mobile-ui",
-        "web-product",
-        "marketing-campaign",
+        "universal-multi-angle-grid",
+        "logo-material-explorer",
+        "meta-ads-creative-director",
+        "mobile-app-visual-design",
+        "web-product-visual-design",
+        "marketing-campaign-generator",
     ):
         assert f"video: video594('{sid}')" in SKILLS, sid
         assert sid not in block.split("=", 1)[-1].split("as const")[0] or "[]" in block
@@ -53,7 +53,7 @@ def test_video_helpers_and_pending_scaffold():
 def test_motion_preset_video_wired_in_dialog():
     """Detail/template cards play when preset.video set; no-video fallback unchanged."""
     dlg = (ROOT / "src/ui/SkillRunDialog.tsx").read_text()
-    assert "presetVideo" in dlg and "skillCoverVideoHover" in dlg
+    assert "item.type === 'video'" in dlg and "skillCoverVideoHover" in dlg
     assert "skill-run-preset-video" in dlg
     assert "ca-skillrun__preset-video" in CSS
     # mutation surface: helpers still return null when video omitted
@@ -138,11 +138,11 @@ def test_mutation_new6_video_pin_must_stay():
     assert "WASH_623_NEW6_VIDEO" in SKILLS
     assert "d03ea7938877d084c201a94ef51f943dd0e061b9" in SKILLS
     for sid in (
-        "multi-angle",
-        "logo-material",
-        "meta-ads",
-        "mobile-ui",
-        "web-product",
-        "marketing-campaign",
+        "universal-multi-angle-grid",
+        "logo-material-explorer",
+        "meta-ads-creative-director",
+        "mobile-app-visual-design",
+        "web-product-visual-design",
+        "marketing-campaign-generator",
     ):
         assert f"video: video594('{sid}')" in SKILLS, sid
