@@ -43,6 +43,8 @@ export const PENDING_WASH = 'comfyart:pending-wash'
 export const isPendingWash = (u?: string | null) => u === PENDING_WASH
 const WASH = (wash as { examples: Record<string, (string | null)[]> }).examples
 const WASH_T = (wash as { templates?: Record<string, (string | null)[]> }).templates ?? {}
+/** #760 — per-template REAL washed media (raw content.media[] 1:1, washed). Never padded with PENDING_WASH. */
+const WASH_S = (wash as { stacks?: Record<string, (string | null)[][]> }).stacks ?? {}
 
 /** #751 — example card left = exactly the raw highlights, 1:1 slot → asset (src/data/wash-748.json).
  *  video slot = the skill's own washed video; image slot = its own washed still, else PENDING_WASH + pendingWash. */
@@ -72,15 +74,25 @@ export function applyRaw748(skill: Skill): Skill {
   const presets = tpls.map((t, i): SkillPreset => {
     const old = skill.presets?.[i]
     const image = old?.image ?? WASH_T[skill.id]?.[i] ?? PENDING_WASH // the template's OWN wash (1:1, fixed per card), else the unified placeholder
-    const stack = t.depth > 1 ? Array.from({ length: t.depth }, (_, j) => (j === 0 ? image : PENDING_WASH)) : undefined
-    const pendingWash = Array.from({ length: t.depth }, (_, j) => j).filter((j) => (j === 0 ? image : PENDING_WASH) === PENDING_WASH)
+    // #760: stack = ALL real washed media[] (no pad-with-last, no slice(0,3)). Empty real → no stack.
+    // Layout uses media.length: 1 = single cover; 2–3 = row focus; ≥4 = 2×2 (4th opacity 0). Rest ≥3 opacity 0.
+    const real = (WASH_S[skill.id]?.[i] ?? []).filter((u): u is string => !!u && !isPendingWash(u))
+    const stack = t.media.length > 1 && real.length > 0 ? real.slice() : undefined
+    const r0 = t.media[0]?.ratio
+    const orient = r0 != null && r0 < 1 ? 'portrait' as const : 'landscape' as const
+    // stack → stackOrient from ratio. Single ~3:4 (Master Packaging) → mediaOrient portrait frame;
+    // 9:16 motion etc. stay unset so full-well contain letterbox is preserved.
+    const stackOrient = stack ? orient : undefined
+    const mediaOrient = !stack && r0 != null && Math.abs(r0 - 0.75) < 0.08 ? 'portrait' as const : undefined
+    const pendingWash = image === PENDING_WASH ? [0] : []
     // #751 HOLD: only a template's own video; the skill-level video is never shared across template cards
     const vid = old?.video
     return {
       id: old?.id ?? `t${i + 1}`, name: t.name,
       prompt: loc(ours.templates?.[i + 1]?.prompt) ?? `Template: ${t.name.en}. Follow this template's own inputs.`,
       ...(ours.templates?.[i + 1]?.description ? { description: ours.templates[i + 1].description } : {}),
-      image, ...(vid ? { video: vid } : {}), ...(stack ? { stack } : {}), ...(pendingWash.length ? { pendingWash } : {}),
+      image, ...(vid ? { video: vid } : {}), ...(stack ? { stack } : {}), ...(stackOrient ? { stackOrient } : {}), ...(mediaOrient ? { mediaOrient } : {}),
+      ...(pendingWash.length ? { pendingWash } : {}),
       inputs: t.inputs.map((q) => toInput(q, ours.templates?.[i + 1]?.placeholders)),
     }
   })

@@ -1,5 +1,5 @@
 {
-  "_doc": "#751 per-slot wash map for example cards: index = raw highlight slot (1:1). null image slot = pendingWash (unified placeholder); null video slot = the skill's own washed video. Only this file changes when a slot is washed. templates: skill id → each template card's OWN cover (1:1 by template index); missing = pendingWash.",
+  "_doc": "#751 per-slot wash map for example cards: index = raw highlight slot (1:1). null image slot = pendingWash (unified placeholder); null video slot = the skill's own washed video. Only this file changes when a slot is washed. templates: skill id → each template card's OWN cover (1:1 by template index); missing = pendingWash. stacks(#760): skill → per-template REAL washed media[] for click-expand only (never PENDING_WASH fillers). Rest cover stays templates[].",
   "examples": {
     "poster-differentiated-compiler": [
       "https://raw.githubusercontent.com/ganjmeng/ComfyArt/6d864bd2dd53b9f5b487829f2834d94be013b0a5/541/wash/poster/examples/1.webp",
@@ -95,8 +95,62 @@
   },
   "templates": {
     "motion-poster-generator": [
-      "https://raw.githubusercontent.com/ganjmeng/ComfyArt/bd043d4cff5019fc4117b5b2f3a33ae437015a28/569/wash/motion/templates/01-poster-animation@thumb.webp",
-      "https://raw.githubusercontent.com/ganjmeng/ComfyArt/bd043d4cff5019fc4117b5b2f3a33ae437015a28/569/wash/motion/templates/02-first-to-last-frame-animation@thumb.webp"
+      "https://raw.githubusercontent.com/ganjmeng/ComfyArt/bd043d4cff5019fc4117b5b2f3a33ae437015a28/569/wash/motion/templates/01-poster-animation.webp",
+      "https://raw.githubusercontent.com/ganjmeng/ComfyArt/bd043d4cff5019fc4117b5b2f3a33ae437015a28/569/wash/motion/templates/02-first-to-last-frame-animation.webp"
+    ]
+  },
+  "stacks": {
+    "packaging-design-director": [
+      null,
+      [
+        "https://raw.githubusercontent.com/ganjmeng/ComfyArt/c26cfaddc5e12c8652b151ef09ad12c47b2062a0/541/wash/packaging/packaging__gold.webp",
+        "https://raw.githubusercontent.com/ganjmeng/ComfyArt/c26cfaddc5e12c8652b151ef09ad12c47b2062a0/541/wash/packaging/packaging__playful.webp",
+        "https://raw.githubusercontent.com/ganjmeng/ComfyArt/c26cfaddc5e12c8652b151ef09ad12c47b2062a0/541/wash/packaging/packaging__panels.webp"
+      ],
+      [
+        "https://raw.githubusercontent.com/ganjmeng/ComfyArt/c26cfaddc5e12c8652b151ef09ad12c47b2062a0/541/wash/packaging/packaging__eco.webp",
+        "https://raw.githubusercontent.com/ganjmeng/ComfyArt/c26cfaddc5e12c8652b151ef09ad12c47b2062a0/541/wash/packaging/packaging__gold.webp",
+        "https://raw.githubusercontent.com/ganjmeng/ComfyArt/c26cfaddc5e12c8652b151ef09ad12c47b2062a0/541/wash/packaging/packaging__playful.webp",
+        "https://raw.githubusercontent.com/ganjmeng/ComfyArt/c26cfaddc5e12c8652b151ef09ad12c47b2062a0/541/wash/packaging/packaging__panels.webp"
+      ]
+    ],
+    "brand-identity-director": [
+      [
+        "https://raw.githubusercontent.com/ganjmeng/ComfyArt/f2045022727c73e24bd6d5ebcb3815bedb7b8797/541/wash/brand/brand__geometric@thumb.webp",
+        "https://raw.githubusercontent.com/ganjmeng/ComfyArt/f2045022727c73e24bd6d5ebcb3815bedb7b8797/541/wash/brand/brand__handmade@thumb.webp",
+        "https://raw.githubusercontent.com/ganjmeng/ComfyArt/f2045022727c73e24bd6d5ebcb3815bedb7b8797/541/wash/brand/brand__tech@thumb.webp",
+        "https://raw.githubusercontent.com/ganjmeng/ComfyArt/f2045022727c73e24bd6d5ebcb3815bedb7b8797/541/wash/brand/brand__beauty@thumb.webp"
+      ],
+      [
+        "https://raw.githubusercontent.com/ganjmeng/ComfyArt/f2045022727c73e24bd6d5ebcb3815bedb7b8797/541/wash/brand/brand__handmade@thumb.webp",
+        "https://raw.githubusercontent.com/ganjmeng/ComfyArt/f2045022727c73e24bd6d5ebcb3815bedb7b8797/541/wash/brand/brand__tech@thumb.webp",
+        "https://raw.githubusercontent.com/ganjmeng/ComfyArt/f2045022727c73e24bd6d5ebcb3815bedb7b8797/541/wash/brand/brand__beauty@thumb.webp",
+        "https://raw.githubusercontent.com/ganjmeng/ComfyArt/f2045022727c73e24bd6d5ebcb3815bedb7b8797/541/wash/brand/brand__foodbev@thumb.webp"
+      ],
+      [
+        "https://raw.githubusercontent.com/ganjmeng/ComfyArt/f2045022727c73e24bd6d5ebcb3815bedb7b8797/541/wash/brand/brand__beauty@thumb.webp",
+        "https://raw.githubusercontent.com/ganjmeng/ComfyArt/f2045022727c73e24bd6d5ebcb3815bedb7b8797/541/wash/brand/brand__foodbev@thumb.webp",
+        "https://raw.githubusercontent.com/ganjmeng/ComfyArt/f2045022727c73e24bd6d5ebcb3815bedb7b8797/541/wash/brand/brand__pet@thumb.webp",
+        "https://raw.githubusercontent.com/ganjmeng/ComfyArt/f2045022727c73e24bd6d5ebcb3815bedb7b8797/541/wash/brand/brand__geometric@thumb.webp"
+      ],
+      [
+        "https://raw.githubusercontent.com/ganjmeng/ComfyArt/f2045022727c73e24bd6d5ebcb3815bedb7b8797/541/wash/brand/brand__foodbev@thumb.webp",
+        "https://raw.githubusercontent.com/ganjmeng/ComfyArt/f2045022727c73e24bd6d5ebcb3815bedb7b8797/541/wash/brand/brand__pet@thumb.webp",
+        "https://raw.githubusercontent.com/ganjmeng/ComfyArt/f2045022727c73e24bd6d5ebcb3815bedb7b8797/541/wash/brand/brand__geometric@thumb.webp",
+        "https://raw.githubusercontent.com/ganjmeng/ComfyArt/f2045022727c73e24bd6d5ebcb3815bedb7b8797/541/wash/brand/brand__handmade@thumb.webp"
+      ],
+      [
+        "https://raw.githubusercontent.com/ganjmeng/ComfyArt/f2045022727c73e24bd6d5ebcb3815bedb7b8797/541/wash/brand/brand__pet@thumb.webp",
+        "https://raw.githubusercontent.com/ganjmeng/ComfyArt/f2045022727c73e24bd6d5ebcb3815bedb7b8797/541/wash/brand/brand__geometric@thumb.webp",
+        "https://raw.githubusercontent.com/ganjmeng/ComfyArt/f2045022727c73e24bd6d5ebcb3815bedb7b8797/541/wash/brand/brand__handmade@thumb.webp",
+        "https://raw.githubusercontent.com/ganjmeng/ComfyArt/f2045022727c73e24bd6d5ebcb3815bedb7b8797/541/wash/brand/brand__tech@thumb.webp"
+      ],
+      [
+        "https://raw.githubusercontent.com/ganjmeng/ComfyArt/f2045022727c73e24bd6d5ebcb3815bedb7b8797/541/wash/brand/brand__tech@thumb.webp",
+        "https://raw.githubusercontent.com/ganjmeng/ComfyArt/f2045022727c73e24bd6d5ebcb3815bedb7b8797/541/wash/brand/brand__beauty@thumb.webp",
+        "https://raw.githubusercontent.com/ganjmeng/ComfyArt/f2045022727c73e24bd6d5ebcb3815bedb7b8797/541/wash/brand/brand__foodbev@thumb.webp",
+        "https://raw.githubusercontent.com/ganjmeng/ComfyArt/f2045022727c73e24bd6d5ebcb3815bedb7b8797/541/wash/brand/brand__pet@thumb.webp"
+      ]
     ]
   }
 }

@@ -49,7 +49,7 @@ def test_meta_copy_has_no_fake_usage():
 
 
 def test_lovart_sizes_and_theme_vars():
-    assert "width: min(1112px, calc(100vw - 32px))" in CSS and "height: min(820px" in CSS
+    assert "max(1112px, calc(1112px + (100vw - 1280px) * 88 / 640))" in CSS and "height: min(820px" in CSS  # #760 r6: 1112@1280 → 1200@1920
     assert "flex: 1 1 752px" in CSS and "flex: 0 0 360px" in CSS
     css_rules = re.sub(r"/\*.*?\*/", "", CSS, flags=re.S)  # hex may appear in history comments (#632)
     assert "background: var(--ca-skillrun-side)" in CSS and "#f5f5f5" not in css_rules
@@ -93,8 +93,9 @@ def test_rev2_cells_pinned(got):
     assert list(b) == ["geometric", "handmade", "tech", "beauty", "foodbev", "pet"]
     assert all(u == R541.format("f2045022727c73e24bd6d5ebcb3815bedb7b8797", asset_dir("brand-identity-director"), asset_dir("brand-identity-director"), i) for i, u in b.items())
     assert list(k) == ["eco", "gold", "playful", "panels", "shelf"] and "mockup" not in k
-    # packaging re-pinned to manifest c26cfad (mockup dropped; same 5 image blobs as 1014ef2)
-    assert all(u == R541.format("c26cfaddc5e12c8652b151ef09ad12c47b2062a0", asset_dir("packaging-design-director"), asset_dir("packaging-design-director"), i) for i, u in k.items() if i != "shelf")
+    # #760 r7: Master (eco) = single 3:4 local wash (Lovart packaging media); rest still @c26cfad / shelf @35c819e
+    assert k["eco"] == "/comfyart/skills/packaging/master.webp"
+    assert all(u == R541.format("c26cfaddc5e12c8652b151ef09ad12c47b2062a0", asset_dir("packaging-design-director"), asset_dir("packaging-design-director"), i) for i, u in k.items() if i not in ("shelf", "eco"))
     assert k["shelf"] == R541.format("35c819e64b38cc7d64dcd814ae8b86133976fc8a", asset_dir("packaging-design-director"), asset_dir("packaging-design-director"), "shelf")  # retail-shelf re-wash
     assert got["presets"]["motion-poster-generator"] == 2 and got["presets"]["poster-differentiated-compiler"] == 0  # #748 raw: 2 motion templates (overrides #687 removal); poster effect-only
 

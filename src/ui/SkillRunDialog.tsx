@@ -40,7 +40,7 @@ function PresetTile({ skill, item, preset: p, on, onPick, onZoom }: {
         onFocus={videoSrc ? play : undefined}
         onBlur={videoSrc ? stop : undefined}
       >
-        <span className="ca-skillrun__presetimg">
+        <span className="ca-skillrun__presetimg" data-orient={p.stackOrient ?? p.mediaOrient ?? undefined}>
           {isPendingWash(img) ? <PendingWash /> : img ? <img src={img} alt="" /> : <span className="ca-icon">{Icons.skill}</span>}
           {videoSrc && (
             <video
@@ -55,11 +55,11 @@ function PresetTile({ skill, item, preset: p, on, onPick, onZoom }: {
               aria-hidden="true"
             />
           )}
-          {/* #748 stack-expand: thumbs fan out on hover, collapse when selected (timings = CSS vars). */}
-          {stack.length > 0 && <span className="ca-skillrun__stack" aria-hidden="true" data-testid="skill-run-stack" style={{ '--n': Math.min(stack.length, 5) } as React.CSSProperties}>
-            {stack.slice(0, 5).map((src, i) => isPendingWash(src)
-              ? <span key={i} className="ca-skillrun__pending" data-pending-wash="1" style={{ '--i': i } as React.CSSProperties}><span className="ca-icon">{Icons.image}</span></span>
-              : <img key={i} src={src} alt="" style={{ '--i': i } as React.CSSProperties} />)}
+          {/* #760: render ALL media[] layers; rest indices ≥3 opacity:0; hover (not selected sticky) expands. */}
+          {stack.length > 1 && <span className="ca-skillrun__stack" aria-hidden="true" data-testid="skill-run-stack"
+            data-n={stack.length >= 4 ? 4 : stack.length} data-orient={p.stackOrient ?? 'landscape'}
+            style={{ '--n': stack.length } as React.CSSProperties}>
+            {stack.map((src, i) => <img key={i} src={src} alt="" style={{ '--i': i } as React.CSSProperties} />)}
           </span>}
           <span className="ca-skillrun__pick">{t('skillRun.select')}</span>
           {on && <span className="ca-skillrun__check" aria-hidden="true"><span className="ca-icon">{Icons.check}</span></span>}
