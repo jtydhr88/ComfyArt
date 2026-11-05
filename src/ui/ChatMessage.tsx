@@ -406,7 +406,7 @@ function toAnswers(questions: AskQuestion[], states: Record<string, QState>): As
   return answers
 }
 
-/** Historical chip asks (no kind) keep the memo path; new question cards use the grey Q/A bubble. */
+/** Historical chip asks (no kind) keep the memo path. */
 function AskMemo({ b }: { b: BotBlock }) {
   const labels = askAnswerLabels(b)
   return (
@@ -417,6 +417,19 @@ function AskMemo({ b }: { b: BotBlock }) {
   )
 }
 
+/** #766: empty selection + no other text = Skip (right user bubble with skip copy only). */
+function isAskSkipped(b: BotBlock): boolean {
+  const questions = askQuestions(b)
+  if (b.answers) {
+    return questions.every((q) => {
+      const a = b.answers![q.id]
+      return !a || (!(a.selected?.length) && !(a.other_text?.trim()))
+    })
+  }
+  return !(b.selected?.length) && !(b.other_text?.trim())
+}
+
+/** #766: answered ask → right user bubble (same shell as the prompt); never the old left grey 问/答 bar. */
 function QuestionAnswered({ b }: { b: BotBlock }) {
   if (b.status !== 'answered') {
     return (
@@ -426,28 +439,33 @@ function QuestionAnswered({ b }: { b: BotBlock }) {
       </div>
     )
   }
-  const questions = askQuestions(b)
-  if (questions.length > 1 || (b.answers && Object.keys(b.answers).length > 1)) {
+  if (isAskSkipped(b)) {
     return (
-      <div className="ca-qmemo">
-        {questions.map((q) => {
-          const a = b.answers?.[q.id]
-          const answer = a ? (qAnswerLabels(q, a.selected ?? [], a.other_text) || t('chatMessage.skipped')) : (askAnswerLabels(b) || t('chatMessage.skipped'))
-          return (
-            <div key={q.id} className="ca-qmemo__block">
-              <div className="ca-qmemo__row"><span className="ca-qmemo__k">{t('chatMessage.qaAsk')}</span><span className="ca-qmemo__v">{q.prompt}</span></div>
-              <div className="ca-qmemo__row"><span className="ca-qmemo__k">{t('chatMessage.qaAnswer')}</span><span className="ca-qmemo__v">{answer}</span></div>
-            </div>
-          )
-        })}
+      <div className="ca-chat__user" data-testid="ask-answer-bubble" data-ask="skip">
+        <div className="ca-chat__bubble ca-chat__bubble--ask">{t('chatMessage.skipThisQuestion')}</div>
       </div>
     )
   }
-  const answer = askAnswerLabels(b) || t('chatMessage.skipThisQuestion')  // #763: Skip posts “Skip this question”
+  const questions = askQuestions(b)
+  const lines: string[] = []
+  const multi = questions.length > 1 || !!(b.answers && Object.keys(b.answers).length > 1)
+  if (multi) {
+    for (const q of questions) {
+      const a = b.answers?.[q.id]
+      const answer = a ? qAnswerLabels(q, a.selected ?? [], a.other_text) : askAnswerLabels(b)
+      if (!answer) continue
+      lines.push(`${t('chatMessage.qaAsk')}: ${q.prompt}`)
+      lines.push(`${t('chatMessage.qaAnswer')}: ${answer}`)
+    }
+  } else {
+    const prompt = questions[0]?.prompt || b.prompt || ''
+    const answer = askAnswerLabels(b)
+    lines.push(`${t('chatMessage.qaAsk')}: ${prompt}`)
+    lines.push(`${t('chatMessage.qaAnswer')}: ${answer}`)
+  }
   return (
-    <div className="ca-qmemo">
-      <div className="ca-qmemo__row"><span className="ca-qmemo__k">{t('chatMessage.qaAsk')}</span><span className="ca-qmemo__v">{b.prompt}</span></div>
-      <div className="ca-qmemo__row"><span className="ca-qmemo__k">{t('chatMessage.qaAnswer')}</span><span className="ca-qmemo__v">{answer}</span></div>
+    <div className="ca-chat__user" data-testid="ask-answer-bubble" data-ask="answer">
+      <div className="ca-chat__bubble ca-chat__bubble--ask">{lines.join('\n')}</div>
     </div>
   )
 }
@@ -835,10 +853,10 @@ function ProcessTimeline({ steps: rawSteps }: { steps: ProcessStep[] }) {
                 <span className="ca-icon">{PROCESS_ICONS[s.kind]}</span>
               </span>
               {/* #413: a live thought on the rail shows its latest line inline, like the lone Thought tip */}
-              {s.live && s.kind === 'thought' && !open && s.text?.trim() ? (
+              {s.live && s.kind === 'thought' && !open && thoughtCollapsedTip(s.text ?? '') ? (
                 <span className="ca-process__inline">
                   <span className="ca-process__label ca-process__label--active">{s.label}</span>
-                  <span className="ca-chat__arg ca-process__arg" data-testid="live-thought-inline">{s.text.trim().split('\n').at(-1)}</span>
+                  <span className="ca-chat__arg ca-process__arg" data-testid="live-thought-inline">{thoughtCollapsedTip(s.text ?? '')}</span>
                 </span>
               ) : (
                 <span className={shine ? 'ca-process__label ca-process__label--active' : 'ca-process__label'}>
@@ -914,14 +932,27 @@ function ProcessTimeline({ steps: rawSteps }: { steps: ProcessStep[] }) {
   )
 }
 
+
+/** #766: collapsed Thought preview is 正文 — must not show ask_user.
+ * Pick the last line that does not mention the tool (case-insensitive).
+ * Expanded thinking body keeps the raw text (tool names OK there). */
+export function thoughtCollapsedTip(text: string): string {
+  const lines = text.trim().split('\n').map((l) => l.trim()).filter(Boolean)
+  for (let i = lines.length - 1; i >= 0; i--) {
+    if (!/ask_user/i.test(lines[i]!)) return lines[i]!
+  }
+  return ''
+}
+
 function Thought({ text, live }: { text: string; live: boolean }) {
   const [open, setOpen] = useState(false)
+  const tip = thoughtCollapsedTip(text)
   return (
     <div className="ca-chat__tool ca-chat__thought" data-live={live || undefined} data-open={open || undefined}>
       <button type="button" className="ca-chat__step" onClick={() => setOpen(!open)}>
         <span className="ca-chat__thinkicon"><span className="ca-icon">{Icons.think}</span></span>
         <span className="ca-chat__thinklabel">{live ? liveThoughtLabel() : t('chatMessage.thought')}</span>
-        {!open && <span className="ca-chat__arg">{text.trim().split('\n').at(-1)}</span>}
+        {!open && tip ? <span className="ca-chat__arg">{tip}</span> : null}
         <span className="ca-chat__chev ca-icon">{Icons.chevron}</span>
       </button>
       {open && <div className="ca-chat__io ca-chat__thoughttext">{text.trim()}</div>}

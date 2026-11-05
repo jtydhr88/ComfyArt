@@ -197,7 +197,6 @@
 }
 /* R4: glyph →/↵ as text 12–13, not oversized SVG */
 .ca-q__key { margin-left: 4px; opacity: .85; font: 400 12px/16px var(--ca-font); font-weight: 400; }
-.ca-qmemo__block + .ca-qmemo__block { margin-top: 8px; padding-top: 8px; }
 /* Unselected A–D: FLAT (near-white/transparent) — NOT full-row --ca-field grey pills */
 .ca-q__opt {
   display: flex; align-items: center; gap: 8px;
@@ -254,13 +253,6 @@
   background: var(--ca-strong); color: var(--ca-float);
 }
 .ca-q__submit:disabled { background: var(--ca-field); color: var(--ca-muted); cursor: default; border: none; }
-.ca-qmemo {
-  display: flex; flex-direction: column; gap: 6px; padding: 8px 12px; border-radius: 12px;
-  background: var(--ca-field); color: var(--ca-muted); font: 400 12px/16px var(--ca-font);
-}
-.ca-qmemo__row { display: flex; gap: 6px; }
-.ca-qmemo__k { flex: none; font-weight: 500; color: var(--ca-muted); }
-.ca-qmemo__v { color: var(--ca-text); opacity: .75; }
 @media (max-width: 390px) {
   .ca-q__opt { min-height: var(--ca-opt-h, 28px); }
 }
