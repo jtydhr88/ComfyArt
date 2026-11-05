@@ -128,7 +128,8 @@ export function SkillRunDialog({ skill, presetId, onClose, run = newProject }: {
                   onClick={onFav}>
                   <span className="ca-icon">{fav ? Icons.bookmarkFilled : Icons.bookmark}</span>
                 </button>
-                <button type="button" className="ca-skillrun__action" data-testid="skill-run-detail" onClick={() => { onClose(); openSkillEditor(skill.id) }}>{t('skillRun.detail')}</button>
+                {/* #687 P0: builtin skills never reach openSkillEditor / SKILL.md — 「详情」 only for user-created (custom) skills. */}
+                {skill.custom === true && <button type="button" className="ca-skillrun__action" data-testid="skill-run-detail" onClick={() => { onClose(); openSkillEditor(skill.id) }}>{t('skillRun.detail')}</button>}
               </div>
             </div>
             {desc && <p className="ca-skillrun__desc" data-testid="skill-run-desc">{desc}</p>}
