@@ -76,10 +76,24 @@ async def test_detail_opens_edit_form(app_url):  # noqa: F811
     async with pw.async_playwright() as p:
         browser, pg = await _open(p, app_url, "zh")
         await pg.locator('[data-skill="poster"] .ca-swall__cover').click()
-        await pg.get_by_test_id("skill-run-detail").click()
-        await pg.get_by_test_id("skill-form").wait_for()
-        assert await pg.get_by_test_id("skill-detail").count() == 0
+        # #687 P0: builtin poster no longer exposes 「详情」 → editor (SKILL.md).
+        await pg.get_by_test_id("skill-run-dialog").wait_for()
+        assert await pg.get_by_test_id("skill-run-detail").count() == 0
+        assert await pg.get_by_test_id("skill-form").count() == 0
         await browser.close()
+
+
+async def test_builtin_has_no_detail_editor_687(app_url):  # noqa: F811
+    async with pw.async_playwright() as p:
+        for lang in ("zh", "en"):
+            browser, pg = await _open(p, app_url, lang)
+            for sid in ("poster", "product", "packaging"):
+                await pg.locator(f'[data-skill="{sid}"] .ca-swall__cover').click()
+                await pg.get_by_test_id("skill-run-dialog").wait_for()
+                assert await pg.get_by_test_id("skill-run-detail").count() == 0
+                assert await pg.get_by_test_id("skill-form").count() == 0
+                await pg.keyboard.press("Escape")
+            await browser.close()
 
 
 async def test_personal_groups_and_old_skill_starts_directly(app_url):  # noqa: F811

@@ -145,6 +145,8 @@ def test_dialog_is_data_driven():
     assert "if (missing.length) { setTried(true)" in DLG and "skillRunParams(skill, values, preset)" in DLG
     # 「详情」 keeps main's #484 edit page — no new detail route.
     assert "openSkillEditor(skill.id)" in DLG
+    # #687 P0: builtins never reach the editor — 「详情」 gated on skill.custom.
+    assert "{skill.custom === true && <button" in DLG and 'data-testid="skill-run-detail"' in DLG
 
 
 def test_page_wiring():
