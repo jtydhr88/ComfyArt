@@ -9,12 +9,13 @@ EN = json.loads((ROOT / "src/locales/en.json").read_text())
 SETTINGS = (ROOT / "src/ui/BotSettings.tsx").read_text()
 PICKER = (ROOT / "src/ui/AgentPicker.tsx").read_text()
 DOCS = ROOT / "docs-site"
-PROVIDERS = ("claude-code", "codex", "qwen-code", "deepseek-harness")
+PROVIDERS = ("claude-code", "codex", "qwen-code", "deepseek-harness", "hermes")
 LINKS = (
     "https://docs.claude.com/en/docs/claude-code/overview",
     "https://developers.openai.com/codex/cli",
     "https://github.com/QwenLM/qwen-code",
     "https://www.npmjs.com/package/@deepseek-ai/dsh",
+    "https://hermes-agent.nousresearch.com/docs/getting-started/installation",
 )
 
 
@@ -22,8 +23,8 @@ def test_copy_zh_en():
     # #399 (PR #401): brand is the {brand} placeholder (rendered as BRAND.name = Loomi), not hard-coded ComfyArt
     # #345: section retitled 本机第三方 Agent / Local third-party agents; desc expands install+login+detect+no-keys
     assert ZH["agentSetup.title"] == "本机第三方 Agent" and EN["agentSetup.title"] == "Local third-party agents"
-    assert ZH["agentSetup.desc"] == "用你电脑上已安装并登录的 Claude Code、Codex 等。检测到才会出现在列表里；{brand} 不保存它们的密钥。"
-    assert EN["agentSetup.desc"] == "Use Claude Code, Codex, and similar tools already installed and signed in on this computer. They only appear in the list when detected; {brand} never stores their keys."
+    assert ZH["agentSetup.desc"] == "用你电脑上已安装并登录的 Claude Code、Codex、Hermes 等。检测到才会出现在列表里；{brand} 不保存它们的密钥。"
+    assert EN["agentSetup.desc"] == "Use Claude Code, Codex, Hermes, and similar tools already installed and signed in on this computer. They only appear in the list when detected; {brand} never stores their keys."
     assert (ZH["agentSetup.setUp"], EN["agentSetup.setUp"]) == ("去配置", "Set up")
     assert (ZH["agentSetup.connected"], EN["agentSetup.connected"]) == ("已连接", "Connected")
     assert (ZH["agentSetup.copy"], EN["agentSetup.copy"]) == ("复制", "Copy")
@@ -116,3 +117,11 @@ def test_settings_modal_wider_and_tab_hint_contrast():
 def test_dist_has_setup():
     js = "".join(p.read_text(errors="ignore") for p in (ROOT / "dist/assets").glob("*.js"))
     assert "external-agents" in js and "ca-agentsetup" in js
+
+
+def test_hermes_settings_copy_and_fields():
+    assert "botSettings.hermesSshHost" in ZH and "botSettings.hermesSshHost" in EN
+    assert "botSettings.hermesProfile" in ZH and "botSettings.hermesProfile" in EN
+    assert 'data-testid="hermes-settings"' in SETTINGS
+    assert "bot-hermes-ssh-host" in SETTINGS and "bot-hermes-profile" in SETTINGS
+    assert "hermes" in SETTINGS

@@ -53,7 +53,24 @@ Step-by-step setup for each tool, with the status meanings and an FAQ: [External
 | Codex | `codex` on PATH, logged in |
 | Qwen Code | `qwen` on PATH with a model configured in `~/.qwen/settings.json` |
 | DeepSeek Harness | `dsh` on PATH, signed in through the DeepSeek Harness app |
+| Hermes | [Hermes Agent](https://github.com/NousResearch/hermes-agent) with a model configured, on this machine or another one over SSH (see below) |
 | OpenAI-compatible LLM | any OpenAI-compatible endpoint with tool calling; set its URL and model in Agent Settings. If it needs a key, set `COMFYART_LOCAL_LLM_API_KEY` before starting ComfyUI. |
+
+
+### Hermes
+
+Each turn starts `hermes acp`. The model, skills and memory come from Hermes's own configuration.
+
+- **Hermes SSH host** (Agent Settings): blank runs `hermes` from this machine's PATH. Set a host alias or `user@host` to run it on that machine over `ssh` (key login only). ComfyArt opens a reverse tunnel so Hermes reaches this canvas; ComfyUI does not need to listen on the LAN.
+- **Hermes profile**: ComfyArt runs `hermes -p <profile> acp`, `comfyart` by default. Hermes's terminal and file tools cannot be turned off in ACP mode, so give ComfyArt its own profile with no sudo password and a network-less docker terminal:
+
+  ```
+  hermes profile create comfyart --no-skills --no-alias
+  hermes -p comfyart config set terminal.backend docker
+  ```
+
+  Then add `docker_network: false` under `terminal:` in `~/.hermes/profiles/comfyart/config.yaml`.
+- Actions that ask for approval are always rejected. Each chat maps to one Hermes session; chats cannot be branched. Attachments are images only.
 
 Other settings:
 

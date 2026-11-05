@@ -94,7 +94,7 @@
   "agentSetup.connected": "Connected",
   "agentSetup.copied": "Copied",
   "agentSetup.copy": "Copy",
-  "agentSetup.desc": "Use Claude Code, Codex, and similar tools already installed and signed in on this computer. They only appear in the list when detected; {brand} never stores their keys.",
+  "agentSetup.desc": "Use Claude Code, Codex, Hermes, and similar tools already installed and signed in on this computer. They only appear in the list when detected; {brand} never stores their keys.",
   "agentSetup.install": "Install",
   "agentSetup.officialDocs": "Official docs",
   "agentSetup.setUp": "Set up",
@@ -1800,5 +1800,9 @@
   "skills.cat.restaurant-website": "Website",
   "skills.clothingSwap": "AI Clothing Swap",
   "skills.desc.clothing-swap": "Fixed person, swap outfit; dual refs (person + garment)",
-  "skills.cat.clothing-swap": "E-commerce"
+  "skills.cat.clothing-swap": "E-commerce",
+  "botSettings.hermesSshHost": "Hermes SSH host",
+  "botSettings.hermesSshHostHint": "Host alias or user@host (key login); empty = use local Hermes",
+  "botSettings.hermesProfile": "Hermes profile",
+  "botSettings.hermesProfileHint": "Profile made for ComfyArt (hermes -p <name>), see the Agent guide. Empty = Hermes default profile"
 }
