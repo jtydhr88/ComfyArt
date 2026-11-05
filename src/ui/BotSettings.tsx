@@ -131,7 +131,7 @@ export function BotSettings({ onError }: { onError: (msg: string) => void }) {
         </section>
 
         {/* #345 ② Local third-party agents — switches + AgentSetup; dependency logic unchanged */}
-        <AgentSetup providers={providers} enabled={enabled} onError={onError}>
+        <AgentSetup providers={providers} enabled={enabled} onError={onError} draft={draft} edit={edit}>
           {SWITCHES.map(([key, label]) => (
             <label key={key} className="ca-notice__push">
               <input type="checkbox" checked={!!draft[key]} onChange={(e) => setDraft({ ...draft, [key]: e.target.checked })} />
@@ -196,14 +196,17 @@ export const AGENT_DOCS: Record<string, string> = {
   codex: 'https://developers.openai.com/codex/cli',
   'qwen-code': 'https://github.com/QwenLM/qwen-code',
   'deepseek-harness': 'https://www.npmjs.com/package/@deepseek-ai/dsh',
+  hermes: 'https://hermes-agent.nousresearch.com/docs/getting-started/installation',
 }
 export const AGENT_GUIDE_PATH = '/guides/external-agents'
 export const mcpConfig = (origin: string) => JSON.stringify({ mcpServers: { comfyart: { type: 'http', url: `${origin}/comfyart/mcp` } } }, null, 2)
 
-function AgentSetup({ providers, enabled, onError, children }: {
+function AgentSetup({ providers, enabled, onError, draft, edit, children }: {
   providers: ProviderInfo[]
   enabled: boolean | null
   onError: (msg: string) => void
+  draft: Settings
+  edit: (key: string, value: string) => void
   children?: ReactNode
 }) {
   const [copied, setCopied] = useState<string | null>(null)
@@ -230,6 +233,34 @@ function AgentSetup({ providers, enabled, onError, children }: {
             <span className="ca-agentsetup__name">{providerLabel(p)}</span>
             <span className="ca-agentsetup__chip" data-on={p.available || undefined} title={p.detail || p.version}>{p.available ? t('agentSetup.connected') : t('agentPicker.notDetected')}</span>
           </div>
+          {p.id === 'hermes' && (
+            <div className="ca-agentsetup__hermes" data-testid="hermes-settings">
+              <label className="ca-rename__field">
+                <span>{t('botSettings.hermesSshHost')}</span>
+                <input
+                  className="ca-panel__input"
+                  type="text"
+                  autoComplete="off"
+                  value={String(draft['bot-hermes-ssh-host'] ?? '')}
+                  placeholder={t('botSettings.hermesSshHostHint')}
+                  onChange={(e) => edit('bot-hermes-ssh-host', e.target.value)}
+                  onKeyDown={(e) => e.stopPropagation()}
+                />
+              </label>
+              <label className="ca-rename__field">
+                <span>{t('botSettings.hermesProfile')}</span>
+                <input
+                  className="ca-panel__input"
+                  type="text"
+                  autoComplete="off"
+                  value={String(draft['bot-hermes-profile'] ?? '')}
+                  placeholder={t('botSettings.hermesProfileHint')}
+                  onChange={(e) => edit('bot-hermes-profile', e.target.value)}
+                  onKeyDown={(e) => e.stopPropagation()}
+                />
+              </label>
+            </div>
+          )}
           <ol className="ca-agentsetup__steps">
             <li>
               <span>{t('agentSetup.install')}</span>

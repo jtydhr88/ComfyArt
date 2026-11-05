@@ -53,7 +53,24 @@ Loomi 使用本机上已经登录好的命令行 Agent，从不保存任何凭�
 | Codex | PATH 里有 `codex`，并已登录 |
 | Qwen Code | PATH 里有 `qwen`，并在 `~/.qwen/settings.json` 里配好模型 |
 | DeepSeek Harness | PATH 里有 `dsh`，并已通过 DeepSeek Harness 应用登录 |
+| Hermes | 本机或可 SSH 登录的另一台机器上装好 [Hermes Agent](https://github.com/NousResearch/hermes-agent) 并配好模型（见下方） |
 | OpenAI 兼容大模型 | 任何支持工具调用的 OpenAI 兼容接口，在 Agent 设置里填地址和模型。需要密钥的话，启动 ComfyUI 前设置环境变量 `COMFYART_LOCAL_LLM_API_KEY`。 |
+
+
+### Hermes
+
+每一轮会启动 `hermes acp`。模型、技能和记忆都来自 Hermes 自己的配置。
+
+- **Hermes SSH 主机**（Agent 设置）：留空则用本机 PATH 上的 `hermes`。填主机别名或 `user@host` 则通过 `ssh` 在那台机器上跑（仅密钥登录）。ComfyArt 会开反向隧道让 Hermes 连到本机画布；ComfyUI 不必对局域网开放。
+- **Hermes 配置档**：ComfyArt 运行 `hermes -p <配置档> acp`，默认 `comfyart`。ACP 模式下 Hermes 的终端和文件工具关不掉，所以请给 ComfyArt 单独建一个没有 sudo 密码、且 docker 终端无网络的配置档：
+
+  ```
+  hermes profile create comfyart --no-skills --no-alias
+  hermes -p comfyart config set terminal.backend docker
+  ```
+
+  然后在 `~/.hermes/profiles/comfyart/config.yaml` 的 `terminal:` 下加上 `docker_network: false`。
+- 需要审批的操作一律拒绝。每个聊天对应一个 Hermes 会话；不能分支。附件仅支持图片。
 
 其他设置：
 

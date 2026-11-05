@@ -1,6 +1,6 @@
 ---
 title: "外部 Agent"
-description: "用你电脑上已安装的 Claude Code、Codex、Qwen Code 或 DeepSeek Harness 来操作画布。"
+description: "用你电脑上已安装的 Claude Code、Codex、Qwen Code、DeepSeek Harness 或 Hermes 来操作画布。"
 ---
 
 除了内置的 Loomi Agent，Loomi 也可以调用你电脑上已安装的 Agent。**Agent 设置 → 外部 Agent** 里每个工具一张卡片，步骤和本页一致。
@@ -15,6 +15,7 @@ description: "用你电脑上已安装的 Claude Code、Codex、Qwen Code 或 De
 | Codex | [developers.openai.com/codex/cli](https://developers.openai.com/codex/cli) |
 | Qwen Code | [github.com/QwenLM/qwen-code](https://github.com/QwenLM/qwen-code) |
 | DeepSeek Harness | [npmjs.com/package/@deepseek-ai/dsh](https://www.npmjs.com/package/@deepseek-ai/dsh) |
+| Hermes | [hermes-agent.nousresearch.com](https://hermes-agent.nousresearch.com/docs/getting-started/installation) |
 
 ## 状态是什么意思
 
@@ -51,7 +52,7 @@ description: "用你电脑上已安装的 Claude Code、Codex、Qwen Code 或 De
 
 ## 常见问题
 
-**安装后仍显示未检测到。** 在新终端里确认命令能运行（`claude --version`、`codex --version`、`qwen --version`、`dsh --version`）。如果是在 Loomi 启动后才安装的，重启 Loomi 让它读到新的 PATH，再点 **重新检测**。
+**安装后仍显示未检测到。** 在新终端里确认命令能运行（`claude --version`、`codex --version`、`qwen --version`、`dsh --version`, `hermes --version`）。如果是在 Loomi 启动后才安装的，重启 Loomi 让它读到新的 PATH，再点 **重新检测**。
 
 **Agent 提示未登录。** 在终端里运行一次该工具并完成登录，然后重新发送消息。
 

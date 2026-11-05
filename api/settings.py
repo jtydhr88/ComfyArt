@@ -13,6 +13,9 @@ SETTINGS_SPEC: dict[str, object] = {
     "bot-model-codex": "",
     "bot-model-qwen-code": "",
     "bot-model-deepseek-harness": "",
+    "bot-model-hermes": "",
+    "bot-hermes-ssh-host": "",
+    "bot-hermes-profile": "comfyart",
     # #120 / #30: default agent LLM is DeepSeek 4.1 flash on WaveSpeed's OpenAI-compatible endpoint (same
     # WaveSpeed key); any other OpenAI-compatible endpoint / model can still be set in Agent settings
     "bot-local-llm-url": "https://llm.wavespeed.ai/v1",
