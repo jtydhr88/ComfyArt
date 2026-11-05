@@ -8,6 +8,7 @@ from urllib.parse import urlsplit, urlunsplit
 
 from ._acp import AcpTransport
 from ._acp_provider import SESSION_TIMEOUT_S, AcpLaunch, AcpProvider
+from ._cli_common import base_spawn_env
 from .agent_host import AgentHost
 from .providers import TurnRequest
 
@@ -62,6 +63,13 @@ class HermesProvider(AcpProvider):
     def _hermes_args(self, *args: str) -> list[str]:
         name = self._profile().strip()
         return ["-p", name, *args] if name else list(args)
+
+    def _spawn_env(self) -> dict:
+        # Hermes refuses production state.db when it detects pytest. ComfyArt hosts the
+        # user's real Hermes profile (including Full-App e2e under pytest), so bypass.
+        env = base_spawn_env()
+        env["HERMES_STATE_DB_GUARD_BYPASS"] = "1"
+        return env
 
     def _command(self) -> tuple[Optional[list[str]], str]:
         name = self._profile().strip()
