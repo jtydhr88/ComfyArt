@@ -18,7 +18,7 @@ needs_node = pytest.mark.skipif(
     not (ROOT / "node_modules" / ".bin" / "rolldown").exists() or not shutil.which("node"), reason="needs node + npm install")
 
 EFFECT = ("poster-differentiated-compiler", "banner-design-director", "interior-architectural-visualization", "cover-design-director")  # #641: thumbnail dialog parity → no presets
-TEMPLATE = {sid: len(RAW_748[sid]["templates"]) for sid in TEMPLATE_IDS}  # #748 Final: raw template counts (character 7, product 7, motion 2)
+TEMPLATE = {sid: len(RAW_748[sid]["templates"]) for sid in TEMPLATE_IDS}  # #748 Final: raw template counts (character 7+ext 1, product 7, motion 2)
 ASSETS = "https://raw.githubusercontent.com/ganjmeng/ComfyArt/bd043d4cff5019fc4117b5b2f3a33ae437015a28/569/wash"
 CHARACTER = [("角色转身板", "Character Turnaround Sheet", "01-character-turnaround-sheet"),
              ("表情动作板", "Expression & Pose Sheet", "02-expression-pose-sheet"),
@@ -26,7 +26,8 @@ CHARACTER = [("角色转身板", "Character Turnaround Sheet", "01-character-tur
              ("服装/形态变体板", "Outfit / Form Variation Sheet", "04-outfit-form-variation-sheet"),
              ("道具互动板", "Prop Interaction Sheet", "05-prop-interaction-sheet"),
              ("基础角色板", "Basic Character Sheet", "06-basic-character-sheet"),
-             ("完整技术角色板", "Complete Technical Character Sheet", "07-complete-technical-character-sheet")]  # #748 raw: 7 members (product said 8; raw wins)
+             ("完整技术角色板", "Complete Technical Character Sheet", "07-complete-technical-character-sheet"),
+             ("时装大片角色板", "Editorial Fashion Sheet", "08-luxury-editorial-character-sheet")]  # #748: raw 7 + own ext 1
 PINNED = {}  # motion only; character follows manifest f81ce12a below
 V31 = "https://raw.githubusercontent.com/ganjmeng/ComfyArt/9024565c9857c5cb79e3bce85e636f5f102ad181/569/wash/character/templates/v3.1"
 V31_FILES = ("04-outfit-form-variation-sheet", "05-prop-interaction-sheet")  # re-washed 04/05

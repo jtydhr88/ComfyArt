@@ -582,6 +582,53 @@
               "maxLength": 200
             }
           ]
+        },
+        {
+          "name": {
+            "zh": "时装大片角色板",
+            "en": "Editorial Fashion Sheet"
+          },
+          "depth": 1,
+          "media": [
+            {
+              "type": "image",
+              "ratio": null
+            }
+          ],
+          "inputs": [
+            {
+              "key": "subject_image",
+              "type": "image",
+              "required": false,
+              "label": {
+                "zh": "角色参考图片",
+                "en": "Character reference images"
+              },
+              "maxCount": 9,
+              "maxSizeMb": 10
+            },
+            {
+              "key": "character_info",
+              "type": "text",
+              "required": false,
+              "label": {
+                "zh": "角色资料",
+                "en": "Character information"
+              },
+              "maxLength": 200
+            },
+            {
+              "key": "visual_direction",
+              "type": "text",
+              "required": false,
+              "label": {
+                "zh": "视觉呈现方式",
+                "en": "Visual direction"
+              },
+              "maxLength": 200
+            }
+          ],
+          "source": "comfyart"
         }
       ]
     },

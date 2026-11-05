@@ -84,12 +84,12 @@ def test_builtin_preset_images_unique(got):
     imgs = [u for u in got["builtinPresetImgs"] if u]
     washed = [u for u in imgs if "569/wash/" in u or "541/wash/" in u]
     covers = [u for u in imgs if "494/covers-v4/" in u]
-    assert len(washed) == 24  # #748 Final: product 6 washed (+1 SaaS placeholder) / brand 6 / packaging 5 + character 7 (raw)
+    assert len(washed) == 25  # #748 Final: product 6 washed (+1 SaaS placeholder) / brand 6 / packaging 5 + character 8 (raw 7 + ext)
     assert all("raw.githubusercontent.com/ganjmeng/ComfyArt/" in u for u in washed)
-    assert sum("569/wash/character/templates/" in u for u in washed) == 7 and sum("569/wash/motion/templates/" in u for u in washed) == 0
+    assert sum("569/wash/character/templates/" in u for u in washed) == 8 and sum("569/wash/motion/templates/" in u for u in washed) == 0
     assert sum("541/wash/product/" in u for u in washed) == 6
     assert sum("541/wash/brand/" in u for u in washed) == 6 and sum("541/wash/packaging/" in u for u in washed) == 5
-    assert len(set(washed)) == 24  # no shared cover fallback across washed presets
+    assert len(set(washed)) == 25  # no shared cover fallback across washed presets
     assert covers == []  # #748 Final: the new-6 are example cards now (no presets → no cover fallback)
 
 

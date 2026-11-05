@@ -72,6 +72,17 @@ def final_table(index: str) -> list[dict]:
     return rows
 
 
+def load_ext(raw: Path, sid: str) -> list:
+    """own/<skillKey>.ext.json (sibling of raw/): our extra templates appended after the reference ones."""
+    f = raw.parent / "own" / f"{sid}.ext.json"
+    if not f.exists():
+        return []
+    e = json.loads(f.read_text())
+    if e.get("skillKey") != sid or e.get("source") != "comfyart":
+        raise ConvertError(f"bad ext file {f.name}: skillKey/source")
+    return e.get("collectionMembers") or []
+
+
 class ConvertError(Exception):
     """Hard failure: never written to src/data."""
 
@@ -115,15 +126,17 @@ def convert(raw: Path) -> dict:
         s = {"source": "reference", "kind": r["card"], "title": {"zh": r["zh"], "en": r["en"]}, "assetDir": r["assetDir"]}
         if r["card"] == "template":
             tpls = []
-            for ti, m in enumerate(d.get("collectionMembers") or []):
+            members = [(m, False) for m in d.get("collectionMembers") or []] + [(m, True) for m in load_ext(raw, sid)]  # INDEX rule: raw + own ext
+            for ti, (m, own) in enumerate(members):
                 mc = m.get("content") or {}
                 media = [{"type": _kind(x.get("url")), "ratio": _ratio(x.get("coverWidth"), x.get("coverHeight"))} for x in mc.get("media") or []]
-                for j, x in enumerate(media):
+                for j, x in enumerate(media if not own else []):  # ext media are already our washed assets
                     WASH.append((sid, f"template {ti + 1} media {j + 1}", x["type"], x["ratio"]))
                 mi = mc.get("i18n") or {}
                 _copy(sid, f"template {ti + 1} description", (mi.get("zh") or {}).get("description"), (mi.get("en") or {}).get("description"))
                 tpls.append({"name": _title(m), "depth": len(media), "media": media,
-                             "inputs": _questions(sid, f"template {ti + 1}", mc.get("template"))})
+                             "inputs": _questions(sid, f"template {ti + 1}", mc.get("template")),
+                             **({"source": "comfyart"} if own else {})})
             s["templates"] = tpls
         else:
             hl = sorted(c.get("highlights") or [], key=lambda h: h.get("order", 0))

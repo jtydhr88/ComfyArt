@@ -33,3 +33,21 @@ def test_duplicate_app_ids_fail():
 def test_own_id_collision_fails():
     with pytest.raises(c.ConvertError):
         c.check_own({"poster-design": {}}, ["poster-design"])
+
+
+def test_ext_appends_own_templates(tmp_path):
+    import json
+    (tmp_path / "raw").mkdir(); (tmp_path / "own").mkdir()
+    (tmp_path / "own" / "x-skill.ext.json").write_text(json.dumps({"skillKey": "x-skill", "source": "comfyart", "collectionMembers": [{"title": "t8"}]}))
+    assert c.load_ext(tmp_path / "raw", "x-skill") == [{"title": "t8"}]
+    assert c.load_ext(tmp_path / "raw", "y-skill") == []
+    (tmp_path / "own" / "z-skill.ext.json").write_text(json.dumps({"skillKey": "other", "source": "comfyart"}))
+    with pytest.raises(c.ConvertError, match="bad ext"):
+        c.load_ext(tmp_path / "raw", "z-skill")
+
+
+def test_character_raw_plus_ext_is_8():
+    import json
+    t = json.loads((Path(__file__).parent.parent / "src/data/skills-748.json").read_text())["skills"]["character-sheet-design"]["templates"]
+    assert len(t) == 8 and t[-1]["source"] == "comfyart" and t[-1]["name"]["en"] == "Editorial Fashion Sheet"
+    assert all("source" not in x for x in t[:7])
