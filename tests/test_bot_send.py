@@ -105,3 +105,25 @@ def test_compose_puts_memory_first_and_skill_instruction_before_the_text():
     text = bot_send.compose_provider_text("make it", skill_name="Poster", memory="MEM", lines=["[ref]"])
     assert text.startswith("MEM\n\nUse the ComfyArt skill 'Poster'")
     assert text.endswith("make it\n\n[ref]")
+
+
+async def test_an_unreadable_document_is_noted_not_refused(fresh_user_dir):
+    (fresh_user_dir / "input").mkdir(parents=True, exist_ok=True)
+    (fresh_user_dir / "input" / "broken.docx").write_bytes(b"not a zip")
+    docs = bot_send.parse_docs([{"src": "/api/view?filename=broken.docx&type=input", "name": "broken.docx"}])
+    attachments, lines = await bot_send.prepare_attachments([], [], docs)
+    assert attachments == [] and "could not read its text" in lines[0]
+
+
+def test_a_file_without_a_video_stream_is_a_read_error(fresh_user_dir):
+    import numpy as np
+    folder = fresh_user_dir / "output" / "comfyart"
+    folder.mkdir(parents=True, exist_ok=True)
+    with av.open(str(folder / "voice.mp4"), "w") as out:
+        stream = out.add_stream("aac", rate=16000)
+        frame = av.AudioFrame.from_ndarray(np.zeros((1, 1024), dtype=np.float32), format="fltp", layout="mono")
+        frame.sample_rate = 16000
+        for packet in [*stream.encode(frame), *stream.encode()]:
+            out.mux(packet)
+    with pytest.raises(ValueError):
+        video_frames(str(folder / "voice.mp4"), 4)

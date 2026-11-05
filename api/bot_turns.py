@@ -10,6 +10,7 @@ from ..bot import BotEvent, TurnHandle, TurnRequest, bot_asks, get_provider
 from ..bot._cli_common import resolve_comfy_mcp_argv
 from ..bot.agent_host import COMFY_MCP_ALLOWED_TOOLS
 from . import chat_store
+from ._common import spawn
 from .settings import SETTINGS_SPEC, get_setting
 
 _log = logging.getLogger(__name__)
@@ -35,7 +36,10 @@ QUEUED: dict[str, list[dict]] = {}
 
 
 def broadcast(event: str, payload: dict) -> None:
-    PromptServer.instance.send_sync("comfyart-bot", {"event": event, **payload})
+    try:
+        PromptServer.instance.send_sync("comfyart-bot", {"event": event, **payload})
+    except Exception:
+        _log.exception("[ComfyArt/bot] broadcast failed")
 
 
 def _mcp_endpoint(chat_id: str) -> str:
@@ -68,6 +72,8 @@ def provider_model(provider_id: str) -> str:
 def blocks_text(blocks: list[dict]) -> str:
     parts = []
     for b in blocks:
+        if not isinstance(b, dict):
+            continue
         kind = b.get("type")
         if kind == "text":
             parts.append(str(b.get("text") or ""))
@@ -183,10 +189,14 @@ async def _run_turn(chat: dict, text: str, state: _TurnState, *,
             state.last_persist = now
             chat_store.update_message(chat_id, state.message_id, blocks=state.blocks)
 
-    history = None if provider.capabilities().stateful else _replay_history(chat_id, state.message_id)
-
     comfy_mcp_argv = _comfy_mcp_argv()
     try:
+        history = None
+        if not provider.capabilities().stateful:
+            try:
+                history = _replay_history(chat_id, state.message_id)
+            except Exception:
+                _log.exception("[ComfyArt/bot] history replay failed for %s", chat_id)
         result = await provider.send(
             TurnRequest(
                 chat_id=chat_id,
@@ -252,10 +262,10 @@ def begin_turn(chat: dict, *, text: str, provider_text: str,
         "user_message": user_msg,
         "assistant_message": assistant_msg,
     })
-    asyncio.create_task(
+    spawn(
         _run_turn(chat, text, state, provider_text=provider_text,
                   attachments=attachments),
-        name=f"comfyart-bot-{chat['id'][:8]}",
+        f"comfyart-bot-{chat['id'][:8]}",
     )
     return assistant_msg
 

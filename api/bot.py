@@ -1,3 +1,5 @@
+import logging
+
 from aiohttp import web
 
 from ..bot import bot_asks, get_provider, list_providers
@@ -8,6 +10,7 @@ from ._common import error, json_body, request_user, routes
 from .bot_turns import ACTIVE_TURNS, QUEUED, broadcast
 from .settings import bot_disabled, bot_enabled
 
+_log = logging.getLogger(__name__)
 
 @routes.get("/comfyart/bot/status")
 async def bot_status(request: web.Request) -> web.Response:
@@ -31,8 +34,12 @@ async def bot_status(request: web.Request) -> web.Response:
             "stateful": caps.stateful,
             "attachments": caps.attachments,
             "branch": provider.supports_branch,
-            "models": await provider.list_models(),
+            "models": [],
         }
+        try:
+            entry["models"] = await provider.list_models()
+        except Exception:
+            _log.exception("[ComfyArt/bot] list_models failed for %s", provider.id)
         options = provider.model_options()
         if options:
             entry["model_options"] = options
@@ -126,7 +133,9 @@ async def remove_chat(chat: dict) -> None:
     QUEUED.pop(chat["id"], None)
     state = ACTIVE_TURNS.get(chat["id"])
     if state is not None:
-        await get_provider(chat["provider"]).stop(state.handle)
+        provider = get_provider(chat["provider"])
+        if provider is not None:
+            await provider.stop(state.handle)
     chat_store.delete_chat(chat["id"])
     broadcast("chat_deleted", {"chat_id": chat["id"]})
 
@@ -219,7 +228,9 @@ async def bot_stop(request: web.Request) -> web.Response:
     if state is None:
         return error("no active turn", 409)
     bot_asks.cancel_chat_asks(chat["id"])
-    await get_provider(chat["provider"]).stop(state.handle)
+    provider = get_provider(chat["provider"])
+    if provider is not None:
+        await provider.stop(state.handle)
     return web.json_response({"ok": True})
 
 
@@ -233,7 +244,7 @@ async def bot_branch_chat(request: web.Request) -> web.Response:
     if not message_id:
         return error("message_id required", 400)
     provider = get_provider(chat["provider"])
-    if not provider.supports_branch:
+    if provider is not None and not provider.supports_branch:
         return error(f"{provider.label} sessions cannot be forked, so this chat cannot be branched. Start a new chat instead.", 400)
     branch = chat_store.branch_chat(chat["id"], message_id)
     if branch is None:

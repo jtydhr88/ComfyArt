@@ -1,5 +1,7 @@
+import asyncio
 import json
 import os
+from typing import Any, Coroutine
 from urllib.parse import parse_qs, urlparse
 
 import folder_paths
@@ -7,6 +9,14 @@ from aiohttp import web
 from server import PromptServer
 
 routes = PromptServer.instance.routes
+
+_TASKS: set[asyncio.Task] = set()
+
+
+def spawn(coro: Coroutine[Any, Any, None], name: str) -> None:
+    task = asyncio.create_task(coro, name=name)
+    _TASKS.add(task)
+    task.add_done_callback(_TASKS.discard)
 
 
 def app_path(*parts: str) -> str:

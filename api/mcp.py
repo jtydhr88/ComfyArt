@@ -1,6 +1,8 @@
 import json
 import logging
+import re
 import uuid
+from pathlib import Path
 
 from aiohttp import web
 
@@ -14,6 +16,7 @@ _log = logging.getLogger(__name__)
 
 SUPPORTED_PROTOCOL_VERSIONS = ("2024-11-05", "2025-03-26", "2025-06-18")
 DEFAULT_PROTOCOL_VERSION = "2025-06-18"
+VERSION = re.search(r'^version = "([^"]+)"', (Path(__file__).resolve().parents[1] / "pyproject.toml").read_text(encoding="utf-8"), re.MULTILINE).group(1)
 
 INSTRUCTIONS = (
     "Window into ComfyArt, a design canvas running on this ComfyUI. Call "
@@ -38,7 +41,7 @@ def _initialize(params: dict) -> dict:
     return {
         "protocolVersion": version,
         "capabilities": {"tools": {}},
-        "serverInfo": {"name": "comfyart-mcp", "title": "ComfyArt", "version": "0.1.0"},
+        "serverInfo": {"name": "comfyart-mcp", "title": "ComfyArt", "version": VERSION},
         "instructions": INSTRUCTIONS,
     }
 

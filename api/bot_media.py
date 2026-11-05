@@ -24,6 +24,8 @@ def video_duration(container) -> float:
 
 def video_frames(path: str, count: int, start: float = 0.0, end: float | None = None) -> tuple[list[tuple[float, Image.Image]], float]:
     with av.open(path) as container:
+        if not container.streams.video:
+            raise ValueError("the file has no video stream")
         stream = container.streams.video[0]
         duration = video_duration(container)
         end = min(end if end is not None else duration, duration)

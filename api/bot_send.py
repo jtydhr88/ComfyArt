@@ -74,7 +74,8 @@ async def prepare_attachments(refs: list[dict], kits: list[dict], docs: list[dic
         try:
             text, pages, images = await asyncio.to_thread(read_document, d["src"])
         except DOC_ERRORS as e:
-            raise ValueError(f"could not read {d['name']} ({e})") from e
+            doc_lines.append(f"[Attached document {d['name']}: {d['src']} — could not read its text ({e})]")
+            continue
         images = images[:max(0, ATTACH_MAX_COUNT - len(attachments))] if page_images else []
         attachments += images
         doc_lines.append(document_line(d["name"], d["src"], text, pages, len(images)))
