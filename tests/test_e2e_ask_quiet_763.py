@@ -117,3 +117,23 @@ def test_other_typed_is_right_user_bubble(browser, bundle, lang):
     assert q in text and a in text, st
     assert ("Hand-drawn ink" in text) or ("手绘墨线" in text), st
     assert len(text.splitlines()) >= 2, st
+
+
+@pytest.mark.parametrize("lang", ["zh", "en"])
+def test_thought_collapsed_hides_ask_user(browser, bundle, lang):
+    """#766: collapsed tip is 正文 (no ask_user); expanded thinking may keep ask_user."""
+    page = browser.new_page(viewport={"width": 400, "height": 720})
+    page.goto(f"{bundle}/index.html?lang={lang}&theme=light&scene=thought-leak")
+    page.wait_for_function("window.__ready")
+    page.wait_for_timeout(200)
+    tip = page.locator(".ca-chat__thought .ca-chat__arg")
+    tip_text = tip.inner_text() if tip.count() else ""
+    assert "ask_user" not in tip_text.lower(), tip_text
+    assert "plan" in tip_text.lower() or "logo" in tip_text.lower()
+    page.locator(".ca-chat__thought .ca-chat__step").click()
+    page.wait_for_timeout(100)
+    body = page.locator(".ca-chat__thoughttext").inner_text()
+    # Expanded keeps the tool name
+    assert "ask_user" in body.lower(), body
+    assert page.locator('[data-testid="ask-answer-bubble"]').count() == 1
+    page.close()

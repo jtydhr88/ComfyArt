@@ -853,10 +853,10 @@ function ProcessTimeline({ steps: rawSteps }: { steps: ProcessStep[] }) {
                 <span className="ca-icon">{PROCESS_ICONS[s.kind]}</span>
               </span>
               {/* #413: a live thought on the rail shows its latest line inline, like the lone Thought tip */}
-              {s.live && s.kind === 'thought' && !open && s.text?.trim() ? (
+              {s.live && s.kind === 'thought' && !open && thoughtCollapsedTip(s.text ?? '') ? (
                 <span className="ca-process__inline">
                   <span className="ca-process__label ca-process__label--active">{s.label}</span>
-                  <span className="ca-chat__arg ca-process__arg" data-testid="live-thought-inline">{s.text.trim().split('\n').at(-1)}</span>
+                  <span className="ca-chat__arg ca-process__arg" data-testid="live-thought-inline">{thoughtCollapsedTip(s.text ?? '')}</span>
                 </span>
               ) : (
                 <span className={shine ? 'ca-process__label ca-process__label--active' : 'ca-process__label'}>
@@ -932,14 +932,27 @@ function ProcessTimeline({ steps: rawSteps }: { steps: ProcessStep[] }) {
   )
 }
 
+
+/** #766: collapsed Thought preview is 正文 — must not show ask_user.
+ * Pick the last line that does not mention the tool (case-insensitive).
+ * Expanded thinking body keeps the raw text (tool names OK there). */
+export function thoughtCollapsedTip(text: string): string {
+  const lines = text.trim().split('\n').map((l) => l.trim()).filter(Boolean)
+  for (let i = lines.length - 1; i >= 0; i--) {
+    if (!/ask_user/i.test(lines[i]!)) return lines[i]!
+  }
+  return ''
+}
+
 function Thought({ text, live }: { text: string; live: boolean }) {
   const [open, setOpen] = useState(false)
+  const tip = thoughtCollapsedTip(text)
   return (
     <div className="ca-chat__tool ca-chat__thought" data-live={live || undefined} data-open={open || undefined}>
       <button type="button" className="ca-chat__step" onClick={() => setOpen(!open)}>
         <span className="ca-chat__thinkicon"><span className="ca-icon">{Icons.think}</span></span>
         <span className="ca-chat__thinklabel">{live ? liveThoughtLabel() : t('chatMessage.thought')}</span>
-        {!open && <span className="ca-chat__arg">{text.trim().split('\n').at(-1)}</span>}
+        {!open && tip ? <span className="ca-chat__arg">{tip}</span> : null}
         <span className="ca-chat__chev ca-icon">{Icons.chevron}</span>
       </button>
       {open && <div className="ca-chat__io ca-chat__thoughttext">{text.trim()}</div>}
