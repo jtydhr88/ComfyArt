@@ -105,14 +105,15 @@ def test_agent_tools_superset_of_upstream():
 
 
 def test_comfy_mcp_allowed_tools_kept():
-    tree = ast.parse((ROOT / "bot/guide.py").read_text(encoding="utf-8"))
+    # #754: the list now lives in the vendored kit (bot/agent_host.py); bot/guide.py re-exports it.
     allowed = None
-    for node in tree.body:
+    for node in (n for f in ("bot/agent_host.py", "bot/guide.py")
+                 for n in ast.parse((ROOT / f).read_text(encoding="utf-8")).body):
         if isinstance(node, ast.Assign) and any(
             isinstance(t, ast.Name) and t.id == "COMFY_MCP_ALLOWED_TOOLS" for t in node.targets
         ):
             allowed = ast.literal_eval(node.value)
-    assert allowed is not None, "COMFY_MCP_ALLOWED_TOOLS not found in bot/guide.py"
+    assert allowed is not None, "COMFY_MCP_ALLOWED_TOOLS not found in bot/agent_host.py or bot/guide.py"
     missing = _missing(UPSTREAM_COMFY_MCP_ALLOWED_TOOLS, allowed)
     assert not missing, f"COMFY_MCP_ALLOWED_TOOLS missing vs upstream: {missing}"
 
