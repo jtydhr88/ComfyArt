@@ -443,7 +443,7 @@ function QuestionAnswered({ b }: { b: BotBlock }) {
       </div>
     )
   }
-  const answer = askAnswerLabels(b) || t('chatMessage.skipped')
+  const answer = askAnswerLabels(b) || t('chatMessage.skipThisQuestion')  // #763: Skip posts “Skip this question”
   return (
     <div className="ca-qmemo">
       <div className="ca-qmemo__row"><span className="ca-qmemo__k">{t('chatMessage.qaAsk')}</span><span className="ca-qmemo__v">{b.prompt}</span></div>
@@ -457,6 +457,7 @@ function QuestionBlock({ q, st, onChange }: { q: AskQuestion; st: QState; onChan
   const multi = (q.max_selections ?? 1) > 1
   const allowOther = !!q.allow_other
   const textOnly = !options.length && allowOther
+  // #763: D is always the inline `Other (type your answer)...` row on choice cards
   const recommended = new Set([...(q.defaults ?? []), ...options.filter((o) => o.recommended).map((o) => o.id)])
   const otherLetter = LETTERS[options.length] ?? 'A'
 
@@ -507,14 +508,15 @@ function QuestionBlock({ q, st, onChange }: { q: AskQuestion; st: QState; onChan
                 {recommended.has(o.id) && <span className="ca-q__rec">{t('chatMessage.recommended')}</span>}
               </button>
             ))}
-            {allowOther && (
-              <div className="ca-q__opt" data-other="" data-text="" data-on={otherOn || undefined}>
+            {(
+              <div className="ca-q__opt" data-other="" data-text="" data-on={otherOn || undefined} data-off={!allowOther || undefined}>
                 <span className="ca-q__letter">{otherLetter}</span>
                 <input
                   type="text"
                   className="ca-q__input"
                   value={st.other}
                   placeholder={q.placeholder || t('chatMessage.other')}
+                  disabled={!allowOther}
                   onChange={(e) => onOther(e.target.value)}
                   onFocus={stealOther}
                   onKeyDown={(e) => e.stopPropagation()}
@@ -622,6 +624,20 @@ function Ask({ b }: { b: BotBlock }) {
       )}
     </div>
   )
+}
+
+/** #763: a question is open, or just ended (answered/skipped) and real reply text has not started yet —
+ * no 输出中… / Outputting… shell (rail row, bordered status, or footer label) while in this state. */
+export function askQuiet(m: BotMessage) {
+  let at = -1
+  m.blocks.forEach((b, i) => { if (b.type === 'ask') at = i })
+  if (at < 0) return false
+  return !m.blocks.slice(at + 1).some((b) => b.type === 'text' && (b.text ?? '').trim() !== '')
+}
+
+/** #763: a pending question card docks directly above the composer (not inline in the timeline). */
+export function isDockedQuestion(b: BotBlock) {
+  return b.type === 'ask' && b.status === 'pending' && b.kind !== 'plan_quote' && b.kind !== 'run_approval' && b.kind !== OVER_QUOTE.kind
 }
 
 export function renderAsk(b: BotBlock, key: string | number) {
@@ -987,12 +1003,13 @@ function DoneFeedback({ messageId }: { messageId: string }) {
   )
 }
 
-export function AssistantBlocks({ editor, m }: { editor: Editor; m: BotMessage }) {
+export function AssistantBlocks({ editor, m, dockAsks }: { editor: Editor; m: BotMessage; dockAsks?: boolean }) {
   const results = new Map(m.blocks.filter((b) => b.type === 'tool_result' && b.id).map((b) => [b.id, b]))
   const resultOf = (b: BotBlock, i: number) => (b.id ? results.get(b.id) : m.blocks[i + 1]?.type === 'tool_result' ? m.blocks[i + 1] : undefined)
   const isPlan = (b: BotBlock) => b.type === 'tool_use' && toolName(b.name) === 'update_plan'
   const plan = m.blocks.filter(isPlan).at(-1)
   const done = m.status !== 'streaming'
+  const quiet = askQuiet(m) // #763: no 输出中… shell while a question is open / just answered or skipped
   const outputs = done ? outputsOf(m.blocks.filter((b) => b.type !== 'task')) : []
   const items: ReactNode[] = []
   let run: Pair[] = []
@@ -1037,6 +1054,8 @@ export function AssistantBlocks({ editor, m }: { editor: Editor; m: BotMessage }
     // #627: thinking after an image/video gen row → ref_analysis (参考素材分析结束), not a second 思考完成
   let sawMediaGen = false
   m.blocks.forEach((b, i) => {
+    // #763: ask_user never paints its own 向你提问 timeline row (the docked card is the status)
+    if ((b.type === 'tool_use' || b.type === 'tool_result') && toolName(b.name) === 'ask_user') return
     if (hideMemCall(b)) {
       // #437: memory write in flight → 记忆更新中 (no ›); becomes 记忆已更新 › when memory_updated lands
       if (
@@ -1151,7 +1170,7 @@ export function AssistantBlocks({ editor, m }: { editor: Editor; m: BotMessage }
     }
     if (b.type !== 'tool_result') {
       // #348: streaming wait / emitting reply → Outputting… on the rail (Brain)
-      if (!done && proc.length && !proc.some((s) => s.live) && (b.type === 'text' || b.type === 'notice' || b.type === 'ask' || b.type === 'task')) {
+      if (!done && !quiet && proc.length && !proc.some((s) => s.live) && (b.type === 'text' || b.type === 'notice' || b.type === 'task')) {
         proc.push({
           key: `out${i}`,
           kind: 'outputting',
@@ -1166,7 +1185,7 @@ export function AssistantBlocks({ editor, m }: { editor: Editor; m: BotMessage }
       if (b.type === 'text') items.push(<Markdown key={i} text={b.text ?? ''} />)
       if (b.type === 'tool_use') items.push(<Step key={i} editor={editor} use={b} result={resultOf(b, i)} />)
       if (b.type === 'retry') items.push(<Retry key={i} b={b} live={!done && !m.blocks.slice(i + 1).some((x) => x.type === 'retry')} />)
-      if (b.type === 'ask') items.push(renderAsk(b, b.ask_id ?? i))
+      if (b.type === 'ask' && !(dockAsks && isDockedQuestion(b))) items.push(renderAsk(b, b.ask_id ?? i))
       if (b.type === 'task') items.push(<Task key={i} editor={editor} b={b} />)
       if (b.type === 'run_stop') {
         // #492: skip reason=done in AssistantBlocks render (reloaded old chats included). latest-card scan unchanged.
@@ -1178,7 +1197,7 @@ export function AssistantBlocks({ editor, m }: { editor: Editor; m: BotMessage }
     }
   })
   // Streaming with process rail but no live row yet → Outputting… wait state
-  if (!done && proc.length && !proc.some((s) => s.live)) {
+  if (!done && !quiet && proc.length && !proc.some((s) => s.live)) {
     proc.push({
       key: 'out-end',
       kind: 'outputting',

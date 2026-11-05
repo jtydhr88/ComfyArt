@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { atom, useValue, type Editor, type TLShapeId } from 'tldraw'
 
 import { draftAtom, isRefShape, sendToAgent, uploadRefs, type RefShape } from '../agent'
-import { BUILTIN_AGENT, NO_KEY_DETAIL, botEnabledAtom, branchFrom, chatIdAtom, chatsAtom, deleteChat, messagesAtom, openChat, providersAtom, stopTurn, type BotMessage } from '../bot'
+import { BUILTIN_AGENT, NO_KEY_DETAIL, botEnabledAtom, branchFrom, chatIdAtom, chatsAtom, deleteChat, messagesAtom, openChat, providersAtom, type BotMessage } from '../bot'
 import { chatFrameOf, locateChatFrame } from '../chatFrame'
 import { errorText } from '../jobs'
 import { libraryAtom } from '../library'
@@ -11,7 +11,7 @@ import { botSettingsOpenAtom } from './AgentPicker'
 import { dockAtom } from './chatDock'
 import { libraryTabAtom } from './LibraryPanel'
 import { sideAtom } from './SidePanel'
-import { AssistantBlocks, stoppedSubmitted, textOf, UserMessage } from './ChatMessage'
+import { AssistantBlocks, askQuiet, isDockedQuestion, renderAsk, stoppedSubmitted, textOf, UserMessage } from './ChatMessage'
 import { Composer, FILE_ACCEPT } from './Composer'
 import { Icons, LoomiMono } from './icons'
 import { NoticeCenter } from './NoticeCenter'
@@ -126,6 +126,7 @@ export function AgentPanel({ editor, projectId, max, onMax, onCollapse, onError 
   const hasFrame = useValue('chat frame', () => !!(chat && chatFrameOf(editor, chat.id, true)), [editor, chat?.id])
   const list = useRef<HTMLDivElement>(null)
   const busy = !!chat?.busy
+  const docked = (messages.at(-1)?.role === 'assistant' ? messages.at(-1)!.blocks : []).filter(isDockedQuestion)
   const canBranch = providers.find((p) => p.id === chat?.provider)?.branch ?? false
   const fail = (e: unknown) => onError(errorText(e))
 
@@ -212,13 +213,14 @@ export function AgentPanel({ editor, projectId, max, onMax, onCollapse, onError 
           ? <UserMessage key={m.id} editor={editor} m={m} onBranch={canBranch && !busy ? () => void branchFrom(m.id).catch(fail) : undefined} />
           : (
             <div key={m.id} className={fading.has(m.id) ? 'ca-chat__bot ca-chat__bot--stopping' : 'ca-chat__bot'}>
-              <AssistantBlocks editor={editor} m={m} />
-              {m.status === 'streaming' && (
+              <AssistantBlocks editor={editor} m={m} dockAsks />
+              {/* #763: no streaming footer while a question is open / just answered or skipped and no reply text yet */}
+              {m.status === 'streaming' && !askQuiet(m) && (
                 <div className="ca-chat__thinking">
                   <span className="ca-chat__thinkicon"><span className="ca-icon">{Icons.think}</span></span>
                   <span className="ca-chat__thinklabel">{/* #437: a plain-text reply in progress only reads 输出中…; a reasoning turn's own Thought row carries the live label */}
-                  {m.blocks.some((b) => b.type !== 'text' && b.type !== 'thinking') ? t('agentPanel.working') : m.blocks.some((b) => b.type === 'thinking') ? '' : t('chatMessage.outputting')}</span>
-                  <button type="button" className="ca-panel__chip" onClick={() => void stopTurn().catch(fail)}>{t('agentPanel.stop')}</button>
+                  {/* #763: faint streaming text only; Stop lives in the composer's right primary button */}
+                  {m.blocks.some((b) => b.type === 'thinking') ? '' : t('chatMessage.outputting')}</span>
                 </div>
               )}
               {m.status === 'aborted' && stoppedSubmitted(m) > 0 && (
@@ -237,7 +239,11 @@ export function AgentPanel({ editor, projectId, max, onMax, onCollapse, onError 
           )))}
       </div>
       {away && <button type="button" className="ca-chat__jump" title={t('agentPanel.jumpToLatest')} onClick={toBottom}><span className="ca-icon">{Icons.chevron}</span></button>}
-      <Composer editor={editor} busy={busy} onError={onError} />
+      {docked.length > 0 && (
+        <div className="ca-chat__dock" data-testid="question-dock">{docked.map((b, i) => renderAsk(b, b.ask_id ?? i))}</div>
+      )}
+      {/* #763: while a question waits on the user the run is paused, so the right primary button is voice/send, not Stop */}
+      <Composer editor={editor} busy={busy && !docked.length} onError={onError} />
     </aside>
   )
 }

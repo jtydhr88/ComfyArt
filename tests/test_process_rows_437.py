@@ -27,7 +27,9 @@ def test_thinking_row_behind_one_flag_and_key() -> None:
 def test_plain_text_reply_only_outputting() -> None:
     assert ZH["chatMessage.outputting"] == "输出中…"
     assert "t('chatMessage.outputting')" in PANEL
-    assert "b.type !== 'text' && b.type !== 'thinking'" in PANEL  # reasoning: the Thought row carries 输出中…, no second label
+    # reasoning: the Thought row carries 输出中…, no second label; #763: no 工作中… label either (Stop lives in the composer)
+    assert "m.blocks.some((b) => b.type === 'thinking') ? '' : t('chatMessage.outputting')" in PANEL
+    assert "agentPanel.working" not in PANEL
 
 
 def test_generation_row_is_model_name() -> None:

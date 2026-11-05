@@ -25,41 +25,29 @@ def _at_menu_block() -> str:
 
 
 def test_at_menu_exactly_three_groups_in_order() -> None:
+    """#763 supersedes #362: @ menu groups are Assets (refs + project + 素材) → Model."""
     block = _at_menu_block()
-    assert 'data-at-group="reference"' in block
-    assert 'data-at-group="project"' in block
-    assert 'data-at-group="assets"' in block
-    i_ref = block.index('data-at-group="reference"')
-    i_proj = block.index('data-at-group="project"')
-    i_assets = block.index('data-at-group="assets"')
-    assert i_ref < i_proj < i_assets
-    assert "composer.atGroupReference" in block
-    assert "composer.atGroupProject" in block
-    assert "composer.atGroupAssets" in block
+    assert 'data-at-group="assets"' in block and 'data-at-group="model"' in block
+    assert block.index('data-at-group="assets"') < block.index('data-at-group="model"')
+    assert block.count("composer.atGroup") == 2
+    assert "composer.atGroupAssets" in block and "composer.atGroupModel" in block
 
 
 def test_at_menu_no_model_group() -> None:
-    """Forbidden: 模型/Model group or model-picker rows inside @ menu."""
+    """#763 product ruling: the Model group is required now (model tiers + More), no model-picker chrome."""
     block = _at_menu_block()
-    assert "atGroupModel" not in block
-    assert 'data-at-group="model"' not in block
+    assert 'data-at-group="model"' in block
+    assert "IMAGE_MODELS" in COMPOSER and "AT_MODEL_LIMIT" in COMPOSER
     assert "model-picker" not in block.lower()
-    assert "ca-model" not in block
-    # titles rendered are only the three locked groups — no fourth model title key
-    assert block.count("composer.atGroup") == 3
-    assert "composer.atGroupModel" not in COMPOSER
-    assert '"composer.atGroupModel"' not in ZH
-    assert '"composer.atGroupModel"' not in EN
-    # i18n must not ship a model group label for @
-    assert "composer.atGroupModel" not in ZH
-    assert "composer.atGroupModel" not in EN
+    assert '"composer.atGroupModel"' in ZH and '"composer.atGroupModel"' in EN
 
 
 def test_at_filter_placeholder_style() -> None:
-    assert "composer.atFilterPlaceholder" in COMPOSER
-    assert '"composer.atFilterPlaceholder": "@ 输入关键词匹配参考资源"' in ZH
-    assert "Type to match reference resources" in EN or "@ Type to match" in EN
-    assert 'data-testid="at-menu-filter"' in COMPOSER
+    """#763: the textarea placeholder becomes the search hint (no in-menu filter row)."""
+    assert "composer.atSearchPlaceholder" in COMPOSER
+    assert 'data-testid="at-search-hint"' in COMPOSER
+    assert '"composer.atSearchPlaceholder": "Type a keyword to search references"' in EN
+    assert '"composer.atSearchPlaceholder"' in ZH
 
 
 def test_at_rows_square_thumb_plus_name() -> None:
@@ -106,12 +94,8 @@ def test_summary_capsule_should_path_present() -> None:
 
 
 def test_i18n_group_labels() -> None:
-    assert '"composer.atGroupReference": "参考"' in ZH
-    assert '"composer.atGroupProject": "本项目"' in ZH
-    assert '"composer.atGroupAssets": "素材"' in ZH
-    assert '"composer.atGroupReference"' in EN
-    assert '"composer.atGroupProject"' in EN
-    assert '"composer.atGroupAssets"' in EN
+    assert '"composer.atGroupAssets": "素材"' in ZH and '"composer.atGroupModel": "模型"' in ZH
+    assert '"composer.atGroupAssets": "Assets"' in EN and '"composer.atGroupModel": "Model"' in EN
 
 
 def test_done_prose_360_untouched() -> None:

@@ -14,10 +14,21 @@ export function useSlot(hasContent: boolean, composing: boolean) {
   return { showSend: ref.current, setVoice }
 }
 
-export function ComposerSlot({ showSend, setVoice, canSend, onSend, onText, onError, title }: {
+export function ComposerSlot({ showSend, setVoice, canSend, onSend, onText, onError, title, onStop }: {
   showSend: boolean; setVoice: (s: VoiceState) => void; canSend: boolean; onSend: () => void
   onText: (text: string) => void; onError: (msg: string) => void; title?: string
+  /** #763: while a turn is running the same slot becomes Stop (solid square); no separate working/stop chrome. */
+  onStop?: () => void
 }) {
+  if (onStop) {
+    return (
+      <div className="ca-composer__slotwrap" data-slot="stop">
+        <button type="button" className="ca-gen__send ca-composer__slot" data-slot="stop" data-testid="composer-stop" title={t('agentPanel.stop')} aria-label={t('agentPanel.stop')} onClick={onStop}>
+          <span className="ca-icon">{Icons.stop}</span>
+        </button>
+      </div>
+    )
+  }
   return (
     <div className="ca-composer__slotwrap" data-slot={showSend ? 'send' : 'voice'}>
       <VoiceButton slot hidden={showSend} onState={setVoice} onError={onError} onText={onText} />

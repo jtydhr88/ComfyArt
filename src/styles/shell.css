@@ -160,7 +160,7 @@ button.ca-head__logo { padding: 0; border: none; border-radius: 8px; background:
 button.ca-head__logo:hover, button.ca-head__logo[data-open] { background: var(--ca-hover); }
 .ca-root[data-chat="max"] .ca-main { display: none; }
 .ca-agent[data-max] { flex: 1; width: auto; border-right: none; }
-.ca-agent[data-max] .ca-chat, .ca-agent[data-max] .ca-composer { width: min(720px, calc(100% - 24px)); margin-left: auto; margin-right: auto; box-sizing: border-box; }
+.ca-agent[data-max] .ca-chat, .ca-agent[data-max] .ca-composer, .ca-agent[data-max] .ca-chat__dock { width: min(720px, calc(100% - 24px)); margin-left: auto; margin-right: auto; box-sizing: border-box; }
 .ca-agent[data-max] .ca-composer { margin-bottom: 8px; }  /* #542: chat-only input card 720 wide, docked 8px from the bottom */
 .ca-agent[data-max] .ca-head__name { margin-right: auto; }  /* #542 P1-2: full-screen chat keeps logo + name left and the saved / new chat / notices / expand / collapse group at the top right */
 
@@ -202,8 +202,21 @@ button.ca-head__logo:hover, button.ca-head__logo[data-open] { background: var(--
 .ca-composer__notice { /* #644: in flow above the composer: 12 below the chat, 36 above the rim (mascot peeks 29) */ flex: none; margin: 12px 12px 36px; display: flex; align-items: center; gap: 8px; padding: 8px 10px; border-radius: 10px; background: var(--ca-float); color: var(--ca-text); border: 1px solid var(--ca-border); box-shadow: 0 2px 8px rgb(0 0 0 / 8%); font-size: 13px; }
 .ca-composer__mini { width: 24px; height: 24px; border-radius: 4px; object-fit: cover; }
 
-/* #362 @ menu groups 参考/本项目/素材 (no Model) + composer capsules */
-.ca-at-menu { width: 280px; max-height: 320px; padding: 4px; }
+/* #362 @ menu + composer capsules; #763: Assets → Model, popped above the composer (~255 wide, rows 32) */
+.ca-composer__field { position: relative; display: flex; flex-direction: column; }
+.ca-composer__ghost {
+  position: absolute; inset: 0; pointer-events: none; overflow: hidden;
+  font: inherit; color: var(--ca-muted); white-space: pre-wrap; word-break: break-word;
+}
+.ca-composer__ghost-typed { visibility: hidden; }
+.ca-composer__ghost + .ca-composer__input::placeholder { color: transparent; }
+.ca-composer__suggest.ca-at-menu {
+  left: 50px; right: auto; width: 255px; max-height: 340px; padding: 8px 4px;
+  border-radius: 12px; box-sizing: border-box;
+}
+.ca-at-menu__sep { height: 1px; margin: 4px 4px 6px; background: var(--ca-border); }
+.ca-at-menu__thumb--icon { background: transparent; color: var(--ca-text); }
+.ca-at-menu__thumb--icon .ca-icon { width: 16px; height: 16px; }
 .ca-at-menu__filter {
   margin: 2px 6px 6px; padding: 6px 8px; border-radius: 8px;
   color: var(--ca-muted); font: 13px/20px var(--ca-font);
@@ -213,9 +226,10 @@ button.ca-head__logo:hover, button.ca-head__logo[data-open] { background: var(--
 .ca-at-menu__title {
   padding: 6px 8px 4px; font: 12px/16px var(--ca-font); color: var(--ca-muted);
 }
-.ca-at-menu__row { height: 40px; gap: 8px; }
+.ca-at-menu__row { height: 32px; gap: 8px; }
+[data-at-group="assets"] > button.ca-at-menu__row:first-of-type { background: var(--ca-hover); } /* current item */
 .ca-at-menu__thumb {
-  position: relative; flex: 0 0 28px; width: 28px; height: 28px; border-radius: 4px;
+  position: relative; flex: 0 0 20px; width: 20px; height: 20px; border-radius: 4px;
   overflow: hidden; display: inline-flex; align-items: center; justify-content: center;
   background: var(--ca-field); color: var(--ca-muted);
 }
@@ -226,8 +240,8 @@ button.ca-head__logo:hover, button.ca-head__logo[data-open] { background: var(--
   background: #0006; color: #fff;
 }
 .ca-at-menu__play .ca-icon, .ca-at-menu__play svg { width: 14px; height: 14px; }
-.ca-at-menu__more { height: 32px; color: var(--ca-muted); }
-.ca-at-menu__more-mark { width: 28px; text-align: center; }
+.ca-at-menu__more { height: 32px; gap: 8px; color: var(--ca-text); }
+.ca-at-menu__more-mark { width: 20px; text-align: center; }
 .ca-chip--capsule {
   height: 28px; padding: 0 8px 0 4px; border-radius: 8px; gap: 6px;
   border: var(--ca-border-w) solid var(--ca-border); background: var(--ca-field);
@@ -530,6 +544,8 @@ textarea.ca-genblock__text { flex: 1; resize: none; border: none; outline: none;
 span.arti-mascot { cursor: default; pointer-events: none; }
 /* content above the peek so body is half-hidden behind rounded top */
 .ca-composer > :not(.arti-mascot-wrap) { position: relative; z-index: 2; }
+/* #763: the @ / slash pop stays a floating card above the input (not in flow) */
+.ca-composer > .ca-composer__suggest { position: absolute; z-index: 20; }
 /* #376: while the Arti notify panel is open the mascot is fully hidden (nothing peeks into the 8px gap); close → idle peek returns */
 .arti-mascot-wrap[data-notify-open] {
   visibility: hidden;
@@ -725,3 +741,17 @@ span.arti-mascot { cursor: default; pointer-events: none; }
   }
 }
 .ca-agentlogo--loomi { color: var(--ca-strong); }
+
+/* #763: pending question card docks directly above the composer (same width); bottom gap clears the 29px Arti mascot */
+.ca-chat__dock { margin: 0 12px 30px; box-sizing: border-box; align-self: stretch; flex: none; display: flex; flex-direction: column; gap: 8px; max-height: 55%; min-height: 0; }
+.ca-chat__dock .ca-q { box-sizing: border-box; overflow: auto; padding: 16px 8px; gap: 10px; border-radius: 16px; --ca-opt-h: 36px; --ca-opt-gap: 4px; }
+.ca-chat__dock .ca-q__head, .ca-chat__dock .ca-q__prompt, .ca-chat__dock .ca-q__foot { padding: 0 8px; }
+.ca-chat__dock .ca-q__opt { box-sizing: border-box; padding: 0 8px; }
+.ca-chat__dock .ca-q__opt[data-on] .ca-q__letter { color: var(--ca-letter-fg); background: var(--ca-letter); }
+.ca-chat__dock .ca-q__opt[data-off] { cursor: default; }
+.ca-chat__dock .ca-q__opt[data-off]:hover { background: transparent; }
+.ca-chat__dock .ca-q__skip { width: 60px; height: 32px; padding: 0; border-radius: 10px; font-size: 13px; }
+.ca-chat__dock .ca-q__submit { width: 90px; height: 32px; padding: 0; border-radius: 10px; font-size: 13px; }
+.ca-at-menu__group > .ca-menu__item { width: 100%; box-sizing: border-box; }
+.ca-at-menu__thumb.ca-at-menu__thumb--icon { background: transparent; color: var(--ca-text); }
+.ca-at-menu__row > .ca-menu__grow { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
