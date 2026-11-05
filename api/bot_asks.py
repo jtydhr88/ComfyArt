@@ -16,9 +16,19 @@ RUN_APPROVAL_KIND = _kit.RUN_APPROVAL_KIND
 QUESTION_KIND = "question"
 
 _MAX_OPTIONS = 12
+# After ask_user resolves, tool results carry a note that steers the model to
+# Lovart-style confirmation-and-wait prose (restate choice/skip + wait; no
+# generate this turn). Do not tell the model to "continue with defaults".
 _SKIP_NOTE = (
-    "user skipped this question; continue with sensible defaults or omit "
-    "this preference — do not re-ask immediately"
+    "user skipped this question; acknowledge the skip in chat (restate that "
+    "you are skipping this preference), clearly wait for their next "
+    "instructions, and do NOT generate images or call generation tools this "
+    "turn — do not re-ask immediately"
+)
+_ANSWER_NOTE = (
+    "user answered; acknowledge their choice in chat (restate the selected "
+    "preference), clearly wait for their next instructions, and do NOT "
+    "generate images or call generation tools this turn"
 )
 
 
@@ -441,6 +451,10 @@ def validate_answer(spec: dict, selected: list[str],
 
 def skip_note() -> str:
     return _SKIP_NOTE
+
+
+def answer_note() -> str:
+    return _ANSWER_NOTE
 
 
 def list_pending_for_chat(chat_id: str) -> list[PendingAsk]:

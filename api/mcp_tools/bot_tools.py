@@ -86,6 +86,8 @@ async def ask_user(args: dict) -> dict:
     if skipped:
         result["note"] = bot_asks.skip_note()
         result["skipped"] = True
+    else:
+        result["note"] = bot_asks.answer_note()
     return result
 
 
@@ -239,9 +241,12 @@ TOOLS: dict[str, dict] = {
             "a few minutes pass. Use when a required parameter or creative "
             "choice is missing. options are choices (A–E); min/max_selections "
             "for multi-select; allow_other for free text; allow_skip (default "
-            "true). Returns {status, selected, other_text, answers?}; skipped "
-            "answers include a note — continue with sensible defaults and do "
-            "not re-ask immediately. status cancelled/expired means no answer."
+            "true). Returns {status, selected, other_text, answers?, note}. "
+            "After the user answers or skips, the note tells you to "
+            "acknowledge (restate the choice or that it was skipped), clearly "
+            "wait for their next instructions, and NOT generate images this "
+            "turn — do not re-ask immediately. status cancelled/expired means "
+            "no answer."
         ),
         "inputSchema": ASK_USER_SCHEMA,
         "handler": ask_user,
