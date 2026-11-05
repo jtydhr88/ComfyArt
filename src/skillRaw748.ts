@@ -43,6 +43,8 @@ export const PENDING_WASH = 'comfyart:pending-wash'
 export const isPendingWash = (u?: string | null) => u === PENDING_WASH
 const WASH = (wash as { examples: Record<string, (string | null)[]> }).examples
 const WASH_T = (wash as { templates?: Record<string, (string | null)[]> }).templates ?? {}
+/** #760 — per-template REAL washed media (raw content.media[] 1:1, washed). Never padded with PENDING_WASH. */
+const WASH_S = (wash as { stacks?: Record<string, (string | null)[][]> }).stacks ?? {}
 
 /** #751 — example card left = exactly the raw highlights, 1:1 slot → asset (src/data/wash-748.json).
  *  video slot = the skill's own washed video; image slot = its own washed still, else PENDING_WASH + pendingWash. */
@@ -72,8 +74,10 @@ export function applyRaw748(skill: Skill): Skill {
   const presets = tpls.map((t, i): SkillPreset => {
     const old = skill.presets?.[i]
     const image = old?.image ?? WASH_T[skill.id]?.[i] ?? PENDING_WASH // the template's OWN wash (1:1, fixed per card), else the unified placeholder
-    const stack = t.depth > 1 ? Array.from({ length: t.depth }, (_, j) => (j === 0 ? image : PENDING_WASH)) : undefined
-    const pendingWash = Array.from({ length: t.depth }, (_, j) => j).filter((j) => (j === 0 ? image : PENDING_WASH) === PENDING_WASH)
+    // #760: rest = ONE cover; click-expand only shows REAL washed media[] (no PENDING_WASH fillers, no fake layers).
+    const real = (WASH_S[skill.id]?.[i] ?? []).filter((u): u is string => !!u && !isPendingWash(u)).slice(0, t.depth)
+    const stack = t.depth > 1 && real.length > 1 ? real : undefined
+    const pendingWash = image === PENDING_WASH ? [0] : []
     // #751 HOLD: only a template's own video; the skill-level video is never shared across template cards
     const vid = old?.video
     return {

@@ -56,10 +56,11 @@ def test_template_stacks_never_reuse_washed_stills(got):
         if r["kind"] != "template":
             continue
         for t, p in zip(r["templates"], got["skills"][sid]["presets"]):
-            media = p["stack"] or [p["image"]]
-            assert len(media) == t["depth"], sid
-            assert all(m == P for m in media[1:]), f"{sid}: extra stack slots must be pendingWash"
-            assert (p["pendingWash"] or []) == [i for i, m in enumerate(media) if m == P], sid
+            # #760: no PENDING_WASH filler layers; stack only from REAL washed media[], never longer than depth
+            stack = p["stack"] or []
+            assert P not in stack, f"{sid}: stack must never be padded with pendingWash"
+            assert len(stack) <= t["depth"] and len(stack) != 1, sid
+            assert (p["pendingWash"] or []) == ([0] if p["image"] == P else []), sid
 
 
 @needs_node

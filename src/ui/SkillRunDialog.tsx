@@ -55,11 +55,9 @@ function PresetTile({ skill, item, preset: p, on, onPick, onZoom }: {
               aria-hidden="true"
             />
           )}
-          {/* #748 stack-expand: thumbs fan out on hover, collapse when selected (timings = CSS vars). */}
-          {stack.length > 0 && <span className="ca-skillrun__stack" aria-hidden="true" data-testid="skill-run-stack" style={{ '--n': Math.min(stack.length, 5) } as React.CSSProperties}>
-            {stack.slice(0, 5).map((src, i) => isPendingWash(src)
-              ? <span key={i} className="ca-skillrun__pending" data-pending-wash="1" style={{ '--i': i } as React.CSSProperties}><span className="ca-icon">{Icons.image}</span></span>
-              : <img key={i} src={src} alt="" style={{ '--i': i } as React.CSSProperties} />)}
+          {/* #760: rest = the single cover above (contain+center); click (selected) → expand REAL media[] only, 400ms. */}
+          {stack.length > 1 && <span className="ca-skillrun__stack" aria-hidden="true" data-testid="skill-run-stack" style={{ '--n': Math.min(stack.length, 5) } as React.CSSProperties}>
+            {stack.slice(0, 5).map((src, i) => <img key={i} src={src} alt="" style={{ '--i': i } as React.CSSProperties} />)}
           </span>}
           <span className="ca-skillrun__pick">{t('skillRun.select')}</span>
           {on && <span className="ca-skillrun__check" aria-hidden="true"><span className="ca-icon">{Icons.check}</span></span>}
