@@ -1250,3 +1250,39 @@ body { background: var(--ca-float); }
   padding-right: 32px;
 }
 .ca-skillrun__presetselect::-ms-expand { display: none; }
+
+/* #748 — SkillRunDialog static polish per design measure 2026-11-05 (packaging + motion first).
+ * TODO(#748): timings are placeholders until design posts measured durations/easing from reference frame capture. */
+.ca-skillrun {
+  --ca-skillrun-select-dur: 150ms;              /* TODO(#748) selected ring / ✓ transition */
+  --ca-skillrun-select-ease: cubic-bezier(.4, 0, .2, 1); /* TODO(#748) */
+  --ca-skillrun-hover-dur: 150ms;               /* TODO(#748) 「选择」 capsule + zoom icon */
+  --ca-skillrun-hover-ease: cubic-bezier(.4, 0, .2, 1);  /* TODO(#748) */
+  --ca-skillrun-stack-dur: 240ms;               /* TODO(#748) stack spread / collapse */
+  --ca-skillrun-stack-ease: cubic-bezier(.2, 0, 0, 1);   /* TODO(#748) */
+  --ca-skillrun-stack-step: 0px;                /* TODO(#748) per-layer offset when collapsed */
+  --ca-skillrun-ring: #1a1a1a;
+}
+.ca-skillrun__presetimg, .ca-skillrun__presetimg::after { border-radius: 8px; }
+.ca-skillrun__presetimg::after { transition: box-shadow var(--ca-skillrun-select-dur) var(--ca-skillrun-select-ease); }
+.ca-skillrun__preset[data-on] .ca-skillrun__presetimg::after { box-shadow: inset 0 0 0 1.5px var(--ca-skillrun-ring); }
+.ca-skillrun__check { background: var(--ca-skillrun-ring); color: #fff; }
+:root[data-theme="dark"] .ca-skillrun { --ca-skillrun-ring: var(--ca-text); }
+.ca-skillrun__presetname { transition: color var(--ca-skillrun-select-dur) var(--ca-skillrun-select-ease); }
+.ca-skillrun__zoom, .ca-skillrun__pick {
+  transition: opacity var(--ca-skillrun-hover-dur) var(--ca-skillrun-hover-ease), transform var(--ca-skillrun-hover-dur) var(--ca-skillrun-hover-ease);
+}
+/* stack-expand: collapsed pile under the still; hover spreads a row of small thumbs; selected collapses again. */
+.ca-skillrun__stack { position: absolute; inset: auto 8px 8px 8px; height: 28%; display: flex; gap: 4px; z-index: 1; pointer-events: none; }
+.ca-skillrun__stack img {
+  flex: 1 1 0; min-width: 0; height: 100%; object-fit: cover; border-radius: 4px; opacity: 0;
+  transform: translateX(calc(var(--i) * -100% - var(--i) * 4px + var(--i) * var(--ca-skillrun-stack-step)));
+  transition: transform var(--ca-skillrun-stack-dur) var(--ca-skillrun-stack-ease), opacity var(--ca-skillrun-stack-dur) var(--ca-skillrun-stack-ease);
+}
+.ca-skillrun__preset:not([data-on]):hover .ca-skillrun__stack img,
+.ca-skillrun__preset:not([data-on]):focus-visible .ca-skillrun__stack img { opacity: 1; transform: none; }
+/* right panel: label→control 8, field gap 24; text 36h grey; Start disabled light grey until required filled */
+.ca-skillrun__body > .ca-skillform { gap: 24px; }
+.ca-skillrun .ca-skillform .ca-skillrun__field > .ca-panel__input { background: var(--ca-field); border: 0; }
+.ca-skillrun__current .ca-skillrun__currentrow { background: var(--ca-float, #fff); box-shadow: inset 0 0 0 1px var(--ca-border); }
+.ca-skillrun__go[aria-disabled="true"] { background: var(--ca-hover, #ececec); color: var(--ca-muted, #a3a3a3); cursor: not-allowed; }

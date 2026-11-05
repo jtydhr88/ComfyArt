@@ -1,4 +1,5 @@
 import { atom } from 'tldraw'
+import { MEASURED_INPUTS_748 } from './skillInputsMeasured'
 import { unzipSync } from 'fflate'
 
 import { deleteUserFile, listUserFiles, readUserText, uploadImage, viewUrl, writeUserText } from './comfy'
@@ -12,7 +13,16 @@ export interface LocText { zh: string; en: string }
 export type SkillCategory = 'ecommerce' | 'branding' | 'social' | 'website' | 'ads'
 /** #494 — one preset (template): `prompt` is the style text appended after the skill's instructions when the user runs
  *  the skill with this preset (step 2). `image` is the preset's own example image; unset → the skill's list cover. */
-export interface SkillPreset { id: string; name: LocText; prompt?: string; image?: string; /** #575 — optional template hover/detail mp4; unset → still `image` / skill cover. */ video?: string }
+export interface SkillPreset { id: string; name: LocText; prompt?: string; image?: string; /** #575 — optional template hover/detail mp4; unset → still `image` / skill cover. */ video?: string
+  /** #748 — stack-expand tile: extra thumbs fanned out on hover, collapsed on select. Data-driven; unset → plain tile. */
+  stack?: string[] }
+/** #748 §C — left media[]: data-driven template/example tiles. Same renderer branches on `type`; stack carries children.
+ *  TODO(#748): seeded from presets until the product media dump lands; then fill per skill. */
+export interface SkillMediaItem {
+  type: 'image' | 'video' | 'stack'; url: string; ratio?: string; cover?: string
+  /** links the tile to a preset (selection → 当前模板 + run params) */
+  presetId?: string; name?: LocText; children?: SkillMediaItem[]
+}
 /** #494 — one field of the skill's input dialog. Label / placeholder / default / required all come from here. */
 export interface SkillInput {
   key: string; label: { zh: string; en?: string }; type: 'text' | 'textarea' | 'select' | 'image'; required?: boolean
@@ -25,7 +35,7 @@ export interface SkillInput {
 export interface Skill {
   id: string; name: string; description?: string; instructions: string; files?: Record<string, string>; images?: Record<string, string>; custom?: boolean; learned?: string[]
   /** #494 built-in metadata. Imported / personal skills have none of these and need no migration. */
-  category?: SkillCategory; cover?: string; video?: string; presets?: SkillPreset[]; inputs?: SkillInput[]
+  category?: SkillCategory; cover?: string; video?: string; presets?: SkillPreset[]; inputs?: SkillInput[]; media?: SkillMediaItem[]
   /** #541/#575 「效果示例」 carousel media (commit-pinned stills and/or short mp4). Unset → the section is not rendered.
    *  #641: an explicit empty list renders 「暂无示例」 when `presetChips` is set. */
   examples?: string[]
@@ -304,7 +314,11 @@ function orderBuiltins(skills: Skill[]): Skill[] {
  *  #642 Phase3-S3 — NEW19 NEARMISS_INPUTS field parity (scaffold); assets empty until #643 wash pins.
  *  Skill Creator Out → #650. `interior` untouched. Gold UX site external — never name it in src.
  */
-export const BUILTIN_SKILLS: Skill[] = orderBuiltins([
+/** #748 — reference-measured inputs[] (src/data/skill-inputs-748.json) override hand-entered ones by skill id. */
+function withMeasuredInputs748(list: Skill[]): Skill[] {
+  return list.map((s) => MEASURED_INPUTS_748[s.id] ? { ...s, inputs: MEASURED_INPUTS_748[s.id] } : s)
+}
+export const BUILTIN_SKILLS: Skill[] = withMeasuredInputs748(orderBuiltins([
   { id: 'poster', name: t('skills.posterDesign'), instructions: 'You are a production poster designer. Deliver print-ready compositions, not loose mood sketches.\n1) Brief: pull headline, subject, audience and use (event, promo, editorial) from the upload and notes.\n2) Hierarchy: one hero subject, strong headline typography in quotes, clear subcopy ladder, generous margins.\n3) Ratio: default 3:4; keep safe margins for print crop. Offer 2 distinct art directions when the brief is open.\n4) Finish: high contrast, legible at arm length, no clipped type. Put every on-art phrase in quotes.\n5) Refs: when the user uploaded a file, pass its shape id in refs (ref_modes content) on every generate_image call.',
     category: 'ads', cover: cover('poster'), quickStartCover: quickStartCover('poster'), featured: feedCovers('poster'), video: video('poster'), examples: ex541('poster', [1, 2, 3, 4, 5]),
     inputs: REF_CARD_INPUTS_687 },
@@ -525,7 +539,7 @@ export const BUILTIN_SKILLS: Skill[] = orderBuiltins([
   { id: 'interior', name: t('skills.interiorArchitecturalVisualization'), instructions: 'Produce photoreal interior or architecture renders: eye-level wide shot, natural light, accurate materials, 16:9. Add a detail vignette at 4:3.',
     cover: cover('interior'), quickStartCover: quickStartCover('interior'), featured: feedCovers('interior'), video: video('interior'), examples: ex541('interior', [1, 2, 3, 4]),
     inputs: REF_CARD_INPUTS_687 },
-])
+]))
 
 export const skillAtom = atom<Skill | null>('skill', null)
 /** #673 — the plain sentence shown in the composer when a hidden skill is attached from an old session / card / link. */
@@ -1070,4 +1084,14 @@ export function skillRunParams(skill: Skill, values: SkillValues, presetId?: str
   }
   const preset = presetId ? skill.presets?.find((p) => p.id === presetId) : undefined
   return { skill: skill.id, mode: 'agent', ask: lines.join('\n') || skill.name, ...(preset ? { preset: preset.id } : {}), ...(refs.length ? { ref: refs } : {}) }
+}
+
+/** #748 §C — left tiles: explicit skill.media[] wins; else derived from presets (image/video; preset.stack → stack children). */
+export function skillMedia(skill: Skill): SkillMediaItem[] {
+  if (skill.media?.length) return skill.media
+  return (skill.presets ?? []).filter((p) => !!(p.image || p.video)).map((p): SkillMediaItem => {
+    const url = presetImage(skill, p) ?? p.image ?? ''
+    if (p.stack?.length) return { type: 'stack', url, presetId: p.id, name: p.name, children: p.stack.map((c) => ({ type: 'image', url: c })) }
+    return { type: p.video ? 'video' : 'image', url, ...(p.video ? { cover: url } : {}), presetId: p.id, name: p.name }
+  })
 }

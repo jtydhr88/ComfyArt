@@ -6,7 +6,7 @@
  *  No skill ids are named here. 「详情」 keeps main's #484 edit page (openSkillEditor). */
 import { useRef, useState } from 'react'
 
-import { uploadSkillImage, isSkillMediaVideo, loc, loadFavourites, missingInputs, presetImage, presetVideo, recordSkillUse, skillAuthor, skillCover, skillCoverVideoHover, skillMeta, skillMetaLabel, skillDefaults, skillDescription, skillPreset, skillRunParams, skillShareUrl, toggleFavourite, type Skill, type SkillPreset } from '../skills'
+import { uploadSkillImage, isSkillMediaVideo, loc, loadFavourites, missingInputs, presetImage, presetVideo, recordSkillUse, skillAuthor, skillCover, skillCoverVideoHover, skillMeta, skillMetaLabel, skillDefaults, skillDescription, skillPreset, skillRunParams, skillShareUrl, skillMedia, toggleFavourite, type Skill, type SkillPreset } from '../skills'
 import { newProject } from '../projects'
 import { BRAND } from '../brand'
 import { copyText } from '../clipboard'
@@ -27,8 +27,10 @@ function PresetTile({ skill, preset: p, on, onPick, onZoom }: {
   const play = () => skillCoverVideoHover(videoRef.current, 'enter')
   const stop = () => skillCoverVideoHover(videoRef.current, 'leave')
   const zoomSrc = videoSrc || img
+  const item = skillMedia(skill).find((m) => m.presetId === p.id)
+  const stack = item?.type === 'stack' ? (item.children ?? []).map((c) => c.url) : []
   return (
-    <div className="ca-skillrun__tile" data-on={on || undefined} data-has-video={videoSrc ? '1' : undefined}>
+    <div className="ca-skillrun__tile" data-stack={stack.length ? stack.length : undefined} data-on={on || undefined} data-has-video={videoSrc ? '1' : undefined}>
       <button type="button" role="radio" aria-checked={on} data-on={on || undefined}
         className="ca-skillrun__preset" data-testid="skill-run-preset" data-preset={p.id}
         onClick={onPick}
@@ -52,6 +54,10 @@ function PresetTile({ skill, preset: p, on, onPick, onZoom }: {
               aria-hidden="true"
             />
           )}
+          {/* #748 stack-expand: thumbs fan out on hover, collapse when selected (timings = CSS vars). */}
+          {stack.length > 0 && <span className="ca-skillrun__stack" aria-hidden="true" data-testid="skill-run-stack">
+            {stack.map((src, i) => <img key={i} src={src} alt="" style={{ '--i': i } as React.CSSProperties} />)}
+          </span>}
           <span className="ca-skillrun__pick">{t('skillRun.select')}</span>
           {on && <span className="ca-skillrun__check" aria-hidden="true"><span className="ca-icon">{Icons.check}</span></span>}
         </span>
@@ -137,7 +143,7 @@ export function SkillRunDialog({ skill, presetId, onClose, run = newProject }: {
           </header>
           {(() => {
             const examples = skill.examples ?? []
-            const presetTiles = (skill.presets ?? []).filter((p) => !!(p.image || p.video))
+            const presetTiles = skillMedia(skill).map((m) => skill.presets?.find((p) => p.id === m.presetId)).filter((p): p is SkillPreset => !!p)
             // #641: thumbnail (presetChips) with an explicit empty list still shows 「暂无示例」.
             const showEmptyExamples = !!skill.presetChips && Array.isArray(skill.examples) && skill.examples.length === 0
             const coverSrc = skillCover(skill)?.src ?? null
@@ -182,7 +188,7 @@ export function SkillRunDialog({ skill, presetId, onClose, run = newProject }: {
           </div>
           <div className="ca-skillrun__body">
             {chosen && (() => {
-              const presetTiles = (skill.presets ?? []).filter((p) => !!(p.image || p.video))
+              const presetTiles = skillMedia(skill).map((m) => skill.presets?.find((p) => p.id === m.presetId)).filter((p): p is SkillPreset => !!p)
               const pickOnLeft = presetTiles.length > 0
               // #636 PRODUCT HARD LOCK: C5 nearMiss Examples-only → remove entire 「当前模板」 row.
               // Presets are default params only; never expose as select. FieldSelect+custom chevron
@@ -277,7 +283,7 @@ export function SkillRunDialog({ skill, presetId, onClose, run = newProject }: {
           </div>
           <div className="ca-skillrun__foot">
             {runError && <p className="ca-skillrun__fielderr" role="alert" data-testid="skill-run-run-error">{t('skillRun.startFailed')}</p>}
-            <button type="button" className="ca-panel__primary ca-skillrun__go" data-testid="skill-run-go" disabled={!!uploading} data-missing={missing.length || undefined}
+            <button type="button" className="ca-panel__primary ca-skillrun__go" data-testid="skill-run-go" disabled={!!uploading} aria-disabled={missing.length > 0 || undefined} data-missing={missing.length || undefined}
               onClick={onStart}>{t('skillRun.start')}</button>
           </div>
         </div>

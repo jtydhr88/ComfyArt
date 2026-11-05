@@ -1,0 +1,382 @@
+{
+ "source": "reference product measure 2026-11-05 (#748 comment 6646601205)",
+ "skills": {
+  "thumbnail": {
+   "left": "examples",
+   "currentTemplate": false,
+   "inputs": [
+    {
+     "key": "upload",
+     "type": "upload",
+     "label_zh": "上传文件",
+     "required": false
+    },
+    {
+     "key": "notes",
+     "type": "text",
+     "label_zh": "补充描述",
+     "required": false,
+     "placeholder_zh": "有什么想补充的吗？",
+     "maxlength": 500
+    }
+   ],
+   "startDisabledWhenEmpty": false
+  },
+  "poster": {
+   "left": "examples",
+   "currentTemplate": false,
+   "inputs": [
+    {
+     "key": "upload",
+     "type": "upload",
+     "label_zh": "上传文件",
+     "required": false
+    },
+    {
+     "key": "notes",
+     "type": "text",
+     "label_zh": "补充描述",
+     "required": false,
+     "placeholder_zh": "有什么想补充的吗？",
+     "maxlength": 500
+    }
+   ],
+   "startDisabledWhenEmpty": false
+  },
+  "meta-ads": {
+   "left": "examples",
+   "currentTemplate": false,
+   "inputs": [
+    {
+     "key": "upload",
+     "type": "upload",
+     "label_zh": "上传文件",
+     "required": false
+    },
+    {
+     "key": "notes",
+     "type": "text",
+     "label_zh": "补充描述",
+     "required": false,
+     "placeholder_zh": "有什么想补充的吗？",
+     "maxlength": 500
+    }
+   ],
+   "startDisabledWhenEmpty": false
+  },
+  "marketing-campaign": {
+   "left": "examples",
+   "currentTemplate": false,
+   "inputs": [
+    {
+     "key": "upload",
+     "type": "upload",
+     "label_zh": "上传文件",
+     "required": false
+    },
+    {
+     "key": "notes",
+     "type": "text",
+     "label_zh": "补充描述",
+     "required": false,
+     "placeholder_zh": "有什么想补充的吗？",
+     "maxlength": 500
+    }
+   ],
+   "startDisabledWhenEmpty": false
+  },
+  "banner": {
+   "left": "examples",
+   "currentTemplate": false,
+   "inputs": [
+    {
+     "key": "upload",
+     "type": "upload",
+     "label_zh": "上传文件",
+     "required": false
+    },
+    {
+     "key": "notes",
+     "type": "text",
+     "label_zh": "补充描述",
+     "required": false,
+     "placeholder_zh": "有什么想补充的吗？",
+     "maxlength": 500
+    }
+   ],
+   "startDisabledWhenEmpty": false
+  },
+  "character": {
+   "left": "examples",
+   "currentTemplate": false,
+   "inputs": [
+    {
+     "key": "upload",
+     "type": "upload",
+     "label_zh": "上传文件",
+     "required": false
+    },
+    {
+     "key": "notes",
+     "type": "text",
+     "label_zh": "补充描述",
+     "required": false,
+     "placeholder_zh": "有什么想补充的吗？",
+     "maxlength": 500
+    }
+   ],
+   "startDisabledWhenEmpty": false
+  },
+  "logo-material": {
+   "left": "examples",
+   "currentTemplate": false,
+   "inputs": [
+    {
+     "key": "upload",
+     "type": "upload",
+     "label_zh": "上传文件",
+     "required": false
+    },
+    {
+     "key": "notes",
+     "type": "text",
+     "label_zh": "补充描述",
+     "required": false,
+     "placeholder_zh": "有什么想补充的吗？",
+     "maxlength": 500
+    }
+   ],
+   "startDisabledWhenEmpty": false
+  },
+  "mobile-ui": {
+   "left": "examples",
+   "currentTemplate": false,
+   "inputs": [
+    {
+     "key": "upload",
+     "type": "upload",
+     "label_zh": "上传文件",
+     "required": false
+    },
+    {
+     "key": "notes",
+     "type": "text",
+     "label_zh": "补充描述",
+     "required": false,
+     "placeholder_zh": "有什么想补充的吗？",
+     "maxlength": 500
+    }
+   ],
+   "startDisabledWhenEmpty": false
+  },
+  "web-product": {
+   "left": "examples",
+   "currentTemplate": false,
+   "inputs": [
+    {
+     "key": "upload",
+     "type": "upload",
+     "label_zh": "上传文件",
+     "required": false
+    },
+    {
+     "key": "notes",
+     "type": "text",
+     "label_zh": "补充描述",
+     "required": false,
+     "placeholder_zh": "有什么想补充的吗？",
+     "maxlength": 500
+    }
+   ],
+   "startDisabledWhenEmpty": false
+  },
+  "multi-angle": {
+   "left": "examples",
+   "currentTemplate": false,
+   "inputs": [
+    {
+     "key": "upload",
+     "type": "upload",
+     "label_zh": "上传文件",
+     "required": false
+    },
+    {
+     "key": "notes",
+     "type": "text",
+     "label_zh": "补充描述",
+     "required": false,
+     "placeholder_zh": "有什么想补充的吗？",
+     "maxlength": 500
+    }
+   ],
+   "startDisabledWhenEmpty": false
+  },
+  "interior": {
+   "left": "examples",
+   "currentTemplate": false,
+   "inputs": [
+    {
+     "key": "upload",
+     "type": "upload",
+     "label_zh": "上传文件",
+     "required": false
+    },
+    {
+     "key": "notes",
+     "type": "text",
+     "label_zh": "补充描述",
+     "required": false,
+     "placeholder_zh": "有什么想补充的吗？",
+     "maxlength": 500
+    }
+   ],
+   "startDisabledWhenEmpty": false
+  },
+  "social": {
+   "left": "examples",
+   "currentTemplate": false,
+   "inputs": [
+    {
+     "key": "upload",
+     "type": "upload",
+     "label_zh": "上传文件",
+     "required": false
+    },
+    {
+     "key": "notes",
+     "type": "text",
+     "label_zh": "补充描述",
+     "required": false,
+     "placeholder_zh": "有什么想补充的吗？",
+     "maxlength": 500
+    }
+   ],
+   "startDisabledWhenEmpty": false
+  },
+  "packaging": {
+   "left": "templates",
+   "templateCount": 5,
+   "currentTemplate": true,
+   "startDisabledWhenEmpty": true,
+   "inputs": [
+    {
+     "key": "brief",
+     "type": "text",
+     "label_zh": "商品与包装资料",
+     "required": true,
+     "placeholder_zh": "简要说明包装什么商品及包装形式；已有品牌文字、尺寸或主款要求可补充。"
+    },
+    {
+     "key": "assets",
+     "type": "upload",
+     "label_zh": "商品与包装素材",
+     "required": false
+    },
+    {
+     "key": "visual",
+     "type": "text",
+     "label_zh": "视觉呈现方式",
+     "required": false,
+     "placeholder_zh": "补充希望保留或避免的视觉要求；没有要求可留空。"
+    }
+   ]
+  },
+  "motion": {
+   "left": "templates",
+   "templateCount": 2,
+   "currentTemplate": true,
+   "startDisabledWhenEmpty": true,
+   "inputs": [
+    {
+     "key": "source",
+     "type": "upload",
+     "label_zh": "静态原稿",
+     "required": true
+    },
+    {
+     "key": "motion",
+     "type": "text",
+     "label_zh": "动态要求",
+     "required": false,
+     "placeholder_zh": "说明希望运动或保持不动的内容；没有要求可留空，由 Skill 规划。"
+    },
+    {
+     "key": "visual",
+     "type": "text",
+     "label_zh": "视觉呈现方式",
+     "required": false,
+     "placeholder_zh": "描述希望的视觉效果或提供参考；没有要求可留空。"
+    }
+   ]
+  },
+  "product": {
+   "left": "templates",
+   "templateCount": 7,
+   "currentTemplate": true,
+   "startDisabledWhenEmpty": true,
+   "inputs": [
+    {
+     "key": "images",
+     "type": "upload",
+     "label_zh": "商品图片",
+     "required": true
+    },
+    {
+     "key": "info",
+     "type": "text",
+     "label_zh": "商品资料",
+     "required": false,
+     "placeholder_zh": "补充商品名称、已确认卖点和实际使用方式；没有可留空。"
+    },
+    {
+     "key": "brand",
+     "type": "upload",
+     "label_zh": "品牌素材（选填）",
+     "required": false
+    },
+    {
+     "key": "extra",
+     "type": "text",
+     "label_zh": "补充要求",
+     "required": false,
+     "placeholder_zh": "补充用途、文案、时长或声音要求；不确定可留空，后续确认。"
+    },
+    {
+     "key": "visual",
+     "type": "text",
+     "label_zh": "视觉呈现方式",
+     "required": false,
+     "placeholder_zh": "描述希望的视觉效果或提供参考；没有要求可留空。"
+    }
+   ]
+  },
+  "brand": {
+   "left": "templates",
+   "templateCount": 6,
+   "currentTemplate": true,
+   "startDisabledWhenEmpty": true,
+   "inputs": [
+    {
+     "key": "brief",
+     "type": "text",
+     "label_zh": "品牌资料",
+     "required": true,
+     "placeholder_zh": "简要说明品牌名称与主要业务；已有品牌定位或确认文案可一并补充。"
+    },
+    {
+     "key": "assets",
+     "type": "upload",
+     "label_zh": "品牌素材",
+     "required": false
+    },
+    {
+     "key": "visual",
+     "type": "text",
+     "label_zh": "视觉呈现方式",
+     "required": false,
+     "placeholder_zh": "补充希望保留或避免的视觉要求；没有要求可留空。"
+    }
+   ]
+  }
+ }
+}
