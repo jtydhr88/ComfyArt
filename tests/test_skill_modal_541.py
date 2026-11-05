@@ -102,7 +102,7 @@ def test_rev2_cells_pinned(got):
 @needs_node
 def test_examples_carousel_is_data_driven(got):
     want = {"poster-differentiated-compiler": 5, "cover-design-director": 7, "rednote-cover-maker": 10, "banner-design-director": 2, "interior-architectural-visualization": 4,  # #575: thumbnail/banner lead with wash mp4
-            "universal-multi-angle-grid": 4, "logo-material-explorer": 3, "meta-ads-creative-director": 4, "mobile-app-visual-design": 4, "web-product-visual-design": 4, "marketing-campaign-generator": 4,  # #593 new-6
+            "universal-multi-angle-grid": 4, "logo-material-explorer": 2, "meta-ads-creative-director": 4, "mobile-app-visual-design": 4, "web-product-visual-design": 4, "marketing-campaign-generator": 4,  # #593 new-6
             "flash-cut-video": 1, "style-transfer": 4, "person-swap": 1, "commerce-strategist": 1, "lifestyle-scene": 2,  # #637 B5 hardMax
             "logo-abstract": 4, "photo-split-poster": 1, "ppt-visual": 1, "promo-ecommerce": 1, "naive-illustration": 4,  # #673 C re-wash (promo ex01 pulled; logo 4)
             "taobao-product": 8, "before-after": 8, "product-website": 3, "linkedin-banner": 1, "clothing-swap": 2,  # #643 batch1 (#667)

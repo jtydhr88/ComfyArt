@@ -33,7 +33,7 @@ def test_wash_594_pin_and_paths():
         head = e.split("inputs:", 1)[0]
         assert f"cover: cover('{sid}')" in head
         assert f"featured: feedCovers('{sid}')" in head
-        assert f"examples: ex594('{sid}', [1, 2, 3{'' if sid == 'logo-material-explorer' else ', 4'}])" in head  # #748: logo-material left = video + 3
+        assert f"examples: ex594('{sid}', [1, 2{'' if sid == 'logo-material-explorer' else ', 3, 4'}])" in head  # #748: logo-material left = 1 video + 2 images
         assert "quickStartCoverFit: 'contain'" in head
         assert f"video: video594('{sid}')" in head  # #623
         assert "lovart" not in head.lower()
