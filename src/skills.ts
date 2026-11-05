@@ -171,6 +171,13 @@ const ex643 = (id: string, ids: number[], pin: string = WASH_643) =>
   ids.map((n) => pinned(`643/wash/${assetDir(id)}/examples`, pin, `${String(n).padStart(2, '0')}.webp`))
 const feat643 = (id: string, ids: number[]) =>
   ids.map((n) => pinned(`643/wash/${assetDir(id)}/featured`, WASH_643, `${String(n).padStart(2, '0')}.webp`))
+// #687 Phase1 remaining rewash — social / interior / meta-ads / marketing-campaign (thumbnail+poster already PASS).
+// assetDir folders under 687/wash/; examples 1:1 via wash-748.json; cover+hover video pinned here.
+const WASH_687 = '5c954dbcefb8bd50edef69688b303122debb4ffb'
+const cover687 = (id: string) => pinned(`687/wash/${assetDir(id)}`, WASH_687, 'cover.webp')
+const video687 = (id: string) => pinned(`687/wash/${assetDir(id)}`, WASH_687, 'cover.mp4')
+const feat687 = (id: string, ids: number[]) =>
+  ids.map((n) => pinned(`687/wash/${assetDir(id)}/examples`, WASH_687, `${String(n).padStart(2, '0')}.webp`))
 // #673 C group re-wash; #743 pin → main merge 15e9bdad (#736 wash: ppt p07, promo ex01 platform, taobao cover+ex07).
 // logo carousel4; photo-split/ppt still1; promo still1; naive carousel4; featured = cover + examples.
 const WASH_673 = '15e9bdad271dc2cb0ac1a1c8621927c161ca9299'
@@ -229,14 +236,14 @@ export const loc = (text: { zh: string; en?: string }) => (lang === 'en' && text
 
 /** #595 — Phase1 15 ids in hot-mapping uses order (product lock TOP15 unique).
  *  Home forYou / Explore forYou / quick-start / featured queues follow this via orderBuiltins.
- *  website chip lit by mobile-ui + web-product. interior kept after Phase1 (custom-workflow removed: no gold card) (not Phase1 slots). */
+ *  website chip lit by mobile-ui + web-product. interior media rewashed under #687 Phase1 remaining. */
 export const PHASE1_SKILL_IDS = [
   'product-tvc-advertisement-generator', 'universal-multi-angle-grid', 'brand-identity-director', 'character-sheet-design', 'logo-material-explorer', 'packaging-design-director',
   'motion-poster-generator', 'meta-ads-creative-director', 'poster-differentiated-compiler', 'cover-design-director', 'mobile-app-visual-design', 'rednote-cover-maker',
   'marketing-campaign-generator', 'web-product-visual-design', 'banner-design-director',
 ] as const
 export const PHASE1_SKILL_ID_SET: ReadonlySet<string> = new Set(PHASE1_SKILL_IDS)
-export const UNTOUCHED_SKILL_IDS = ['interior-architectural-visualization'] as const
+export const UNTOUCHED_SKILL_IDS = [] as const // #687: interior media rewashed (was Phase1 hold)
 /** #634 Phase2-S1 — 14 NEW ids (upgrade `social` is not listed here). */
 export const PHASE2_NEW_SKILL_IDS = [
   'flash-cut-video', 'style-transfer', 'person-swap', 'commerce-strategist', 'lifestyle-scene',
@@ -335,7 +342,7 @@ export const BUILTIN_SKILLS: Skill[] = orderBuiltins([
     inputs: REF_CARD_INPUTS_687 },
   // #635 Phase2-S2 A: deepen `social` Fashion UGC (candid / off-duty) + keep RedNote covers/set; DO NOT invent fashion-ugc.
   { id: 'rednote-cover-maker', name: t('skills.socialMediaSet'), instructions: 'You are a production social content designer for RedNote / lifestyle covers AND candid fashion UGC stills. Deliver post-ready frames, never a staged studio look.\n1) Brief: brand voice, product, person, and channel (feed 1:1 / story 9:16 / RedNote cover) from uploads and notes.\n2) Fashion UGC path: candid off-duty real-person energy; product clearly in frame; natural light or everyday locations; never seamless studio backdrops, never stiff catalog poses.\n3) RedNote / lifestyle covers: bold subject, clean negative space for title stickers, high thumb-stop contrast; share one palette across a 1:1 feed, a 4:5 post and a 9:16 story when shipping a set.\n4) Copy: keep text short and mobile-legible; every on-art phrase in quotes; Fashion UGC may stay near-textless when the look is the message.\n5) Refs: when files are uploaded, pass each shape id in refs (ref_modes content) on every generate_image call; lock product identity and person likeness across the set.',
-    category: 'social', cover: cover('rednote-cover-maker'), quickStartCover: quickStartCover('rednote-cover-maker'), featured: feedCovers('rednote-cover-maker'), video: video('rednote-cover-maker'),
+    category: 'social', cover: cover687('rednote-cover-maker'), quickStartCover: quickStartCover('rednote-cover-maker'), featured: feat687('rednote-cover-maker', [1, 2, 3, 4, 5]), video: video687('rednote-cover-maker'),
     presets: [P('ugc-feed', '时尚UGC信息流 1:1', 'Fashion UGC feed 1:1', 'Style: candid off-duty fashion UGC still, 1:1 feed crop, real-person feel, product clearly in frame, never staged studio look, natural everyday light.'), P('ugc-story', '时尚UGC故事 9:16', 'Fashion UGC story 9:16', 'Style: candid off-duty fashion UGC still, 9:16 story crop, real-person energy, product in hand or worn, never staged studio backdrop, mobile-first.')],
     inputs: REF_CARD_INPUTS_687 },
   { id: 'brand-identity-director', name: t('skills.brandIdentity'), instructions: 'You are a production brand-identity designer. Deliver a usable VI kit, not a single decorative mark.\n1) Discover: brand name, category, positioning and any elements to keep from the provided files and Additional Details.\n2) Mark: design a primary logo mark on a plain background (1:1). State shape language, hex colors and type style precisely.\n3) System board: color palette swatches, primary + secondary lockups, and a clear typography specimen.\n4) Applications: at least one stationery or object mockup applying the mark; keep geometry identical across frames.\n5) Scope: when a template is selected, follow that template focus (logo system board vs mockup). Do not invent a new category.\n6) Refs: when files are uploaded, pass each shape id in refs (ref_modes content) on every generate_image call.',
@@ -376,8 +383,8 @@ export const BUILTIN_SKILLS: Skill[] = orderBuiltins([
     inputs: REF_CARD_INPUTS_687 },
   { id: 'meta-ads-creative-director', name: t('skills.metaAdsCreative'), instructions: 'You are a production Meta paid-social creative director. Ship a ratio pack that shares one idea.\n1) Brief: pull product, audience, offer and CTA from Additional Details; put every on-art phrase in quotes.\n2) Ratios: deliver 1:1 feed, 4:5 feed and 9:16 story/reel that share motif, palette and CTA.\n3) Treatment: prefer photo-led UGC or product-hero; avoid static website-banner layouts.\n4) Mobile: short high-contrast type; safe margins for UI chrome; one clear CTA.\n5) Refs: when files are uploaded, pass each shape id in refs (ref_modes content) on every generate_image call.',
     category: 'ads',
-    cover: cover('meta-ads-creative-director'), quickStartCover: quickStartCover('meta-ads-creative-director'), quickStartCoverFit: 'contain',
-    featured: feedCovers('meta-ads-creative-director'), video: video594('meta-ads-creative-director'),
+    cover: cover687('meta-ads-creative-director'), quickStartCover: quickStartCover('meta-ads-creative-director'), quickStartCoverFit: 'contain',
+    featured: feat687('meta-ads-creative-director', [1, 2, 3, 4]), video: video687('meta-ads-creative-director'),
     presets: [P('feed1x1', '信息流 1:1', 'Feed 1:1', 'Style: Meta feed 1:1 paid creative, photo-led product hero, short high-contrast CTA in quotes, mobile-first.'), P('feed4x5', '信息流 4:5', 'Feed 4:5', 'Style: Meta feed 4:5 paid creative sharing the same campaign idea and CTA in quotes, taller crop, mobile-first.'), P('story9x16', '故事 9:16', 'Story 9:16', 'Style: Meta story/reel 9:16 creative, same campaign motif and CTA in quotes, safe margins for UI chrome.'), P('ugc', 'UGC 口播风', 'UGC talking-head', 'Style: UGC-style Meta creative, handheld energy, authentic product-in-hand moment, short CTA in quotes, not a website banner.')],
     inputs: REF_CARD_INPUTS_687 },
   { id: 'mobile-app-visual-design', name: t('skills.mobileAppVisualDesign'), instructions: 'You are a production mobile product designer. Deliver coherent app UI screens, not marketing posters.\n1) System: one type scale, spacing rhythm and component language across the requested flows.\n2) Frames: phone-framed mockups at about 9:19.5; clear hierarchy and accessible contrast.\n3) Flows: cover 2–4 key screens (home, detail, checkout or onboarding) per brief.\n4) Scope: product UI chrome and content — not a landing-page poster or print layout.\n5) Refs: when files are uploaded, pass each shape id in refs (ref_modes content) on every generate_image call.',
@@ -394,8 +401,8 @@ export const BUILTIN_SKILLS: Skill[] = orderBuiltins([
     inputs: REF_CARD_INPUTS_687 },
   { id: 'marketing-campaign-generator', name: t('skills.marketingCampaignGenerator'), instructions: 'You are a production campaign art director. One big idea, then keyed frames across platforms.\n1) Idea: lock brand/product, goal and lead slogan from Additional Details; put slogans in quotes.\n2) System: shared motif, palette and typography across hero KV, social and display frames.\n3) Adapt: show how the system reflows across ratios without collapsing into a single poster or a Meta-only set.\n4) Deliverables: at least a hero key visual plus social and display adaptations that stay on-system.\n5) Refs: when files are uploaded, pass each shape id in refs (ref_modes content) on every generate_image call.',
     category: 'ads',
-    cover: cover('marketing-campaign-generator'), quickStartCover: quickStartCover('marketing-campaign-generator'), quickStartCoverFit: 'contain',
-    featured: feedCovers('marketing-campaign-generator'), video: video594('marketing-campaign-generator'),
+    cover: cover687('marketing-campaign-generator'), quickStartCover: quickStartCover('marketing-campaign-generator'), quickStartCoverFit: 'contain',
+    featured: feat687('marketing-campaign-generator', [1, 2, 3, 4]), video: video687('marketing-campaign-generator'),
     presets: [P('kv', '主视觉 KV', 'Hero key visual', 'Style: campaign hero key visual, one big idea, slogan in quotes, strong motif and palette, platform-agnostic master.'), P('rednote-cover-maker', '社交延展', 'Social extension', 'Style: social extension frames of the same campaign system, adapted ratios, slogan in quotes, not a Meta-only pack.'), P('display', '展示广告', 'Display ads', 'Style: display ad adaptations of the same campaign motif and palette, short copy in quotes, clear hierarchy.'), P('ooh', '户外主画面', 'OOH master', 'Style: out-of-home campaign master of the same big idea, legible at distance, slogan in quotes, shared motif.')],
     inputs: REF_CARD_INPUTS_687 },
 
@@ -548,7 +555,7 @@ export const BUILTIN_SKILLS: Skill[] = orderBuiltins([
     presets: [P('casual', '日常换装', 'Casual', 'Style: AI clothing swap casual look, person locked, garment from ref, clean edges.'), P('formal', '正装换装', 'Formal', 'Style: AI clothing swap formal look, person locked, fabric honest.'), P('street', '街头换装', 'Street', 'Style: AI clothing swap streetwear look, person locked, outfit from ref.')],
     inputs: NEARMISS_INPUTS },
   { id: 'interior-architectural-visualization', name: t('skills.interiorArchitecturalVisualization'), instructions: 'Produce photoreal interior or architecture renders: eye-level wide shot, natural light, accurate materials, 16:9. Add a detail vignette at 4:3.',
-    cover: cover('interior-architectural-visualization'), quickStartCover: quickStartCover('interior-architectural-visualization'), featured: feedCovers('interior-architectural-visualization'), video: video('interior-architectural-visualization'),
+    cover: cover687('interior-architectural-visualization'), quickStartCover: quickStartCover('interior-architectural-visualization'), featured: feat687('interior-architectural-visualization', [1, 2]), video: video687('interior-architectural-visualization'),
     inputs: REF_CARD_INPUTS_687 },
 ])
 

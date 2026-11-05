@@ -928,19 +928,11 @@
       "highlights": [
         {
           "type": "image",
-          "ratio": 0.8
+          "ratio": 0.75
         },
         {
           "type": "image",
-          "ratio": 0.8
-        },
-        {
-          "type": "image",
-          "ratio": 0.8
-        },
-        {
-          "type": "image",
-          "ratio": 1.0
+          "ratio": 0.75
         }
       ],
       "inputs": [
@@ -2193,43 +2185,23 @@
       "highlights": [
         {
           "type": "image",
-          "ratio": 0.75
+          "ratio": 0.5667
         },
         {
           "type": "image",
-          "ratio": 0.75
+          "ratio": 0.8
         },
         {
           "type": "image",
-          "ratio": 0.75
+          "ratio": 0.8
         },
         {
           "type": "image",
-          "ratio": 0.75
+          "ratio": 0.8
         },
         {
           "type": "image",
-          "ratio": 0.75
-        },
-        {
-          "type": "image",
-          "ratio": 0.75
-        },
-        {
-          "type": "image",
-          "ratio": 0.75
-        },
-        {
-          "type": "image",
-          "ratio": 0.75
-        },
-        {
-          "type": "image",
-          "ratio": 0.75
-        },
-        {
-          "type": "image",
-          "ratio": 0.75
+          "ratio": 0.7473
         }
       ],
       "inputs": [

@@ -1,0 +1,32 @@
+{
+  "_comment": "retry 4:5 fails with auto",
+  "assets": [
+    {
+      "skill_id": "social",
+      "slot": "examples",
+      "index": 2,
+      "source_path": "docs/design/687/gold/social/hl-1.png",
+      "prompt": "Recreate as ORIGINAL Instagram product post. Keep LAYOUT: gaming controller on volcanic rock, giant flaming word behind, brand top, feature row, CTA pill. Replace ALL copy/brands: brand 'WYRM', sub 'EMBER EDITION', flaming word 'EMBER', features 'RGB Lighting | Precision Triggers | Wireless', CTA 'RESERVE'. Controller silhouette similar but new dragon-scale motif and LED color. No DRAKON, no PlayStation marks.",
+      "aspect_ratio": "auto",
+      "resolution": "2K"
+    },
+    {
+      "skill_id": "social",
+      "slot": "examples",
+      "index": 3,
+      "source_path": "docs/design/687/gold/social/hl-2.png",
+      "prompt": "Recreate as ORIGINAL Instagram product post for over-ear headphones. Keep LAYOUT and hero product angle from reference (studio product hero, bold typography). Replace ALL brands/copy with 'SONIQ' / 'PULSE ANC', new slogan in quotes 'Silence, redesigned.', CTA 'SHOP NOW'. Keep premium silver/white headphone category and high-contrast commercial look. No AURA brand.",
+      "aspect_ratio": "auto",
+      "resolution": "2K"
+    },
+    {
+      "skill_id": "social",
+      "slot": "examples",
+      "index": 4,
+      "source_path": "docs/design/687/gold/social/hl-3.png",
+      "prompt": "Recreate as ORIGINAL Instagram product post. Keep LAYOUT: single brown Oxford shoe on soft cream, large serif word behind, brand top, feature line, CTA. Replace ALL copy: brand 'VALDEN', tagline 'HANDCRAFTED LEATHER', big word 'CRAFT', features 'Italian Calfskin \u00b7 Blake Stitched \u00b7 Leather Sole', CTA 'BUY NOW'. New shoe detailing distinct from reference. No MIRANO.",
+      "aspect_ratio": "auto",
+      "resolution": "2K"
+    }
+  ]
+}

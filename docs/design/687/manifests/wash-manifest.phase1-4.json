@@ -1,0 +1,194 @@
+{
+  "_comment": "#687 Phase1 remaining 4-skill rewash (kie I2I). SOP B product/text; interior photo-to-render.",
+  "assets": [
+    {
+      "skill_id": "social",
+      "slot": "examples",
+      "index": 1,
+      "source_path": "docs/design/687/gold/social/hl-0.png",
+      "prompt": "Recreate as ORIGINAL Instagram story product ad. Keep the same LAYOUT: tall 9:16, bottle centered with citrus slices halo, warm beige studio, big serif headline behind bottle, brand lockup top, CTA pill bottom. Replace ALL brand and copy: brand 'SOLVITA', product 'Rosehip Face Oil', headline 'GLOW' (not VITAMIN), subline 'WITH PURE BOTANICALS', CTA 'SHOP NOW'. New bottle label art with different rosehip illustration. No watermarks, no competitor brands (ORGILEEN banned).",
+      "aspect_ratio": "9:16",
+      "resolution": "2K"
+    },
+    {
+      "skill_id": "social",
+      "slot": "examples",
+      "index": 2,
+      "source_path": "docs/design/687/gold/social/hl-1.png",
+      "prompt": "Recreate as ORIGINAL Instagram product post. Keep LAYOUT: gaming controller on volcanic rock, giant flaming word behind, brand top, feature row, CTA pill. Replace ALL copy/brands: brand 'WYRM', sub 'EMBER EDITION', flaming word 'EMBER', features 'RGB Lighting | Precision Triggers | Wireless', CTA 'RESERVE'. Controller silhouette similar but new dragon-scale motif and LED color. No DRAKON, no PlayStation marks.",
+      "aspect_ratio": "4:5",
+      "resolution": "2K"
+    },
+    {
+      "skill_id": "social",
+      "slot": "examples",
+      "index": 3,
+      "source_path": "docs/design/687/gold/social/hl-2.png",
+      "prompt": "Recreate as ORIGINAL Instagram product post for over-ear headphones. Keep LAYOUT and hero product angle from reference (studio product hero, bold typography). Replace ALL brands/copy with 'SONIQ' / 'PULSE ANC', new slogan in quotes 'Silence, redesigned.', CTA 'SHOP NOW'. Keep premium silver/white headphone category and high-contrast commercial look. No AURA brand.",
+      "aspect_ratio": "4:5",
+      "resolution": "2K"
+    },
+    {
+      "skill_id": "social",
+      "slot": "examples",
+      "index": 4,
+      "source_path": "docs/design/687/gold/social/hl-3.png",
+      "prompt": "Recreate as ORIGINAL Instagram product post. Keep LAYOUT: single brown Oxford shoe on soft cream, large serif word behind, brand top, feature line, CTA. Replace ALL copy: brand 'VALDEN', tagline 'HANDCRAFTED LEATHER', big word 'CRAFT', features 'Italian Calfskin · Blake Stitched · Leather Sole', CTA 'BUY NOW'. New shoe detailing distinct from reference. No MIRANO.",
+      "aspect_ratio": "4:5",
+      "resolution": "2K"
+    },
+    {
+      "skill_id": "social",
+      "slot": "examples",
+      "index": 5,
+      "source_path": "docs/design/687/gold/social/hl-4.png",
+      "prompt": "Recreate as ORIGINAL Instagram product post. Keep LAYOUT: hand holding green juice bottle, kiwi props, giant word behind, brand top, CTA. Replace ALL copy: brand 'KIORA', sub 'COLD-PRESSED KIWI', big word 'PURE', benefits '100% Natural • Vitamin C • No Added Sugar', CTA 'SIP NOW'. New bottle label. No VERDE brand.",
+      "aspect_ratio": "3:4",
+      "resolution": "2K"
+    },
+    {
+      "skill_id": "interior",
+      "slot": "cover",
+      "index": 0,
+      "source_path": "docs/design/687/gold/interior/cover.png",
+      "prompt": "Recreate as ORIGINAL photoreal interior visualization. Keep the same room CATEGORY and LAYOUT family (bright living room, large windows, soft daylight, seating + rug). Change furniture finishes, art, plants, and textiles enough that it is clearly a new room design. No brands, watermarks, or readable personal photos on walls.",
+      "aspect_ratio": "3:4",
+      "resolution": "2K"
+    },
+    {
+      "skill_id": "interior",
+      "slot": "examples",
+      "index": 1,
+      "source_path": "docs/design/687/gold/interior/hl-0.png",
+      "prompt": "Recreate as ORIGINAL PHOTO of a lived-in study/living bay window room. Keep LAYOUT: center bay window with blinds, desk under window, rocking chair left, leather recliner right, ottoman foreground, rug, floor lamp. Change wood tones, textiles, art, and plants so it is a different home. Photoreal, natural daylight. No brands or PII.",
+      "aspect_ratio": "3:4",
+      "resolution": "2K"
+    },
+    {
+      "skill_id": "interior",
+      "slot": "examples",
+      "index": 2,
+      "source_path": "docs/design/687/gold/interior/hl-1.png",
+      "prompt": "Recreate as ORIGINAL ARCHITECTURAL RENDER of the SAME room layout family as a polished visualization (photo-to-render pair). Keep furniture placement logic (bay window, desk, two chairs, ottoman, rug) but upgrade materials, lighting cleanliness, and CG-render polish. Distinct from a casual snapshot. No brands or PII.",
+      "aspect_ratio": "3:4",
+      "resolution": "2K"
+    },
+    {
+      "skill_id": "meta-ads",
+      "slot": "cover",
+      "index": 0,
+      "source_path": "docs/design/687/gold/meta-ads/frames/cover.png",
+      "prompt": "Recreate as ORIGINAL Meta ads collage cover. Keep LAYOUT: dark charcoal backdrop with multiple ad tiles; hero center sunscreen spray beach ad plus secondary drink cans tile. Replace ALL brands/copy: sunscreen brand 'SOLSHIELD' headline 'UV ARMOR', CTA 'SHOP NOW'; drink brand 'FIZZLYTE' headline 'ZERO SUGAR. FULL CHARGE.'. New product packaging. No AQUA SPARK / prior brands.",
+      "aspect_ratio": "4:3",
+      "resolution": "2K"
+    },
+    {
+      "skill_id": "meta-ads",
+      "slot": "examples",
+      "index": 1,
+      "source_path": "docs/design/687/gold/meta-ads/hl-0.webp",
+      "prompt": "Recreate as ORIGINAL Meta multi-option ad BOARD (3 vertical options side by side). Keep 3-panel Option 1/2/3 structure for a portable blender. Replace ALL brands and promo numbers: brand 'MIXLY', discount '25% OFF' (not 30), rewrite Japanese promo lines to new phrasing with same energy. Keep fruit/lifestyle motifs per panel but new pixels. No BLENJOY.",
+      "aspect_ratio": "16:9",
+      "resolution": "2K"
+    },
+    {
+      "skill_id": "meta-ads",
+      "slot": "examples",
+      "index": 2,
+      "source_path": "docs/design/687/gold/meta-ads/hl-1.webp",
+      "prompt": "Recreate as ORIGINAL Meta multi-option ad BOARD (3 options). Keep Option1 product hero / Option2 before-after face / Option3 model-with-serum layout. Replace ALL brands/copy: brand 'CLARÉ', product 'Clarifying Acne Serum', headlines 'Clear Skin in 5 Days', 'Day 1 vs Day 5', 'Finally. Calm clear skin.'. New model faces mandatory. No LUMIÈRE.",
+      "aspect_ratio": "16:9",
+      "resolution": "2K"
+    },
+    {
+      "skill_id": "meta-ads",
+      "slot": "examples",
+      "index": 3,
+      "source_path": "docs/design/687/gold/meta-ads/hl-2.webp",
+      "prompt": "Recreate as ORIGINAL Meta multi-option ad BOARD showing 3 phone mockups (Option 1/2/3) of Facebook feed ads for a portable blender. Keep phone chrome + sponsored UI structure (UI labels like Like/Comment/Share/Shop Now may stay). Replace brand to 'TREKBLEND', price to '$42.00', rewrite all headlines and feature lines. New models and product colors. No FreshTrek.",
+      "aspect_ratio": "16:9",
+      "resolution": "2K"
+    },
+    {
+      "skill_id": "meta-ads",
+      "slot": "examples",
+      "index": 4,
+      "source_path": "docs/design/687/gold/meta-ads/hl-3.webp",
+      "prompt": "Recreate as ORIGINAL Meta multi-option ad BOARD (OPTION 1/2/3) for instant oatmeal. Keep three creative directions + small platform ratio chips. Replace brand to 'OATFORGE', flavors Maple Berry / Apple Cinnamon stay as category but rewrite all headlines ('Your Morning, Sorted.' → 'Mornings, Handled.'; 'Real Ingredients. Real Fast.' → 'Real Oats. Real Quick.'; 'SKIP THE CRASH' → 'SKIP THE SLUMP'). New model faces. No OATLYF.",
+      "aspect_ratio": "16:9",
+      "resolution": "2K"
+    },
+    {
+      "skill_id": "marketing-campaign",
+      "slot": "examples",
+      "index": 1,
+      "source_path": "docs/design/687/gold/marketing-campaign/hl-1.webp",
+      "prompt": "Recreate as ORIGINAL ultra-wide marketing campaign multi-frame STRIP. Keep the same strip LAYOUT: many vertical panels of headphone product/lifestyle in a row with bold short labels. Replace ALL on-art words (e.g. SILENT/01 and any brand) with new short labels like FOCUS / 01 / FLOW / CITY / NIGHT. Same headphone category, new pixels. No competitor brands.",
+      "aspect_ratio": "auto",
+      "resolution": "2K"
+    },
+    {
+      "skill_id": "marketing-campaign",
+      "slot": "examples",
+      "index": 2,
+      "source_path": "docs/design/687/gold/marketing-campaign/hl-2.webp",
+      "prompt": "Recreate as ORIGINAL ultra-wide campaign strip. Keep multi-panel horizontal strip composition and subject category from reference. Rewrite every readable marketing word to new short campaign labels. New pixels mandatory.",
+      "aspect_ratio": "auto",
+      "resolution": "2K"
+    },
+    {
+      "skill_id": "marketing-campaign",
+      "slot": "examples",
+      "index": 3,
+      "source_path": "docs/design/687/gold/marketing-campaign/hl-3.webp",
+      "prompt": "Recreate as ORIGINAL ultra-wide lifestyle campaign strip of a white e-bike in city scenes (6 panels). Keep panel count and urban lifestyle narrative. Change riders (new people), cafe name (not KAFFE & VIN), and any brand marks on the bike. No readable personal signage left from reference.",
+      "aspect_ratio": "auto",
+      "resolution": "2K"
+    },
+    {
+      "skill_id": "marketing-campaign",
+      "slot": "examples",
+      "index": 4,
+      "source_path": "docs/design/687/gold/marketing-campaign/hl-4.webp",
+      "prompt": "Recreate as ORIGINAL ultra-wide campaign multi-frame strip. Keep strip LAYOUT and product/lifestyle category from reference. Rewrite all marketing text to new short labels. New pixels mandatory.",
+      "aspect_ratio": "auto",
+      "resolution": "2K"
+    },
+    {
+      "skill_id": "marketing-campaign",
+      "slot": "examples",
+      "index": 5,
+      "source_path": "docs/design/687/gold/marketing-campaign/hl-5.webp",
+      "prompt": "Recreate as ORIGINAL ultra-wide campaign multi-frame strip. Keep strip LAYOUT and subject category. Rewrite all on-art copy. New pixels mandatory.",
+      "aspect_ratio": "auto",
+      "resolution": "2K"
+    },
+    {
+      "skill_id": "marketing-campaign",
+      "slot": "examples",
+      "index": 6,
+      "source_path": "docs/design/687/gold/marketing-campaign/hl-6.webp",
+      "prompt": "Recreate as ORIGINAL ultra-wide campaign multi-frame strip. Keep strip LAYOUT and subject category. Rewrite all on-art copy. New pixels mandatory.",
+      "aspect_ratio": "auto",
+      "resolution": "2K"
+    },
+    {
+      "skill_id": "marketing-campaign",
+      "slot": "examples",
+      "index": 7,
+      "source_path": "docs/design/687/gold/marketing-campaign/hl-7.webp",
+      "prompt": "Recreate as ORIGINAL ultra-wide campaign multi-frame strip. Keep strip LAYOUT and subject category. Rewrite all on-art copy. New pixels mandatory.",
+      "aspect_ratio": "auto",
+      "resolution": "2K"
+    },
+    {
+      "skill_id": "marketing-campaign",
+      "slot": "cover",
+      "index": 0,
+      "source_path": "docs/design/687/gold/marketing-campaign/frames/cover.png",
+      "prompt": "Recreate as ORIGINAL marketing campaign cover still: diagonal tiled grid of silver/white over-ear headphones product + studio lifestyle tiles with thick white gutters. Keep grid LAYOUT and headphone category. Use a DIFFERENT adult model (new face) and slightly different headphone shell texture. No brands or watermarks.",
+      "aspect_ratio": "4:3",
+      "resolution": "2K"
+    }
+  ]
+}
