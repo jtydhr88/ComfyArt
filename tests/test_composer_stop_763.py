@@ -94,8 +94,13 @@ def test_at_menu_assets_then_model_and_ref_chip_restored():
     # #769 model-pref glyph is equilateral wireframe cube (Lucide Box), not skewed Cuboid
     icons = read("src/ui/icons.tsx")
     assert "cube: L(Box" in icons and "cube: L(Cuboid)" not in icons
+    assert "hash: L(Hash" in icons  # #769: 参考区 # is Lucide Hash (not Frame that fills the box)
+    ref = read("src/ui/RefFrameButton.tsx")
+    assert "ca-bar__btn--icon ca-refbtn" in ref and "Icons.hash" in ref
+    assert "t('chatFrame.ref')" not in ref  # icon-only; no 参考/Ref label beside Cube
     css = read("src/styles/shell.css")
     assert ".ca-modelprefs__btn .ca-icon { width: 16px; height: 16px; }" in css
+    assert ".ca-refbtn .ca-icon { width: 16px; height: 16px; }" in css
     assert ".ca-pop-anchor:has(.ca-modelprefs__btn) + .ca-composer__slotwrap { margin-left: 2px; }" in css  # #769: foot gap 4 + margin 2 → 8px → c2c 40
 
 

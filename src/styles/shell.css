@@ -267,6 +267,16 @@ button.ca-head__logo:hover, button.ca-head__logo[data-open] { background: var(--
 .ca-composer__foot { gap: 4px; }
 /* #769: glyph 16×16 in 32×32 hit; foot gap 4 + margin 2 (+~0–2 wrapper) → 8px gap → c2c 40 */
 .ca-modelprefs__btn .ca-icon { width: 16px; height: 16px; }
+/* #769: 参考区 # matches Cube — 32×32 hit, 16×16 glyph, stroke via Icons.hash; count overlays so linked gray never widens past 32 */
+.ca-refbtn { position: relative; width: 32px; padding: 0; justify-content: center; }
+.ca-refbtn .ca-icon { width: 16px; height: 16px; }
+.ca-refbtn__count {
+  position: absolute; top: -2px; right: -2px; z-index: 1;
+  min-width: 14px; height: 14px; padding: 0 3px; box-sizing: border-box;
+  border-radius: 7px; background: var(--ca-strong); color: var(--ca-float);
+  font: 600 9px/14px var(--ca-font); font-variant-numeric: tabular-nums; text-align: center;
+  pointer-events: none;
+}
 .ca-composer__foot > .ca-pop-anchor:has(.ca-modelprefs__btn) + .ca-composer__slotwrap { margin-left: 2px; }
 .ca-composer__foot > .ca-pop-anchor { min-width: 0; }
 .ca-composer__foot .ca-gen__pill { max-width: 100%; }

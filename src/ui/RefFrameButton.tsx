@@ -19,9 +19,9 @@ export function RefFrameButton({ editor }: { editor: Editor }) {
   }
   const title = !state ? t('chatFrame.createRefTip') : state.linked ? t('chatFrame.linkedTip') : state.count ? t('chatFrame.linkTip') : t('chatFrame.emptyTip')
   return (
-    <button type="button" className="ca-bar__btn ca-refbtn" data-on={state?.linked || undefined} title={title} onClick={click}>
-      <span className="ca-icon">{Icons.frame}</span><span>{t('chatFrame.ref')}</span>
-      {/* #282: the count is its own span so the agent-bar collapse (which hides the word) never hides the number; shown only when linked (product) */}
+    <button type="button" className="ca-bar__btn ca-bar__btn--icon ca-refbtn" data-on={state?.linked || undefined} title={title} onClick={click}>
+      <span className="ca-icon">{Icons.hash}</span>
+      {/* #282: count as overlay badge so the 32×32 hit never widens; shown only when linked */}
       {state?.linked && state.count ? <span className="ca-refbtn__count">{state.count}</span> : null}
     </button>
   )
