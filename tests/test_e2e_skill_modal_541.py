@@ -96,7 +96,7 @@ STAGE = """() => { const st = document.querySelector('[data-testid=skill-run-exa
           st: [a.x, a.y, a.width, a.height], img: [c.x, c.y, c.width, c.height], nat: [i.naturalWidth, i.naturalHeight]} }"""
 
 
-@pytest.mark.parametrize("skill,portrait", [("poster-differentiated-compiler", True), ("rednote-cover-maker", True), ("interior-architectural-visualization", True), ("cover-design-director", False)])  # #569: character examples removed
+@pytest.mark.parametrize("skill,portrait", [("poster-differentiated-compiler", True), ("rednote-cover-maker", True), ("interior-architectural-visualization", True)])  # #569: character examples removed; #748: cover-design-director raw = 1 video (no still stage)
 async def test_example_stage_contain_no_crop(app_url, skill, portrait):  # noqa: F811
     """Lovart stage: whole image visible (contain), centered, on #f4f4f4 - portrait must not overflow/crop."""
     async with pw.async_playwright() as p:

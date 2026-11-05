@@ -236,7 +236,8 @@ async def test_thumbnail_upgrade_skill_regression(app_url, fake_agent, lang, the
         await card.get_by_test_id("skills-card-try").click()
         dlg = pg.locator('[data-testid="skill-run-dialog"][data-skill="cover-design-director"]')
         await dlg.wait_for(timeout=10000)
-        assert await dlg.get_by_test_id("skill-run-example-thumb").count() == 7  # video lead + 6 examples
+        assert await dlg.get_by_test_id("skill-run-example-thumb").count() == 0  # #748 raw highlights: 1 video → single stage, no thumb strip
+        assert await dlg.get_by_test_id("skill-run-example-stage-video").count() == 1
         assert await dlg.get_by_test_id("skill-run-meta").count() == 0          # effect skill: no 'N templates' line
         await _assert_template_label(pg, dlg, lang)
         await pg.keyboard.press("Escape")
