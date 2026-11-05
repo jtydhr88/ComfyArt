@@ -16,7 +16,7 @@ class PendingAsk:
         self.message_id = message_id
         self.spec = spec
         self.abandoned = False
-        self.future: asyncio.Future = asyncio.get_event_loop().create_future()
+        self.future: asyncio.Future = asyncio.get_running_loop().create_future()
 
 
 PENDING: dict[str, PendingAsk] = {}

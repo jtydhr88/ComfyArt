@@ -105,7 +105,8 @@ def _install_stubs() -> None:
 _install_stubs()
 
 from ComfyArt import api
-from ComfyArt.api import bot_asks, chat_store
+from ComfyArt.api import chat_store
+from ComfyArt.bot import bot_asks
 from ComfyArt.api.bot_turns import ACTIVE_TURNS, QUEUED
 from ComfyArt.api.settings import SETTINGS_SPEC
 from ComfyArt.bot import register_provider

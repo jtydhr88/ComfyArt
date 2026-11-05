@@ -1,6 +1,7 @@
 import asyncio
 
-from .. import bot_asks, chat_store
+from ...bot import bot_asks
+from .. import chat_store
 from ..bot_turns import ACTIVE_TURNS, broadcast
 from ._context import BOT_CHAT_ID
 

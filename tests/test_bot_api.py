@@ -4,7 +4,8 @@ import asyncio
 
 from conftest import SENT, wait_bot_done, write_settings
 
-from ComfyArt.api import bot_asks, chat_store
+from ComfyArt.api import chat_store
+from ComfyArt.bot import bot_asks
 from ComfyArt.api.bot import reap_stale_messages
 from ComfyArt.api.bot_turns import ACTIVE_TURNS
 from ComfyArt.bot.providers import BotEvent
