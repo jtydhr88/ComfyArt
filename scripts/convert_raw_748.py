@@ -12,6 +12,7 @@ reference ids. Checks: id kebab-case; own skill ids must not collide with a refe
 from __future__ import annotations
 
 import json
+import os
 import re
 import sys
 from pathlib import Path
@@ -72,10 +73,17 @@ def final_table(index: str) -> list[dict]:
     return rows
 
 
+EXT_REQUIRED = {"character-sheet-design": 1}  # sid -> own templates that MUST be merged (c67ac2aa layout: raw/../own/)
+
+
 def load_ext(raw: Path, sid: str) -> list:
-    """own/<skillKey>.ext.json (sibling of raw/): our extra templates appended after the reference ones."""
-    f = raw.parent / "own" / f"{sid}.ext.json"
+    """own/<skillKey>.ext.json (sibling of raw/, i.e. /workspace/lovart-inputs/own/): our extra templates after the reference ones.
+    A required ext that is missing (wrong dir, file absent) is a HARD FAIL — never silently emit fewer templates."""
+    own = raw.parent / "own"
+    f = own / f"{sid}.ext.json"
     if not f.exists():
+        if sid in EXT_REQUIRED:
+            raise ConvertError(f"required ext missing: {f} (own dir {'exists' if own.is_dir() else 'MISSING'})")
         return []
     e = json.loads(f.read_text())
     if e.get("skillKey") != sid or e.get("source") != "comfyart":
@@ -156,12 +164,14 @@ def convert(raw: Path) -> dict:
     return skills
 
 
-def check_own(skills: dict, own_ids: list[str]) -> None:
+def check_own(skills: dict, own_ids: list[str], feed_ids: frozenset = frozenset()) -> None:
     for oid in own_ids:
         if not KEBAB.match(oid):
             raise ConvertError(f"bad id format: {oid!r}")
         if oid in skills:
-            raise ConvertError(f"own id collides with a reference skillKey: {oid!r}")
+            raise ConvertError(f"own id collides with a Final skill id: {oid!r}")
+        if oid in feed_ids:
+            raise ConvertError(f"own id collides with a reference feed skillKey: {oid!r}")
 
 
 if __name__ == "__main__":
@@ -170,14 +180,27 @@ if __name__ == "__main__":
     skills = convert(raw)
     src = (ROOT / "src/skills.ts").read_text()
     own = sorted(set(re.findall(r"\{ id: '([^']+)'", src)) - set(skills))
-    check_own(skills, own)
+    feed = frozenset(re.sub(r"-<masked>-<masked>$", "", x["skillKey"]) for x in json.loads((raw / "feed-list.json").read_text())["cards"] if x.get("skillKey"))
+    check_own(skills, own, feed)
+    for sid, n in EXT_REQUIRED.items():
+        got = sum(1 for t in skills[sid]["templates"] if t.get("source") == "comfyart")
+        if got != n:
+            raise ConvertError(f"{sid}: {got} ext templates merged, want {n}")
+    if len(skills["character-sheet-design"]["templates"]) != 8:
+        raise ConvertError("character-sheet-design must have 8 templates (raw 7 + ext 1)")
     (ROOT / "src/data/skills-748.json").write_text(json.dumps({"source": "scripts/convert_raw_748.py (structure only)", "skills": skills}, ensure_ascii=False, indent=2) + "\n")
     d = ROOT / "docs/design/748"
     d.mkdir(parents=True, exist_ok=True)
-    (d / "COPY-REWRITE.md").write_text("\n".join(["# #748 COPY-REWRITE checklist", "",
-        "Reference long copy — NOT shipped. Product rewrites each row; until then the app uses our own generic copy.", "",
-        "| skill | slot | zh (reference) | en (reference) | rewrite |", "|---|---|---|---|---|"] +
-        [f"| {a} | {b} | {c} | {e} | TODO |" for a, b, c, e in COPY]) + "\n")
+    (d / "COPY-REWRITE.md").write_text("\n".join(["# #748 COPY-REWRITE checklist (keys only)", "",
+        "Reference copy is NOT in this repo (originals: review-assets `lovart-raw/2026-11-05/COPY-REWRITE-originals.md`).",
+        "Product writes our own zh/en per row; until then the app uses our generic copy.", "",
+        "| skill | slot | zh (ours) | en (ours) |", "|---|---|---|---|"] +
+        [f"| {a} | {b} | TODO | TODO |" for a, b, c, e in COPY]) + "\n")
+    orig = os.environ.get("COPY_ORIGINALS_OUT")  # never inside the repo
+    if orig:
+        assert not Path(orig).resolve().is_relative_to(ROOT.resolve())
+        Path(orig).write_text("\n".join(["# #748 reference copy originals (review-assets only, never main)", "", "| skill | slot | zh | en |", "|---|---|---|---|"] +
+            [f"| {a} | {b} | {c} | {e} |" for a, b, c, e in COPY]) + "\n")
     (d / "WASH-TODO.md").write_text("\n".join(["# #748 wash TODO (slots on temporary placeholders)", "", "| skill | slot | type | ratio |", "|---|---|---|---|"] +
         [f"| {a} | {b} | {c} | {e} |" for a, b, c, e in WASH]) + "\n")
     print(f"{len(skills)} skills, {sum(len(s.get('templates', [])) for s in skills.values())} templates, {len(WASH)} wash slots, {len(COPY)} copy rows, own ids checked: {len(own)}")

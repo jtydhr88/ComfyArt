@@ -78,3 +78,22 @@ async def test_skillrun_748(app_url, sid, lang, theme):  # noqa: F811
         if SHOTS:
             await pg.screenshot(path=_shot(f"748-{sid}-{lang}-{theme}.png"))
         await browser.close()
+
+
+async def test_used_count_plus_one_on_successful_start_748(app_url):  # noqa: F811
+    """#748 QA: a successful Start records +1 for the selected template (our own stats), shown as 已使用 1 次 next open."""
+    async with pw.async_playwright() as p:
+        browser, pg, dlg = await _open(p, app_url, "packaging-design-director", "zh", "light")
+        assert await pg.evaluate("localStorage.getItem('comfyart.skillTemplateUsage')") in (None, "{}")
+        await dlg.get_by_test_id("skill-run-preset").nth(1).click()
+        await dlg.locator('input[type="file"]').first.set_input_files(str(Path(__file__).parent / "fixtures/ma_subject_691.png"))
+        await pg.wait_for_function("() => !document.querySelector('[data-testid=skill-run-go]').disabled")
+        txt = dlg.locator("textarea[data-key], input[data-key]:not([type=file])")
+        for i in range(await txt.count()):
+            await txt.nth(i).fill("测试 748")
+        assert await dlg.get_by_test_id("skill-run-go").get_attribute("data-missing") is None
+        await dlg.get_by_test_id("skill-run-go").click()
+        await pg.wait_for_function("(localStorage.getItem('comfyart.skillTemplateUsage')||'').includes('packaging-design-director/')")
+        used = await pg.evaluate("JSON.parse(localStorage.getItem('comfyart.skillTemplateUsage'))")
+        assert list(used.values()) == [1] and list(used)[0].startswith("packaging-design-director/"), used
+        await browser.close()

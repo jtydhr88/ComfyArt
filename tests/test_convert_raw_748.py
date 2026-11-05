@@ -108,3 +108,20 @@ def test_template_media_and_inputs_match_raw_plus_ext(sid):
                 assert len(mc.get("media") or []) == t["depth"]
                 assert [x["type"] for x in t["media"]] == [c._kind(x.get("url")) for x in mc.get("media") or []]
             assert [q["key"] for q in t["inputs"]] == [q["key"] for q in ((mc.get("template") or {}).get("questions") or [])]
+
+
+def test_own_id_collides_with_final_id_fails():
+    with pytest.raises(c.ConvertError, match="Final skill id"):
+        c.check_own({"logo-material-explorer": {}}, ["logo-material-explorer"])
+
+
+def test_own_id_collides_with_feed_skillkey_fails():
+    with pytest.raises(c.ConvertError, match="reference feed skillKey"):
+        c.check_own({}, ["animated-poster-maker"], frozenset({"animated-poster-maker"}))
+
+
+def test_required_ext_missing_is_hard_fail(tmp_path):
+    (tmp_path / "raw").mkdir()  # no sibling own/ dir → character would silently drop to 7 / 27 total
+    with pytest.raises(c.ConvertError, match="required ext missing"):
+        c.load_ext(tmp_path / "raw", "character-sheet-design")
+    assert c.load_ext(tmp_path / "raw", "packaging-design-director") == []

@@ -242,7 +242,7 @@ async def test_thumbnail_upgrade_skill_regression(app_url, fake_agent, lang, the
         await pg.keyboard.press("Escape")
         await browser.close()
         browser, pg = await _page(p, lang, theme)
-        await pg.goto(app_url + f"?project=p644thumb{lang}&new=1&skill=thumbnail&mode=agent")
+        await pg.goto(app_url + f"?project=p644thumb{lang}&new=1&skill=cover-design-director&mode=agent")
         await pg.locator(".ca-composer__input").wait_for()
         await _dismiss(pg)
         await pg.get_by_test_id("composer-skill-chip").wait_for(timeout=10000)  # listed skill → chip, never the #673 notice
