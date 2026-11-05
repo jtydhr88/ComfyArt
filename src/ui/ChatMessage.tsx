@@ -644,13 +644,26 @@ function Ask({ b }: { b: BotBlock }) {
   )
 }
 
-/** #763: a question is open, or just ended (answered/skipped) and real reply text has not started yet —
- * no 输出中… / Outputting… shell (rail row, bordered status, or footer label) while in this state. */
+/** #763/#769: quiet empty 输出中… / Outputting… chrome (rail row, bordered status, footer) when:
+ * - a question is open, or just ended and reply text has not started yet (#763), or
+ * - the turn is already done, or
+ * - after an ask the reply text is present and no non-ask tool is still pending (#769 wait / completed reply).
+ * Do not quiet a plain generating turn with no ask (keeps Outputting… while streaming). */
 export function askQuiet(m: BotMessage) {
   let at = -1
   m.blocks.forEach((b, i) => { if (b.type === 'ask') at = i })
-  if (at < 0) return false
-  return !m.blocks.slice(at + 1).some((b) => b.type === 'text' && (b.text ?? '').trim() !== '')
+  if (at < 0) return m.status !== 'streaming'
+  const after = m.blocks.slice(at + 1)
+  const replied = after.some((b) => b.type === 'text' && (b.text ?? '').trim() !== '')
+  if (!replied) return true
+  if (m.status !== 'streaming') return true
+  // Reply text is already on screen — stay quiet unless a real tool is still running.
+  return !after.some((b) => {
+    if (b.type !== 'tool_use') return false
+    if (toolName(b.name) === 'ask_user') return false
+    if (!b.id) return !after.some((x) => x.type === 'tool_result')
+    return !m.blocks.some((x) => x.type === 'tool_result' && x.id === b.id)
+  })
 }
 
 /** #763: a pending question card docks directly above the composer (not inline in the timeline). */

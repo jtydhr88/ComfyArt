@@ -31,6 +31,7 @@ import {
   Globe,
   Grid2x2,
   Hand,
+  Hash,
   Heart,
   HelpCircle,
   History,
@@ -209,7 +210,8 @@ export const Icons = {
   wave: <Svg><path d="M4 10v4M8 7v10M12 4v16M16 7v10M20 10v4" /></Svg>,
   mic: L(Mic),
   music: L(Music),
-  cube: L(Cuboid),
+  cube: L(Box, 2.5),  /* #769: equilateral wireframe (3 faces ≈ hex); stroke ~1.67px at 16×16 glyph (was Cuboid) */
+  hash: L(Hash, 2.5),  /* #769: composer-right 参考区 # — same 16×16 / stroke 2.5 as cube; not Frame */
   sound: L(Volume2),
   soundOff: L(VolumeX),
   panelRight: L(PanelRight),

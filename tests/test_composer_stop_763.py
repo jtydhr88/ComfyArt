@@ -80,29 +80,44 @@ def test_dock_card_geometry():
     assert "width: 90px; height: 32px" in css.split(".ca-chat__dock .ca-q__submit {")[1].split("}")[0]
 
 
-def test_at_menu_assets_then_model_and_no_ref_chip():
+def test_at_menu_assets_then_model_and_ref_chip_restored():
     comp = read("src/ui/Composer.tsx")
     assert comp.index('data-at-group="assets"') < comp.index('data-at-group="model"')
-    assert "RefFrameButton" not in comp
+    # 参考区 button remounted beside ModelPrefs; @ menu does not replace it
+    assert "RefFrameButton" in comp and "{mode === 'agent' && !agentOff && <RefFrameButton editor={editor} />}" in comp
     assert "atOpen ? t('composer.atSearchPlaceholder')" in comp
     css = read("src/styles/shell.css")
     assert ".ca-composer > .ca-composer__suggest { position: absolute" in css
     assert "width: 255px" in css.split(".ca-composer__suggest.ca-at-menu {")[1].split("}")[0]
-    assert "Icons.cube" in read("src/ui/ModelPrefs.tsx")
+    mp = read("src/ui/ModelPrefs.tsx")
+    assert "Icons.cube" in mp and "ca-modelprefs__btn" in mp
+    # #769 model-pref glyph is equilateral wireframe cube (Lucide Box), not skewed Cuboid
+    icons = read("src/ui/icons.tsx")
+    assert "cube: L(Box" in icons and "cube: L(Cuboid)" not in icons
+    assert "hash: L(Hash" in icons  # #769: 参考区 # is Lucide Hash (not Frame that fills the box)
+    ref = read("src/ui/RefFrameButton.tsx")
+    assert "ca-bar__btn--icon ca-refbtn" in ref and "Icons.hash" in ref
+    assert "t('chatFrame.ref')" not in ref  # icon-only; no 参考/Ref label beside Cube
+    css = read("src/styles/shell.css")
+    assert ".ca-modelprefs__btn .ca-icon { width: 16px; height: 16px; }" in css
+    assert ".ca-refbtn .ca-icon { width: 16px; height: 16px; }" in css
+    assert ".ca-pop-anchor:has(.ca-modelprefs__btn) + .ca-composer__slotwrap { margin-left: 2px; }" in css  # #769: foot gap 4 + margin 2 → 8px → c2c 40
 
 
 def test_no_outputting_shell_while_question_open_or_just_ended():
-    """HOLD 98fa5b44: no empty 输出中… / Outputting… box with the docked question, after Skip/answer before tokens."""
+    """#763/#769: no empty 输出中… / Outputting… box with docked question, after Skip/answer, or after wait reply."""
     msg = read("src/ui/ChatMessage.tsx")
     quiet = msg.split("export function askQuiet(m: BotMessage)")[1].split("\n}\n")[0]
-    # last ask (pending, answered or skipped) quiets until real reply text arrives
     assert "b.type === 'ask'" in quiet and "b.type === 'text'" in quiet and ".trim() !== ''" in quiet
+    assert "m.status !== 'streaming'" in quiet  # #769: done turns quiet; plain stream-without-ask keeps Outputting
+    assert "ask_user" in quiet  # pending non-ask tools keep Outputting after reply text
     blocks = msg.split("export function AssistantBlocks")[1].split("export function UserMessage")[0]
     assert "const quiet = askQuiet(m)" in blocks
     assert "b.type === 'ask' || b.type === 'task'" not in blocks  # an ask no longer spawns an outputting row
     assert blocks.count("!done && !quiet && proc.length") == 2  # both outputting rows gated
     panel = read("src/ui/AgentPanel.tsx")
-    assert "m.status === 'streaming' && !askQuiet(m) && (" in panel
+    assert "!askQuiet(m)" in panel and "chatMessage.outputting" in panel
+    assert "never leave an empty Outputting box" in panel or "foot" in panel
 
 
 def test_generating_without_question_still_outputting():

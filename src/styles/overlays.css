@@ -443,7 +443,7 @@
 .ca-composer__mode[data-agent] { max-width: 100%; min-width: 0; }
 .ca-composer__mode[data-agent] > .ca-menu__grow { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
 /* #219: the agent name needs the room: in the agent bar the ref button keeps only its icon (its tooltip explains it) */
-.ca-composer__foot:has(.ca-composer__mode[data-agent]) .ca-refbtn > span:not(.ca-icon):not(.ca-refbtn__count) { display: none; }
+/* #769: ref is icon-only (#); label-collapse rule retired */
 .ca-chat__tool { display: flex; flex-direction: column; gap: 6px; }
 .ca-chat__tool > .ca-chat__step { width: 100%; padding: 0; border: none; background: none; font: inherit; font-size: 13px; text-align: left; cursor: pointer; }
 .ca-chat__tool > .ca-chat__step:hover { color: var(--ca-text); }
@@ -658,9 +658,8 @@
 .ca-chip--image .ca-each__role[data-shared] { background: var(--ca-strong); color: var(--ca-float); }
 .ca-composer__chips:has(.ca-each__role) { padding-bottom: 10px; }
 .ca-reframe__hint { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; padding: 24px; box-sizing: border-box; border: 2px dashed var(--ca-border); border-radius: var(--ca-frame-r, 0); color: var(--ca-muted); font: 400 28px/1.4 var(--ca-font); text-align: center; pointer-events: none; }
-.ca-refbtn { white-space: nowrap; flex: none; }
+.ca-refbtn { white-space: nowrap; flex: none; } /* width/padding from shell #769 ca-bar__btn--icon */
 .ca-refbtn[data-on] { background: var(--ca-active); }
-.ca-refbtn__count { font-variant-numeric: tabular-nums; }
 .ca-workflows__group { display: flex; flex-direction: column; gap: 6px; }
 .ca-workflows__row { display: grid; grid-template-columns: 1fr 1.3fr auto; align-items: center; gap: 4px 8px; font-size: 13px; }
 .ca-workflows__warn { grid-column: 1 / -1; font-size: 12px; color: var(--ca-error-text); }

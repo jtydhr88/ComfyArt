@@ -1,5 +1,5 @@
 """#763 HOLD 98fa5b44 (design 5783457718 / product 5783482534 / QA 6655783604): no empty 输出中… / Outputting…
-shell with the docked question, after Skip, or after an answer before reply tokens; plain generating keeps it."""
+shell with the docked question, after Skip, after an answer before reply tokens, or after a wait/completed reply (#769); plain generating keeps it."""
 import os
 import subprocess
 import threading
@@ -66,7 +66,7 @@ def _state(browser, bundle, scene, lang, theme="light"):
 
 
 @pytest.mark.parametrize("lang", ["zh", "en"])
-@pytest.mark.parametrize("scene", ["q-open", "skip-after", "answer-before-tokens"])
+@pytest.mark.parametrize("scene", ["q-open", "skip-after", "answer-before-tokens", "wait-reply-streaming", "wait-reply-done", "answer-then-text"])
 def test_no_outputting_shell_with_or_right_after_question(browser, bundle, scene, lang):
     st = _state(browser, bundle, scene, lang)
     assert st["status"] == 0 and st["outRow"] == 0 and st["footer"] == 0, st
