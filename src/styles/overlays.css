@@ -425,6 +425,11 @@
 .ca-md p, .ca-md ul, .ca-md ol { margin: 0; }
 .ca-md ul, .ca-md ol { padding-left: 20px; }
 .ca-md .ca-md__h { font-weight: 600; }
+/* #765: agent reply prose — Inter 14/400/1.6, text .90; lists 12px indent, 4px item gap; headings + strong read as plain paragraphs */
+.ca-chat__bot .ca-md { gap: 8px; font-size: 14px; line-height: 1.6; color: var(--ca-text); }
+.ca-chat__bot .ca-md ul, .ca-chat__bot .ca-md ol { padding-left: 12px; }
+.ca-chat__bot .ca-md li + li { margin-top: 4px; }
+.ca-chat__bot .ca-md .ca-md__h, .ca-chat__bot .ca-md strong, .ca-chat__bot .ca-md b, .ca-chat__bot .ca-md th { font-weight: 400; }
 .ca-md code { padding: 1px 4px; border-radius: 4px; background: var(--ca-field); font-size: 12px; }
 /* #715 design: only the task id never breaks mid-string; too long -> whole id moves down, then end ellipsis (full id in title, copyable) */
 .ca-task-id { display: inline-block; max-width: 100%; box-sizing: border-box; vertical-align: bottom; white-space: nowrap; word-break: keep-all; overflow-wrap: normal; overflow: hidden; text-overflow: ellipsis; user-select: text; }
@@ -447,6 +452,7 @@
 .ca-chat__tool { display: flex; flex-direction: column; gap: 6px; }
 .ca-chat__tool > .ca-chat__step { width: 100%; padding: 0; border: none; background: none; font: inherit; font-size: 13px; text-align: left; cursor: pointer; }
 .ca-chat__tool > .ca-chat__step:hover { color: var(--ca-text); }
+.ca-chat__thought > .ca-chat__step { font-weight: 400; line-height: 24px; min-height: 24px; color: var(--ca-text-think); } /* #765 collapsed Thought row 13/400, row 24 */
 .ca-chat__tool[data-error] > .ca-chat__step { color: #dc2626; }
 .ca-chat__chev { margin-left: auto; transition: transform .15s; }
 .ca-chat__tool[data-open] .ca-chat__chev { transform: rotate(180deg); }
@@ -581,8 +587,8 @@
   overflow: auto;
   padding: 8px 10px;
   border-left: 2px solid var(--ca-border);
-  color: var(--ca-muted);
-  font: 400 12px/18px var(--ca-font);
+  color: var(--ca-text-think);
+  font: 400 13px/1.6 var(--ca-font); /* #765 expanded thinking */
   white-space: pre-wrap;
 }
 
@@ -607,7 +613,7 @@
   aspect-ratio: var(--ca-media-hero-ar-video);
 }
 
-.ca-chat__thoughttext { max-height: 240px; overflow: auto; padding: 8px 10px; border-left: 2px solid var(--ca-border); color: var(--ca-muted); font-size: 12px; line-height: 18px; white-space: pre-wrap; }
+.ca-chat__thoughttext { max-height: 240px; overflow: auto; padding: 8px 10px; border-left: 2px solid var(--ca-border); color: var(--ca-text-think); font: 400 13px/1.6 var(--ca-font); white-space: pre-wrap; } /* #765 13/400/1.6 .55 */
 .ca-chat__io pre { margin: 0; max-height: 200px; overflow: auto; padding: 8px 10px; border-radius: 8px; background: var(--ca-field); font-size: 12px; line-height: 18px; white-space: pre-wrap; word-break: break-all; }
 .ca-chat__notice { padding: 8px 12px; border-radius: 10px; background: var(--ca-field); font-size: 13px; color: var(--ca-muted); }
 .ca-chat__notice[data-level="error"] { background: rgba(220,38,38,.08); color: #dc2626; white-space: normal; overflow-wrap: anywhere; }  /* #305: key CTA must not clip */
@@ -1012,6 +1018,7 @@
 .ca-process__row[data-kind="image"] { grid-template-columns: var(--ca-process-col) 6px minmax(0, 1fr); }
 .ca-process__icon--image .ca-icon { width: 16px; height: 16px; opacity: .55; }
 .ca-process__row[data-kind="image"] .ca-process__label { font-size: 13px; font-weight: 400; }
+.ca-process__row[data-kind="thought"] .ca-process__label { font-weight: 400; color: var(--ca-text-think); } /* #765 Thought row 13/400 */
 /* #421: failed generation row — same red as tool-step errors */
 .ca-process__row[data-error] .ca-process__label { color: #dc2626; }
 
