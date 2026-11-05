@@ -5,6 +5,7 @@ import { agentModeAtom, DOC_ACCEPT, docsAtom, draftAtom, eachLine, eachRuns, ext
 
 import { keyMissing, keySettingsOpenAtom, keyStatusAtom, refreshKeyStatus } from '../wavespeedKey'
 import { EachButton, EachRole, useEach } from './EachToggle'
+import { RefFrameButton } from './RefFrameButton'
 import { listAssets, placeAsset, type AssetItem } from '../assets'
 import { imageUrl } from '../comfy'
 import { botEnabledAtom, loadProviders, loadSettings, messagesAtom, providerLabel, providersStateAtom, stopTurn } from '../bot'
@@ -499,7 +500,7 @@ export function Composer({ editor, busy, onError }: { editor: Editor; busy: bool
         {/* #268: right group = reference / preferences (agent) or settings, next to voice/send */}
         <div className="ca-gen__spacer" />
         {refs.length > 1 && <EachButton compact on={each.on} onChange={each.setOn} />}
-        {/* #763: no 参考 chip beside the input — references come from the @ menu */}
+        {mode === 'agent' && !agentOff && <RefFrameButton editor={editor} />}
         {mode === 'agent' && <ModelPrefs onError={onError} />}
         <ComposerSlot showSend={showSend} setVoice={setVoice} canSend={(content || refs.length > 0) && !agentOff && !agentLoading} onSend={send}
           title={agentLoading ? t('bot.agentListLoading') : busy && mode === 'agent' ? t('composer.sendQueuedAfterTheCurrent') : t('composer.send')} onError={onError}

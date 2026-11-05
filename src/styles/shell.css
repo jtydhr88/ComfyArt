@@ -265,6 +265,9 @@ button.ca-head__logo:hover, button.ca-head__logo[data-open] { background: var(--
 .ca-chip--summary { max-width: 200px; }
 
 .ca-composer__foot { gap: 4px; }
+/* #769: glyph 16×16 in 32×32 hit; foot gap 4 + margin 2 (+~0–2 wrapper) → 8px gap → c2c 40 */
+.ca-modelprefs__btn .ca-icon { width: 16px; height: 16px; }
+.ca-composer__foot > .ca-pop-anchor:has(.ca-modelprefs__btn) + .ca-composer__slotwrap { margin-left: 2px; }
 .ca-composer__foot > .ca-pop-anchor { min-width: 0; }
 .ca-composer__foot .ca-gen__pill { max-width: 100%; }
 .ca-composer__mode { color: var(--ca-text); }

@@ -23,8 +23,8 @@ export function ModelPrefs({ onError, within = '.ca-composer', side = 'top' }: {
       align="end"
       within={within}
       trigger={({ open: o, toggle: flip }) => (
-        <button type="button" className="ca-bar__btn ca-bar__btn--icon" title={t('modelPrefs.modelPreferences')} data-open={o || undefined} onClick={flip}>
-          <span className="ca-icon">{Icons.cube}</span>{/* #763: cube model button */}
+        <button type="button" className="ca-bar__btn ca-bar__btn--icon ca-modelprefs__btn" title={t('modelPrefs.modelPreferences')} data-open={o || undefined} onClick={flip}>
+          <span className="ca-icon">{Icons.cube}</span>{/* #769: 32×32 hit left of primary; glyph ≈16×16; stroke ~1.5–2px; c2c=40 (8px gap); equilateral Cube */}
         </button>
       )}
     >

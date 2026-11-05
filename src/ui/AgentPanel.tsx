@@ -215,14 +215,17 @@ export function AgentPanel({ editor, projectId, max, onMax, onCollapse, onError 
             <div key={m.id} className={fading.has(m.id) ? 'ca-chat__bot ca-chat__bot--stopping' : 'ca-chat__bot'}>
               <AssistantBlocks editor={editor} m={m} dockAsks />
               {/* #763: no streaming footer while a question is open / just answered or skipped and no reply text yet */}
-              {m.status === 'streaming' && !askQuiet(m) && (
-                <div className="ca-chat__thinking">
-                  <span className="ca-chat__thinkicon"><span className="ca-icon">{Icons.think}</span></span>
-                  <span className="ca-chat__thinklabel">{/* #437: a plain-text reply in progress only reads 输出中…; a reasoning turn's own Thought row carries the live label */}
-                  {/* #763: faint streaming text only; Stop lives in the composer's right primary button */}
-                  {m.blocks.some((b) => b.type === 'thinking') ? '' : t('chatMessage.outputting')}</span>
-                </div>
-              )}
+              {(() => {
+                // #437: reasoning turns keep the live label on the Thought row; #769: never leave an empty Outputting box
+                const foot = m.blocks.some((b) => b.type === 'thinking') ? '' : t('chatMessage.outputting')
+                return m.status === 'streaming' && !askQuiet(m) && foot ? (
+                  <div className="ca-chat__thinking">
+                    <span className="ca-chat__thinkicon"><span className="ca-icon">{Icons.think}</span></span>
+                    <span className="ca-chat__thinklabel">{/* #763: faint streaming text only; Stop lives in the composer's right primary button */}
+                    {foot}</span>
+                  </div>
+                ) : null
+              })()}
               {m.status === 'aborted' && stoppedSubmitted(m) > 0 && (
                 <div className="ca-chat__hint" data-stopped="submitted">{t('chatMessage.stoppedSubmittedNote')}</div>
               )}
