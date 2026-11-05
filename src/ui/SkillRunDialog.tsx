@@ -55,7 +55,7 @@ function PresetTile({ skill, item, preset: p, on, onPick, onZoom }: {
               aria-hidden="true"
             />
           )}
-          {/* #760: rest = the single cover above (contain+center); click (selected) → expand REAL media[] only, 400ms. */}
+          {/* #760: rest = static multi-image pile (real media[] only); hover OR selected → 400ms expand. */}
           {stack.length > 1 && <span className="ca-skillrun__stack" aria-hidden="true" data-testid="skill-run-stack" style={{ '--n': Math.min(stack.length, 5) } as React.CSSProperties}>
             {stack.slice(0, 5).map((src, i) => <img key={i} src={src} alt="" style={{ '--i': i } as React.CSSProperties} />)}
           </span>}

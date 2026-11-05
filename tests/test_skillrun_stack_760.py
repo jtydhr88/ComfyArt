@@ -1,4 +1,4 @@
-"""#760 — rest = ONE cover <img> (contain+center), no CSS pile; click-expand keeps 400ms #751 timing, real media only."""
+"""#760 — rest = static multi-image pile (real media); card ≈258×193; hover/selected expand 400ms."""
 import re
 from pathlib import Path
 
@@ -11,14 +11,23 @@ RAW = (ROOT / "src/skillRaw748.ts").read_text()
 def test_400ms_expand_collapse_kept():
     assert "--ca-skillrun-stack-dur: 400ms" in CSS
     assert "--ca-skillrun-stack-ease: cubic-bezier(.25, .1, .25, 1)" in CSS
-    assert "transition: left var(--ca-skillrun-stack-dur) var(--ca-skillrun-stack-ease)" in CSS
+    assert "var(--ca-skillrun-stack-dur)" in CSS
 
 
-def test_no_rest_pile_and_rotations():
-    assert not re.search(r"\.ca-skillrun__stack > \*:nth-child", CSS)
-    assert "rotate(var(--r" not in CSS
-    assert ".ca-skillrun__preset[data-on] .ca-skillrun__stack { opacity: 1; }" in CSS
+def test_card_size_matches_lovart_working():
+    """Design @1280: Lovart left template card ≈258×193 (4:3)."""
+    assert "width: 258px" in CSS
+    assert "aspect-ratio: 4 / 3" in CSS
+    assert "aspect-ratio: 160 / 120" not in CSS
+
+
+def test_rest_is_static_pile_focus_expands():
     assert "--ca-skillrun-stack-w: 76%; --ca-skillrun-stack-h: 80%" in CSS
+    assert "rotate(var(--r" in CSS
+    assert ".ca-skillrun__stack > *:nth-child(1)" in CSS
+    # hover OR selected expands
+    assert "[data-on] .ca-skillrun__stack > *" in CSS
+    assert ":hover .ca-skillrun__stack > *" in CSS
 
 
 def test_stack_never_padded_with_pending():

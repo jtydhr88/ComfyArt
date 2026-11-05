@@ -74,7 +74,7 @@ export function applyRaw748(skill: Skill): Skill {
   const presets = tpls.map((t, i): SkillPreset => {
     const old = skill.presets?.[i]
     const image = old?.image ?? WASH_T[skill.id]?.[i] ?? PENDING_WASH // the template's OWN wash (1:1, fixed per card), else the unified placeholder
-    // #760: rest = ONE cover; click-expand only shows REAL washed media[] (no PENDING_WASH fillers, no fake layers).
+    // #760: rest = static multi-image pile from REAL washed media[]; focus expands. Never PENDING_WASH fillers.
     const real = (WASH_S[skill.id]?.[i] ?? []).filter((u): u is string => !!u && !isPendingWash(u)).slice(0, t.depth)
     const stack = t.depth > 1 && real.length > 1 ? real : undefined
     const pendingWash = image === PENDING_WASH ? [0] : []
