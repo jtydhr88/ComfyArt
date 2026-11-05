@@ -237,9 +237,9 @@ function AgentSetup({ providers, enabled, onError, draft, edit, children }: {
             <div className="ca-agentsetup__hermes" data-testid="hermes-settings">
               <label className="ca-rename__field">
                 <span>{t('botSettings.hermesSshHost')}</span>
-                <input
-                  className="ca-panel__input"
-                  type="text"
+                <textarea
+                  className="ca-panel__input ca-agentsetup__hermes-hint"
+                  rows={2}
                   autoComplete="off"
                   value={String(draft['bot-hermes-ssh-host'] ?? '')}
                   placeholder={t('botSettings.hermesSshHostHint')}

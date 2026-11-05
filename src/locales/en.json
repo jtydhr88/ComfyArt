@@ -1802,7 +1802,7 @@
   "skills.desc.clothing-swap": "Fixed person, swap outfit; dual refs (person + garment)",
   "skills.cat.clothing-swap": "E-commerce",
   "botSettings.hermesSshHost": "Hermes SSH host",
-  "botSettings.hermesSshHostHint": "Run Hermes on another machine (host alias or user@host, key login). Empty = local hermes",
+  "botSettings.hermesSshHostHint": "Host alias or user@host (key login); empty = use local Hermes",
   "botSettings.hermesProfile": "Hermes profile",
   "botSettings.hermesProfileHint": "Profile made for ComfyArt (hermes -p <name>), see the Agent guide. Empty = Hermes default profile"
 }

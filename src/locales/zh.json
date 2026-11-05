@@ -1802,7 +1802,7 @@
   "skills.desc.clothing-swap": "固定人像换服装/搭配；双图（人+衣）",
   "skills.cat.clothing-swap": "电商",
   "botSettings.hermesSshHost": "Hermes SSH 主机",
-  "botSettings.hermesSshHostHint": "在另一台机器上运行 Hermes（主机别名或 user@host，密钥登录）。留空 = 本机 hermes",
+  "botSettings.hermesSshHostHint": "主机别名或 user@host（密钥登录）；留空 = 使用本机 Hermes",
   "botSettings.hermesProfile": "Hermes 配置档",
   "botSettings.hermesProfileHint": "给 ComfyArt 专用的配置档（hermes -p <名字>），见 Agent 文档。留空 = Hermes 默认配置档"
 }
