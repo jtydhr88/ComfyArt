@@ -282,7 +282,8 @@ export const PHASE3_NEW_SKILL_IDS = [
 export const PHASE3_NEW_SKILL_ID_SET: ReadonlySet<string> = new Set(PHASE3_NEW_SKILL_IDS)
 
 /** Phase1 hot order → Phase2 Soft mount NEW (B+C) → deferred D → untouched / other. */
-function orderBuiltins(skills: Skill[]): Skill[] {
+function orderBuiltins(raw: Skill[]): Skill[] {
+  const skills = withMeasuredInputs748(raw)
   const phase1Rank = new Map<string, number>(PHASE1_SKILL_IDS.map((id, i) => [id, i]))
   // Soft mount NEW only (exclude `social` — already ranked in Phase1)
   const phase2MountIds = PHASE2_SKILL_IDS.filter((id) => !phase1Rank.has(id))
@@ -318,7 +319,7 @@ function orderBuiltins(skills: Skill[]): Skill[] {
 function withMeasuredInputs748(list: Skill[]): Skill[] {
   return list.map((s) => MEASURED_INPUTS_748[s.id] ? { ...s, inputs: MEASURED_INPUTS_748[s.id] } : s)
 }
-export const BUILTIN_SKILLS: Skill[] = withMeasuredInputs748(orderBuiltins([
+export const BUILTIN_SKILLS: Skill[] = orderBuiltins([
   { id: 'poster', name: t('skills.posterDesign'), instructions: 'You are a production poster designer. Deliver print-ready compositions, not loose mood sketches.\n1) Brief: pull headline, subject, audience and use (event, promo, editorial) from the upload and notes.\n2) Hierarchy: one hero subject, strong headline typography in quotes, clear subcopy ladder, generous margins.\n3) Ratio: default 3:4; keep safe margins for print crop. Offer 2 distinct art directions when the brief is open.\n4) Finish: high contrast, legible at arm length, no clipped type. Put every on-art phrase in quotes.\n5) Refs: when the user uploaded a file, pass its shape id in refs (ref_modes content) on every generate_image call.',
     category: 'ads', cover: cover('poster'), quickStartCover: quickStartCover('poster'), featured: feedCovers('poster'), video: video('poster'), examples: ex541('poster', [1, 2, 3, 4, 5]),
     inputs: REF_CARD_INPUTS_687 },
@@ -539,7 +540,7 @@ export const BUILTIN_SKILLS: Skill[] = withMeasuredInputs748(orderBuiltins([
   { id: 'interior', name: t('skills.interiorArchitecturalVisualization'), instructions: 'Produce photoreal interior or architecture renders: eye-level wide shot, natural light, accurate materials, 16:9. Add a detail vignette at 4:3.',
     cover: cover('interior'), quickStartCover: quickStartCover('interior'), featured: feedCovers('interior'), video: video('interior'), examples: ex541('interior', [1, 2, 3, 4]),
     inputs: REF_CARD_INPUTS_687 },
-]))
+])
 
 export const skillAtom = atom<Skill | null>('skill', null)
 /** #673 — the plain sentence shown in the composer when a hidden skill is attached from an old session / card / link. */

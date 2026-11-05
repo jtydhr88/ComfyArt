@@ -36,7 +36,7 @@ MOTION = [("海报动画", "Poster Animation", "01-poster-animation"),
 # #687: brand / packaging / character → reference-card Upload + Additional; motion → Reference Video Remake
 # (locked in tests/test_skill_fields_687.py). product keeps the #569 three fields.
 INPUTS = {
-    "product": [("商品图片", "image", True), ("商品资料", "text", False), ("视觉呈现方式", "text", False)],
+    "product": [('商品图片', 'image', True), ('商品资料', 'text', False), ('品牌素材（选填）', 'image', False), ('补充要求', 'text', False), ('视觉呈现方式', 'text', False)],  # #748 measured (src/data/skill-inputs-748.json)
 }
 
 
@@ -62,7 +62,7 @@ def test_effect_skills_only_upload_and_note(got):
     for sid in EFFECT:
         f = got["skills"][sid]["inputs"]
         assert [(x["zh"], x["type"], x["required"]) for x in f] == [("上传文件", "image", False), ("补充描述", "textarea", False)], sid
-        assert f[1]["ph"]["zh"] == ("还有什么想补充的吗？" if sid in ("poster", "banner", "interior") else "有什么想补充的吗？") and f[1]["ph"]["en"], sid  # #687
+        assert f[1]["ph"]["zh"] == "有什么想补充的吗？"  # #748 measured: one zh placeholder on every example-class card and f[1]["ph"]["en"], sid  # #687
         assert all(x["en"] for x in f), sid
 
 
@@ -101,7 +101,7 @@ def test_character_has_no_examples(got):
 def test_template_skills_three_inputs(got):
     for sid, want in INPUTS.items():
         f = got["skills"][sid]["inputs"]
-        assert len(f) == 3, sid
+        assert len(f) == len(want), sid
         assert [(x["zh"], x["type"], x["required"]) for x in f] == want, sid
         assert all(x["en"] for x in f), sid
         assert all(x["ph"] and x["ph"]["zh"] and x["ph"]["en"] for x in f if x["type"] != "image"), sid

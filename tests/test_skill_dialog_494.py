@@ -56,7 +56,7 @@ def test_every_field_is_bilingual_data(got):
     for sid, fields in got["fields"].items():
         assert fields, sid
         # #569: effect skills (upload + note) and character carry no required field, like the reference.
-        assert any(req for _, _, req, *_ in fields) == (sid not in EFFECT and sid not in NEARMISS and sid not in {"character", "social", "multi-angle", "brand", "packaging", "logo-material", "meta-ads", "marketing-campaign", "web-product", "mobile-ui"}), sid  # #687-1 reference-card fields optional  # #635 social optional refs; #691 multi-angle upload optional
+        assert any(req for _, _, req, *_ in fields) == (sid not in EFFECT and sid not in NEARMISS and sid not in {"character", "social", "multi-angle", "logo-material", "meta-ads", "marketing-campaign", "web-product", "mobile-ui"}), sid  # #687-1 reference-card fields optional  # #635 social optional refs; #691 multi-angle upload optional
         for key, typ, req, zh, en, ph in fields:
             assert typ in {"text", "textarea", "select", "image"} and zh and en, (sid, key)
             if req and typ in {"text", "textarea"}:
@@ -92,8 +92,8 @@ def test_builtin_preset_images_unique(got):
 @needs_node
 def test_defaults_and_required(got):
     assert got["posterDefaults"] == {"file": "", "note": ""}  # #569 effect skill: upload + note only
-    assert got["brandDefaults"] == {"file": "", "note": ""}  # #687-1 Upload Files + Additional Details
-    assert got["brandMissing"] == [] and got["brandFilled"] == []
+    assert got["brandDefaults"] == {"brief": "", "assets": "", "visual": ""}  # #748 measured: brand is template-class
+    assert got["brandMissing"] == ["brief"] and got["brandFilled"] == []
     assert got["posterPresets"] == 0
     assert got["cwDefaults"] == {"brief": ""}
     assert got["posterMissing"] == [] and got["posterFilled"] == []

@@ -10,7 +10,7 @@ EX = (ROOT / "src/ui/SkillExamples.tsx").read_text()
 
 def test_examples_only_left_no_cover_fallback_template_grid():
     assert "presetTiles" in DLG
-    assert "p.image || p.video" in DLG
+    assert "skillMedia(skill)" in DLG  # #748: tiles come from data-driven media[] (image/video/stack)
     assert 'data-left={examples.length ? (presetTiles.length ? \'both\' : \'examples\') : \'templates\'}' in DLG
     # #636 product lock: Examples-only does not render 「当前模板」 native select
     assert "skill-run-preset-select" not in DLG

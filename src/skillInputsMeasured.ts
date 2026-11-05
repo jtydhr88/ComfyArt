@@ -24,7 +24,7 @@ function toInput(f: MeasuredField): SkillInput {
   return {
     key: KEY[f.key] ?? f.key,
     label: { zh: f.label_zh, ...(EN[f.label_zh] ? { en: EN[f.label_zh] } : {}) },
-    type: f.type === 'upload' ? 'image' : 'text',
+    type: f.type === 'upload' ? 'image' : f.key === 'notes' ? 'textarea' : 'text', // example-class 补充描述 stays the multi-line box
     ...(f.required ? { required: true } : {}),
     ...(ph ? { placeholder: { zh: ph, en: EN[ph] ?? ph /* TODO(#748): en measure */ } } : {}),
     ...(f.maxlength ? { maxLength: f.maxlength } : {}),
