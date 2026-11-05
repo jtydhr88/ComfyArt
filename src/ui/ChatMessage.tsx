@@ -443,7 +443,7 @@ function QuestionAnswered({ b }: { b: BotBlock }) {
       </div>
     )
   }
-  const answer = askAnswerLabels(b) || t('chatMessage.skipped')
+  const answer = askAnswerLabels(b) || t('chatMessage.skipThisQuestion')  // #763: Skip posts “Skip this question”
   return (
     <div className="ca-qmemo">
       <div className="ca-qmemo__row"><span className="ca-qmemo__k">{t('chatMessage.qaAsk')}</span><span className="ca-qmemo__v">{b.prompt}</span></div>
@@ -457,6 +457,7 @@ function QuestionBlock({ q, st, onChange }: { q: AskQuestion; st: QState; onChan
   const multi = (q.max_selections ?? 1) > 1
   const allowOther = !!q.allow_other
   const textOnly = !options.length && allowOther
+  // #763: D is always the inline `Other (type your answer)...` row on choice cards
   const recommended = new Set([...(q.defaults ?? []), ...options.filter((o) => o.recommended).map((o) => o.id)])
   const otherLetter = LETTERS[options.length] ?? 'A'
 
@@ -507,14 +508,15 @@ function QuestionBlock({ q, st, onChange }: { q: AskQuestion; st: QState; onChan
                 {recommended.has(o.id) && <span className="ca-q__rec">{t('chatMessage.recommended')}</span>}
               </button>
             ))}
-            {allowOther && (
-              <div className="ca-q__opt" data-other="" data-text="" data-on={otherOn || undefined}>
+            {(
+              <div className="ca-q__opt" data-other="" data-text="" data-on={otherOn || undefined} data-off={!allowOther || undefined}>
                 <span className="ca-q__letter">{otherLetter}</span>
                 <input
                   type="text"
                   className="ca-q__input"
                   value={st.other}
                   placeholder={q.placeholder || t('chatMessage.other')}
+                  disabled={!allowOther}
                   onChange={(e) => onOther(e.target.value)}
                   onFocus={stealOther}
                   onKeyDown={(e) => e.stopPropagation()}
@@ -1042,6 +1044,8 @@ export function AssistantBlocks({ editor, m, dockAsks }: { editor: Editor; m: Bo
     // #627: thinking after an image/video gen row → ref_analysis (参考素材分析结束), not a second 思考完成
   let sawMediaGen = false
   m.blocks.forEach((b, i) => {
+    // #763: ask_user never paints its own 向你提问 timeline row (the docked card is the status)
+    if ((b.type === 'tool_use' || b.type === 'tool_result') && toolName(b.name) === 'ask_user') return
     if (hideMemCall(b)) {
       // #437: memory write in flight → 记忆更新中 (no ›); becomes 记忆已更新 › when memory_updated lands
       if (

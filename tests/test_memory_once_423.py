@@ -171,7 +171,8 @@ def test_locales_only_add_memory_retrieved_430():
         "customWorkflows.action.videoCutout", "customWorkflows.action.model3d",
         "customWorkflows.group.model", "customWorkflows.model3dGone", "customWorkflows.needsVideo",
         # #763: composer placeholder aligned to the original ("@" for context, "/" for skills)
-        "composer.describeYourDesignNeedsFor",
+        "composer.describeYourDesignNeedsFor", "chatMessage.other", "chatMessage.skipThisQuestion",
+        "composer.atSearchPlaceholder", "composer.atGroupModel",
         # #542: Skill Creator landing heading (not memory copy)
         "agentPanel.creatorStartTitle",
         # #539 PR-B: Assets page empty state + embedded detail upload copy (not memory copy)
