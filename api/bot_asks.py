@@ -16,22 +16,28 @@ RUN_APPROVAL_KIND = _kit.RUN_APPROVAL_KIND
 QUESTION_KIND = "question"
 
 _MAX_OPTIONS = 12
-# After ask_user resolves, tool results carry a note: always confirm
-# (restate choice/skip) in chat, then continue the original task — unless
-# the user's own message asked to wait / not generate yet. Do not say
-# "continue with sensible defaults" and do not globally forbid generation.
+# After ask_user resolves: default is continue the original task immediately
+# (generate when appropriate). Do NOT emit a separate pre-generate
+# confirmation sentence. Restate the choice in the post-image completion
+# intro. Wait/no-generate prose only if the user explicitly asked to wait.
+# Do not say "continue with sensible defaults".
 _SKIP_NOTE = (
-    "user skipped this question; first acknowledge the skip in chat "
-    "(restate that you are skipping this preference), then continue the "
-    "user's original task. Only if their own instructions asked you to wait "
-    "or not generate yet, use confirm+wait prose and do not generate this "
-    "turn — do not re-ask immediately"
+    "user skipped this question; do NOT write a separate pre-generate "
+    "confirmation (no Got it / 知道了 skip line before images). Immediately "
+    "continue the user's original task (generation expected when they did "
+    "not ask to wait). Only if their own instructions asked you to wait or "
+    "not generate yet, use the pinned wait sentences and do not generate "
+    "this turn — do not re-ask immediately"
 )
 _ANSWER_NOTE = (
-    "user answered; first acknowledge their choice in chat (restate the "
-    "selected preference), then continue the user's original task. Only if "
-    "their own instructions asked you to wait or not generate yet, use "
-    "confirm+wait prose and do not generate this turn"
+    "user answered; do NOT write a separate pre-generate confirmation "
+    "(no Got it / 知道了 restating the choice before images). Immediately "
+    "continue the user's original task — generation is expected and "
+    "required when they did not ask to wait. After images are delivered, "
+    "restate their selection in the completion intro and invite "
+    "adjustments. Only if their own instructions asked you to wait or not "
+    "generate yet, use the pinned wait sentences and do not generate this "
+    "turn"
 )
 
 
