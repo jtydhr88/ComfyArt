@@ -66,7 +66,7 @@
 .ca-chat__empty[data-creator] .ca-chat__starts { margin-top: 16px; gap: 15px; align-items: center; }  /* #542: reference design stack pitch; 3 buttons, not stretched */
 .ca-chat__empty[data-creator] .ca-chat__start { justify-content: center; width: 172px; min-width: 172px; height: 38px; flex: none; border-radius: 19px; padding: 0 10px; gap: 6px; white-space: nowrap; font-size: 13px; }
 .ca-chat__user { align-self: flex-end; max-width: 85%; display: flex; flex-direction: column; align-items: flex-end; gap: 6px; }
-.ca-chat__bubble { padding: 10px 14px; border-radius: 16px; background: var(--ca-field); white-space: pre-wrap; word-break: break-word; }
+.ca-chat__bubble { padding: 10px 14px; border-radius: 16px; background: var(--ca-field); font: 500 14px/24px var(--ca-font); color: var(--ca-text); /* #765 */ white-space: pre-wrap; word-break: break-word; }
 /* #766: answered ask uses the same bubble shell; Inter 14/500/lh24 per product lock */
 .ca-chat__bubble--ask { font: 500 14px/24px var(--ca-font); color: var(--ca-text); }
 .ca-chat__bot { display: flex; flex-direction: column; gap: 10px; }

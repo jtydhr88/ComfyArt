@@ -22,6 +22,7 @@
   --ca-btn-primary-fg: #ffffff;
   --ca-muted: rgba(0,0,0,.3);
   --ca-text-2: rgba(0,0,0,.6); /* secondary text (reference design CN secondary level) */
+  --ca-text-think: rgba(0,0,0,.55); /* #765 expanded thinking body + Thought row */
   --ca-notify-close-hover: rgb(242,242,242);
   --ca-hover: rgba(0,0,0,.06);
   --ca-active: rgba(0,0,0,.08);
@@ -90,6 +91,7 @@
   --ca-btn-primary-fg: #161616;
   --ca-muted: rgba(255,255,255,.4);
   --ca-text-2: rgba(255,255,255,.6);
+  --ca-text-think: rgba(255,255,255,.55); /* #765 */
   --ca-notify-close-hover: rgb(52,52,52);
   --ca-hover: rgba(255,255,255,.08);
   --ca-active: rgba(255,255,255,.12);
