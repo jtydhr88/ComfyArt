@@ -101,8 +101,8 @@ def test_rev2_cells_pinned(got):
 
 @needs_node
 def test_examples_carousel_is_data_driven(got):
-    want = {"poster-differentiated-compiler": 5, "cover-design-director": 7, "rednote-cover-maker": 10, "banner-design-director": 2, "interior-architectural-visualization": 4,  # #575: thumbnail/banner lead with wash mp4
-            "universal-multi-angle-grid": 4, "logo-material-explorer": 2, "meta-ads-creative-director": 4, "mobile-app-visual-design": 4, "web-product-visual-design": 4, "marketing-campaign-generator": 4,  # #593 new-6
+    want = {"poster-differentiated-compiler": 5, "cover-design-director": 1, "rednote-cover-maker": 10, "banner-design-director": 1, "interior-architectural-visualization": 4,  # #575: thumbnail/banner lead with wash mp4
+            "universal-multi-angle-grid": 11, "logo-material-explorer": 3, "meta-ads-creative-director": 4, "mobile-app-visual-design": 13, "web-product-visual-design": 9, "marketing-campaign-generator": 8,  # #593 new-6; #748 = raw highlights (convert)
             "flash-cut-video": 1, "style-transfer": 4, "person-swap": 1, "commerce-strategist": 1, "lifestyle-scene": 2,  # #637 B5 hardMax
             "logo-abstract": 4, "photo-split-poster": 1, "ppt-visual": 1, "promo-ecommerce": 1, "naive-illustration": 4,  # #673 C re-wash (promo ex01 pulled; logo 4)
             "taobao-product": 8, "before-after": 8, "product-website": 3, "linkedin-banner": 1, "clothing-swap": 2,  # #643 batch1 (#667)
@@ -119,6 +119,10 @@ def test_examples_carousel_is_data_driven(got):
             "ai-model": 6,  # #643 per-slot PR
             "pose-fission": 4}  # #643 per-slot PR
     assert {k: v for k, v in got["examples"].items() if v} == want
+    _j = json  # #748: Final 16 example cards = raw highlights length, exactly
+    for sid, r in _j.loads((Path(__file__).parent.parent / "src/data/skills-748.json").read_text())["skills"].items():
+        if r["kind"] == "example":
+            assert got["examples"][sid] == len(r["highlights"]), sid
     for sid in ("product-tvc-advertisement-generator", "brand-identity-director", "packaging-design-director", "motion-poster-generator", "character-sheet-design"):
         assert got["examples"][sid] == 0, sid
     # Unset examples stay omitted. An explicit empty list is the #641 「暂无示例」 state.
@@ -149,13 +153,17 @@ VIDEO_LEAD = {"cover-design-director", "banner-design-director"}  # #575 lead ex
 
 @needs_node
 def test_examples_pinned_to_image_commits(got):
+    f16 = json.loads((Path(__file__).parent.parent / "src/data/skills-748.json").read_text())["skills"]
     for sid, (sha, ids) in EX541.items():
+        if sid in f16:  # #748: left = raw highlights (asserted in test_examples_carousel_is_data_driven)
+            continue
         stills = [f"https://raw.githubusercontent.com/ganjmeng/ComfyArt/{sha}/541/wash/{asset_dir(sid)}/examples/{n}.webp" for n in ids]
         want = ([f"https://raw.githubusercontent.com/ganjmeng/ComfyArt/{TIP_VIDEO}/494/wash/videos/{asset_dir(sid)}.mp4"] + stills) if sid in VIDEO_LEAD else stills
         assert got["exUrls"][sid] == want, sid
     # #643 (#659) thumbnail true wash: lead mp4 + 6 stills re-pinned to WASH_643
     w643 = "https://raw.githubusercontent.com/ganjmeng/ComfyArt/0be4350be224066cccf5e2929bfcb02e0bf8f7a9/643/wash/thumbnail/examples"
-    assert got["exUrls"]["cover-design-director"] == [f"https://raw.githubusercontent.com/ganjmeng/ComfyArt/{TIP_VIDEO}/494/wash/videos/thumbnail.mp4"] + [f"{w643}/{n:02d}.webp" for n in range(1, 7)]
+    assert got["exUrls"]["cover-design-director"] == [f"https://raw.githubusercontent.com/ganjmeng/ComfyArt/{TIP_VIDEO}/494/wash/videos/thumbnail.mp4"]  # #748 raw: 1 video
+    assert w643
     assert not any("/541/wash/examples/" in u for us in got["exUrls"].values() for u in us)  # old void path
 
 

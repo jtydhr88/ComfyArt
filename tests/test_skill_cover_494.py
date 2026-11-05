@@ -126,7 +126,7 @@ def test_575_video_contract(got):
     tip = "1bbb3f208f18b26ef95c8d9f16efeea111c43ac7"
     assert got["thumbEx"][0] == f"https://raw.githubusercontent.com/ganjmeng/ComfyArt/{tip}/494/wash/videos/thumbnail.mp4"
     assert got["bannerEx"][0] == f"https://raw.githubusercontent.com/ganjmeng/ComfyArt/{tip}/494/wash/videos/banner.mp4"
-    assert len(got["thumbEx"]) == 7 and len(got["bannerEx"]) == 2
+    assert len(got["thumbEx"]) == 1 and len(got["bannerEx"]) == 1  # #748 raw highlights: 1 video each (convert)
     motion_tip = "5a8d22ed88f732d38f8709a2c0740f074a400a89"
     assert got["motionPresetVideos"] == [f"https://raw.githubusercontent.com/ganjmeng/ComfyArt/{tip}/494/wash/videos/motion.mp4"] * 2  # #748 raw: 2 templates; our wash video is the placeholder (WASH-TODO)
     # mutation: drop preset.video → null (red if wired URLs vanish)

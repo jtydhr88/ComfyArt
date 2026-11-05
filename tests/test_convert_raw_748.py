@@ -51,3 +51,60 @@ def test_character_raw_plus_ext_is_8():
     t = json.loads((Path(__file__).parent.parent / "src/data/skills-748.json").read_text())["skills"]["character-sheet-design"]["templates"]
     assert len(t) == 8 and t[-1]["source"] == "comfyart" and t[-1]["name"]["en"] == "Editorial Fashion Sheet"
     assert all("source" not in x for x in t[:7])
+
+
+# QA: every Final 16 skill's left media (length + video markers) and right inputs equal raw (+ own ext).
+# media string: v = video, i = image. Template skills: per-template media depth + inputs.
+import json  # noqa: E402
+
+RAW = Path("/workspace/lovart-inputs/raw")
+DATA = json.loads((Path(__file__).parent.parent / "src/data/skills-748.json").read_text())["skills"]
+EXAMPLE = {  # sid: (media, n inputs)
+    "cover-design-director": ("v", 2), "poster-differentiated-compiler": ("iiiii", 2), "meta-ads-creative-director": ("iiii", 2),
+    "marketing-campaign-generator": ("v" + "i" * 7, 2), "banner-design-director": ("v", 2), "logo-material-explorer": ("vii", 2),
+    "mobile-app-visual-design": ("i" * 13, 2), "web-product-visual-design": ("i" * 9, 2), "universal-multi-angle-grid": ("i" * 11, 2),
+    "interior-architectural-visualization": ("iiii", 2), "rednote-cover-maker": ("i" * 10, 2),
+}
+TEMPLATE = {  # sid: ([media depth per template], n inputs per template)
+    "character-sheet-design": ([1] * 8, None), "packaging-design-director": ([1, 3, 4, 1, 1], None), "motion-poster-generator": ([1, 1], None),
+    "product-tvc-advertisement-generator": ([1] * 7, 5), "brand-identity-director": ([4] * 6, None),
+}
+
+
+def _raw(sid):
+    f = {c.app_id(r["id"]): r["file"] for r in c.final_table((RAW / "INDEX.md").read_text())}[sid]
+    return json.loads((RAW / f).read_text())
+
+
+def test_final16_covered():
+    assert set(DATA) == set(EXAMPLE) | set(TEMPLATE) and len(DATA) == 16
+
+
+@pytest.mark.parametrize("sid", sorted(EXAMPLE))
+def test_example_media_and_inputs_match_raw(sid):
+    s, (media, n) = DATA[sid], EXAMPLE[sid]
+    assert "".join(h["type"][0] for h in s["highlights"]) == media
+    assert len(s["inputs"]) == n
+    if RAW.exists():
+        ct = _raw(sid).get("content") or {}
+        hl = sorted(ct.get("highlights") or [], key=lambda h: h.get("order", 0))
+        assert "".join("v" if h.get("mediaType") == "video" else "i" for h in hl) == media
+        assert len(((ct.get("template") or {}).get("questions")) or []) == n
+
+
+@pytest.mark.parametrize("sid", sorted(TEMPLATE))
+def test_template_media_and_inputs_match_raw_plus_ext(sid):
+    s, (depths, n) = DATA[sid], TEMPLATE[sid]
+    assert [t["depth"] for t in s["templates"]] == depths == [len(t["media"]) for t in s["templates"]]
+    if n is not None:
+        assert all(len(t["inputs"]) == n for t in s["templates"])
+    if RAW.exists():
+        d = _raw(sid)
+        mem = (d.get("collectionMembers") or []) + c.load_ext(RAW, sid)
+        assert len(mem) == len(depths)
+        for t, m in zip(s["templates"], mem):
+            mc = m.get("content") or {}
+            if not (mc.get("media") is None and m in c.load_ext(RAW, sid)):
+                assert len(mc.get("media") or []) == t["depth"]
+                assert [x["type"] for x in t["media"]] == [c._kind(x.get("url")) for x in mc.get("media") or []]
+            assert [q["key"] for q in t["inputs"]] == [q["key"] for q in ((mc.get("template") or {}).get("questions") or [])]

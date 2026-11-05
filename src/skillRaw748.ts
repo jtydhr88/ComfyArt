@@ -30,11 +30,24 @@ function toInput(q: RawInput): SkillInput {
   }
 }
 
+/** #748 — example card left = exactly the raw highlights (type order + count). A video highlight is the skill's
+ *  one video (its cover is the same file, never an extra item); image highlights take our washed stills in order. */
+function examplesFromHighlights(skill: Skill, r: RefSkill748): { examples?: string[] } {
+  const hl = r.highlights ?? []
+  if (!hl.length) return {}
+  const isVid = (u: string) => /\.mp4(\?|$)/i.test(u)
+  // placeholder pool: our own washed stills, cycled until per-slot wash lands (TODO(#748): WASH-TODO.md)
+  const pool = [...new Set([...(skill.examples ?? []), ...(skill.featured ?? []), ...(skill.cover ? [skill.cover] : [])].filter((u) => !isVid(u)))]
+  let i = 0
+  const out = hl.map((h) => (h.type === 'video' ? skill.video : pool.length ? pool[i++ % pool.length] : undefined))
+  return out.every((u) => !!u) ? { examples: out as string[] } : {}
+}
+
 export function applyRaw748(skill: Skill): Skill {
   const r = SKILLS_748[skill.id]
   if (!r) return skill
   const name = lang === 'zh' ? r.title.zh : r.title.en
-  if (r.kind === 'example') return { ...skill, name, presets: undefined, inputs: (r.inputs ?? []).map(toInput) }
+  if (r.kind === 'example') return { ...skill, name, presets: undefined, inputs: (r.inputs ?? []).map(toInput), ...examplesFromHighlights(skill, r) }
   const tpls = r.templates ?? []
   if (!tpls.length) return { ...skill, name }
   // placeholder pool: our own already-washed stills for this skill (TODO(#748): per-slot wash, WASH-TODO.md)
