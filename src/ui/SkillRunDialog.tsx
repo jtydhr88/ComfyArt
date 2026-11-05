@@ -40,7 +40,7 @@ function PresetTile({ skill, item, preset: p, on, onPick, onZoom }: {
         onFocus={videoSrc ? play : undefined}
         onBlur={videoSrc ? stop : undefined}
       >
-        <span className="ca-skillrun__presetimg">
+        <span className="ca-skillrun__presetimg" data-orient={p.stackOrient ?? p.mediaOrient ?? undefined}>
           {isPendingWash(img) ? <PendingWash /> : img ? <img src={img} alt="" /> : <span className="ca-icon">{Icons.skill}</span>}
           {videoSrc && (
             <video

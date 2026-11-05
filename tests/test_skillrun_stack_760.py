@@ -19,12 +19,16 @@ def test_card_well_stays_160_120():
     assert "aspect-ratio: 160 / 120" in CSS and "width: 258px" not in CSS
 
 
-def test_dialog_1200_modal_200ms():
-    assert "min(1200px" in CSS
+def test_dialog_scales_1112_to_1200_modal_200ms():
+    """@1280 → 1112×820 / cards 344×288 (well 344×258); @1920 → 1200×820 / 388×321."""
+    assert "1112px" in CSS and "1200px" in CSS
+    assert "(100vw - 1280px) * 88 / 640" in CSS
     assert "ca-skillrun-in 200ms" in CSS
     assert "ca-skillrun-backdrop-in 200ms" in CSS
-    assert "min(1112px" not in CSS
     assert "ca-skillrun-in 250ms" not in CSS
+    # card geometry: right 360 + aspect 160/120 → well 344×258 @1280 / 388×291 @1920
+    assert "flex: 0 0 360px" in CSS
+    assert "aspect-ratio: 160 / 120" in CSS
 
 
 def test_rest_aspect_aware_and_focus_by_count():
@@ -42,9 +46,9 @@ def test_rest_aspect_aware_and_focus_by_count():
     assert ":hover .ca-skillrun__stack" in seg
     # 2×2 focus
     assert 'data-n="4"' in seg and "49.085%" in seg and "48.76%" in seg
-    # rest layers contain (never cover)
+    # landscape rest contain; portrait rest cover (height-fill 181.5×242)
     assert "object-fit: contain" in seg
-    assert "object-fit: cover" not in seg
+    assert "object-fit: cover" in seg
 
 
 def test_cover_contain_never_cover():
@@ -97,3 +101,14 @@ def test_rest_pile_transform_origin_center():
     seg = CSS.split("#760 — generic SkillRun stack")[1].split("「选择」")[0]
     assert "transform-origin: center center" in seg
     assert "scale(.757178)" in seg
+
+def test_single_portrait_cover_no_stack():
+    """主款/Master Packaging: media.length=1 → no stack; ratio 0.75 → 181.5×242 centered frame."""
+    assert "Math.abs(r0 - 0.75)" in RAW
+    assert "mediaOrient" in RAW
+    assert "mediaOrient" in (ROOT / "src/skills.ts").read_text()
+    assert 'data-orient={p.stackOrient ?? p.mediaOrient' in DLG
+    assert 'presetimg[data-orient="portrait"] > img' in CSS
+    assert "0.55335" in CSS and "0.22332" in CSS
+    # stack still requires media.length > 1
+    assert "t.media.length > 1 && real.length > 0" in RAW

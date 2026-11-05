@@ -18,6 +18,8 @@ export interface SkillPreset { id: string; name: LocText; prompt?: string; image
   stack?: string[]
   /** #760 — rest pile orientation from primary media.ratio (<1 → portrait). */
   stackOrient?: 'portrait' | 'landscape'
+  /** #760 — single-cover orientation when no stack (Master Packaging 0.75 → portrait frame). */
+  mediaOrient?: 'portrait' | 'landscape'
   /** #748 — this template's own right-panel form (reference content.template.questions[]); unset → skill.inputs. */
   inputs?: SkillInput[]
   /** #751 — media indices (0 = cover, 1.. = stack) still on the unified PENDING_WASH placeholder. */

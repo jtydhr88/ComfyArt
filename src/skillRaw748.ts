@@ -79,7 +79,11 @@ export function applyRaw748(skill: Skill): Skill {
     const real = (WASH_S[skill.id]?.[i] ?? []).filter((u): u is string => !!u && !isPendingWash(u))
     const stack = t.media.length > 1 && real.length > 0 ? real.slice() : undefined
     const r0 = t.media[0]?.ratio
-    const stackOrient = stack ? (r0 != null && r0 < 1 ? 'portrait' as const : 'landscape' as const) : undefined
+    const orient = r0 != null && r0 < 1 ? 'portrait' as const : 'landscape' as const
+    // stack → stackOrient from ratio. Single ~3:4 (Master Packaging) → mediaOrient portrait frame;
+    // 9:16 motion etc. stay unset so full-well contain letterbox is preserved.
+    const stackOrient = stack ? orient : undefined
+    const mediaOrient = !stack && r0 != null && Math.abs(r0 - 0.75) < 0.08 ? 'portrait' as const : undefined
     const pendingWash = image === PENDING_WASH ? [0] : []
     // #751 HOLD: only a template's own video; the skill-level video is never shared across template cards
     const vid = old?.video
@@ -87,7 +91,7 @@ export function applyRaw748(skill: Skill): Skill {
       id: old?.id ?? `t${i + 1}`, name: t.name,
       prompt: loc(ours.templates?.[i + 1]?.prompt) ?? `Template: ${t.name.en}. Follow this template's own inputs.`,
       ...(ours.templates?.[i + 1]?.description ? { description: ours.templates[i + 1].description } : {}),
-      image, ...(vid ? { video: vid } : {}), ...(stack ? { stack } : {}), ...(stackOrient ? { stackOrient } : {}),
+      image, ...(vid ? { video: vid } : {}), ...(stack ? { stack } : {}), ...(stackOrient ? { stackOrient } : {}), ...(mediaOrient ? { mediaOrient } : {}),
       ...(pendingWash.length ? { pendingWash } : {}),
       inputs: t.inputs.map((q) => toInput(q, ours.templates?.[i + 1]?.placeholders)),
     }

@@ -868,9 +868,11 @@ body { background: var(--ca-float); }
 
 /* #494-2 — skill's own dialog: left templates (2-col) + right 「开始制作」 panel. */
 .ca-skillrun {
-  /* #760 product: 1920 → 1200×820 / cards ≈388×321; left 840 + right 360 */
+  /* #760 product: @1280 → 1112×820 / cards 344×288 (well 344×258);
+   *               @1920 → 1200×820 / cards 388×321. Right pane locked 360;
+   * width scales with viewport between 1112 and 1200 (not a flat min(1200) cap). */
   position: relative; border-radius: 16px;
-  width: min(1200px, calc(100vw - 32px));
+  width: min(1200px, calc(100vw - 32px), max(1112px, calc(1112px + (100vw - 1280px) * 88 / 640)));
   height: min(820px, calc(100vh - 64px));
   max-height: min(820px, calc(100vh - 64px));
   display: flex; flex-direction: row; padding: 0; overflow: hidden;
@@ -889,7 +891,7 @@ body { background: var(--ca-float); }
   to { opacity: 1; }
 }
 .ca-skillrun__left {
-  flex: 1 1 840px; min-width: 0; padding: 24px 24px 0; overflow: hidden;
+  flex: 1 1 752px; min-width: 0; padding: 24px 24px 0; overflow: hidden;
   display: flex; flex-direction: column; gap: 16px;
 }
 /* pinned head — title / author / desc never scroll away under the template grid */
@@ -1007,6 +1009,18 @@ body { background: var(--ca-float); }
   position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
   max-width: 100%; max-height: 100%; width: auto; height: auto;
   object-fit: contain; object-position: center;
+}
+/* #760 — single portrait cover (Master Packaging 270/360 → 181.5×242 centered in thumb; NO stack).
+ * Same inset geometry as portrait stack stage; object-fit cover fills the portrait frame when wash is landscape. */
+.ca-skillrun__presetimg[data-orient="portrait"] > img,
+.ca-skillrun__presetimg[data-orient="portrait"] > video {
+  left: calc(var(--ca-skillrun-stack-inset, 8px) + (100% - 2 * var(--ca-skillrun-stack-inset, 8px)) * 0.22332);
+  top: var(--ca-skillrun-stack-inset, 8px);
+  transform: none;
+  width: calc((100% - 2 * var(--ca-skillrun-stack-inset, 8px)) * 0.55335);
+  height: calc(100% - 2 * var(--ca-skillrun-stack-inset, 8px));
+  max-width: none; max-height: none;
+  object-fit: cover; object-position: center;
 }
 /* #622 — preset.video muted hover/focus overlay (still underneath; no-video path unchanged). */
 .ca-skillrun__preset-video {
@@ -1304,7 +1318,10 @@ body { background: var(--ca-float); }
 }
 .ca-skillrun__stack[data-orient="portrait"] > *,
 .ca-skillrun__presetimg .ca-skillrun__stack[data-orient="portrait"] > * {
+  /* Multi-SKU static: layers 181.5×242 (height贴满 inset), translateX 73.25 (=left 22.332%), scale .8057.
+   * object-fit:cover fills the portrait frame (landscape wash would letterbox with contain). */
   width: 55.335%; height: 100%; left: 22.332%; top: 0;
+  object-fit: cover; object-position: center;
   transform: scale(.8057) rotate(var(--r, 0deg));
 }
 .ca-skillrun__stack > *:nth-child(1) { --r: 5deg; }
