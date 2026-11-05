@@ -51,6 +51,7 @@ Agent 面板在后端运行一个真正会调用工具的 Agent，移植自 [Com
 | Codex | PATH 里有 `codex` 且已登录 |
 | Qwen Code | PATH 里有 `qwen`，并在 `~/.qwen/settings.json` 配好模型 |
 | DeepSeek Harness | PATH 里有 `dsh`，并在 DeepSeek Harness 应用里登录 |
+| Hermes | 本机或可 SSH 登录的另一台机器上装好 [Hermes Agent](https://github.com/NousResearch/hermes-agent) 并配好模型（见 [Agent 文档](https://comfyart.org/zh/guides/agent)） |
 | Local LLM | 任意支持工具调用的 OpenAI 兼容端点（Agent 设置 → Local LLM 地址）；需要 key 时在启动 ComfyUI 前设置 `COMFYART_LOCAL_LLM_API_KEY` |
 
 智能分镜、OCR、品牌和记忆提取、参考图说明、Ideogram 的结构化描述，都是对默认 Agent 的单次调用（`POST /comfyart/bot/complete`，不带工具）。ComfyArt 从不保存任何凭据。Agent 通过 `POST /comfyart/mcp` 上的 ComfyArt MCP 服务器干活（查看画布、生成和编辑图片、视频、音频和 3D 模型、编辑元素和样机、放置文字、形状、画板、网页和幻灯片、记忆、技能、向用户提问）。画布工具由该项目打开着的 ComfyArt 标签页执行，所以 Agent 工作时请保持页面打开。对话保存在 SQLite 数据库 `user/__comfyart/data.db` 里，关掉面板也会继续运行。

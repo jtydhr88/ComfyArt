@@ -57,6 +57,7 @@ The Agent panel runs a real tool-using agent on the backend, ported from [ComfyT
 | Codex | `codex` on PATH, logged in |
 | Qwen Code | `qwen` on PATH with a model configured in `~/.qwen/settings.json` |
 | DeepSeek Harness | `dsh` on PATH, signed in through the DeepSeek Harness app |
+| Hermes | [Hermes Agent](https://github.com/NousResearch/hermes-agent) with a model configured, on this machine or another one over SSH (see the [Agent guide](https://comfyart.org/guides/agent)) |
 | Local LLM | any OpenAI-compatible endpoint with tool calling (Agent Settings → Local LLM URL); set `COMFYART_LOCAL_LLM_API_KEY` before starting ComfyUI if it needs a key |
 
 Storyboard split, OCR, brand and memory extraction, reference notes and the Ideogram caption are single calls to the default Agent (`POST /comfyart/bot/complete`, no tools). ComfyArt never stores credentials. The agent works through the ComfyArt MCP server at `POST /comfyart/mcp` (look at the canvas, generate and edit images, videos, audio and 3D models, Edit Elements and mockups, place text, shapes, frames, web pages and slides, memory, skills, ask the user). Canvas tools are executed by the open ComfyArt tab of the project, so keep it open while the agent works. Chats are saved in a SQLite database at `user/__comfyart/data.db` and keep running when the panel is closed.

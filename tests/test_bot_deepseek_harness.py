@@ -7,6 +7,7 @@ from pathlib import Path
 
 import pytest
 
+from ComfyArt.bot import _acp_provider as ap
 from ComfyArt.bot import deepseek_harness as dh
 from ComfyArt.bot import deepseek_harness_runtime as rt
 from ComfyArt.bot.providers import (
@@ -368,7 +369,7 @@ class TestStop:
     async def test_cancel_mid_prompt_settles_as_aborted(self, fake_runtime, monkeypatch):
         seen = fake_runtime(hangOnPrompt=True, updates=[
             {"sessionUpdate": "tool_call", "toolCallId": "t5", "title": "mcp__comfyart__run_stage"}])
-        monkeypatch.setattr(dh, "CANCEL_GRACE_S", 5.0)
+        monkeypatch.setattr(ap, "CANCEL_GRACE_S", 5.0)
         provider = dh.DeepSeekHarnessProvider(home_dir="dsh-home")
         started = asyncio.Event()
 

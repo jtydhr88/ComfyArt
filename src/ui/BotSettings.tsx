@@ -9,6 +9,8 @@ import { t } from '../i18n'
 
 const TEXT_FIELDS: [string, string, string][] = [
   ['bot-local-llm-url', t('botSettings.localLlmUrl'), t('botSettings.localLlmUrlHint')],
+  ['bot-hermes-ssh-host', t('botSettings.hermesSshHost'), t('botSettings.hermesSshHostHint')],
+  ['bot-hermes-profile', t('botSettings.hermesProfile'), t('botSettings.hermesProfileHint')],
   ['bot-comfy-mcp-command', t('botSettings.comfyMcpCommand'), t('botSettings.leaveEmptyToFindComfy')],
 ]
 const SWITCHES: [string, string][] = [
