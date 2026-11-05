@@ -4,12 +4,15 @@ import time
 import uuid
 from typing import Optional
 
+from ..bot import bot_asks as _kit
 from ..bot.run_budget import LOCAL_OWNER_ID, LOCAL_PROJECT_ID, LOCAL_WORKSPACE_ID
 from .ask_store import get_store, stamp_ownership
 
-ASK_TIMEOUT_S = 540.0
-RUN_APPROVAL_WAIT_S = 45.0
-RUN_APPROVAL_KIND = "run_approval"
+# Kit base layer (bot/bot_asks.py) owns the shared constants and the single
+# PENDING store; this module extends it (persistence, multi-question specs).
+ASK_TIMEOUT_S = _kit.ASK_TIMEOUT_S
+RUN_APPROVAL_WAIT_S = _kit.RUN_APPROVAL_WAIT_S
+RUN_APPROVAL_KIND = _kit.RUN_APPROVAL_KIND
 QUESTION_KIND = "question"
 
 _MAX_OPTIONS = 12
@@ -22,7 +25,8 @@ _SKIP_NOTE = (
 log = logging.getLogger("comfyart.bot_asks")
 
 
-class PendingAsk:
+class PendingAsk(_kit.PendingAsk):
+    # Does not call the kit __init__: ours adds ownership and a lazy future.
     def __init__(
         self,
         chat_id: str,
@@ -89,8 +93,8 @@ class PendingAsk:
         )
 
 
-PENDING: dict[str, PendingAsk] = {}
-ANSWERED_RUN_APPROVALS: dict[tuple[str, str], dict] = {}
+PENDING: dict[str, PendingAsk] = _kit.PENDING
+ANSWERED_RUN_APPROVALS: dict[tuple[str, str], dict] = _kit.ANSWERED_RUN_APPROVALS
 
 
 def _store_put(ask: PendingAsk) -> None:

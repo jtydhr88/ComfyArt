@@ -17,7 +17,8 @@ from ._cli_common import (
     tool_result_text,
 )
 from .external_context import apply_cold_start
-from .guide import AGENT_GUIDE
+from .agent_host import AgentHost
+from .guide import resolve_host
 from .providers import (
     AgentProvider,
     EmitFn,
@@ -105,7 +106,8 @@ class ClaudeCodeProvider(AgentProvider):
     id = "claude-code"
     label = "Claude Code"
 
-    def __init__(self, *, home_dir: str) -> None:
+    def __init__(self, *, host: Optional[AgentHost] = None, home_dir: str) -> None:
+        self._host = resolve_host(host)
         self._home_dir = home_dir
         self._probe_cache: Optional[tuple[float, ProviderStatus]] = None
 
@@ -164,8 +166,9 @@ class ClaudeCodeProvider(AgentProvider):
         if turn.model:
             argv += ["--model", turn.model]
         if turn.mcp_endpoint:
-            argv += ["--append-system-prompt", AGENT_GUIDE]
-            servers: dict = {"comfyart": {"type": "http", "url": turn.mcp_endpoint}}
+            if self._host.claude_prompt:
+                argv += ["--append-system-prompt", self._host.claude_prompt]
+            servers: dict = {self._host.name: {"type": "http", "url": turn.mcp_endpoint}}
             if turn.comfy_mcp_argv:
                 servers["comfy"] = {
                     "type": "stdio",

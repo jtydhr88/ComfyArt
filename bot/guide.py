@@ -1,3 +1,5 @@
+from .agent_host import COMFY_MCP_ALLOWED_TOOLS, AgentHost  # noqa: F401  (re-exported)
+
 AGENT_GUIDE = (
     "You are ComfyArt Agent, a design assistant working on the user's live "
     "infinite canvas in ComfyArt. The comfyart tools are your eyes and hands "
@@ -144,17 +146,25 @@ PAID_TOOLS = frozenset({
     "image_to_3d", "ocr", "transcribe",
 })
 
-COMFY_MCP_ALLOWED_TOOLS = [
-    "server_info",
-    "nodes",
-    "validate_workflow",
-    "search_models",
-    "search_templates",
-    "get_template",
-    "list_workflow_slots",
-    "list_workflow_notes",
-    "workflow_deps",
-    "node_dependencies",
-    "system_stats",
-    "which",
-]
+
+# #754: comfy-agent-kit host description. core_tools is our full CORE_MCP_TOOLS (Skills `skill`,
+# paid-guard tools, ask_user, update_plan ...), so the built-in agent and external CLIs keep every tool.
+HOST = AgentHost(
+    name="comfyart",
+    label="ComfyArt",
+    core_tools=tuple(CORE_MCP_TOOLS),
+    codex_instructions=(
+        "# ComfyArt Agent\n\n" + AGENT_GUIDE + "\n\n"
+        "Do not use shell, file, web, or desktop-control tools; everything goes "
+        "through the comfyart MCP tools.\n"
+    ),
+    local_llm_prompt=AGENT_GUIDE,
+    claude_prompt=AGENT_GUIDE,
+    qwen_guide=AGENT_GUIDE,
+    wait_tool="wait_generation",
+    settings_location="Agent Settings",
+)
+
+
+def resolve_host(host: "AgentHost | None") -> AgentHost:
+    return HOST if host is None else host
