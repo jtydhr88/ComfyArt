@@ -7,6 +7,7 @@ import { keyMissing, keySettingsOpenAtom, keyStatusAtom, refreshKeyStatus } from
 import { EachButton, EachRole, useEach } from './EachToggle'
 import { RefFrameButton } from './RefFrameButton'
 import { listAssets, placeAsset, type AssetItem } from '../assets'
+import { imageUrl } from '../comfy'
 import { botEnabledAtom, loadProviders, loadSettings, messagesAtom, providerLabel, providersStateAtom } from '../bot'
 import { errorText } from '../jobs'
 import { KIND_LABELS, libraryAtom } from '../library'
@@ -56,7 +57,7 @@ function truncateLabel(name: string, max = 8) {
 function RefThumb({ editor, s }: { editor: Editor; s: RefShape }) {
   const kind = refKindOf(s)
   if (kind === 'audio') return <span className="ca-icon">{Icons.music}</span>
-  return kind === 'video' ? <video src={srcOf(editor, s) ?? ''} muted preload="metadata" /> : <img src={srcOf(editor, s) ?? ''} alt="" />
+  return kind === 'video' ? <video src={srcOf(editor, s) ?? ''} muted preload="metadata" /> : <img src={imageUrl(srcOf(editor, s) ?? '')} alt="" />
 }
 
 /** #250: how far the composer bar has to fold so +, voice and send stay inside it.
@@ -278,7 +279,7 @@ export function Composer({ editor, busy, onError }: { editor: Editor; busy: bool
                   {s.type === 'image' || s.type === 'video'
                     ? (s.type === 'video'
                       ? <><video src={srcOf(editor, s) ?? ''} muted preload="metadata" /><span className="ca-at-menu__play">{Icons.play}</span></>
-                      : <img src={srcOf(editor, s) ?? ''} alt="" />)
+                      : <img src={imageUrl(srcOf(editor, s) ?? '')} alt="" />)
                     : <span className="ca-icon">{Icons.music}</span>}
                 </span>
                 <span className="ca-menu__grow">{imageName(editor, s)}</span>
@@ -298,7 +299,7 @@ export function Composer({ editor, busy, onError }: { editor: Editor; busy: bool
                 <span className="ca-at-menu__thumb">
                   {a.kind === 'video'
                     ? <><img src={a.src} alt="" /><span className="ca-at-menu__play">{Icons.play}</span></>
-                    : <img src={a.src} alt="" />}
+                    : <img src={imageUrl(a.src)} alt="" />}
                 </span>
                 <span className="ca-menu__grow">{a.name || t('common.image')}</span>
               </button>

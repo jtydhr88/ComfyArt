@@ -50,11 +50,12 @@ async def test_paths_outside_the_folder_are_not_found(bot_client, fresh_user_dir
     assert res.status == 404
 
 
-async def test_svg_is_served_as_is_and_unreadable_files_are_not_found(bot_client, fresh_user_dir):
+async def test_svg_is_served_sandboxed_and_unreadable_files_are_not_found(bot_client, fresh_user_dir):
     out = fresh_user_dir / "output"
     out.mkdir(parents=True, exist_ok=True)
     (out / "v.svg").write_text('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10"/>')
     (out / "bad.png").write_bytes(b"not an image")
     res = await bot_client.get("/comfyart/thumb", params={"url": "/api/view?filename=v.svg&type=output"})
     assert res.status == 200 and res.headers["Content-Type"] == "image/svg+xml"
+    assert res.headers["Content-Security-Policy"].startswith("sandbox;") and res.headers["X-Content-Type-Options"] == "nosniff"
     assert (await bot_client.get("/comfyart/thumb", params={"url": "/api/view?filename=bad.png&type=output"})).status == 404
