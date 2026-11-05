@@ -978,18 +978,16 @@ body { background: var(--ca-float); }
 
 .ca-skillrun__section { margin: 0 0 8px; font: 500 13px/20px var(--ca-font); color: var(--ca-text); }
 .ca-skillrun__grid {
-  /* #760: 2-col; tile outer = 258-wide cards (not stretch-to-fill oversized cells) */
-  display: grid; grid-template-columns: repeat(2, max-content); gap: 16px 24px;
-  margin-top: 8px; justify-content: start;
+  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px;
+  margin-top: 8px;
 }
-.ca-skillrun__tile { position: relative; min-width: 0; width: 258px; max-width: 100%; }
+.ca-skillrun__tile { position: relative; min-width: 0; }
 .ca-skillrun__preset {
   width: 100%; display: flex; flex-direction: column; gap: 8px; padding: 0; border: 0;
   background: none; color: var(--ca-text); cursor: pointer; font: inherit; text-align: left;
 }
 .ca-skillrun__presetimg {
-  /* #760: Lovart left template card ≈258×193 (4:3) @1280; was fluid ~330×248 and made stacks look off. */
-  position: relative; width: 258px; max-width: 100%; aspect-ratio: 4 / 3; border-radius: 12px; overflow: hidden;
+  position: relative; aspect-ratio: 160 / 120; border-radius: 12px; overflow: hidden;
   background: var(--ca-skillrun-tile); display: grid; place-items: center;
   box-shadow: inset 0 0 0 var(--ca-border-w) transparent;
   transition: none;
@@ -1261,7 +1259,6 @@ body { background: var(--ca-float); }
   --ca-skillrun-hover-ease: ease-out;
   --ca-skillrun-stack-dur: 400ms;               /* design: stack expand / collapse */
   --ca-skillrun-stack-ease: cubic-bezier(.25, .1, .25, 1);
-  --ca-skillrun-stack-step: 0px;                /* TODO(#748) per-layer offset when collapsed */
   --ca-skillrun-ring: #1a1a1a;
 }
 .ca-skillrun__presetimg, .ca-skillrun__presetimg::after { border-radius: 8px; }
@@ -1273,36 +1270,32 @@ body { background: var(--ca-float); }
 .ca-skillrun__zoom, .ca-skillrun__pick {
   transition: opacity var(--ca-skillrun-hover-dur) var(--ca-skillrun-hover-ease), transform var(--ca-skillrun-hover-dur) var(--ca-skillrun-hover-ease);
 }
-/* #760: rest = multi-image STATIC pile (real media[] only, no PENDING_WASH fillers), centered ~76%x80%
- * inside the 258×193 card; hover OR selected → 400ms fan-out; blur/unhover/deselect collapses. #751 timing. */
-.ca-skillrun { --ca-skillrun-stack-gap: 8px; --ca-skillrun-stack-w: 76%; --ca-skillrun-stack-h: 80%; }
+/* #760 — product DOM @1280×1072 (344×258 well), all in % of the 8px-inset box (328×242) so 1280/1920 match.
+ * Rest: 3 real-media layers 100%×76.03% (16:9) → translateY(15.75% of layer ≈ 12% of inset h) scale(.757178),
+ * rotate +5/−5/+10, z 3/2/1, centered inside the card. Focus (hover OR selected): 3 cells 32.11%×100%,
+ * x = 0 / 33.94% / 67.89%, no scale/rotate, img contain (≈16:9 centered). 400ms #751 easing both ways. */
+.ca-skillrun { --ca-skillrun-stack-inset: 8px; --ca-skillrun-stack-cell: 32.11%; --ca-skillrun-stack-pitch: 33.94%; }
 .ca-skillrun__presetimg > img { object-fit: contain; object-position: center; }
-/* Stack pile IS the rest visual — hide the lone cover underneath when real stack exists. */
 .ca-skillrun__preset:has(.ca-skillrun__stack) .ca-skillrun__presetimg > img { opacity: 0; }
-.ca-skillrun__stack {
-  position: absolute; left: 50%; top: 50%; width: var(--ca-skillrun-stack-w); height: var(--ca-skillrun-stack-h);
-  transform: translate(-50%, -50%); z-index: 1; pointer-events: none;
-}
+.ca-skillrun__stack { position: absolute; inset: var(--ca-skillrun-stack-inset); z-index: 1; pointer-events: none; }
 .ca-skillrun__stack > * {
-  position: absolute; top: 0; bottom: 0; left: 0; width: 100%; height: 100%;
-  object-fit: contain; object-position: center; border-radius: 6px;
-  box-shadow: 0 2px 6px rgb(0 0 0 / .18);
-  z-index: calc(10 - var(--i)); transform: rotate(var(--r, 0deg));
+  position: absolute; left: 0; top: 0; width: 100%; height: 76.03%;
+  object-fit: cover; object-position: center; border-radius: 6px;
+  z-index: calc(3 - var(--i));
+  transform: translateY(15.75%) scale(.757178) rotate(var(--r, 0deg));
   transition: left var(--ca-skillrun-stack-dur) var(--ca-skillrun-stack-ease),
               width var(--ca-skillrun-stack-dur) var(--ca-skillrun-stack-ease),
+              height var(--ca-skillrun-stack-dur) var(--ca-skillrun-stack-ease),
               transform var(--ca-skillrun-stack-dur) var(--ca-skillrun-stack-ease);
 }
-.ca-skillrun__stack > *:nth-child(1) { --r: -2deg; }
-.ca-skillrun__stack > *:nth-child(2) { --r: 5deg; }
-.ca-skillrun__stack > *:nth-child(3) { --r: -7deg; }
-.ca-skillrun__stack > *:nth-child(4) { --r: 8deg; }
-.ca-skillrun__stack > *:nth-child(n+5) { --r: -5deg; }
-/* focus = hover OR selected → expand; leaving either collapses back to static pile */
+.ca-skillrun__stack > *:nth-child(1) { --r: 5deg; }
+.ca-skillrun__stack > *:nth-child(2) { --r: -5deg; }
+.ca-skillrun__stack > *:nth-child(3) { --r: 10deg; }
 .ca-skillrun__preset:hover .ca-skillrun__stack > *,
 .ca-skillrun__preset:focus-visible .ca-skillrun__stack > *,
 .ca-skillrun__preset[data-on] .ca-skillrun__stack > * {
-  --w: calc((100% - (var(--n, 4) - 1) * var(--ca-skillrun-stack-gap)) / var(--n, 4));
-  width: var(--w); left: calc(var(--i) * (var(--w) + var(--ca-skillrun-stack-gap))); transform: none;
+  width: var(--ca-skillrun-stack-cell); height: 100%; left: calc(var(--i) * var(--ca-skillrun-stack-pitch));
+  object-fit: contain; transform: none;
 }
 /* 「选择」 capsule ≈52×22 white top-right; expand icon ≈14×15 top-left; selected: 1px rgb(120,120,120) + dark ✓ replaces capsule */
 .ca-skillrun__pick { min-width: 52px; height: 22px; padding: 0 10px; box-sizing: border-box; border-radius: 11px; background: #fff; color: #1a1a1a; top: 8px; right: 8px; display: inline-flex; align-items: center; justify-content: center; }
