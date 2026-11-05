@@ -845,7 +845,7 @@ function ProcessTimeline({ steps: rawSteps }: { steps: ProcessStep[] }) {
           const shine = s.live && !memKind
           // #382 fix: memory row uses the same row structure as the thought row (one rowbtn, same classes)
           // #627: ref_analysis expands like thought; chevron on the label matches live CN step-rail
-          const canOpen = ((s.kind === 'thought' || isRefAnalysis) && !!s.text?.trim()) || isMemory
+          const canOpen = ((s.kind === 'thought' || isRefAnalysis) && !!sanitizeThoughtText(s.text ?? '')) || isMemory
           const open = openKey === s.key
           const row = (
             <>
@@ -853,10 +853,10 @@ function ProcessTimeline({ steps: rawSteps }: { steps: ProcessStep[] }) {
                 <span className="ca-icon">{PROCESS_ICONS[s.kind]}</span>
               </span>
               {/* #413: a live thought on the rail shows its latest line inline, like the lone Thought tip */}
-              {s.live && s.kind === 'thought' && !open && s.text?.trim() ? (
+              {s.live && s.kind === 'thought' && !open && sanitizeThoughtText(s.text ?? '') ? (
                 <span className="ca-process__inline">
                   <span className="ca-process__label ca-process__label--active">{s.label}</span>
-                  <span className="ca-chat__arg ca-process__arg" data-testid="live-thought-inline">{s.text.trim().split('\n').at(-1)}</span>
+                  <span className="ca-chat__arg ca-process__arg" data-testid="live-thought-inline">{sanitizeThoughtText(s.text ?? '').split('\n').at(-1)}</span>
                 </span>
               ) : (
                 <span className={shine ? 'ca-process__label ca-process__label--active' : 'ca-process__label'}>
@@ -923,26 +923,41 @@ function ProcessTimeline({ steps: rawSteps }: { steps: ProcessStep[] }) {
           style={mediaHero.aspectRatio ? { aspectRatio: mediaHero.aspectRatio } : undefined}
         />
       )}
-      {steps.map((s) => (
-        openKey === s.key && s.text?.trim() ? (
-          <div key={`d-${s.key}`} className="ca-process__detail">{s.text.trim()}</div>
+      {steps.map((s) => {
+        const detail = sanitizeThoughtText(s.text ?? '')
+        return openKey === s.key && detail ? (
+          <div key={`d-${s.key}`} className="ca-process__detail">{detail}</div>
         ) : null
-      ))}
+      })}
     </div>
   )
 }
 
+
+/** #766 HOLD: visible Thought chrome must never show the ask_user tool name.
+ * Drop whole lines that mention it (case-insensitive) so we do not leave broken
+ * sentences like "Let me call  with one multiple-choice question." */
+export function sanitizeThoughtText(text: string): string {
+  return text
+    .split('\n')
+    .filter((line) => !/ask_user/i.test(line))
+    .join('\n')
+    .trim()
+}
+
 function Thought({ text, live }: { text: string; live: boolean }) {
   const [open, setOpen] = useState(false)
+  const visible = sanitizeThoughtText(text)
+  const tip = visible.split('\n').at(-1) ?? ''
   return (
     <div className="ca-chat__tool ca-chat__thought" data-live={live || undefined} data-open={open || undefined}>
       <button type="button" className="ca-chat__step" onClick={() => setOpen(!open)}>
         <span className="ca-chat__thinkicon"><span className="ca-icon">{Icons.think}</span></span>
         <span className="ca-chat__thinklabel">{live ? liveThoughtLabel() : t('chatMessage.thought')}</span>
-        {!open && <span className="ca-chat__arg">{text.trim().split('\n').at(-1)}</span>}
+        {!open && tip ? <span className="ca-chat__arg">{tip}</span> : null}
         <span className="ca-chat__chev ca-icon">{Icons.chevron}</span>
       </button>
-      {open && <div className="ca-chat__io ca-chat__thoughttext">{text.trim()}</div>}
+      {open && visible ? <div className="ca-chat__io ca-chat__thoughttext">{visible}</div> : null}
     </div>
   )
 }

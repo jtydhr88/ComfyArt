@@ -117,3 +117,28 @@ def test_other_typed_is_right_user_bubble(browser, bundle, lang):
     assert q in text and a in text, st
     assert ("Hand-drawn ink" in text) or ("手绘墨线" in text), st
     assert len(text.splitlines()) >= 2, st
+
+
+@pytest.mark.parametrize("lang", ["zh", "en"])
+def test_thought_hides_ask_user(browser, bundle, lang):
+    """#766 HOLD: collapsed Thought tip + expanded body must not show ask_user."""
+    page = browser.new_page(viewport={"width": 400, "height": 720})
+    page.goto(f"{bundle}/index.html?lang={lang}&theme=light&scene=thought-leak")
+    page.wait_for_function("window.__ready")
+    page.wait_for_timeout(200)
+    # Collapsed tip (ca-chat__arg on the lone Thought row)
+    tip = page.locator(".ca-chat__thought .ca-chat__arg")
+    tip_text = tip.inner_text() if tip.count() else ""
+    assert "ask_user" not in tip_text.lower(), tip_text
+    # Expand Thought
+    page.locator(".ca-chat__thought .ca-chat__step").click()
+    page.wait_for_timeout(100)
+    body = page.locator(".ca-chat__thoughttext")
+    body_text = body.inner_text() if body.count() else ""
+    assert "ask_user" not in body_text.lower(), body_text
+    # Visible planning line kept
+    visible = (tip_text + "\n" + body_text).lower()
+    assert "plan" in visible or "logo" in visible or tip.count() == 0
+    # Bubble still present
+    assert page.locator('[data-testid="ask-answer-bubble"]').count() == 1
+    page.close()
