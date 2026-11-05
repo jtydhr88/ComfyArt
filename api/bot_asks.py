@@ -16,19 +16,22 @@ RUN_APPROVAL_KIND = _kit.RUN_APPROVAL_KIND
 QUESTION_KIND = "question"
 
 _MAX_OPTIONS = 12
-# After ask_user resolves, tool results carry a note that steers the model to
-# Lovart-style confirmation-and-wait prose (restate choice/skip + wait; no
-# generate this turn). Do not tell the model to "continue with defaults".
+# After ask_user resolves, tool results carry a note: always confirm
+# (restate choice/skip) in chat, then continue the original task — unless
+# the user's own message asked to wait / not generate yet. Do not say
+# "continue with sensible defaults" and do not globally forbid generation.
 _SKIP_NOTE = (
-    "user skipped this question; acknowledge the skip in chat (restate that "
-    "you are skipping this preference), clearly wait for their next "
-    "instructions, and do NOT generate images or call generation tools this "
+    "user skipped this question; first acknowledge the skip in chat "
+    "(restate that you are skipping this preference), then continue the "
+    "user's original task. Only if their own instructions asked you to wait "
+    "or not generate yet, use confirm+wait prose and do not generate this "
     "turn — do not re-ask immediately"
 )
 _ANSWER_NOTE = (
-    "user answered; acknowledge their choice in chat (restate the selected "
-    "preference), clearly wait for their next instructions, and do NOT "
-    "generate images or call generation tools this turn"
+    "user answered; first acknowledge their choice in chat (restate the "
+    "selected preference), then continue the user's original task. Only if "
+    "their own instructions asked you to wait or not generate yet, use "
+    "confirm+wait prose and do not generate this turn"
 )
 
 

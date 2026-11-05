@@ -242,11 +242,12 @@ TOOLS: dict[str, dict] = {
             "choice is missing. options are choices (A–E); min/max_selections "
             "for multi-select; allow_other for free text; allow_skip (default "
             "true). Returns {status, selected, other_text, answers?, note}. "
-            "After the user answers or skips, the note tells you to "
-            "acknowledge (restate the choice or that it was skipped), clearly "
-            "wait for their next instructions, and NOT generate images this "
-            "turn — do not re-ask immediately. status cancelled/expired means "
-            "no answer."
+            "After the user answers or skips, first acknowledge in chat "
+            "(restate the choice or that it was skipped), then continue the "
+            "original task (generation OK). Only if their own instructions "
+            "asked you to wait or not generate yet, use confirm+wait prose "
+            "and do not generate this turn — do not re-ask immediately. "
+            "status cancelled/expired means no answer."
         ),
         "inputSchema": ASK_USER_SCHEMA,
         "handler": ask_user,

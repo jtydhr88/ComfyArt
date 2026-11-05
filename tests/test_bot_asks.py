@@ -94,19 +94,23 @@ def test_validate_answer_multi_and_other():
 def test_skip_note_text():
     note = bot_asks.skip_note()
     assert "skipped" in note
+    assert "acknowledge the skip" in note
+    assert "continue the user's original task" in note
+    assert "Only if their own instructions asked you to wait" in note
     assert "do not re-ask" in note
-    assert "wait for their next instructions" in note
-    assert "do NOT generate" in note
     assert "sensible defaults" not in note
+    # Wait/no-generate is conditional — not a global forbid on every skip.
+    assert "do NOT generate images or call generation tools this turn" not in note
 
 
 def test_answer_note_text():
     note = bot_asks.answer_note()
     assert "answered" in note
     assert "restate the selected preference" in note
-    assert "wait for their next instructions" in note
-    assert "do NOT generate" in note
+    assert "continue the user's original task" in note
+    assert "Only if their own instructions asked you to wait" in note
     assert "sensible defaults" not in note
+    assert "do NOT generate images or call generation tools this turn" not in note
 
 
 def test_allow_skip_false_explicit():
@@ -214,25 +218,36 @@ def test_validate_answer_answers_skip():
     })
 
 
-def test_ask_user_confirm_wait_guide_and_tool_desc():
-    """#766: after ask_user, guide + tool desc force confirm-and-wait (not continue-to-generate)."""
+def test_ask_user_confirm_then_continue_guide_and_tool_desc():
+    """#766: after ask_user, always confirm; wait/no-generate only if user asked to wait."""
     from ComfyArt.bot.guide import AGENT_GUIDE
     from ComfyArt.api.mcp_tools.bot_tools import TOOLS
     assert "After ask_user returns" in AGENT_GUIDE
-    assert "do NOT call" in AGENT_GUIDE and "wait_generation" in AGENT_GUIDE
+    assert "always reply first" in AGENT_GUIDE
+    assert "continue the original task" in AGENT_GUIDE
+    assert "generation tools are OK" in AGENT_GUIDE
+    assert "Only when the user's own instructions" in AGENT_GUIDE
+    assert "explicitly asked you to wait or not generate yet" in AGENT_GUIDE
+    # Wait templates are examples for the explicit-wait branch, not the default path.
     assert "Got it — your preferred logo style is minimal" in AGENT_GUIDE
     assert "I'll skip the logo style question" in AGENT_GUIDE
     assert "知道了 — 你希望的 logo 风格是极简" in AGENT_GUIDE
     assert "这个问题我先跳过" in AGENT_GUIDE
+    # Must NOT globally forbid same-turn generation after every ask_user.
+    assert "do NOT call generate_image / generate_video / wait_generation" not in AGENT_GUIDE
+    # Do not force ask_user on a plain design prompt.
+    assert "Design a logo" not in AGENT_GUIDE or "must ask" not in AGENT_GUIDE.lower()
     desc = TOOLS["ask_user"]["description"]
-    assert "wait for their next instructions" in desc
-    assert "NOT generate images this turn" in desc
+    assert "acknowledge in chat" in desc
+    assert "continue the original task" in desc
+    assert "generation OK" in desc
+    assert "Only if their own instructions" in desc
     assert "sensible defaults" not in desc
 
 
 @pytest.mark.asyncio
 async def test_ask_user_attaches_answer_or_skip_note(monkeypatch):
-    """#766: answered → answer_note; skip → skip_note (not continue-with-defaults)."""
+    """#766: answered → answer_note; skip → skip_note (confirm then continue; not defaults)."""
     from ComfyArt.api.mcp_tools import bot_tools
     from ComfyArt.api import bot_asks as asks
 
@@ -256,7 +271,8 @@ async def test_ask_user_attaches_answer_or_skip_note(monkeypatch):
     assert out["status"] == "answered"
     assert out.get("skipped") is not True
     assert out["note"] == asks.answer_note()
-    assert "wait for their next instructions" in out["note"]
+    assert "continue the user's original task" in out["note"]
+    assert "Only if their own instructions asked you to wait" in out["note"]
 
     monkeypatch.setattr(bot_tools, "_await_ask", fake_skipped)
     out2 = await bot_tools.ask_user({
@@ -266,4 +282,5 @@ async def test_ask_user_attaches_answer_or_skip_note(monkeypatch):
     })
     assert out2.get("skipped") is True
     assert out2["note"] == asks.skip_note()
+    assert "continue the user's original task" in out2["note"]
     assert "sensible defaults" not in out2["note"]
