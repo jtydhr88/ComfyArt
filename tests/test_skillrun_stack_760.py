@@ -112,3 +112,10 @@ def test_single_portrait_cover_no_stack():
     assert "0.55335" in CSS and "0.22332" in CSS
     # stack still requires media.length > 1
     assert "t.media.length > 1 && real.length > 0" in RAW
+    # #760 r7: Master wash is single-frame 3:4 (no stacked-sheet bitmap); portrait uses contain
+    skills = (ROOT / "src/skills.ts").read_text()
+    assert "packaging/master.webp" in skills
+    assert (ROOT / "public/skills/packaging/master.webp").is_file()
+    # portrait single block uses contain (not cover) so 3:4 media is letterboxed-safe
+    seg = CSS.split('presetimg[data-orient="portrait"] > img')[1].split("preset-video")[0]
+    assert "object-fit: contain" in seg

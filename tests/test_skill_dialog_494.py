@@ -84,12 +84,13 @@ def test_builtin_preset_images_unique(got):
     imgs = [u for u in got["builtinPresetImgs"] if u]
     washed = [u for u in imgs if "569/wash/" in u or "541/wash/" in u]
     covers = [u for u in imgs if "494/covers-v4/" in u]
-    assert len(washed) == 27  # #751 HOLD: +2 motion template covers (wash569). #748 Final: product 6 washed (+1 SaaS placeholder) / brand 6 / packaging 5 + character 8 (raw 7 + ext)
+    assert len(washed) == 26  # #760 r7: packaging Master moved off 541/wash → local master.webp (was 27)
     assert all("raw.githubusercontent.com/ganjmeng/ComfyArt/" in u for u in washed)
     assert sum("569/wash/character/templates/" in u for u in washed) == 8 and sum("569/wash/motion/templates/" in u for u in washed) == 2  # #751 HOLD: own covers
     assert sum("541/wash/product/" in u for u in washed) == 6
-    assert sum("541/wash/brand/" in u for u in washed) == 6 and sum("541/wash/packaging/" in u for u in washed) == 5
-    assert len(set(washed)) == 27  # no shared cover fallback across washed presets
+    assert sum("541/wash/brand/" in u for u in washed) == 6 and sum("541/wash/packaging/" in u for u in washed) == 4  # #760 r7 Master off 541
+    assert sum("/comfyart/skills/packaging/master.webp" in u for u in imgs) == 1  # #760 r7 Master single 3:4
+    assert len(set(washed)) == 26  # no shared cover fallback across washed presets
     assert covers == []  # #748 Final: the new-6 are example cards now (no presets → no cover fallback)
 
 
@@ -202,7 +203,7 @@ def test_copy_and_dialog_style():
     assert ".ca-swall__try" in CSS
     # #494 anim locks (design beziers): hover 150ms .4,0,.2,1; modal 250ms .2,0,0,1; select none; go color 150ms ease no scale
     assert "150ms" in CSS and "ca-skillrun__pick" in CSS and "ca-skillrun__zoom" in CSS
-    assert "ca-skillrun-in" in CSS and "250ms" in CSS and "scale(0.96)" in CSS
+    assert "ca-skillrun-in" in CSS and "200ms" in CSS and "scale(0.96)" in CSS  # #760 tip: modal enter 200ms
     assert "cubic-bezier(.4, 0, .2, 1)" in CSS  # hover chip/pill
     assert "cubic-bezier(.2, 0, 0, 1)" in CSS  # modal open/close
     assert "transition: none" in CSS  # selected ring / ✓

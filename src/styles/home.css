@@ -1010,8 +1010,8 @@ body { background: var(--ca-float); }
   max-width: 100%; max-height: 100%; width: auto; height: auto;
   object-fit: contain; object-position: center;
 }
-/* #760 — single portrait cover (Master Packaging 270/360 → 181.5×242 centered in thumb; NO stack).
- * Same inset geometry as portrait stack stage; object-fit cover fills the portrait frame when wash is landscape. */
+/* #760 r7 — single portrait cover (Master Packaging 270×360 → 181.5×242 centered; NO stack, NO under-layers).
+ * Exact 3:4 media → contain == cover inside the portrait frame; contain keeps letterbox if ratio drifts. */
 .ca-skillrun__presetimg[data-orient="portrait"] > img,
 .ca-skillrun__presetimg[data-orient="portrait"] > video {
   left: calc(var(--ca-skillrun-stack-inset, 8px) + (100% - 2 * var(--ca-skillrun-stack-inset, 8px)) * 0.22332);
@@ -1020,7 +1020,7 @@ body { background: var(--ca-float); }
   width: calc((100% - 2 * var(--ca-skillrun-stack-inset, 8px)) * 0.55335);
   height: calc(100% - 2 * var(--ca-skillrun-stack-inset, 8px));
   max-width: none; max-height: none;
-  object-fit: cover; object-position: center;
+  object-fit: contain; object-position: center;
 }
 /* #622 — preset.video muted hover/focus overlay (still underneath; no-video path unchanged). */
 .ca-skillrun__preset-video {
