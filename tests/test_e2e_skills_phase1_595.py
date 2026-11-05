@@ -115,7 +115,7 @@ async def test_thumbnail_right_pane_upload_then_additional(app_url):  # noqa: F8
         await right.locator('[data-testid="skill-run-field"]').first.wait_for()
         fields = await right.locator('[data-testid="skill-run-field"]').evaluate_all(
             "els => els.map(e => [e.dataset.key, e.dataset.type])")
-        assert fields == [["file", "image"], ["note", "textarea"]], fields
+        assert fields == [["user_image", "image"], ["user_requirement", "textarea"]], fields  # #748 Final raw example form
         assert await pg.get_by_test_id("skill-run-preset").count() == 0
         assert await dlg.locator('[data-testid="skill-run-preset-chips"], [data-testid="skill-run-current"]').count() == 0
         await browser.close()
