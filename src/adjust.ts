@@ -1,3 +1,5 @@
+import { imageUrl } from './comfy'
+
 export interface Adjust {
   exposure: number; contrast: number; highlights: number; shadows: number; whites: number; blacks: number
   saturation: number; vibrance: number; temperature: number; tint: number
@@ -144,7 +146,7 @@ export function loadImage(src: string): Promise<HTMLImageElement> {
     img.crossOrigin = 'anonymous'
     img.onload = () => resolve(img)
     img.onerror = () => reject(new Error(`cannot load ${src}`))
-    img.src = src
+    img.src = imageUrl(src)
   })
 }
 
