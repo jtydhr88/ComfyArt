@@ -8,7 +8,7 @@ import { EachButton, EachRole, useEach } from './EachToggle'
 import { RefFrameButton } from './RefFrameButton'
 import { listAssets, placeAsset, type AssetItem } from '../assets'
 import { imageUrl } from '../comfy'
-import { botEnabledAtom, loadProviders, loadSettings, messagesAtom, providerLabel, providersStateAtom } from '../bot'
+import { botEnabledAtom, loadProviders, loadSettings, messagesAtom, providerLabel, providersStateAtom, stopTurn } from '../bot'
 import { errorText } from '../jobs'
 import { KIND_LABELS, libraryAtom } from '../library'
 import type { AudioShape } from '../shapes/EmbedShapes'
@@ -495,6 +495,7 @@ export function Composer({ editor, busy, onError }: { editor: Editor; busy: bool
         {mode === 'agent' && <ModelPrefs onError={onError} />}
         <ComposerSlot showSend={showSend} setVoice={setVoice} canSend={(content || refs.length > 0) && !agentOff && !agentLoading} onSend={send}
           title={agentLoading ? t('bot.agentListLoading') : busy && mode === 'agent' ? t('composer.sendQueuedAfterTheCurrent') : t('composer.send')} onError={onError}
+          onStop={busy ? () => void stopTurn().catch((e) => onError(errorText(e))) : undefined}
           onText={(t) => draftAtom.set(`${draftAtom.get()}${draftAtom.get() ? ' ' : ''}${t}`)} />
       </div>
     </div>

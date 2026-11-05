@@ -160,7 +160,7 @@ button.ca-head__logo { padding: 0; border: none; border-radius: 8px; background:
 button.ca-head__logo:hover, button.ca-head__logo[data-open] { background: var(--ca-hover); }
 .ca-root[data-chat="max"] .ca-main { display: none; }
 .ca-agent[data-max] { flex: 1; width: auto; border-right: none; }
-.ca-agent[data-max] .ca-chat, .ca-agent[data-max] .ca-composer { width: min(720px, calc(100% - 24px)); margin-left: auto; margin-right: auto; box-sizing: border-box; }
+.ca-agent[data-max] .ca-chat, .ca-agent[data-max] .ca-composer, .ca-agent[data-max] .ca-chat__dock { width: min(720px, calc(100% - 24px)); margin-left: auto; margin-right: auto; box-sizing: border-box; }
 .ca-agent[data-max] .ca-composer { margin-bottom: 8px; }  /* #542: chat-only input card 720 wide, docked 8px from the bottom */
 .ca-agent[data-max] .ca-head__name { margin-right: auto; }  /* #542 P1-2: full-screen chat keeps logo + name left and the saved / new chat / notices / expand / collapse group at the top right */
 
@@ -725,3 +725,7 @@ span.arti-mascot { cursor: default; pointer-events: none; }
   }
 }
 .ca-agentlogo--loomi { color: var(--ca-strong); }
+
+/* #763: pending question card docks directly above the composer (same width); bottom gap clears the 29px Arti mascot */
+.ca-chat__dock { margin: 0 12px 30px; box-sizing: border-box; align-self: stretch; flex: none; display: flex; flex-direction: column; gap: 8px; max-height: 55%; min-height: 0; }
+.ca-chat__dock .ca-q { box-sizing: border-box; overflow: auto; }

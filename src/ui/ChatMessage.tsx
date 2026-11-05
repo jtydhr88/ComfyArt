@@ -624,6 +624,11 @@ function Ask({ b }: { b: BotBlock }) {
   )
 }
 
+/** #763: a pending question card docks directly above the composer (not inline in the timeline). */
+export function isDockedQuestion(b: BotBlock) {
+  return b.type === 'ask' && b.status === 'pending' && b.kind !== 'plan_quote' && b.kind !== 'run_approval' && b.kind !== OVER_QUOTE.kind
+}
+
 export function renderAsk(b: BotBlock, key: string | number) {
   if (b.kind === 'plan_quote') return <PlanQuote key={key} b={b} />
   if (b.kind === 'run_approval') return <Ask key={key} b={b} />
@@ -987,7 +992,7 @@ function DoneFeedback({ messageId }: { messageId: string }) {
   )
 }
 
-export function AssistantBlocks({ editor, m }: { editor: Editor; m: BotMessage }) {
+export function AssistantBlocks({ editor, m, dockAsks }: { editor: Editor; m: BotMessage; dockAsks?: boolean }) {
   const results = new Map(m.blocks.filter((b) => b.type === 'tool_result' && b.id).map((b) => [b.id, b]))
   const resultOf = (b: BotBlock, i: number) => (b.id ? results.get(b.id) : m.blocks[i + 1]?.type === 'tool_result' ? m.blocks[i + 1] : undefined)
   const isPlan = (b: BotBlock) => b.type === 'tool_use' && toolName(b.name) === 'update_plan'
@@ -1166,7 +1171,7 @@ export function AssistantBlocks({ editor, m }: { editor: Editor; m: BotMessage }
       if (b.type === 'text') items.push(<Markdown key={i} text={b.text ?? ''} />)
       if (b.type === 'tool_use') items.push(<Step key={i} editor={editor} use={b} result={resultOf(b, i)} />)
       if (b.type === 'retry') items.push(<Retry key={i} b={b} live={!done && !m.blocks.slice(i + 1).some((x) => x.type === 'retry')} />)
-      if (b.type === 'ask') items.push(renderAsk(b, b.ask_id ?? i))
+      if (b.type === 'ask' && !(dockAsks && isDockedQuestion(b))) items.push(renderAsk(b, b.ask_id ?? i))
       if (b.type === 'task') items.push(<Task key={i} editor={editor} b={b} />)
       if (b.type === 'run_stop') {
         // #492: skip reason=done in AssistantBlocks render (reloaded old chats included). latest-card scan unchanged.

@@ -482,7 +482,7 @@
   "composer.canvasReview": "Canvas Review",
   "composer.canvasReviewUseGetCanvas": "Canvas review: use get_canvas and view_canvas to check the canvas artboard by artboard. Point out issues such as inconsistent brand colors or fonts, typos, hard-to-read text, cropping, low resolution, layout hierarchy, and missing sizes. Write each item as \"Issue: … Suggestion: …\". If there are no issues, say so briefly. Do not change the canvas yet.",
   "composer.createSkillFromThisChat": "Create Skill from This Chat",
-  "composer.describeYourDesignNeedsFor": "Describe your design needs. \"/\" for skills, \"@\" to reference",
+  "composer.describeYourDesignNeedsFor": "Start with an idea, \"@\" for context, \"/\" for skills",
   "composer.image": "Image",
   "composer.instructionsForTheAgentDeliverables": "Instructions for the Agent: deliverables, aspect ratios, style rules…",
   "composer.manageSkills": "Manage Skills",
