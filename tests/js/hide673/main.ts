@@ -25,7 +25,7 @@ async function main() {
         cover: S.skillCover(s) !== undefined, desc: typeof S.skillDescription(s) }
     })
   }
-  const listedRead = await safe(() => S.skillTool({ action: 'read', id: 'poster' }))
+  const listedRead = await safe(() => S.skillTool({ action: 'read', id: 'poster-differentiated-compiler' }))
   const unknown = await safe(() => S.skillTool({ action: 'read', id: 'nope' }))
   // #673 deep link / resend / try-it: attach-time refusal, zero network
   const guard: Record<string, unknown> = {}
@@ -37,7 +37,7 @@ async function main() {
     const find = (id: string) => all.find((x) => x.id === id)!
     const out: Record<string, unknown> = {}
     for (const id of ['yingzao', 'crt-interface']) {
-      S.skillNoticeAtom.set(null); S.skillAtom.set(find('poster'))
+      S.skillNoticeAtom.set(null); S.skillAtom.set(find('poster-differentiated-compiler'))
       // deep link + try-it: attachSkill; resend + send safety net: blockHiddenSkill
       const attached = S.attachSkill(find(id))
       const linkChip = S.skillAtom.get()?.id ?? null
@@ -49,8 +49,8 @@ async function main() {
       out[id] = { attached, linkChip, linkNotice, blocked, resendNotice: S.skillNoticeAtom.get(), submits }
     }
     S.skillNoticeAtom.set('stale')
-    const okAttach = S.attachSkill(find('poster'))
-    out.listed = { attached: okAttach, chip: S.skillAtom.get()?.id, notice: S.skillNoticeAtom.get(), blocked: S.blockHiddenSkill(find('poster')) }
+    const okAttach = S.attachSkill(find('poster-differentiated-compiler'))
+    out.listed = { attached: okAttach, chip: S.skillAtom.get()?.id, notice: S.skillNoticeAtom.get(), blocked: S.blockHiddenSkill(find('poster-differentiated-compiler')) }
     out.notice = S.hiddenSkillNotice(find('yingzao'))
     out.readErr = (await safe(() => S.skillTool({ action: 'read', id: 'yingzao' })) as any).error
     guard[lg] = out

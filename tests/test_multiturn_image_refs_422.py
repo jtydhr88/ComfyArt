@@ -16,7 +16,7 @@ def test_refs_from_blocks_skips_thinking_and_tools():
     blocks = [
         {"type": "thinking", "text": "do not leak"},
         {"type": "text", "text": "edit the poster"},
-        {"type": "image", "shape": "shape:abc", "url": "/api/view?f=a.png", "name": "poster"},
+        {"type": "image", "shape": "shape:abc", "url": "/api/view?f=a.png", "name": "poster-differentiated-compiler"},
         {"type": "tool_use", "name": "generate_image", "input": {}},
         {"type": "video", "shape": "shape:vid", "url": "/api/view?f=v.mp4"},
         {"type": "audio", "shape": "shape:aud", "url": "/api/view?f=a.mp3",
@@ -24,7 +24,7 @@ def test_refs_from_blocks_skips_thinking_and_tools():
     ]
     refs = refs_from_blocks(blocks)
     assert [r["kind"] for r in refs] == ["image", "video", "audio"]
-    assert refs[0]["id"] == "shape:abc" and refs[0]["name"] == "poster"
+    assert refs[0]["id"] == "shape:abc" and refs[0]["name"] == "poster-differentiated-compiler"
     assert refs[2]["transcript"] == "hello"
     assert all("do not leak" not in json.dumps(r) for r in refs)
 
@@ -33,7 +33,7 @@ def test_blocks_text_emits_shape_id_not_bare_url():
     blocks = [
         {"type": "thinking", "text": "secret"},
         {"type": "text", "text": "make it warmer"},
-        {"type": "image", "shape": "shape:p1", "url": "/api/view?f=p.png", "name": "poster"},
+        {"type": "image", "shape": "shape:p1", "url": "/api/view?f=p.png", "name": "poster-differentiated-compiler"},
     ]
     text = blocks_text(blocks)
     assert "secret" not in text
@@ -61,7 +61,7 @@ def test_replay_history_carries_refs(fresh_user_dir):
             {"type": "thinking", "text": "ignore me"},  # should never appear
             {"type": "text", "text": "edit this"},
             {"type": "image", "shape": "shape:poster", "url": "/api/view?f=p.png",
-             "name": "poster"},
+             "name": "poster-differentiated-compiler"},
         ])
     chat_store.create_message(
         chat_id=chat["id"], role="assistant", parent_id=first["id"],
@@ -83,9 +83,9 @@ def test_replay_history_carries_refs(fresh_user_dir):
 def test_fit_history_keeps_shape_id_in_verbatim():
     history = [
         {"role": "user",
-         "text": 'edit\n[Attached image 1 "poster": shape id shape:p1 — /api/view?f=p.png. '
+         "text": 'edit\n[Attached image 1 "poster-differentiated-compiler": shape id shape:p1 — /api/view?f=p.png. '
                  "Use the shape id with edit tools or as a generation ref.]",
-         "refs": [{"id": "shape:p1", "src": "/api/view?f=p.png", "name": "poster",
+         "refs": [{"id": "shape:p1", "src": "/api/view?f=p.png", "name": "poster-differentiated-compiler",
                    "kind": "image", "transcript": ""}]},
         {"role": "assistant", "text": "updated"},
         {"role": "user", "text": "brighter"},

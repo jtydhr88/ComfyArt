@@ -151,7 +151,7 @@ def test_cli_rejects_bad_model_and_missing_key(tmp_path, monkeypatch, capsys):
 
 
 @pytest.mark.parametrize("item, message, drop_index", [
-    ({"slot": "poster"}, "slot", False),
+    ({"slot": "poster-differentiated-compiler"}, "slot", False),
     ({"source_url": None, "source_path": None}, "exactly one", False),
     ({"source_path": "also.png"}, "exactly one", False),
     ({"skill_id": "../escape"}, "skill_id", False),

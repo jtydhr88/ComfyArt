@@ -3,6 +3,8 @@ plus wiring greps for the Skills page / dialog / handoff. Harness needs node + n
 from __future__ import annotations
 
 import json
+from tests.lovart_fields_687 import RAW_748
+from tests.skill_ids_748 import FINAL_IDS, asset_dir
 import os
 import shutil
 import subprocess
@@ -31,23 +33,23 @@ def got(tmp_path_factory) -> dict:
     return json.loads(subprocess.run(["node", str(out)], check=True, capture_output=True, text=True).stdout)
 
 
-EFFECT = ("poster", "banner", "interior", "thumbnail")
+EFFECT = ("poster-differentiated-compiler", "banner-design-director", "interior-architectural-visualization", "cover-design-director")
 # #636 C5 + #664 NEW19 share NEARMISS_INPUTS (Upload + Additional, none required)
 NEARMISS = ("naive-illustration", "logo-abstract", "photo-split-poster", "ppt-visual", "promo-ecommerce",
             "taobao-product", "before-after", "anim-2d", "creator-identity", "product-website", "studio-model",
             "youtube-channel-banner", "ai-model", "product-to-packaging", "game-art", "portrait-studio", "premium-website",
             "animated-poster", "pose-fission", "live-promo-decor", "linkedin-banner", "logo-animation", "restaurant-website", "clothing-swap")  # #641 thumbnail dialog parity → EFFECT_INPUTS
-COUNTS = {"product": 6, "brand": 6, "packaging": 5, "character": 8, "motion": 0,  # #569 template counts
-          "multi-angle": 0, "logo-material": 4, "meta-ads": 4, "mobile-ui": 4, "web-product": 4, "marketing-campaign": 4,  # #593 new-6; multi-angle → Upload+Additional (#691)
+COUNTS = {
           "flash-cut-video": 3, "style-transfer": 3, "person-swap": 3, "commerce-strategist": 3, "lifestyle-scene": 3,
           "naive-illustration": 2, "logo-abstract": 2, "photo-split-poster": 2, "ppt-visual": 3, "promo-ecommerce": 2,
           "yingzao": 2, "crt-interface": 3, "crayon-sketch": 2, "fabric-collage": 2,  # #634 Phase2-S1
-          "social": 2,  # #635 Phase2-S2 Fashion UGC feed+story
           # #640 Phase3-S1 NEW19
           "taobao-product": 3, "before-after": 3, "anim-2d": 2, "creator-identity": 3, "product-website": 2,
           "studio-model": 3, "youtube-channel-banner": 2, "ai-model": 3, "product-to-packaging": 3,
           "game-art": 3, "portrait-studio": 2, "premium-website": 2, "animated-poster": 2, "pose-fission": 3,
           "live-promo-decor": 3, "linkedin-banner": 2, "logo-animation": 2, "restaurant-website": 2, "clothing-swap": 3}
+COUNTS.update({sid: len(RAW_748[sid].get("templates", [])) for sid in FINAL_IDS})  # #748 Final: template cards = raw template count; example cards = 0
+
 
 
 @needs_node
@@ -56,13 +58,16 @@ def test_every_field_is_bilingual_data(got):
     for sid, fields in got["fields"].items():
         assert fields, sid
         # #569: effect skills (upload + note) and character carry no required field, like the reference.
-        assert any(req for _, _, req, *_ in fields) == (sid not in EFFECT and sid not in NEARMISS and sid not in {"character", "social", "multi-angle", "brand", "packaging", "logo-material", "meta-ads", "marketing-campaign", "web-product", "mobile-ui"}), sid  # #687-1 reference-card fields optional  # #635 social optional refs; #691 multi-angle upload optional
+        if sid in FINAL_IDS:  # #748 Final: required flags come from the raw
+            assert any(req for _, _, req, *_ in fields) == any(q["required"] for q in (RAW_748[sid]["templates"][0]["inputs"] if RAW_748[sid]["kind"] == "template" else RAW_748[sid]["inputs"])), sid
+            continue
+        assert any(req for _, _, req, *_ in fields) == (sid not in EFFECT and sid not in NEARMISS and sid not in {"character-sheet-design", "rednote-cover-maker", "universal-multi-angle-grid", "meta-ads-creative-director", "marketing-campaign-generator", "web-product-visual-design", "mobile-app-visual-design"}), sid  # #687-1 reference-card fields optional  # #635 social optional refs; #691 multi-angle upload optional
         for key, typ, req, zh, en, ph in fields:
             assert typ in {"text", "textarea", "select", "image"} and zh and en, (sid, key)
             if req and typ in {"text", "textarea"}:
                 assert ph, (sid, key)
     keys = {sid: [f[0] for f in fs] for sid, fs in got["fields"].items()}
-    assert keys["poster"] != keys["product"] and keys["brand"] != keys["motion"]  # each skill its own dialog (#687: brand now = reference-card Upload + Additional, like poster)
+    assert keys["poster-differentiated-compiler"] != keys["product-tvc-advertisement-generator"] and keys["brand-identity-director"] != keys["motion-poster-generator"]  # each skill its own dialog (#687: brand now = reference-card Upload + Additional, like poster)
 
 
 @needs_node
@@ -79,24 +84,23 @@ def test_builtin_preset_images_unique(got):
     imgs = [u for u in got["builtinPresetImgs"] if u]
     washed = [u for u in imgs if "569/wash/" in u or "541/wash/" in u]
     covers = [u for u in imgs if "494/covers-v4/" in u]
-    assert len(washed) == 25  # product 6 / brand 6 / packaging 5 + character 8 (#687: motion templates removed)
+    assert len(washed) == 27  # #751 HOLD: +2 motion template covers (wash569). #748 Final: product 6 washed (+1 SaaS placeholder) / brand 6 / packaging 5 + character 8 (raw 7 + ext)
     assert all("raw.githubusercontent.com/ganjmeng/ComfyArt/" in u for u in washed)
-    assert sum("569/wash/character/templates/" in u for u in washed) == 8 and sum("569/wash/motion/templates/" in u for u in washed) == 0
+    assert sum("569/wash/character/templates/" in u for u in washed) == 8 and sum("569/wash/motion/templates/" in u for u in washed) == 2  # #751 HOLD: own covers
     assert sum("541/wash/product/" in u for u in washed) == 6
     assert sum("541/wash/brand/" in u for u in washed) == 6 and sum("541/wash/packaging/" in u for u in washed) == 5
-    assert len(set(washed)) == 25  # no shared cover fallback across washed presets
-    assert len(covers) == 20  # 5 new × 4 presets → cover fallback (multi-angle has no presets since #691)
-    assert len(set(covers)) == 5
+    assert len(set(washed)) == 27  # no shared cover fallback across washed presets
+    assert covers == []  # #748 Final: the new-6 are example cards now (no presets → no cover fallback)
 
 
 @needs_node
 def test_defaults_and_required(got):
-    assert got["posterDefaults"] == {"file": "", "note": ""}  # #569 effect skill: upload + note only
-    assert got["brandDefaults"] == {"file": "", "note": ""}  # #687-1 Upload Files + Additional Details
-    assert got["brandMissing"] == [] and got["brandFilled"] == []
+    assert got["posterDefaults"] == {"user_image": "", "user_requirement": ""}  # #748 Final example card: shared form
+    assert got["brandDefaults"] == {"brand_info": "", "subject_image": "", "visual_direction": ""}  # #748 Final: template 1 questions
+    assert got["brandMissing"] == ["brand_info"] and got["brandFilled"] == []
     assert got["posterPresets"] == 0
     assert got["cwDefaults"] == {"brief": ""}
-    assert got["posterMissing"] == [] and got["posterFilled"] == []
+    assert got["posterMissing"] == ["user_image", "user_requirement"] and got["posterFilled"] == ["user_image"]  # #748: both required
     assert got["cwMissing"] == ["brief"]  # whitespace is empty
     assert got["dialog"] == [True, True, False, True]  # old personal skill: no dialog, main's direct start
 
@@ -115,11 +119,11 @@ def test_preset_prompt_appended_after_instructions(got):
 @needs_node
 def test_run_params(got):
     p = got["brandRun"]
-    assert p["skill"] == "brand" and p["mode"] == "agent" and p["ref"] == ["/view?f=a.png"]
+    assert p["skill"] == "brand-identity-director" and p["mode"] == "agent" and p["ref"] == ["/view?f=a.png"]
     assert p["preset"] and p["preset"] != got["presetDefault"]
     assert p["ask"].splitlines()[0].endswith(": Autumn launch")
     q = got["posterNoPreset"]
-    assert q["skill"] == "poster" and q["ref"] == ["/view?f=a.png"] and "preset" not in q and q["ask"].endswith(": Autumn launch")
+    assert q["skill"] == "poster-differentiated-compiler" and q["ref"] == ["/view?f=a.png"] and "preset" not in q and q["ask"].endswith(": Autumn launch")
     assert got["cwRun"] == {"skill": "brief-only", "mode": "agent", "ask": got["cwRun"]["ask"]}
     assert got["cwRun"]["ask"].endswith(": Upscale my photo")
     assert got["emptyRun"]["ask"] == "Old" and "preset" not in got["emptyRun"]
@@ -139,7 +143,7 @@ def test_dialog_is_data_driven():
     assert 'data-testid="skill-run-head"' in DLG and 'data-testid="skill-run-title"' in DLG
     assert 'data-testid="skill-run-author"' in DLG and 'data-testid="skill-run-desc"' in DLG
     assert "ca-skillrun__head" in DLG and "ca-skillrun__title" in DLG and "ca-skillrun__desc" in DLG
-    for bad in ("'poster'", "'product'", "topic", "headline"):
+    for bad in ("'poster-differentiated-compiler'", "'product-tvc-advertisement-generator'", "topic", "headline"):
         assert bad not in DLG, bad
     # #687 — Start stays clickable; onStart gates on missing inputs and only then reveals errors (tried).
     assert "if (missing.length) { setTried(true)" in DLG and "skillRunParams(skill, values, preset)" in DLG

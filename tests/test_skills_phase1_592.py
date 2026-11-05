@@ -8,9 +8,9 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 SKILLS_TS = (ROOT / "src/skills.ts").read_text()
 
-UPGRADE = ["brand", "packaging", "poster", "product", "character", "social", "motion", "banner", "thumbnail"]
-EFFECT = {"poster", "banner", "thumbnail"}  # #641: thumbnail dialog parity → EFFECT_INPUTS
-TEMPLATE_COUNTS = {"product": 6, "brand": 6, "packaging": 5, "character": 8, "motion": 0}
+UPGRADE = ["brand-identity-director", "packaging-design-director", "poster-differentiated-compiler", "product-tvc-advertisement-generator", "character-sheet-design", "rednote-cover-maker", "motion-poster-generator", "banner-design-director", "cover-design-director"]
+EFFECT = {"poster-differentiated-compiler", "banner-design-director", "cover-design-director"}  # #641: thumbnail dialog parity → EFFECT_INPUTS
+TEMPLATE_COUNTS = {"product-tvc-advertisement-generator": 6, "brand-identity-director": 6, "packaging-design-director": 5, "character-sheet-design": 8, "motion-poster-generator": 0}
 
 
 def _entries() -> dict[str, str]:
@@ -43,18 +43,18 @@ def test_upgrade9_presets_examples_inputs_complete():
         e = entries[sid]
         assert "inputs:" in e, sid
         if sid in EFFECT:
-            assert ("inputs: REF_CARD_INPUTS_687 }" if sid in ("poster", "banner", "interior") else "inputs: EFFECT_INPUTS }") in e, sid  # #687
+            assert ("inputs: REF_CARD_INPUTS_687 }" if sid in ("poster-differentiated-compiler", "banner-design-director", "interior-architectural-visualization") else "inputs: EFFECT_INPUTS }") in e, sid  # #687
             assert len(re.findall(r"\bP\('", e)) == 0, sid
-            if sid == "thumbnail":
+            if sid == "cover-design-director":
                 assert "titleCopy" not in e, sid
-                assert "cover: cover643('thumbnail')" in e and "ex643(" in e and "feat643('thumbnail'" in e, sid
-                assert "video: video('thumbnail')" in e, sid
-                assert ("examples: [video(" in e and "ex643(" in e), sid
+                assert "cover: cover643('cover-design-director')" in e and "ex643(" not in e and "feat643('cover-design-director'" in e, sid
+                assert "video: video('cover-design-director')" in e, sid
+                assert "examples: [video(" not in e, sid  # #751 HOLD: Final examples = raw + wash-748.json (1:1, pendingWash)
             else:
-                assert ("examples: ex541(" in e) or ("examples: [video(" in e and "ex541(" in e), sid  # #575 video lead ok
-        elif sid == "social":
+                assert "ex541(" not in e and "examples: [video(" not in e, sid  # #751 HOLD: Final examples = raw + wash-748.json (1:1, pendingWash)
+        elif sid == "rednote-cover-maker":
             # #635 Phase2-S2: Fashion UGC presets coexist with RedNote examples; custom inputs
-            assert "examples: ex541(" in e, sid
+            assert "ex541(" not in e, sid  # #751 HOLD: Final examples = raw + wash-748.json (1:1, pendingWash)
             assert "inputs: EFFECT_INPUTS" not in e, sid
             assert len(re.findall(r"\bP\('", e)) >= 2, sid
             body = e.split("presets:", 1)[1].split("inputs:", 1)[0]
@@ -74,12 +74,12 @@ def test_upgrade9_keeps_existing_media_pins():
     entries = _entries()
     for sid in UPGRADE:
         e = entries[sid]
-        if sid == "thumbnail":
+        if sid == "cover-design-director":
             # #643 true-wash cover/featured/examples + Phase1 video hover + quickStart
-            assert "cover: cover643('thumbnail')" in e, sid
-            assert "video: video('thumbnail')" in e, sid
-            assert "feat643('thumbnail'" in e, sid
-            assert "quickStartCover: quickStartCover('thumbnail')" in e, sid
+            assert "cover: cover643('cover-design-director')" in e, sid
+            assert "video: video('cover-design-director')" in e, sid
+            assert "feat643('cover-design-director'" in e, sid
+            assert "quickStartCover: quickStartCover('cover-design-director')" in e, sid
         else:
             assert f"cover: cover('{sid}')" in e, sid
             assert f"video: video('{sid}')" in e, sid

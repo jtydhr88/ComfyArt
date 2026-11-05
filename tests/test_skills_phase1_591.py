@@ -11,25 +11,25 @@ SKILLS_TS = (ROOT / "src/skills.ts").read_text()
 ZH = json.loads((ROOT / "src/locales/zh.json").read_text())
 EN = json.loads((ROOT / "src/locales/en.json").read_text())
 
-PHASE1_UPGRADE = ["brand", "packaging", "poster", "product", "character", "social", "motion", "banner", "thumbnail"]
-PHASE1_NEW = ["multi-angle", "logo-material", "meta-ads", "mobile-ui", "web-product", "marketing-campaign"]
+PHASE1_UPGRADE = ["brand-identity-director", "packaging-design-director", "poster-differentiated-compiler", "product-tvc-advertisement-generator", "character-sheet-design", "rednote-cover-maker", "motion-poster-generator", "banner-design-director", "cover-design-director"]
+PHASE1_NEW = ["universal-multi-angle-grid", "logo-material-explorer", "meta-ads-creative-director", "mobile-app-visual-design", "web-product-visual-design", "marketing-campaign-generator"]
 PHASE1 = PHASE1_UPGRADE + PHASE1_NEW
-UNTOUCHED = ["interior"]  # custom-workflow removed (no Lovart card)
+UNTOUCHED = ["interior-architectural-visualization"]  # custom-workflow removed (no Lovart card)
 TITLE_KEY = {
-    "multi-angle": "skills.multiAngleImageGenerator",
-    "logo-material": "skills.logoMaterialExplorer",
-    "meta-ads": "skills.metaAdsCreative",
-    "mobile-ui": "skills.mobileAppVisualDesign",
-    "web-product": "skills.webProductVisualDesign",
-    "marketing-campaign": "skills.marketingCampaignGenerator",
+    "universal-multi-angle-grid": "skills.multiAngleImageGenerator",
+    "logo-material-explorer": "skills.logoMaterialExplorer",
+    "meta-ads-creative-director": "skills.metaAdsCreative",
+    "mobile-app-visual-design": "skills.mobileAppVisualDesign",
+    "web-product-visual-design": "skills.webProductVisualDesign",
+    "marketing-campaign-generator": "skills.marketingCampaignGenerator",
 }
 NEW_CATEGORY = {
-    "multi-angle": "ecommerce",
-    "logo-material": "branding",
-    "meta-ads": "ads",
-    "mobile-ui": "website",
-    "web-product": "website",
-    "marketing-campaign": "ads",
+    "universal-multi-angle-grid": "ecommerce",
+    "logo-material-explorer": "branding",
+    "meta-ads-creative-director": "ads",
+    "mobile-app-visual-design": "website",
+    "web-product-visual-design": "website",
+    "marketing-campaign-generator": "ads",
 }
 
 
@@ -60,7 +60,7 @@ def test_new_skills_cut2_skeleton_and_website_categories():
         assert "cover: cover(" in head and "featured: feedCovers(" in head, sid
         assert f"video: video594('{sid}')" in head, sid
         assert "quickStartCoverFit: 'contain'" in head, sid
-        assert "examples: ex594(" in head, sid
+        assert "examples: ex594(" not in head and "ex594" not in head, sid  # #751 HOLD: Final examples come from raw + src/data/wash-748.json (1:1, pendingWash), no hand list
 
 
 def test_locale_titles_and_descriptions_for_new_ids():
@@ -69,10 +69,10 @@ def test_locale_titles_and_descriptions_for_new_ids():
         assert "demo" not in ZH[key].lower() and "demo" not in EN[key].lower()
         assert ZH[f"skills.desc.{sid}"] and EN[f"skills.desc.{sid}"]
         assert ZH[f"skills.cat.{sid}"] and EN[f"skills.cat.{sid}"]
-    assert ZH[TITLE_KEY["multi-angle"]] == "多角度图像生成器"
-    assert EN[TITLE_KEY["multi-angle"]] == "Multi-Angle Image Generator"
-    assert EN[TITLE_KEY["mobile-ui"]] == "Mobile APP Visual Design"
-    assert EN[TITLE_KEY["web-product"]] == "Web Product Visual Design"
+    assert ZH[TITLE_KEY["universal-multi-angle-grid"]] == "多角度图像生成器"
+    assert EN[TITLE_KEY["universal-multi-angle-grid"]] == "Multi-Angle Image Generator"
+    assert EN[TITLE_KEY["mobile-app-visual-design"]] == "Mobile APP Visual Design"
+    assert EN[TITLE_KEY["web-product-visual-design"]] == "Web Product Visual Design"
 
 
 def test_no_lovart_string_in_src_skills():

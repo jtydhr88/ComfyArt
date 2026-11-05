@@ -85,7 +85,7 @@ def test_featured_helper_is_data_driven() -> None:
     assert "preset.image" in SKILLS_TS  # #580: template-type tiles use the preset's own image
     helper = SKILLS_TS.split("export function skillFeaturedCases", 1)[1].split("\nexport ", 1)[0]
     low = helper.lower()
-    for bad in ("'poster'", '"poster"', "'product'", "'demo'", '"demo"'):
+    for bad in ("'poster-differentiated-compiler'", '"poster-differentiated-compiler"', "'product-tvc-advertisement-generator'", "'demo'", '"demo"'):
         assert bad not in helper, bad
     assert "lovart" not in low
 

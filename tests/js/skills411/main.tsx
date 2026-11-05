@@ -191,7 +191,7 @@ function Chip() {
 }
 
 function HomeGrid() {
-  const cards = [SAMPLE, { id: 'poster', name: t('skills.posterDesign'), custom: false }, { id: 'social', name: t('skills.socialMediaSet'), custom: false }]
+  const cards = [SAMPLE, { id: 'poster-differentiated-compiler', name: t('skills.posterDesign'), custom: false }, { id: 'rednote-cover-maker', name: t('skills.socialMediaSet'), custom: false }]
   return (
     <section className="ca-landing__section" data-testid="home-grid" style={{ padding: 16, width: 720 }}>
       <div className="ca-landing__head"><h2>{t('home.startFromSkill')}</h2></div>
