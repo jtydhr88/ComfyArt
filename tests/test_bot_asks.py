@@ -94,7 +94,25 @@ def test_validate_answer_multi_and_other():
 def test_skip_note_text():
     note = bot_asks.skip_note()
     assert "skipped" in note
+    assert "do NOT write a separate pre-generate confirmation" in note
+    assert "Immediately continue the user's original task" in note
+    assert "Only if their own instructions asked you to wait" in note
     assert "do not re-ask" in note
+    assert "sensible defaults" not in note
+    # Must not instruct a pre-generate Got it / 知道了 skip line as the default.
+    assert "first acknowledge the skip in chat" not in note
+
+
+def test_answer_note_text():
+    note = bot_asks.answer_note()
+    assert "answered" in note
+    assert "do NOT write a separate pre-generate confirmation" in note
+    assert "Immediately continue the user's original task" in note
+    assert "After images are delivered" in note
+    assert "restate their selection in the completion intro" in note
+    assert "Only if their own instructions asked you to wait" in note
+    assert "sensible defaults" not in note
+    assert "first acknowledge their choice in chat" not in note
 
 
 def test_allow_skip_false_explicit():
@@ -200,3 +218,75 @@ def test_validate_answer_answers_skip():
         "a": {"selected": []},
         "b": {"selected": []},
     })
+
+
+def test_ask_user_confirm_in_completion_guide_and_tool_desc():
+    """#766: default = no pre-generate confirm, generate, restate in completion; wait only if asked."""
+    from ComfyArt.bot.guide import AGENT_GUIDE
+    from ComfyArt.api.mcp_tools.bot_tools import TOOLS
+    assert "After ask_user returns" in AGENT_GUIDE
+    assert "do NOT write a separate pre-generate" in AGENT_GUIDE
+    assert "Immediately continue the original task" in AGENT_GUIDE
+    assert "generation is expected and required" in AGENT_GUIDE
+    assert "completion intro" in AGENT_GUIDE
+    assert "Here's a minimalist and clean logo" in AGENT_GUIDE
+    assert "Only when the user's own instructions" in AGENT_GUIDE
+    assert "explicitly asked you to wait or not generate yet" in AGENT_GUIDE
+    # Wait templates are for the explicit-wait branch only.
+    assert "Got it — your preferred logo style is minimal" in AGENT_GUIDE
+    assert "I'll skip the logo style question" in AGENT_GUIDE
+    assert "知道了 — 你希望的 logo 风格是极简" in AGENT_GUIDE
+    assert "这个问题我先跳过" in AGENT_GUIDE
+    assert "Do not force ask_user" in AGENT_GUIDE
+    assert "fold that choice into the completion intro" in AGENT_GUIDE
+    assert "Lovart" not in AGENT_GUIDE
+    desc = TOOLS["ask_user"]["description"]
+    assert "do NOT emit a separate" in desc and "pre-generate confirmation" in desc
+    assert "immediately continue the original task" in desc
+    assert "post-image completion intro" in desc
+    assert "Only if their own instructions" in desc
+    assert "sensible defaults" not in desc
+
+
+@pytest.mark.asyncio
+async def test_ask_user_attaches_answer_or_skip_note(monkeypatch):
+    """#766: answered → answer_note; skip → skip_note (no pre-gen confirm; continue)."""
+    from ComfyArt.api.mcp_tools import bot_tools
+    from ComfyArt.api import bot_asks as asks
+
+    async def fake_answered(chat_id, state, spec):
+        return {"status": "answered", "selected": ["minimal"], "other_text": ""}
+
+    async def fake_skipped(chat_id, state, spec):
+        return {"status": "answered", "selected": [], "other_text": ""}
+
+    monkeypatch.setattr(bot_tools, "bot_turn_state", lambda: ("c1", object()))
+    monkeypatch.setattr(bot_tools, "_await_ask", fake_answered)
+    opts = [
+        {"id": "minimal", "label": "Minimal"},
+        {"id": "playful", "label": "Playful"},
+    ]
+    out = await bot_tools.ask_user({
+        "prompt": "logo style?",
+        "options": opts,
+        "allow_skip": True,
+    })
+    assert out["status"] == "answered"
+    assert out.get("skipped") is not True
+    assert out["note"] == asks.answer_note()
+    assert "do NOT write a separate pre-generate confirmation" in out["note"]
+    assert "Immediately continue the user's original task" in out["note"]
+    assert "restate their selection in the completion intro" in out["note"]
+    assert "Only if their own instructions asked you to wait" in out["note"]
+
+    monkeypatch.setattr(bot_tools, "_await_ask", fake_skipped)
+    out2 = await bot_tools.ask_user({
+        "prompt": "logo style?",
+        "options": opts,
+        "allow_skip": True,
+    })
+    assert out2.get("skipped") is True
+    assert out2["note"] == asks.skip_note()
+    assert "do NOT write a separate pre-generate confirmation" in out2["note"]
+    assert "Immediately continue the user's original task" in out2["note"]
+    assert "sensible defaults" not in out2["note"]

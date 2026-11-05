@@ -16,9 +16,28 @@ RUN_APPROVAL_KIND = _kit.RUN_APPROVAL_KIND
 QUESTION_KIND = "question"
 
 _MAX_OPTIONS = 12
+# After ask_user resolves: default is continue the original task immediately
+# (generate when appropriate). Do NOT emit a separate pre-generate
+# confirmation sentence. Restate the choice in the post-image completion
+# intro. Wait/no-generate prose only if the user explicitly asked to wait.
+# Do not say "continue with sensible defaults".
 _SKIP_NOTE = (
-    "user skipped this question; continue with sensible defaults or omit "
-    "this preference — do not re-ask immediately"
+    "user skipped this question; do NOT write a separate pre-generate "
+    "confirmation (no Got it / 知道了 skip line before images). Immediately "
+    "continue the user's original task (generation expected when they did "
+    "not ask to wait). Only if their own instructions asked you to wait or "
+    "not generate yet, use the pinned wait sentences and do not generate "
+    "this turn — do not re-ask immediately"
+)
+_ANSWER_NOTE = (
+    "user answered; do NOT write a separate pre-generate confirmation "
+    "(no Got it / 知道了 restating the choice before images). Immediately "
+    "continue the user's original task — generation is expected and "
+    "required when they did not ask to wait. After images are delivered, "
+    "restate their selection in the completion intro and invite "
+    "adjustments. Only if their own instructions asked you to wait or not "
+    "generate yet, use the pinned wait sentences and do not generate this "
+    "turn"
 )
 
 
@@ -441,6 +460,10 @@ def validate_answer(spec: dict, selected: list[str],
 
 def skip_note() -> str:
     return _SKIP_NOTE
+
+
+def answer_note() -> str:
+    return _ANSWER_NOTE
 
 
 def list_pending_for_chat(chat_id: str) -> list[PendingAsk]:
