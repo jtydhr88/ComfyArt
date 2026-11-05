@@ -1301,6 +1301,9 @@ body { background: var(--ca-float); }
 .ca-skillrun__zoom .ca-icon, .ca-skillrun__zoom svg { width: 14px; height: 15px; }
 .ca-skillrun__preset[data-on] .ca-skillrun__presetimg::after { box-shadow: inset 0 0 0 1px var(--ca-skillrun-selected-stroke); }
 .ca-skillrun { --ca-skillrun-selected-stroke: rgb(120 120 120); }
+/* #748 dark selected: ✓ glyph must contrast its light badge; stroke reads on dark tiles */
+:root[data-theme="dark"] .ca-skillrun__check { color: #1a1a1a; box-shadow: 0 0 0 1px rgb(0 0 0 / .35); }
+:root[data-theme="dark"] .ca-skillrun__preset[data-on] .ca-skillrun__presetimg::after { box-shadow: inset 0 0 0 1.5px var(--ca-text); }
 /* right panel: label→control 8, field gap 24; text 36h grey; Start disabled light grey until required filled */
 .ca-skillrun__body > .ca-skillform { gap: 24px; }
 .ca-skillrun .ca-skillform .ca-skillrun__field > .ca-panel__input { background: var(--ca-field); border: 0; }
