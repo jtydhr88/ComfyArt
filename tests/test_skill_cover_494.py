@@ -130,5 +130,5 @@ def test_575_video_contract(got):
     motion_tip = "5a8d22ed88f732d38f8709a2c0740f074a400a89"
     assert got["motionPresetVideos"] == [None, None]  # #751 HOLD: skill-level video no longer shared onto template cards (each card keeps its OWN cover)  # #748 raw: 2 templates; our wash video is the placeholder (WASH-TODO)
     # mutation: drop preset.video → null (red if wired URLs vanish)
-    assert all(v and v.endswith(".mp4") for v in got["motionPresetVideos"])
+    assert not any(got["motionPresetVideos"])  # #751 HOLD: template cards carry no shared video
     assert got["hoverCalls"] == ["play", "pause"] and got["hoverSeek"] == 0
