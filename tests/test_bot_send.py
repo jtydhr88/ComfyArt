@@ -7,7 +7,8 @@ import pytest
 from PIL import Image
 
 from ComfyArt.api import bot_send
-from ComfyArt.api.bot_media import video_frames, view_path
+from ComfyArt.api.bot_media import view_path
+from ComfyArt.bot.media_sheet import video_frames
 
 
 def _image(base, name="a.png"):

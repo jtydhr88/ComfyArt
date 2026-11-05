@@ -7,7 +7,8 @@ from server import PromptServer
 
 from ComfyArt.api import chat_store, mcp_commands
 from ComfyArt.api.mcp_tools import bot_tools
-from ComfyArt.api.bot_turns import ACTIVE_TURNS, _TurnState
+from ComfyArt.api.bot_turns import ACTIVE_TURNS
+from ComfyArt.bot.turns import TurnState
 from ComfyArt.bot.guide import CORE_MCP_TOOLS
 from ComfyArt.bot.providers import TurnHandle
 
@@ -119,7 +120,7 @@ async def test_slow_page_times_out_without_claiming_it_is_closed(bot_client):
 async def test_generation_asks_first_when_the_chat_runs_in_ask_mode(bot_client):
     chat = chat_store.create_chat(user="default", project="p", provider="codex", run_mode="ask")
     msg = chat_store.create_message(chat_id=chat["id"], role="assistant", blocks=[], status="streaming")
-    ACTIVE_TURNS[chat["id"]] = _TurnState(TurnHandle(), chat["id"], msg["id"])
+    ACTIVE_TURNS[chat["id"]] = TurnState(TurnHandle(), chat["id"], msg["id"])
     call = asyncio.create_task(bot_client.post(f"/comfyart/mcp?bot_chat={chat['id']}", json=_rpc(
         "tools/call", {"name": "generate_image", "arguments": {"prompt": "a cat"}})))
     for _ in range(200):

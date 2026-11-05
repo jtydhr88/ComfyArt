@@ -7,7 +7,8 @@ from aiohttp import web
 from PIL import Image, ImageOps
 
 from ._common import app_path, routes, view_path
-from .bot_media import VIDEO_EXT, video_frames
+from ..bot.media_sheet import video_frames
+from .bot_media import VIDEO_EXT
 
 SIZES = (256, 512, 1024)
 SKIP_FACTOR = 1.25

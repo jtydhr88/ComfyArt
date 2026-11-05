@@ -1,15 +1,14 @@
 import asyncio
-import uuid
 
 from aiohttp import web
 from server import PromptServer
 
+from ..bot.command_relay import CommandRelay
 from ._common import json_body, routes
 
-COMMAND_EVENT = "comfyart-mcp-command"
 DEFAULT_TIMEOUT_S = 20.0
 
-_pending: dict[str, asyncio.Future] = {}
+RELAY = CommandRelay("comfyart-mcp-command", lambda event, data, sid: PromptServer.instance.send_sync(event, data, sid))
 _pages: dict[str, str] = {}
 
 
@@ -38,20 +37,15 @@ def _target(project: str) -> tuple[str, str]:
 async def submit_command(action: str, payload: dict, project: str,
                          timeout: float = DEFAULT_TIMEOUT_S, chat: str = "") -> dict:
     client, project = _target(project)
-    command_id = uuid.uuid4().hex
-    future: asyncio.Future = asyncio.get_running_loop().create_future()
-    _pending[command_id] = future
     try:
-        PromptServer.instance.send_sync(COMMAND_EVENT, {"id": command_id, "action": action, "project": project, "chat": chat, "args": payload}, client)
-        return await asyncio.wait_for(future, timeout)
+        return await RELAY.submit({"action": action, "project": project, "chat": chat, "args": payload},
+                                  sid=client, timeout=timeout)
     except asyncio.TimeoutError:
         if client not in _open_pages():
             raise ValueError(f"the ComfyArt tab of project {project} closed before {action!r} finished")
         raise ValueError(
             f"the ComfyArt page did not finish {action!r} within {timeout:.0f}s; it may still complete — "
             f"check get_canvas before retrying")
-    finally:
-        _pending.pop(command_id, None)
 
 
 @routes.post("/comfyart/mcp_page")
@@ -67,13 +61,5 @@ async def register_page(request: web.Request) -> web.Response:
 
 @routes.post("/comfyart/mcp_command_result")
 async def post_command_result(request: web.Request) -> web.Response:
-    body = await json_body(request)
-    future = _pending.get(str(body.get("command_id") or ""))
-    if future is None or future.done():
-        return web.json_response({"ok": False, "reason": "unknown or expired command"})
-    if body.get("ok"):
-        result = body.get("result")
-        future.set_result(result if isinstance(result, dict) else {"result": result})
-    else:
-        future.set_exception(ValueError(str(body.get("error") or "command failed in the ComfyArt page")))
-    return web.json_response({"ok": True})
+    out, status = RELAY.resolve(await json_body(request), "command failed in the ComfyArt page")
+    return web.json_response(out, status=status)

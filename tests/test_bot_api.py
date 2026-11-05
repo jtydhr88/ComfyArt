@@ -167,10 +167,10 @@ async def test_a_broken_history_block_does_not_stick_the_turn(bot_client, fake_s
 
 async def test_a_chat_whose_provider_is_gone_can_still_be_deleted(bot_client, fake_provider, monkeypatch):
     from ComfyArt.api import bot as bot_api
-    from ComfyArt.api.bot_turns import _TurnState
+    from ComfyArt.bot.turns import TurnState
     from ComfyArt.bot.providers import TurnHandle
     chat = await _chat(bot_client)
-    ACTIVE_TURNS[chat["id"]] = _TurnState(TurnHandle(), chat["id"], "m")
+    ACTIVE_TURNS[chat["id"]] = TurnState(TurnHandle(), chat["id"], "m")
     monkeypatch.setattr(bot_api, "get_provider", lambda _id: None)
     assert (await bot_client.delete(f"/comfyart/bot/chats/{chat['id']}")).status == 200
     assert chat_store.get_chat(chat["id"]) is None

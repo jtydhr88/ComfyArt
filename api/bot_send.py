@@ -4,7 +4,7 @@ from typing import Optional
 from . import chat_store
 from .bot_docs import DOC_ERRORS, document_line, read_document
 from .bot_media import ATTACH_MAX_COUNT, MEDIA_ERRORS, SHEET_FRAMES, render_attachment
-from .bot_turns import ACTIVE_TURNS, QUEUED, begin_turn, broadcast
+from .bot_turns import ACTIVE_TURNS, QUEUED, RUNNER, broadcast
 
 
 def _strings(raw, name: str) -> list[str]:
@@ -135,6 +135,6 @@ def queue_or_begin(chat: dict, *, text: str, provider_text: str,
         broadcast("message_queued", {"chat_id": chat["id"], "user_message": user_msg})
         return user_msg, None
     user_msg = chat_store.create_message(chat_id=chat["id"], role="user", blocks=display_blocks)
-    assistant_msg = begin_turn(chat, text=text, provider_text=provider_text,
-                               attachments=attachments, user_msg=user_msg)
+    assistant_msg = RUNNER.begin(chat, text=text, provider_text=provider_text,
+                                 attachments=attachments, user_msg=user_msg)
     return user_msg, assistant_msg
