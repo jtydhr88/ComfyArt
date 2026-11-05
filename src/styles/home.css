@@ -868,13 +868,13 @@ body { background: var(--ca-float); }
 
 /* #494-2 — skill's own dialog: left templates (2-col) + right 「开始制作」 panel. */
 .ca-skillrun {
-  /* #541 design spec: 1112×820, left 752 + right 360 */
+  /* #760 product: 1920 → 1200×820 / cards ≈388×321; left 840 + right 360 */
   position: relative; border-radius: 16px;
-  width: min(1112px, calc(100vw - 32px));
+  width: min(1200px, calc(100vw - 32px));
   height: min(820px, calc(100vh - 64px));
   max-height: min(820px, calc(100vh - 64px));
   display: flex; flex-direction: row; padding: 0; overflow: hidden;
-  animation: ca-skillrun-in 250ms cubic-bezier(.2, 0, 0, 1) both;
+  animation: ca-skillrun-in 200ms cubic-bezier(.2, 0, 0, 1) both;
   transform-origin: center center;
 }
 @keyframes ca-skillrun-in {
@@ -882,14 +882,14 @@ body { background: var(--ca-float); }
   to { opacity: 1; transform: scale(1); }
 }
 .ca-modal[data-testid="skill-run-modal"] {
-  animation: ca-skillrun-backdrop-in 250ms cubic-bezier(.2, 0, 0, 1) both;
+  animation: ca-skillrun-backdrop-in 200ms cubic-bezier(.2, 0, 0, 1) both;
 }
 @keyframes ca-skillrun-backdrop-in {
   from { opacity: 0; }
   to { opacity: 1; }
 }
 .ca-skillrun__left {
-  flex: 1 1 752px; min-width: 0; padding: 24px 24px 0; overflow: hidden;
+  flex: 1 1 840px; min-width: 0; padding: 24px 24px 0; overflow: hidden;
   display: flex; flex-direction: column; gap: 16px;
 }
 /* pinned head — title / author / desc never scroll away under the template grid */
@@ -1002,10 +1002,17 @@ body { background: var(--ca-float); }
 .ca-skillrun__preset[data-on] .ca-skillrun__presetimg::after {
   box-shadow: inset 0 0 0 1px var(--ca-text);
 }
-.ca-skillrun__presetimg > img, .ca-skillrun__presetimg > video { width: 100%; height: 100%; object-fit: contain; }
+/* #760 — contain ONLY (never cover); letterbox on --ca-skillrun-tile (#f4f4f4). Portrait fills height (~145×258 @1280). */
+.ca-skillrun__presetimg > img, .ca-skillrun__presetimg > video {
+  position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
+  max-width: 100%; max-height: 100%; width: auto; height: auto;
+  object-fit: contain; object-position: center;
+}
 /* #622 — preset.video muted hover/focus overlay (still underneath; no-video path unchanged). */
 .ca-skillrun__preset-video {
-  position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; display: block;
+  position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
+  max-width: 100%; max-height: 100%; width: auto; height: auto;
+  object-fit: contain; object-position: center; display: block;
   opacity: 0; pointer-events: none; z-index: 0;
   transition: opacity 150ms ease;
 }
@@ -1272,38 +1279,65 @@ body { background: var(--ca-float); }
 .ca-skillrun__zoom, .ca-skillrun__pick {
   transition: opacity var(--ca-skillrun-hover-dur) var(--ca-skillrun-hover-ease), transform var(--ca-skillrun-hover-dur) var(--ca-skillrun-hover-ease);
 }
-/* #760 — product DOM @1280×1072 (344×258 well), all in % of the 8px-inset box (328×242) so 1280/1920 match.
- * Rest: 3 real-media layers 100%×76.03% (16:9) → translateY(15.75% of layer ≈ 12% of inset h) scale(.757178),
- * rotate +5/−5/+10, z 3/2/1, centered inside the card. Focus (hover OR selected): 3 cells 32.11%×100%,
- * x = 0 / 33.94% / 67.89%, no scale/rotate, img contain (≈16:9 centered). 400ms #751 easing both ways. */
+/* #760 — generic SkillRun stack (all skills). % of 8px-inset (328×242 @1280).
+ * Rest: ALL media[] in DOM; indices ≥3 opacity:0 (max 3 visible). Aspect-aware:
+ *   landscape → 100%×76.03% + translateY(15.75%) scale(.757178) (~78% AABB);
+ *   portrait  → 55.335%×100% (181.5×242) left 22.332% + scale(.8057).
+ * Focus: hover/focus-visible ONLY (no [data-on] sticky). 2–3 = one-row; ≥4 = 2×2 (161×118 gap 6, 4th opacity 0).
+ * Cover img: contain letterbox only — never cover. */
 .ca-skillrun { --ca-skillrun-stack-inset: 8px; --ca-skillrun-stack-cell: 32.11%; --ca-skillrun-stack-pitch: 33.94%; }
-.ca-skillrun__presetimg > img, .ca-skillrun__presetimg > video { object-fit: contain; object-position: center; }
 .ca-skillrun__preset:has(.ca-skillrun__stack) .ca-skillrun__presetimg > img { opacity: 0; }
 .ca-skillrun__stack { position: absolute; inset: var(--ca-skillrun-stack-inset); z-index: 1; pointer-events: none; }
 .ca-skillrun__stack > *,
 .ca-skillrun__presetimg .ca-skillrun__stack > * {
   position: absolute; left: 0; top: 0; width: 100%; height: 76.03%;
-  object-fit: cover; object-position: center; border-radius: 6px;
+  object-fit: contain; object-position: center; border-radius: 6px; background: var(--ca-skillrun-tile);
   z-index: calc(3 - var(--i));
   transform-origin: center center;
   transform: translateY(15.75%) scale(.757178) rotate(var(--r, 0deg));
   transition: left var(--ca-skillrun-stack-dur) var(--ca-skillrun-stack-ease),
+              top var(--ca-skillrun-stack-dur) var(--ca-skillrun-stack-ease),
               width var(--ca-skillrun-stack-dur) var(--ca-skillrun-stack-ease),
               height var(--ca-skillrun-stack-dur) var(--ca-skillrun-stack-ease),
-              transform var(--ca-skillrun-stack-dur) var(--ca-skillrun-stack-ease);
+              transform var(--ca-skillrun-stack-dur) var(--ca-skillrun-stack-ease),
+              opacity var(--ca-skillrun-stack-dur) var(--ca-skillrun-stack-ease);
+}
+.ca-skillrun__stack[data-orient="portrait"] > *,
+.ca-skillrun__presetimg .ca-skillrun__stack[data-orient="portrait"] > * {
+  width: 55.335%; height: 100%; left: 22.332%; top: 0;
+  transform: scale(.8057) rotate(var(--r, 0deg));
 }
 .ca-skillrun__stack > *:nth-child(1) { --r: 5deg; }
 .ca-skillrun__stack > *:nth-child(2) { --r: -5deg; }
 .ca-skillrun__stack > *:nth-child(3) { --r: 10deg; }
-.ca-skillrun__preset:hover .ca-skillrun__stack > *,
-.ca-skillrun__preset:focus-visible .ca-skillrun__stack > *,
-.ca-skillrun__preset[data-on] .ca-skillrun__stack > *,
-.ca-skillrun__preset:hover .ca-skillrun__presetimg .ca-skillrun__stack > *,
-.ca-skillrun__preset:focus-visible .ca-skillrun__presetimg .ca-skillrun__stack > *,
-.ca-skillrun__preset[data-on] .ca-skillrun__presetimg .ca-skillrun__stack > * {
-  width: var(--ca-skillrun-stack-cell); height: 100%; left: calc(var(--i) * var(--ca-skillrun-stack-pitch));
+.ca-skillrun__stack > *:nth-child(n+4) { opacity: 0; }
+/* focus 2–3: one row */
+.ca-skillrun__preset:hover .ca-skillrun__stack[data-n="2"] > *,
+.ca-skillrun__preset:focus-visible .ca-skillrun__stack[data-n="2"] > *,
+.ca-skillrun__preset:hover .ca-skillrun__stack[data-n="3"] > *,
+.ca-skillrun__preset:focus-visible .ca-skillrun__stack[data-n="3"] > *,
+.ca-skillrun__preset:hover .ca-skillrun__presetimg .ca-skillrun__stack[data-n="2"] > *,
+.ca-skillrun__preset:focus-visible .ca-skillrun__presetimg .ca-skillrun__stack[data-n="2"] > *,
+.ca-skillrun__preset:hover .ca-skillrun__presetimg .ca-skillrun__stack[data-n="3"] > *,
+.ca-skillrun__preset:focus-visible .ca-skillrun__presetimg .ca-skillrun__stack[data-n="3"] > * {
+  width: var(--ca-skillrun-stack-cell); height: 100%; left: calc(var(--i) * var(--ca-skillrun-stack-pitch)); top: 0;
   object-fit: contain; transform: none;
 }
+/* focus ≥4: 2×2 cells 161×118 gap 6; 4th stays opacity 0 */
+.ca-skillrun__preset:hover .ca-skillrun__stack[data-n="4"] > *,
+.ca-skillrun__preset:focus-visible .ca-skillrun__stack[data-n="4"] > *,
+.ca-skillrun__preset:hover .ca-skillrun__presetimg .ca-skillrun__stack[data-n="4"] > *,
+.ca-skillrun__preset:focus-visible .ca-skillrun__presetimg .ca-skillrun__stack[data-n="4"] > * {
+  width: 49.085%; height: 48.76%; object-fit: contain; transform: none;
+}
+.ca-skillrun__preset:hover .ca-skillrun__stack[data-n="4"] > *:nth-child(1),
+.ca-skillrun__preset:focus-visible .ca-skillrun__stack[data-n="4"] > *:nth-child(1) { left: 0; top: 0; }
+.ca-skillrun__preset:hover .ca-skillrun__stack[data-n="4"] > *:nth-child(2),
+.ca-skillrun__preset:focus-visible .ca-skillrun__stack[data-n="4"] > *:nth-child(2) { left: 50.915%; top: 0; }
+.ca-skillrun__preset:hover .ca-skillrun__stack[data-n="4"] > *:nth-child(3),
+.ca-skillrun__preset:focus-visible .ca-skillrun__stack[data-n="4"] > *:nth-child(3) { left: 0; top: 51.24%; }
+.ca-skillrun__preset:hover .ca-skillrun__stack[data-n="4"] > *:nth-child(4),
+.ca-skillrun__preset:focus-visible .ca-skillrun__stack[data-n="4"] > *:nth-child(4) { left: 50.915%; top: 51.24%; opacity: 0; }
 /* 「选择」 capsule ≈52×22 white top-right; expand icon ≈14×15 top-left; selected: 1px rgb(120,120,120) + dark ✓ replaces capsule */
 .ca-skillrun__pick { min-width: 52px; height: 22px; padding: 0 10px; box-sizing: border-box; border-radius: 11px; background: #fff; color: #1a1a1a; top: 8px; right: 8px; display: inline-flex; align-items: center; justify-content: center; }
 .ca-skillrun__preset[data-on] .ca-skillrun__pick { opacity: 0 !important; }

@@ -55,9 +55,11 @@ function PresetTile({ skill, item, preset: p, on, onPick, onZoom }: {
               aria-hidden="true"
             />
           )}
-          {/* #760: rest = static 3-layer pile (real media[] only); hover OR selected → 400ms expand. */}
-          {stack.length > 1 && <span className="ca-skillrun__stack" aria-hidden="true" data-testid="skill-run-stack" style={{ '--n': Math.min(stack.length, 3) } as React.CSSProperties}>
-            {stack.slice(0, 3).map((src, i) => <img key={i} src={src} alt="" style={{ '--i': i } as React.CSSProperties} />)}
+          {/* #760: render ALL media[] layers; rest indices ≥3 opacity:0; hover (not selected sticky) expands. */}
+          {stack.length > 1 && <span className="ca-skillrun__stack" aria-hidden="true" data-testid="skill-run-stack"
+            data-n={stack.length >= 4 ? 4 : stack.length} data-orient={p.stackOrient ?? 'landscape'}
+            style={{ '--n': stack.length } as React.CSSProperties}>
+            {stack.map((src, i) => <img key={i} src={src} alt="" style={{ '--i': i } as React.CSSProperties} />)}
           </span>}
           <span className="ca-skillrun__pick">{t('skillRun.select')}</span>
           {on && <span className="ca-skillrun__check" aria-hidden="true"><span className="ca-icon">{Icons.check}</span></span>}

@@ -1,4 +1,4 @@
-"""#760 — rest = static multi-image pile (real media); card ≈258×193; hover/selected expand 400ms."""
+"""#760 — generic SkillRun stack: all media[], aspect-aware rest, focus by count, contain-only covers."""
 import re
 from pathlib import Path
 
@@ -6,6 +6,7 @@ ROOT = Path(__file__).resolve().parents[1]
 CSS = (ROOT / "src/styles/home.css").read_text()
 DLG = (ROOT / "src/ui/SkillRunDialog.tsx").read_text()
 RAW = (ROOT / "src/skillRaw748.ts").read_text()
+WASH = (ROOT / "src/data/wash-748.json").read_text()
 
 
 def test_400ms_expand_collapse_kept():
@@ -18,31 +19,67 @@ def test_card_well_stays_160_120():
     assert "aspect-ratio: 160 / 120" in CSS and "width: 258px" not in CSS
 
 
-def test_rest_is_static_pile_focus_expands():
-    seg = CSS.split("#760 — product DOM")[1].split("「选择」")[0]
+def test_dialog_1200_modal_200ms():
+    assert "min(1200px" in CSS
+    assert "ca-skillrun-in 200ms" in CSS
+    assert "ca-skillrun-backdrop-in 200ms" in CSS
+    assert "min(1112px" not in CSS
+    assert "ca-skillrun-in 250ms" not in CSS
+
+
+def test_rest_aspect_aware_and_focus_by_count():
+    seg = CSS.split("#760 — generic SkillRun stack")[1].split("「选择」")[0]
     assert "inset: var(--ca-skillrun-stack-inset)" in seg and "--ca-skillrun-stack-inset: 8px" in seg
+    # landscape rest path (~78% AABB)
     assert "height: 76.03%" in seg and "translateY(15.75%) scale(.757178)" in seg
+    # portrait rest path
+    assert 'data-orient="portrait"' in seg and "55.335%" in seg and "scale(.8057)" in seg
     assert "nth-child(1) { --r: 5deg; }" in seg and "nth-child(2) { --r: -5deg; }" in seg and "nth-child(3) { --r: 10deg; }" in seg
-    assert "nth-child(4)" not in seg and "z-index: calc(3 - var(--i))" in seg
-    assert "--ca-skillrun-stack-cell: 32.11%" in seg and "--ca-skillrun-stack-pitch: 33.94%" in seg
-    for stale in ("33px", "120px", "126", "252", "56%"):
-        assert stale not in seg, stale
-    assert "[data-on] .ca-skillrun__stack > *" in seg and ":hover .ca-skillrun__stack > *" in seg
-    assert "stack.slice(0, 3)" in DLG
+    # indices ≥3 opacity 0
+    assert "nth-child(n+4) { opacity: 0; }" in seg
+    # no sticky [data-on] expand
+    assert "[data-on] .ca-skillrun__stack" not in seg
+    assert ":hover .ca-skillrun__stack" in seg
+    # 2×2 focus
+    assert 'data-n="4"' in seg and "49.085%" in seg and "48.76%" in seg
+    # rest layers contain (never cover)
+    assert "object-fit: contain" in seg
+    assert "object-fit: cover" not in seg
+
+
+def test_cover_contain_never_cover():
+    """Single-tile cover (motion 首尾帧 etc.): contain letterbox only."""
+    assert "/* #760 — contain ONLY (never cover)" in CSS
+    # absolute centered auto box — height fills for portrait (~145×258 @1280)
+    assert "max-width: 100%; max-height: 100%; width: auto; height: auto;" in CSS
+    bare = re.findall(r"\.ca-skillrun__presetimg\s+img\b", CSS)
+    assert not bare, bare
+
+
+def test_render_all_media_no_slice_no_pad():
+    assert "stack.slice(0, 3)" not in DLG
+    assert "stack.map(" in DLG
+    assert 'data-n={stack.length >= 4 ? 4 : stack.length}' in DLG
+    assert "while (stack.length < target)" not in RAW
+    assert "slice(0, target)" not in RAW
+    assert "No pad" in RAW or "no pad-with-last" in RAW
+    assert "t.media.length > 1 && real.length > 0" in RAW
 
 
 def test_stack_never_padded_with_pending():
     assert "j === 0 ? image : PENDING_WASH" not in RAW
     assert "stack.length > 1" in DLG
-    seg = DLG[DLG.index('data-testid="skill-run-stack"'):][:400]
+    seg = DLG[DLG.index('data-testid="skill-run-stack"'):][:500]
     assert "PendingWash" not in seg and "pending-wash" not in seg
 
-def test_stack_pads_with_real_dup_never_pending():
-    """depth>1 + ≥1 real → pad to min(depth,3) by duplicating last real; never PENDING_WASH."""
-    assert "Never PENDING_WASH fillers" in RAW
-    assert "while (stack.length < target) stack.push(stack[stack.length - 1]" in RAW
-    assert "j === 0 ? image : PENDING_WASH" not in RAW
-    assert "target > 1 && real.length > 0" in RAW
+
+def test_wash_raw_not_thumb():
+    """media URLs = raw originals with real w/h, not @thumb."""
+    assert "02-first-to-last-frame-animation.webp" in WASH
+    assert "02-first-to-last-frame-animation@thumb.webp" not in WASH
+    # packaging stack raw
+    assert "packaging__gold.webp" in WASH
+    assert "packaging__gold@thumb.webp" not in WASH
 
 
 def test_skills_category_chip_200ms_not_select_pill():
@@ -51,22 +88,12 @@ def test_skills_category_chip_200ms_not_select_pill():
     assert "200ms" in chip
     assert "--ca-skillrun-hover-dur: 100ms" in CSS
     assert "--ca-skillrun-hover-dur: 200ms" not in CSS
-    # #760 override (after the legacy 150ms rule) must drive pick/zoom via the 100ms token
     assert CSS.count(".ca-skillrun__zoom, .ca-skillrun__pick {") >= 2
     override = CSS.rsplit(".ca-skillrun__zoom, .ca-skillrun__pick {", 1)[1].split("}", 1)[0]
     assert "var(--ca-skillrun-hover-dur)" in override
 
 
-def test_presetimg_contain_is_direct_child_only():
-    """Cover/video contain must not override stack layer object-fit via descendant selector."""
-    assert ".ca-skillrun__presetimg > img" in CSS
-    # bare `.ca-skillrun__presetimg img` (no >) would steal stack cover
-    import re
-    bare = re.findall(r"\.ca-skillrun__presetimg\s+img\b", CSS)
-    assert not bare, bare
-
 def test_rest_pile_transform_origin_center():
-    seg = CSS.split("#760 — product DOM")[1].split("「选择」")[0]
+    seg = CSS.split("#760 — generic SkillRun stack")[1].split("「选择」")[0]
     assert "transform-origin: center center" in seg
     assert "scale(.757178)" in seg
-

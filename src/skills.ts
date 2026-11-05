@@ -14,8 +14,10 @@ export type SkillCategory = 'ecommerce' | 'branding' | 'social' | 'website' | 'a
 /** #494 — one preset (template): `prompt` is the style text appended after the skill's instructions when the user runs
  *  the skill with this preset (step 2). `image` is the preset's own example image; unset → the skill's list cover. */
 export interface SkillPreset { id: string; name: LocText; prompt?: string; image?: string; /** #575 — optional template hover/detail mp4; unset → still `image` / skill cover. */ video?: string
-  /** #748 — stack-expand tile: extra thumbs fanned out on hover, collapsed on select. Data-driven; unset → plain tile. */
+  /** #748 — stack-expand tile: real media[] layers. Data-driven; unset → plain tile. */
   stack?: string[]
+  /** #760 — rest pile orientation from primary media.ratio (<1 → portrait). */
+  stackOrient?: 'portrait' | 'landscape'
   /** #748 — this template's own right-panel form (reference content.template.questions[]); unset → skill.inputs. */
   inputs?: SkillInput[]
   /** #751 — media indices (0 = cover, 1.. = stack) still on the unified PENDING_WASH placeholder. */

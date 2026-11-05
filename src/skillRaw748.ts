@@ -74,15 +74,12 @@ export function applyRaw748(skill: Skill): Skill {
   const presets = tpls.map((t, i): SkillPreset => {
     const old = skill.presets?.[i]
     const image = old?.image ?? WASH_T[skill.id]?.[i] ?? PENDING_WASH // the template's OWN wash (1:1, fixed per card), else the unified placeholder
-    // #760: rest = static multi-image pile from REAL washed media[]; focus expands. Never PENDING_WASH fillers.
-    // raw media count wins; if fewer than min(depth,3) layers, duplicate the last real URL (same image × N). Empty real → no stack (single-cover fallback).
-    const target = Math.min(Math.max(t.depth, 0), 3)
-    const real = (WASH_S[skill.id]?.[i] ?? []).filter((u): u is string => !!u && !isPendingWash(u)).slice(0, target)
-    let stack: string[] | undefined
-    if (target > 1 && real.length > 0) {
-      stack = real.slice()
-      while (stack.length < target) stack.push(stack[stack.length - 1]!)
-    }
+    // #760: stack = ALL real washed media[] (no pad-with-last, no slice(0,3)). Empty real → no stack.
+    // Layout uses media.length: 1 = single cover; 2–3 = row focus; ≥4 = 2×2 (4th opacity 0). Rest ≥3 opacity 0.
+    const real = (WASH_S[skill.id]?.[i] ?? []).filter((u): u is string => !!u && !isPendingWash(u))
+    const stack = t.media.length > 1 && real.length > 0 ? real.slice() : undefined
+    const r0 = t.media[0]?.ratio
+    const stackOrient = stack ? (r0 != null && r0 < 1 ? 'portrait' as const : 'landscape' as const) : undefined
     const pendingWash = image === PENDING_WASH ? [0] : []
     // #751 HOLD: only a template's own video; the skill-level video is never shared across template cards
     const vid = old?.video
@@ -90,7 +87,8 @@ export function applyRaw748(skill: Skill): Skill {
       id: old?.id ?? `t${i + 1}`, name: t.name,
       prompt: loc(ours.templates?.[i + 1]?.prompt) ?? `Template: ${t.name.en}. Follow this template's own inputs.`,
       ...(ours.templates?.[i + 1]?.description ? { description: ours.templates[i + 1].description } : {}),
-      image, ...(vid ? { video: vid } : {}), ...(stack ? { stack } : {}), ...(pendingWash.length ? { pendingWash } : {}),
+      image, ...(vid ? { video: vid } : {}), ...(stack ? { stack } : {}), ...(stackOrient ? { stackOrient } : {}),
+      ...(pendingWash.length ? { pendingWash } : {}),
       inputs: t.inputs.map((q) => toInput(q, ours.templates?.[i + 1]?.placeholders)),
     }
   })
