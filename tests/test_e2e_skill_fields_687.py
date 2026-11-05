@@ -51,7 +51,7 @@ async def _check(pg, sid, lang):
         if typ == "image":
             assert g["fileAccept"] == ("video/*" if acc == "video" else "image/*"), (sid, key)
     go = pg.get_by_test_id("skill-run-go")
-    assert await go.is_enabled(), sid  # #687: Start always clickable; validation runs on click
+    assert await go.evaluate("b => !b.disabled"), sid  # #748: template-class shows aria-disabled look but stays clickable; #687: Start always clickable; validation runs on click
     assert await dlg.get_by_test_id("skill-run-field-error").count() == 0, sid  # no errors on open
     if sid == "motion":
         assert await dlg.get_by_test_id("skill-run-current").count() == 0  # #687: off-topic templates removed → no 模板 row
@@ -130,13 +130,14 @@ async def test_motion_validates_only_after_start_click_687(app_url):  # noqa: F8
         await pg.get_by_test_id("skills-wall").wait_for()
         dlg = await _check(pg, "motion", "zh")
         url0 = pg.url
-        await pg.get_by_test_id("skill-run-go").click()
+        await pg.get_by_test_id("skill-run-go").click(force=True)  # #748 aria-disabled look, still clickable
         errs = await dlg.get_by_test_id("skill-run-field-error").evaluate_all("es => es.map(e => e.dataset.key)")
-        assert errs == ["refVideo", "remakeBrief"], errs
+        REQ = [r[0] for r in SPEC["motion"] if r[2]]  # #748 measured keys
+        assert errs == REQ, errs
         assert pg.url == url0  # nothing started
-        await dlg.locator('[data-testid="skill-run-field"][data-key="remakeBrief"]').fill("swap product")
+        await dlg.locator(f'[data-testid="skill-run-field"][data-key="{[r for r in SPEC["motion"] if r[1] != "image"][0][0]}"]').fill("swap product")
         errs = await dlg.get_by_test_id("skill-run-field-error").evaluate_all("es => es.map(e => e.dataset.key)")
-        assert errs == ["refVideo"], errs
+        assert errs == [r[0] for r in SPEC["motion"] if r[2] and r[1] == "image"], errs
         if SHOTS:
             await pg.screenshot(path=str(Path(SHOTS) / "skill-fields-motion-after-start-zh-light.png"))
         await browser.close()

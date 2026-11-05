@@ -53,7 +53,7 @@ def test_video_helpers_and_pending_scaffold():
 def test_motion_preset_video_wired_in_dialog():
     """Detail/template cards play when preset.video set; no-video fallback unchanged."""
     dlg = (ROOT / "src/ui/SkillRunDialog.tsx").read_text()
-    assert "presetVideo" in dlg and "skillCoverVideoHover" in dlg
+    assert "item.type === 'video'" in dlg and "skillCoverVideoHover" in dlg
     assert "skill-run-preset-video" in dlg
     assert "ca-skillrun__preset-video" in CSS
     # mutation surface: helpers still return null when video omitted

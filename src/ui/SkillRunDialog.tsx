@@ -6,7 +6,7 @@
  *  No skill ids are named here. 「详情」 keeps main's #484 edit page (openSkillEditor). */
 import { useRef, useState } from 'react'
 
-import { uploadSkillImage, isSkillMediaVideo, loc, loadFavourites, missingInputs, presetImage, presetVideo, recordSkillUse, skillAuthor, skillCover, skillCoverVideoHover, skillMeta, skillMetaLabel, skillDefaults, skillDescription, skillPreset, skillRunParams, skillShareUrl, skillMedia, toggleFavourite, type Skill, type SkillPreset } from '../skills'
+import { uploadSkillImage, isSkillMediaVideo, loc, loadFavourites, missingInputs, presetImage, recordSkillUse, skillAuthor, skillCover, skillCoverVideoHover, skillMeta, skillMetaLabel, skillDefaults, skillDescription, skillPreset, skillRunParams, skillShareUrl, skillMedia, selectedMedia, getSkillUsage, toggleFavourite, type SkillMediaItem, type Skill, type SkillPreset } from '../skills'
 import { newProject } from '../projects'
 import { BRAND } from '../brand'
 import { copyText } from '../clipboard'
@@ -17,18 +17,18 @@ import { openSkillEditor } from './SkillsDialog'
 import { SkillExamples } from './SkillExamples'
 
 /** #622 — template tile: still thumb + optional preset.video muted hover/focus loop (no-video unchanged). */
-function PresetTile({ skill, preset: p, on, onPick, onZoom }: {
-  skill: Skill; preset: SkillPreset; on: boolean
+function PresetTile({ skill, item, preset: p, on, onPick, onZoom }: {
+  skill: Skill; item: SkillMediaItem; preset: SkillPreset; on: boolean
   onPick: () => void; onZoom: (src: string) => void
 }) {
-  const img = presetImage(skill, p)
-  const videoSrc = presetVideo(skill, p)
+  // #748: tile media comes from the media[] item (image / video / stack), never from component constants.
+  const img = item.type === 'video' ? (item.cover ?? presetImage(skill, p)) : item.url || presetImage(skill, p)
+  const videoSrc = item.type === 'video' ? item.url : null
   const videoRef = useRef<HTMLVideoElement>(null)
   const play = () => skillCoverVideoHover(videoRef.current, 'enter')
   const stop = () => skillCoverVideoHover(videoRef.current, 'leave')
   const zoomSrc = videoSrc || img
-  const item = skillMedia(skill).find((m) => m.presetId === p.id)
-  const stack = item?.type === 'stack' ? (item.children ?? []).map((c) => c.url) : []
+  const stack = item.type === 'stack' ? (item.children ?? []).map((c) => c.url) : []
   return (
     <div className="ca-skillrun__tile" data-stack={stack.length ? stack.length : undefined} data-on={on || undefined} data-has-video={videoSrc ? '1' : undefined}>
       <button type="button" role="radio" aria-checked={on} data-on={on || undefined}
@@ -55,8 +55,8 @@ function PresetTile({ skill, preset: p, on, onPick, onZoom }: {
             />
           )}
           {/* #748 stack-expand: thumbs fan out on hover, collapse when selected (timings = CSS vars). */}
-          {stack.length > 0 && <span className="ca-skillrun__stack" aria-hidden="true" data-testid="skill-run-stack">
-            {stack.map((src, i) => <img key={i} src={src} alt="" style={{ '--i': i } as React.CSSProperties} />)}
+          {stack.length > 0 && <span className="ca-skillrun__stack" aria-hidden="true" data-testid="skill-run-stack" style={{ '--n': Math.min(stack.length, 5) } as React.CSSProperties}>
+            {stack.slice(0, 5).map((src, i) => <img key={i} src={src} alt="" style={{ '--i': i } as React.CSSProperties} />)}
           </span>}
           <span className="ca-skillrun__pick">{t('skillRun.select')}</span>
           {on && <span className="ca-skillrun__check" aria-hidden="true"><span className="ca-icon">{Icons.check}</span></span>}
@@ -67,6 +67,52 @@ function PresetTile({ skill, preset: p, on, onPick, onZoom }: {
         onClick={() => onZoom(zoomSrc)}><span className="ca-icon">{Icons.expand}</span></button>}
     </div>
   )
+}
+
+/** #748 — ONE left renderer for examples carousel + template picker; branches on the media[] data only:
+ *  items without presetId → examples carousel, items with presetId → template grid (image / video / stack). */
+function SkillMediaLeft({ skill, preset, onPick, onZoom }: {
+  skill: Skill; preset: string | null; onPick: (id: string) => void; onZoom: (src: string) => void
+}) {
+            const media = skillMedia(skill)
+            const examples = media.filter((m) => !m.presetId).map((m) => m.url)
+            const tiles = media.flatMap((m) => { const p = skill.presets?.find((x) => x.id === m.presetId); return p ? [{ m, p }] : [] })
+            const presetTiles = tiles.map((x) => x.p)
+            // #641: thumbnail (presetChips) with an explicit empty list still shows 「暂无示例」.
+            const showEmptyExamples = !!skill.presetChips && Array.isArray(skill.examples) && skill.examples.length === 0
+            const coverSrc = skillCover(skill)?.src ?? null
+            // #637: Examples-only left when examples drive the gold shape; 「模板」 grid only for real preset media
+            // (never invent Examples / 模板 from cover). Cover alone → dedicated main-preview hero.
+            if (!examples.length && !presetTiles.length && !showEmptyExamples) {
+              if (!coverSrc) return null
+              return (
+                <div className="ca-skillrun__templates" data-left="cover" data-testid="skill-run-cover-preview">
+                  <div
+                    className="ca-skillrun__stage ca-skillrun__coverstage"
+                    data-testid="skill-run-cover-stage"
+                    data-media="image"
+                  >
+                    <img src={coverSrc} alt="" data-testid="skill-run-cover-img" />
+                  </div>
+                </div>
+              )
+            }
+            return (
+              <div className="ca-skillrun__templates" data-left={examples.length ? (presetTiles.length ? 'both' : 'examples') : 'templates'}>
+                <SkillExamples examples={skill.media?.length ? examples : skill.examples} />
+                {!!presetTiles.length && (
+                  <div role="radiogroup" data-testid="skill-run-presets">
+                    <div className="ca-skillrun__section">{t('skillRun.templates')}</div>
+                    <div className="ca-skillrun__grid">
+                      {tiles.map(({ m, p }) => (
+                        <PresetTile key={p.id} skill={skill} item={m} preset={p} on={preset === p.id}
+                          onPick={() => onPick(p.id)} onZoom={onZoom} />
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            )
 }
 
 export function SkillRunDialog({ skill, presetId, onClose, run = newProject }: {
@@ -141,45 +187,7 @@ export function SkillRunDialog({ skill, presetId, onClose, run = newProject }: {
             {desc && <p className="ca-skillrun__desc" data-testid="skill-run-desc">{desc}</p>}
             {meta && <p className="ca-skillrun__meta" data-testid="skill-run-meta">{skillMetaLabel(meta)}</p>}
           </header>
-          {(() => {
-            const examples = skill.examples ?? []
-            const presetTiles = skillMedia(skill).map((m) => skill.presets?.find((p) => p.id === m.presetId)).filter((p): p is SkillPreset => !!p)
-            // #641: thumbnail (presetChips) with an explicit empty list still shows 「暂无示例」.
-            const showEmptyExamples = !!skill.presetChips && Array.isArray(skill.examples) && skill.examples.length === 0
-            const coverSrc = skillCover(skill)?.src ?? null
-            // #637: Examples-only left when examples drive the gold shape; 「模板」 grid only for real preset media
-            // (never invent Examples / 模板 from cover). Cover alone → dedicated main-preview hero.
-            if (!examples.length && !presetTiles.length && !showEmptyExamples) {
-              if (!coverSrc) return null
-              return (
-                <div className="ca-skillrun__templates" data-left="cover" data-testid="skill-run-cover-preview">
-                  <div
-                    className="ca-skillrun__stage ca-skillrun__coverstage"
-                    data-testid="skill-run-cover-stage"
-                    data-media="image"
-                  >
-                    <img src={coverSrc} alt="" data-testid="skill-run-cover-img" />
-                  </div>
-                </div>
-              )
-            }
-            return (
-              <div className="ca-skillrun__templates" data-left={examples.length ? (presetTiles.length ? 'both' : 'examples') : 'templates'}>
-                <SkillExamples examples={skill.examples} />
-                {!!presetTiles.length && (
-                  <div role="radiogroup" data-testid="skill-run-presets">
-                    <div className="ca-skillrun__section">{t('skillRun.templates')}</div>
-                    <div className="ca-skillrun__grid">
-                      {presetTiles.map((p) => (
-                        <PresetTile key={p.id} skill={skill} preset={p} on={preset === p.id}
-                          onPick={() => setPreset(p.id)} onZoom={setZoom} />
-                      ))}
-                    </div>
-                  </div>
-                )}
-              </div>
-            )
-          })()}
+          <SkillMediaLeft skill={skill} preset={preset} onPick={setPreset} onZoom={setZoom} />
         </div>
         <div className="ca-skillrun__right">
           <div className="ca-skillrun__righthead">
@@ -188,7 +196,7 @@ export function SkillRunDialog({ skill, presetId, onClose, run = newProject }: {
           </div>
           <div className="ca-skillrun__body">
             {chosen && (() => {
-              const presetTiles = skillMedia(skill).map((m) => skill.presets?.find((p) => p.id === m.presetId)).filter((p): p is SkillPreset => !!p)
+              const presetTiles = skillMedia(skill).filter((m) => m.presetId && skill.presets?.some((p) => p.id === m.presetId))
               const pickOnLeft = presetTiles.length > 0
               // #636 PRODUCT HARD LOCK: C5 nearMiss Examples-only → remove entire 「当前模板」 row.
               // Presets are default params only; never expose as select. FieldSelect+custom chevron
@@ -197,13 +205,20 @@ export function SkillRunDialog({ skill, presetId, onClose, run = newProject }: {
               return (
               <div className="ca-skillrun__current" data-testid="skill-run-current">
                 <span className="ca-skillrun__currentlabel">{t('skillRun.currentTemplate')}</span>
-                <div className="ca-skillrun__currentrow">
-                  <span className="ca-skillrun__currentthumb">
-                    {presetImage(skill, chosen) ? <img src={presetImage(skill, chosen)!} alt="" /> : <span className="ca-icon">{Icons.skill}</span>}
+                {(() => {
+                  // #748: name / thumb / usage from the SELECTED media item (click only — hover never changes this row).
+                  const sel = selectedMedia(skill, chosen.id)
+                  const thumb = sel ? (sel.type === 'video' ? sel.cover : sel.type === 'stack' ? (sel.children?.[0]?.url ?? sel.url) : sel.url) : presetImage(skill, chosen)
+                  const usage = sel?.usage ?? getSkillUsage(skill.id)
+                  return <div className="ca-skillrun__currentrow" data-testid="skill-run-current-row" data-media={sel?.type}>
+                  <span className="ca-skillrun__currentthumb" data-testid="skill-run-current-thumb">
+                    {thumb ? <img src={thumb} alt="" /> : <span className="ca-icon">{Icons.skill}</span>}
                   </span>
-                  <span className="ca-skillrun__currentname">{loc(chosen.name)}</span>
+                  <span className="ca-skillrun__currentname" data-testid="skill-run-current-name">{loc(sel?.name ?? chosen.name)}</span>
+                  <span className="ca-skillrun__currentusage" data-testid="skill-run-current-usage">{t('skillRun.usageCount', String(usage))}</span>
                   <span className="ca-skillrun__currenthint">{t('skillRun.pickLeft')}</span>
                 </div>
+                })()}
               </div>
               )
             })()}

@@ -1272,15 +1272,35 @@ body { background: var(--ca-float); }
 .ca-skillrun__zoom, .ca-skillrun__pick {
   transition: opacity var(--ca-skillrun-hover-dur) var(--ca-skillrun-hover-ease), transform var(--ca-skillrun-hover-dur) var(--ca-skillrun-hover-ease);
 }
-/* stack-expand: collapsed pile under the still; hover spreads a row of small thumbs; selected collapses again. */
-.ca-skillrun__stack { position: absolute; inset: auto 8px 8px 8px; height: 28%; display: flex; gap: 4px; z-index: 1; pointer-events: none; }
+/* stack-expand (design geometry 11-05): rest = 4-layer pile, top −2°, back layers ±5°..±8°;
+ * hover = fan to a row of 4–5 cards, rotation 0, gap 6–12px; selected → collapses back. Durations = TODO vars. */
+.ca-skillrun { --ca-skillrun-stack-gap: 8px; --ca-skillrun-stack-w: 56%; }
+.ca-skillrun__stack { position: absolute; inset: 10%; z-index: 1; pointer-events: none; }
 .ca-skillrun__stack img {
-  flex: 1 1 0; min-width: 0; height: 100%; object-fit: cover; border-radius: 4px; opacity: 0;
-  transform: translateX(calc(var(--i) * -100% - var(--i) * 4px + var(--i) * var(--ca-skillrun-stack-step)));
-  transition: transform var(--ca-skillrun-stack-dur) var(--ca-skillrun-stack-ease), opacity var(--ca-skillrun-stack-dur) var(--ca-skillrun-stack-ease);
+  position: absolute; top: 0; bottom: 0; left: calc((100% - var(--ca-skillrun-stack-w)) / 2); width: var(--ca-skillrun-stack-w);
+  height: 100%; object-fit: cover; border-radius: 6px; box-shadow: 0 2px 6px rgb(0 0 0 / .18);
+  z-index: calc(10 - var(--i)); transform: rotate(var(--r, 0deg));
+  transition: left var(--ca-skillrun-stack-dur) var(--ca-skillrun-stack-ease), width var(--ca-skillrun-stack-dur) var(--ca-skillrun-stack-ease), transform var(--ca-skillrun-stack-dur) var(--ca-skillrun-stack-ease);
 }
+.ca-skillrun__stack img:nth-child(1) { --r: -2deg; }
+.ca-skillrun__stack img:nth-child(2) { --r: 5deg; }
+.ca-skillrun__stack img:nth-child(3) { --r: -7deg; }
+.ca-skillrun__stack img:nth-child(4) { --r: 8deg; }
+.ca-skillrun__stack img:nth-child(n+5) { --r: -5deg; }
+.ca-skillrun__preset:not([data-on]):hover .ca-skillrun__stack,
+.ca-skillrun__preset:not([data-on]):focus-visible .ca-skillrun__stack { inset: 10% 6px; }
 .ca-skillrun__preset:not([data-on]):hover .ca-skillrun__stack img,
-.ca-skillrun__preset:not([data-on]):focus-visible .ca-skillrun__stack img { opacity: 1; transform: none; }
+.ca-skillrun__preset:not([data-on]):focus-visible .ca-skillrun__stack img {
+  --w: calc((100% - (var(--n, 4) - 1) * var(--ca-skillrun-stack-gap)) / var(--n, 4));
+  width: var(--w); left: calc(var(--i) * (var(--w) + var(--ca-skillrun-stack-gap))); transform: none;
+}
+/* 「选择」 capsule ≈52×22 white top-right; expand icon ≈14×15 top-left; selected: 1px rgb(120,120,120) + dark ✓ replaces capsule */
+.ca-skillrun__pick { min-width: 52px; height: 22px; padding: 0 10px; box-sizing: border-box; border-radius: 11px; background: #fff; color: #1a1a1a; top: 8px; right: 8px; display: inline-flex; align-items: center; justify-content: center; }
+.ca-skillrun__preset[data-on] .ca-skillrun__pick { opacity: 0 !important; }
+.ca-skillrun__zoom { top: 8px; left: 8px; }
+.ca-skillrun__zoom .ca-icon, .ca-skillrun__zoom svg { width: 14px; height: 15px; }
+.ca-skillrun__preset[data-on] .ca-skillrun__presetimg::after { box-shadow: inset 0 0 0 1px var(--ca-skillrun-selected-stroke); }
+.ca-skillrun { --ca-skillrun-selected-stroke: rgb(120 120 120); }
 /* right panel: label→control 8, field gap 24; text 36h grey; Start disabled light grey until required filled */
 .ca-skillrun__body > .ca-skillform { gap: 24px; }
 .ca-skillrun .ca-skillform .ca-skillrun__field > .ca-panel__input { background: var(--ca-field); border: 0; }

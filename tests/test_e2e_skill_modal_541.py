@@ -75,6 +75,7 @@ async def test_zoom_select_and_gating(app_url):  # noqa: F811
         assert await tile.get_by_test_id("skill-run-preset").get_attribute("aria-checked") == "true"
         assert await tile.locator(".ca-skillrun__check").count() == 1
         # #576: selection ring on image only (344×258); title outside below
+        await pg.wait_for_timeout(400)  # #748 ring fades in over --ca-skillrun-select-dur
         ring = await tile.locator(".ca-skillrun__presetimg").evaluate(
             "el => { const a = getComputedStyle(el, '::after'); const r = el.getBoundingClientRect();"
             " return [a.boxShadow, Math.round(r.width), Math.round(r.height)] }")

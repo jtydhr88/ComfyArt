@@ -22,6 +22,8 @@ export interface SkillMediaItem {
   type: 'image' | 'video' | 'stack'; url: string; ratio?: string; cover?: string
   /** links the tile to a preset (selection → 当前模板 + run params) */
   presetId?: string; name?: LocText; children?: SkillMediaItem[]
+  /** TODO(#748): usage count for 当前模板; rename to the skill/get field once raw lands. */
+  usage?: number
 }
 /** #494 — one field of the skill's input dialog. Label / placeholder / default / required all come from here. */
 export interface SkillInput {
@@ -1090,9 +1092,15 @@ export function skillRunParams(skill: Skill, values: SkillValues, presetId?: str
 /** #748 §C — left tiles: explicit skill.media[] wins; else derived from presets (image/video; preset.stack → stack children). */
 export function skillMedia(skill: Skill): SkillMediaItem[] {
   if (skill.media?.length) return skill.media
-  return (skill.presets ?? []).filter((p) => !!(p.image || p.video)).map((p): SkillMediaItem => {
+  // TEMP(#748) placeholder until skill/get → media[] script: examples carousel items (no presetId) + preset tiles.
+  const ex = (skill.examples ?? []).map((url): SkillMediaItem => ({ type: isSkillMediaVideo(url) ? 'video' : 'image', url }))
+  return [...ex, ...(skill.presets ?? []).filter((p) => !!(p.image || p.video)).map((p): SkillMediaItem => {
     const url = presetImage(skill, p) ?? p.image ?? ''
     if (p.stack?.length) return { type: 'stack', url, presetId: p.id, name: p.name, children: p.stack.map((c) => ({ type: 'image', url: c })) }
-    return { type: p.video ? 'video' : 'image', url, ...(p.video ? { cover: url } : {}), presetId: p.id, name: p.name }
-  })
+    return { type: p.video ? 'video' : 'image', url: p.video ? (presetVideo(skill, p) ?? url) : url, ...(p.video ? { cover: url } : {}), presetId: p.id, name: p.name }
+  })]
+}
+/** #748 — 当前模板 row data from the selected media item (click only; hover never changes it). */
+export function selectedMedia(skill: Skill, presetId: string | null): SkillMediaItem | null {
+  return skillMedia(skill).find((m) => m.presetId && m.presetId === presetId) ?? null
 }
