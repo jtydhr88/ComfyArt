@@ -86,10 +86,10 @@ def test_builtin_preset_images_unique(got):
     covers = [u for u in imgs if "494/covers-v4/" in u]
     assert len(washed) == 27  # #751 HOLD: +2 motion template covers (wash569). #748 Final: product 6 washed (+1 SaaS placeholder) / brand 6 / packaging 5 + character 8 (raw 7 + ext)
     assert all("raw.githubusercontent.com/ganjmeng/ComfyArt/" in u for u in washed)
-    assert sum("569/wash/character/templates/" in u for u in washed) == 8 and sum("569/wash/motion/templates/" in u for u in washed) == 0
+    assert sum("569/wash/character/templates/" in u for u in washed) == 8 and sum("569/wash/motion/templates/" in u for u in washed) == 2  # #751 HOLD: own covers
     assert sum("541/wash/product/" in u for u in washed) == 6
     assert sum("541/wash/brand/" in u for u in washed) == 6 and sum("541/wash/packaging/" in u for u in washed) == 5
-    assert len(set(washed)) == 25  # no shared cover fallback across washed presets
+    assert len(set(washed)) == 27  # no shared cover fallback across washed presets
     assert covers == []  # #748 Final: the new-6 are example cards now (no presets → no cover fallback)
 
 
