@@ -89,3 +89,24 @@ def test_at_menu_assets_then_model_and_no_ref_chip():
     assert ".ca-composer > .ca-composer__suggest { position: absolute" in css
     assert "width: 255px" in css.split(".ca-composer__suggest.ca-at-menu {")[1].split("}")[0]
     assert "Icons.cube" in read("src/ui/ModelPrefs.tsx")
+
+
+def test_no_outputting_shell_while_question_open_or_just_ended():
+    """HOLD 98fa5b44: no empty 输出中… / Outputting… box with the docked question, after Skip/answer before tokens."""
+    msg = read("src/ui/ChatMessage.tsx")
+    quiet = msg.split("export function askQuiet(m: BotMessage)")[1].split("\n}\n")[0]
+    # last ask (pending, answered or skipped) quiets until real reply text arrives
+    assert "b.type === 'ask'" in quiet and "b.type === 'text'" in quiet and ".trim() !== ''" in quiet
+    blocks = msg.split("export function AssistantBlocks")[1].split("export function UserMessage")[0]
+    assert "const quiet = askQuiet(m)" in blocks
+    assert "b.type === 'ask' || b.type === 'task'" not in blocks  # an ask no longer spawns an outputting row
+    assert blocks.count("!done && !quiet && proc.length") == 2  # both outputting rows gated
+    panel = read("src/ui/AgentPanel.tsx")
+    assert "m.status === 'streaming' && !askQuiet(m) && (" in panel
+
+
+def test_generating_without_question_still_outputting():
+    msg = read("src/ui/ChatMessage.tsx")
+    assert "kind: 'outputting'" in msg and "label: processLabel('outputting', true)" in msg
+    assert "<div className=\"ca-process__status\">{live.label}</div>" in msg
+    assert "t('chatMessage.outputting')" in read("src/ui/AgentPanel.tsx")

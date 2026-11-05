@@ -11,7 +11,7 @@ import { botSettingsOpenAtom } from './AgentPicker'
 import { dockAtom } from './chatDock'
 import { libraryTabAtom } from './LibraryPanel'
 import { sideAtom } from './SidePanel'
-import { AssistantBlocks, isDockedQuestion, renderAsk, stoppedSubmitted, textOf, UserMessage } from './ChatMessage'
+import { AssistantBlocks, askQuiet, isDockedQuestion, renderAsk, stoppedSubmitted, textOf, UserMessage } from './ChatMessage'
 import { Composer, FILE_ACCEPT } from './Composer'
 import { Icons, LoomiMono } from './icons'
 import { NoticeCenter } from './NoticeCenter'
@@ -214,7 +214,8 @@ export function AgentPanel({ editor, projectId, max, onMax, onCollapse, onError 
           : (
             <div key={m.id} className={fading.has(m.id) ? 'ca-chat__bot ca-chat__bot--stopping' : 'ca-chat__bot'}>
               <AssistantBlocks editor={editor} m={m} dockAsks />
-              {m.status === 'streaming' && (
+              {/* #763: no streaming footer while a question is open / just answered or skipped and no reply text yet */}
+              {m.status === 'streaming' && !askQuiet(m) && (
                 <div className="ca-chat__thinking">
                   <span className="ca-chat__thinkicon"><span className="ca-icon">{Icons.think}</span></span>
                   <span className="ca-chat__thinklabel">{/* #437: a plain-text reply in progress only reads 输出中…; a reasoning turn's own Thought row carries the live label */}
