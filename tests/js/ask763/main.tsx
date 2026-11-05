@@ -29,6 +29,7 @@ const scenes: Record<string, any[]> = {
   'skip-after': [...head, ask('answered', { answers: { q1: { selected: [] } } }), res('u1', 'mcp__comfyart__ask_user', '{"skipped":true}')],
   'answer-before-tokens': [...head, ask('answered', { answers: { q1: { selected: ['m'] } } }), res('u1', 'mcp__comfyart__ask_user', '{"selected":["m"]}')],
   'answer-then-text': [...head, ask('answered', { answers: { q1: { selected: ['m'] } } }), res('u1', 'mcp__comfyart__ask_user', '{}'), { type: 'text', text: lang === 'en' ? 'Going minimal.' : '那就走极简风。' }],
+  'other-typed': [...head, ask('answered', { answers: { q1: { selected: [], other_text: lang === 'en' ? 'Hand-drawn ink' : '手绘墨线' } } }), res('u1', 'mcp__comfyart__ask_user', '{}')],
   'gen-no-question': [{ type: 'thinking', text: 'Plan.' }, use('c1', 'mcp__comfyart__canvas_read'), res('c1', 'mcp__comfyart__canvas_read')],
 }
 const scene = q.get('scene') ?? 'q-open'

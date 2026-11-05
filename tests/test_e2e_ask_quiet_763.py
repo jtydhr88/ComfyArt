@@ -47,12 +47,19 @@ def _state(browser, bundle, scene, lang, theme="light"):
     page.goto(f"{bundle}/index.html?lang={lang}&theme={theme}&scene={scene}")
     page.wait_for_function("window.__ready")
     page.wait_for_timeout(200)
+    bubble = page.locator('[data-testid="ask-answer-bubble"]')
+    qmemo = page.locator(".ca-qmemo").count()
     st = {
         "status": page.locator(".ca-process__status").count(),
         "outRow": page.locator('.ca-process__row[data-kind="outputting"]').count(),
         "footer": page.locator('[data-testid="footer"]').count(),
         "dock": page.locator('[data-testid="question-dock"]').count(),
         "botText": page.locator('[data-testid="bot"]').inner_text(),
+        "qmemo": qmemo,
+        "bubbleCount": bubble.count(),
+        "bubbleAsk": bubble.get_attribute("data-ask") if bubble.count() else None,
+        "bubbleText": bubble.inner_text() if bubble.count() else "",
+        "bubbleIsUser": bubble.evaluate("el => el.classList.contains('ca-chat__user')") if bubble.count() else False,
     }
     page.close()
     return st
@@ -71,3 +78,42 @@ def test_no_outputting_shell_with_or_right_after_question(browser, bundle, scene
 def test_generating_without_question_keeps_outputting(browser, bundle, lang):
     st = _state(browser, bundle, "gen-no-question", lang)
     assert st["outRow"] == 1 and st["status"] == 1 and OUTPUTTING[lang] in st["botText"], st
+
+
+# --- #766: answered/skip → right user bubble, never left grey 问/答 bar ---
+SKIP_COPY = {"zh": "跳过这个问题", "en": "Skip this question"}
+QA_PREFIX = {"zh": ("问:", "答:"), "en": ("Q:", "A:")}
+
+
+@pytest.mark.parametrize("lang", ["zh", "en"])
+def test_skip_is_right_user_bubble(browser, bundle, lang):
+    st = _state(browser, bundle, "skip-after", lang)
+    assert st["qmemo"] == 0 and st["bubbleCount"] == 1 and st["bubbleAsk"] == "skip", st
+    assert st["bubbleIsUser"] is True
+    assert st["bubbleText"].strip() == SKIP_COPY[lang], st
+    assert "问 /" not in st["botText"] and "Q /" not in st["botText"]
+
+
+@pytest.mark.parametrize("lang", ["zh", "en"])
+def test_answer_is_right_user_bubble_with_qa_lines(browser, bundle, lang):
+    st = _state(browser, bundle, "answer-before-tokens", lang)
+    assert st["qmemo"] == 0 and st["bubbleCount"] == 1 and st["bubbleAsk"] == "answer", st
+    assert st["bubbleIsUser"] is True
+    q, a = QA_PREFIX[lang]
+    text = st["bubbleText"]
+    assert q in text and a in text, st
+    # label for option 'm' is 极简 / Minimal
+    assert ("极简" in text) or ("Minimal" in text), st
+    # not the old left grey process-style bar
+    assert st["bubbleText"].count("\n") >= 1 or "\n" in repr(st["bubbleText"])
+
+
+@pytest.mark.parametrize("lang", ["zh", "en"])
+def test_other_typed_is_right_user_bubble(browser, bundle, lang):
+    st = _state(browser, bundle, "other-typed", lang)
+    assert st["qmemo"] == 0 and st["bubbleCount"] == 1 and st["bubbleAsk"] == "answer", st
+    q, a = QA_PREFIX[lang]
+    text = st["bubbleText"]
+    assert q in text and a in text, st
+    assert ("Hand-drawn ink" in text) or ("手绘墨线" in text), st
+    assert len(text.splitlines()) >= 2, st
