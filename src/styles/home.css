@@ -748,6 +748,8 @@ body { background: var(--ca-float); }
   height: var(--ca-chip-h); padding: var(--ca-chip-py) var(--ca-chip-px); box-sizing: border-box; border: var(--ca-chip-border);
   border-radius: var(--ca-chip-radius); background: var(--ca-chip-bg); color: var(--ca-chip-fg);
   font: var(--ca-chip-font); cursor: pointer;
+  /* #760 — Skills category chips (For you / E-commerce / …): ~200ms; NOT the card 「选择」 pill (100ms). */
+  transition: background-color 200ms ease, color 200ms ease, border-color 200ms ease;
 }
 .ca-skills__chip:hover { background: var(--ca-chip-hover-bg); }
 .ca-skills__chip[data-on] { background: var(--ca-chip-on-bg); color: var(--ca-chip-on-fg); border-color: var(--ca-chip-on-border); }
@@ -1000,7 +1002,7 @@ body { background: var(--ca-float); }
 .ca-skillrun__preset[data-on] .ca-skillrun__presetimg::after {
   box-shadow: inset 0 0 0 1px var(--ca-text);
 }
-.ca-skillrun__presetimg img, .ca-skillrun__presetimg video { width: 100%; height: 100%; object-fit: contain; }
+.ca-skillrun__presetimg > img, .ca-skillrun__presetimg > video { width: 100%; height: 100%; object-fit: contain; }
 /* #622 — preset.video muted hover/focus overlay (still underneath; no-video path unchanged). */
 .ca-skillrun__preset-video {
   position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; display: block;
@@ -1275,13 +1277,15 @@ body { background: var(--ca-float); }
  * rotate +5/−5/+10, z 3/2/1, centered inside the card. Focus (hover OR selected): 3 cells 32.11%×100%,
  * x = 0 / 33.94% / 67.89%, no scale/rotate, img contain (≈16:9 centered). 400ms #751 easing both ways. */
 .ca-skillrun { --ca-skillrun-stack-inset: 8px; --ca-skillrun-stack-cell: 32.11%; --ca-skillrun-stack-pitch: 33.94%; }
-.ca-skillrun__presetimg > img { object-fit: contain; object-position: center; }
+.ca-skillrun__presetimg > img, .ca-skillrun__presetimg > video { object-fit: contain; object-position: center; }
 .ca-skillrun__preset:has(.ca-skillrun__stack) .ca-skillrun__presetimg > img { opacity: 0; }
 .ca-skillrun__stack { position: absolute; inset: var(--ca-skillrun-stack-inset); z-index: 1; pointer-events: none; }
-.ca-skillrun__stack > * {
+.ca-skillrun__stack > *,
+.ca-skillrun__presetimg .ca-skillrun__stack > * {
   position: absolute; left: 0; top: 0; width: 100%; height: 76.03%;
   object-fit: cover; object-position: center; border-radius: 6px;
   z-index: calc(3 - var(--i));
+  transform-origin: center center;
   transform: translateY(15.75%) scale(.757178) rotate(var(--r, 0deg));
   transition: left var(--ca-skillrun-stack-dur) var(--ca-skillrun-stack-ease),
               width var(--ca-skillrun-stack-dur) var(--ca-skillrun-stack-ease),
@@ -1293,7 +1297,10 @@ body { background: var(--ca-float); }
 .ca-skillrun__stack > *:nth-child(3) { --r: 10deg; }
 .ca-skillrun__preset:hover .ca-skillrun__stack > *,
 .ca-skillrun__preset:focus-visible .ca-skillrun__stack > *,
-.ca-skillrun__preset[data-on] .ca-skillrun__stack > * {
+.ca-skillrun__preset[data-on] .ca-skillrun__stack > *,
+.ca-skillrun__preset:hover .ca-skillrun__presetimg .ca-skillrun__stack > *,
+.ca-skillrun__preset:focus-visible .ca-skillrun__presetimg .ca-skillrun__stack > *,
+.ca-skillrun__preset[data-on] .ca-skillrun__presetimg .ca-skillrun__stack > * {
   width: var(--ca-skillrun-stack-cell); height: 100%; left: calc(var(--i) * var(--ca-skillrun-stack-pitch));
   object-fit: contain; transform: none;
 }

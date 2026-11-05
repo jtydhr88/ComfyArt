@@ -36,3 +36,37 @@ def test_stack_never_padded_with_pending():
     assert "stack.length > 1" in DLG
     seg = DLG[DLG.index('data-testid="skill-run-stack"'):][:400]
     assert "PendingWash" not in seg and "pending-wash" not in seg
+
+def test_stack_pads_with_real_dup_never_pending():
+    """depth>1 + ≥1 real → pad to min(depth,3) by duplicating last real; never PENDING_WASH."""
+    assert "Never PENDING_WASH fillers" in RAW
+    assert "while (stack.length < target) stack.push(stack[stack.length - 1]" in RAW
+    assert "j === 0 ? image : PENDING_WASH" not in RAW
+    assert "target > 1 && real.length > 0" in RAW
+
+
+def test_skills_category_chip_200ms_not_select_pill():
+    """Category chips For you / E-commerce / … = 200ms; card 「选择」/zoom stay 100ms."""
+    chip = CSS.split(".ca-skills__chip {", 1)[1].split("}", 1)[0]
+    assert "200ms" in chip
+    assert "--ca-skillrun-hover-dur: 100ms" in CSS
+    assert "--ca-skillrun-hover-dur: 200ms" not in CSS
+    # #760 override (after the legacy 150ms rule) must drive pick/zoom via the 100ms token
+    assert CSS.count(".ca-skillrun__zoom, .ca-skillrun__pick {") >= 2
+    override = CSS.rsplit(".ca-skillrun__zoom, .ca-skillrun__pick {", 1)[1].split("}", 1)[0]
+    assert "var(--ca-skillrun-hover-dur)" in override
+
+
+def test_presetimg_contain_is_direct_child_only():
+    """Cover/video contain must not override stack layer object-fit via descendant selector."""
+    assert ".ca-skillrun__presetimg > img" in CSS
+    # bare `.ca-skillrun__presetimg img` (no >) would steal stack cover
+    import re
+    bare = re.findall(r"\.ca-skillrun__presetimg\s+img\b", CSS)
+    assert not bare, bare
+
+def test_rest_pile_transform_origin_center():
+    seg = CSS.split("#760 — product DOM")[1].split("「选择」")[0]
+    assert "transform-origin: center center" in seg
+    assert "scale(.757178)" in seg
+

@@ -75,8 +75,14 @@ export function applyRaw748(skill: Skill): Skill {
     const old = skill.presets?.[i]
     const image = old?.image ?? WASH_T[skill.id]?.[i] ?? PENDING_WASH // the template's OWN wash (1:1, fixed per card), else the unified placeholder
     // #760: rest = static multi-image pile from REAL washed media[]; focus expands. Never PENDING_WASH fillers.
-    const real = (WASH_S[skill.id]?.[i] ?? []).filter((u): u is string => !!u && !isPendingWash(u)).slice(0, t.depth)
-    const stack = t.depth > 1 && real.length > 1 ? real : undefined
+    // raw media count wins; if fewer than min(depth,3) layers, duplicate the last real URL (same image × N). Empty real → no stack (single-cover fallback).
+    const target = Math.min(Math.max(t.depth, 0), 3)
+    const real = (WASH_S[skill.id]?.[i] ?? []).filter((u): u is string => !!u && !isPendingWash(u)).slice(0, target)
+    let stack: string[] | undefined
+    if (target > 1 && real.length > 0) {
+      stack = real.slice()
+      while (stack.length < target) stack.push(stack[stack.length - 1]!)
+    }
     const pendingWash = image === PENDING_WASH ? [0] : []
     // #751 HOLD: only a template's own video; the skill-level video is never shared across template cards
     const vid = old?.video

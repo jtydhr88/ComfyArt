@@ -75,6 +75,7 @@ def test_chips_and_vertical_rhythm() -> None:
     assert "gap: var(--ca-chip-gap)" in chips
     chip = _rule(".ca-skills__chip")
     assert "var(--ca-chip-h)" in chip and "var(--ca-chip-py)" in chip
+    assert "200ms" in chip  # #760 category chip transition (not skillrun select pill)
     assert "--ca-chip-h: 30px" in CSS and "--ca-chip-on-bg: rgba(0, 0, 0, .08)" in CSS
     scroll = _rule(".ca-skills__scroll")
     assert "padding: 8px 60px 96px" in scroll and "overflow-y: auto" in scroll  # chip→card ~28
