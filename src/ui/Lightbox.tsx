@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { atom, useValue, type Editor, type TLShapeId } from 'tldraw'
 
+import { imageUrl } from '../comfy'
 import { mediaAsset } from '../jobs'
 import { Icons } from './icons'
 import { useEscape } from './escape'
@@ -50,7 +51,7 @@ export function Lightbox({ editor }: { editor: Editor }) {
 
   return (
     <div className="ca-lightbox" onPointerDown={(e) => { e.stopPropagation(); if (e.target === e.currentTarget) lightboxAtom.set(null) }} onWheel={(e) => setZoom((z) => Math.min(8, Math.max(0.2, z * (e.deltaY < 0 ? 1.1 : 0.9))))}>
-      {item.video ? <video src={item.src} controls autoPlay muted={muted} style={style} /> : <img src={item.src} alt="" style={style} draggable={false} />}
+      {item.video ? <video src={item.src} controls autoPlay muted={muted} style={style} /> : <img src={imageUrl(item.src)} alt="" style={style} draggable={false} />}
       <button type="button" className="ca-lightbox__nav" data-side="left" title={t('lightbox.previous')} onClick={() => go(-1)}><span className="ca-icon">{Icons.next}</span></button>
       <button type="button" className="ca-lightbox__nav" data-side="right" title={t('lightbox.next')} onClick={() => go(1)}><span className="ca-icon">{Icons.next}</span></button>
       <div className="ca-bar ca-lightbox__bar">

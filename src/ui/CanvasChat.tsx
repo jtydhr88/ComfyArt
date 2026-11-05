@@ -3,6 +3,7 @@ import { useEditor, useValue, type TLShapeId } from 'tldraw'
 
 import { eachLine, eachRuns, generateDirect, isRefShape, refKindOf, sendToAgent, srcOf, type RefShape } from '../agent'
 import { botEnabledAtom } from '../bot'
+import { imageUrl } from '../comfy'
 import { canvasChatAtom, promptFor, renumber, tagOf } from '../canvasChat'
 import { errorText } from '../jobs'
 import { EachButton, EachRole, useEach } from './EachToggle'
@@ -17,7 +18,7 @@ const EDGE = 8
 function Thumb({ s, src }: { s: RefShape; src: string }) {
   const kind = refKindOf(s)
   if (kind === 'audio') return <span className="ca-icon">{Icons.music}</span>
-  return kind === 'video' ? <video src={src} muted preload="metadata" /> : <img src={src} alt="" />
+  return kind === 'video' ? <video src={src} muted preload="metadata" /> : <img src={imageUrl(src)} alt="" />
 }
 
 export function CanvasChat({ onError }: { onError: (msg: string) => void }) {

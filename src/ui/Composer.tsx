@@ -6,6 +6,7 @@ import { EachButton, EachRole, useEach } from './EachToggle'
 import { RefFrameButton } from './RefFrameButton'
 import { placeAsset } from '../assets'
 import { botEnabledAtom, messagesAtom } from '../bot'
+import { imageUrl } from '../comfy'
 import { VIDEO_RATIOS } from '../genOptions'
 import { errorText } from '../jobs'
 import { KIND_LABELS, libraryAtom } from '../library'
@@ -42,7 +43,7 @@ function imageName(editor: Editor, s: RefShape) {
 function RefThumb({ editor, s }: { editor: Editor; s: RefShape }) {
   const kind = refKindOf(s)
   if (kind === 'audio') return <span className="ca-icon">{Icons.music}</span>
-  return kind === 'video' ? <video src={srcOf(editor, s) ?? ''} muted preload="metadata" /> : <img src={srcOf(editor, s) ?? ''} alt="" />
+  return kind === 'video' ? <video src={srcOf(editor, s) ?? ''} muted preload="metadata" /> : <img src={imageUrl(srcOf(editor, s) ?? '')} alt="" />
 }
 
 function DirectPills({ editor, video }: { editor: Editor; video: boolean }) {
@@ -160,7 +161,7 @@ export function Composer({ editor, busy, onError }: { editor: Editor; busy: bool
           ))}
           {mentions.map((s) => (
             <button key={s.id} type="button" className="ca-menu__item" onClick={() => { addRef(s.id); clearAt() }}>
-              {s.type === 'image' ? <img className="ca-composer__mini" src={srcOf(editor, s) ?? ''} alt="" /> : <span className="ca-icon">{s.type === 'video' ? Icons.video : Icons.music}</span>}<span className="ca-menu__grow">{imageName(editor, s)}</span>
+              {s.type === 'image' ? <img className="ca-composer__mini" src={imageUrl(srcOf(editor, s) ?? '')} alt="" /> : <span className="ca-icon">{s.type === 'video' ? Icons.video : Icons.music}</span>}<span className="ca-menu__grow">{imageName(editor, s)}</span>
             </button>
           ))}
         </div>

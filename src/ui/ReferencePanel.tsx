@@ -2,7 +2,7 @@ import { useRef, useState } from 'react'
 import { createShapeId, useValue, type Editor, type TLImageShape } from 'tldraw'
 
 import { draftAtom, extraRefsAtom, srcOf } from '../agent'
-import { refFromUrl, uploadImage, viewUrl } from '../comfy'
+import { imageUrl, refFromUrl, uploadImage, viewUrl } from '../comfy'
 import { createGenerator, generate } from '../generate'
 import { type ErrorSink, errorText, placeMedia, toMedia } from '../jobs'
 import { ask, stripThink } from '../llm'
@@ -159,7 +159,7 @@ export function ReferencePanel({ editor, onError }: { editor: Editor; onError: E
       {shown.map((r) => (
         <div key={keyOf(r)} className="ca-ref">
           <div className="ca-ref__img">
-            <img src={r.src} alt="" />
+            <img src={imageUrl(r.src)} alt="" />
             <Popover
               open={menu === keyOf(r)}
               onOpenChange={(o) => setMenu(o ? keyOf(r) : null)}

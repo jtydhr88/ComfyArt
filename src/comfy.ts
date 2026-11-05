@@ -78,6 +78,8 @@ export const thumbSize = (edge: number) => THUMB_SIZES.find((s) => edge <= s)
 
 export const isViewUrl = (src: string) => src.startsWith('/api/view?')
 
+export const imageUrl = (src: string) => isViewUrl(src) && /\.svg$/i.test(new URLSearchParams(src.slice(10)).get('filename') ?? '') ? thumbUrl(src) : src
+
 export function refFromUrl(src: string): ImageRef {
   const q = new URL(src, location.origin).searchParams
   return { filename: q.get('filename') ?? '', subfolder: q.get('subfolder') ?? '', type: q.get('type') ?? 'input' }

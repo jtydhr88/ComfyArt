@@ -53,4 +53,7 @@ async def thumb(request: web.Request) -> web.StreamResponse:
     headers = {"Cache-Control": "no-cache"}
     if path.endswith(".webp"):
         headers["Content-Type"] = "image/webp"
+    elif path.lower().endswith(".svg"):
+        headers.update({"Content-Type": "image/svg+xml", "Content-Security-Policy": "sandbox; default-src 'none'; style-src 'unsafe-inline'",
+                        "X-Content-Type-Options": "nosniff"})
     return web.FileResponse(path, headers=headers)
