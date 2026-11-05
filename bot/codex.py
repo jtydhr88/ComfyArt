@@ -23,7 +23,8 @@ from ._cli_common import (
     run_command,
 )
 from .external_context import apply_cold_start
-from .guide import AGENT_GUIDE
+from .agent_host import AgentHost
+from .guide import HOST, resolve_host
 from .providers import (
     AgentProvider,
     BotEvent,
@@ -75,11 +76,7 @@ def resolve_codex_command() -> Optional[list[str]]:
     return None
 
 
-_AGENT_INSTRUCTIONS = (
-    "# ComfyArt Agent\n\n" + AGENT_GUIDE + "\n\n"
-    "Do not use shell, file, web, or desktop-control tools; everything goes "
-    "through the comfyart MCP tools.\n"
-)
+_AGENT_INSTRUCTIONS = HOST.codex_instructions
 
 
 def read_codex_config() -> dict:
@@ -92,14 +89,15 @@ def read_codex_config() -> dict:
         return {}
 
 
-def write_agent_instructions(home: str) -> Path:
+def write_agent_instructions(home: str, text: Optional[str] = None) -> Path:
+    text = _AGENT_INSTRUCTIONS if text is None else text
     path = Path(home) / "AGENTS.md"
     try:
         existing = path.read_text(encoding="utf-8") if path.exists() else ""
     except OSError:
         existing = ""
-    if existing != _AGENT_INSTRUCTIONS:
-        path.write_text(_AGENT_INSTRUCTIONS, encoding="utf-8")
+    if existing != text:
+        path.write_text(text, encoding="utf-8")
     return path
 
 
@@ -243,7 +241,8 @@ class CodexCodeProvider(AgentProvider):
     id = "codex"
     label = "Codex"
 
-    def __init__(self, *, home_dir: str) -> None:
+    def __init__(self, *, host: Optional[AgentHost] = None, home_dir: str) -> None:
+        self._host = resolve_host(host)
         self._home_dir = home_dir
         self._probe_cache: Optional[tuple[float, ProviderStatus]] = None
 
@@ -252,7 +251,7 @@ class CodexCodeProvider(AgentProvider):
 
     def _resolve_home(self) -> str:
         os.makedirs(self._home_dir, exist_ok=True)
-        write_agent_instructions(self._home_dir)
+        write_agent_instructions(self._home_dir, self._host.codex_instructions)
         return self._home_dir
 
     def _detect_logged_in(self) -> bool:

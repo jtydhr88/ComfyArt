@@ -16,7 +16,8 @@ from ._cli_common import (
 )
 from . import lms
 from . import robustness as _rb
-from .guide import AGENT_GUIDE, CORE_MCP_TOOLS, PAID_TOOLS
+from .agent_host import AgentHost
+from .guide import AGENT_GUIDE, CORE_MCP_TOOLS, PAID_TOOLS, resolve_host  # noqa: F401
 from .plan_quote import CANCEL_TEXT, QUOTE_TOOL, canon_key
 from .providers import (
     AgentProvider,
@@ -1143,8 +1144,11 @@ async def test_local_llm(*, base_url: str, api_key: str = "", model: str = "",
 class LocalLlmProvider(AgentProvider):
     id = "local-llm"
     label = "Local LLM"
+    # #754 (kit): LM Studio frees VRAM for ComfyUI while waiting; hosted endpoints override this.
+    unloads_lms_during_waits = True
 
-    def __init__(self, *, base_url: Callable[[], str]) -> None:
+    def __init__(self, *, host: Optional[AgentHost] = None, base_url: Callable[[], str]) -> None:
+        self._host = resolve_host(host)
         self._base_url_source = base_url
         self._probe_cache: Optional[tuple[float, str, ProviderStatus]] = None
 
@@ -1156,7 +1160,7 @@ class LocalLlmProvider(AgentProvider):
 
     def _api_headers(self) -> dict:
         headers = {"Content-Type": "application/json"}
-        key = os.environ.get(_API_KEY_ENV, "")
+        key = os.environ.get(self._host.local_llm_key_env or _API_KEY_ENV, "")
         if key:
             headers["Authorization"] = f"Bearer {key}"
         return headers
@@ -1241,7 +1245,7 @@ class LocalLlmProvider(AgentProvider):
                        "params": {}}, timeout=30,
         )
         tools = (data.get("result") or {}).get("tools") or []
-        return [t for t in tools if t.get("name") in CORE_MCP_TOOLS]
+        return [t for t in tools if t.get("name") in self._host.core_tools]
 
     async def _mcp_call_tool(self, session: aiohttp.ClientSession,
                              endpoint: str, name: str,
@@ -1348,20 +1352,23 @@ class LocalLlmProvider(AgentProvider):
                                handle: TurnHandle) -> str:
         args = dict(args)
         args.setdefault("timeout_s", 170)
-        unloaded = bool(lms.lms_bin()) and await lms.unload_models()
+        unloaded = bool(self.unloads_lms_during_waits) and bool(lms.lms_bin()) and await lms.unload_models()
         try:
             raw = ""
             for _ in range(_MAX_WAIT_SLICES):
                 if handle.stop_requested:
                     break
                 raw, _images = await self._mcp_call_tool(
-                    session, endpoint, "wait_generation", args)
+                    session, endpoint, self._host.wait_tool or "wait_generation", args)
                 try:
                     data = json.loads(raw)
                 except ValueError:
                     break
                 if not isinstance(data, dict) or data.get("status") != "running":
                     break
+                # #754 (kit): resume after the last output already seen instead of re-reading it
+                if data.get("after_output_id") is not None:
+                    args["after_output_id"] = data["after_output_id"]
             return raw
         finally:
             if unloaded:

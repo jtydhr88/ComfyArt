@@ -9,6 +9,7 @@ from ..bot import (
     QwenCodeProvider,
     register_provider,
 )
+from ..bot.guide import HOST
 from ._common import app_path
 from .llm_key import is_wavespeed_url, llm_api_key
 from .settings import get_setting
@@ -44,6 +45,12 @@ class AgentLlmProvider(LocalLlmProvider):
         # #219: the in-process secret lets the built-in agent use the canvas tools while external MCP is off
         from .mcp import INTERNAL_HEADER, INTERNAL_TOKEN
         return {**LocalLlmProvider._mcp_headers(), INTERNAL_HEADER: INTERNAL_TOKEN}
+
+    @property
+    def unloads_lms_during_waits(self) -> bool:
+        """#754: a WaveSpeed (hosted) endpoint has no local LM Studio to unload/reload; local URLs keep it."""
+        base = self._base_url()
+        return not (base and is_wavespeed_url(base))
 
     async def probe(self) -> ProviderStatus:
         base = self._base_url()
@@ -93,11 +100,11 @@ class AgentLlmProvider(LocalLlmProvider):
 
 
 # #219: the built-in agent is listed first; external CLIs follow
-register_provider(AgentLlmProvider(base_url=lambda: str(get_setting("bot-local-llm-url"))))
-register_provider(ClaudeCodeProvider(home_dir=app_path("bot-home")))
-register_provider(CodexCodeProvider(home_dir=app_path("bot-home-codex")))
-register_provider(QwenCodeProvider(home_dir=app_path("bot-home-qwen")))
-register_provider(DeepSeekHarnessProvider(home_dir=app_path("bot-home-deepseek-harness")))
+register_provider(AgentLlmProvider(host=HOST, base_url=lambda: str(get_setting("bot-local-llm-url"))))
+register_provider(ClaudeCodeProvider(host=HOST, home_dir=app_path("bot-home")))
+register_provider(CodexCodeProvider(host=HOST, home_dir=app_path("bot-home-codex")))
+register_provider(QwenCodeProvider(host=HOST, home_dir=app_path("bot-home-qwen")))
+register_provider(DeepSeekHarnessProvider(host=HOST, home_dir=app_path("bot-home-deepseek-harness")))
 
 
 def user_policy_layer() -> dict:

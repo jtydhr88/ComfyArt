@@ -17,7 +17,8 @@ from ._cli_common import (
     run_command,
 )
 from .external_context import apply_cold_start
-from .guide import AGENT_GUIDE, COMFY_MCP_ALLOWED_TOOLS, CORE_MCP_TOOLS
+from .agent_host import COMFY_MCP_ALLOWED_TOOLS, AgentHost
+from .guide import resolve_host
 from .providers import (
     AgentProvider,
     EmitFn,
@@ -105,7 +106,9 @@ def resolve_qwen_command() -> Optional[list[str]]:
 
 
 def write_project_settings(home_dir: str, mcp_endpoint: str,
-                           comfy_mcp_argv: Optional[list[str]] = None) -> Path:
+                           comfy_mcp_argv: Optional[list[str]] = None,
+                           host: Optional[AgentHost] = None) -> Path:
+    host = resolve_host(host)
     path = Path(home_dir) / ".qwen" / "settings.json"
     path.parent.mkdir(parents=True, exist_ok=True)
     data: dict = {}
@@ -119,13 +122,13 @@ def write_project_settings(home_dir: str, mcp_endpoint: str,
     servers = data.get("mcpServers")
     if not isinstance(servers, dict):
         servers = {}
-    servers["comfyart"] = {
+    servers[host.name] = {
         "httpUrl": mcp_endpoint,
         "trust": True,
         "timeout": MCP_TOOL_TIMEOUT_MS,
-        "includeTools": list(CORE_MCP_TOOLS),
+        "includeTools": list(host.core_tools),
     }
-    allow = ["comfyart"]
+    allow = [host.name]
     if comfy_mcp_argv:
         servers["comfy"] = {
             "command": comfy_mcp_argv[0],
@@ -146,7 +149,8 @@ def write_project_settings(home_dir: str, mcp_endpoint: str,
     generator.setdefault("timeout", _LLM_REQUEST_TIMEOUT_MS)
     data["contentGenerator"] = generator
     path.write_text(json.dumps(data, indent=2), encoding="utf-8")
-    (Path(home_dir) / "QWEN.md").write_text(AGENT_GUIDE + "\n", encoding="utf-8")
+    if host.qwen_guide:
+        (Path(home_dir) / "QWEN.md").write_text(host.qwen_guide + "\n", encoding="utf-8")
     return path
 
 
@@ -154,7 +158,8 @@ class QwenCodeProvider(AgentProvider):
     id = "qwen-code"
     label = "Qwen Code"
 
-    def __init__(self, *, home_dir: str) -> None:
+    def __init__(self, *, host: Optional[AgentHost] = None, home_dir: str) -> None:
+        self._host = resolve_host(host)
         self._home_dir = home_dir
         self._probe_cache: Optional[tuple[float, ProviderStatus]] = None
 
@@ -230,7 +235,7 @@ class QwenCodeProvider(AgentProvider):
         home = self._resolve_home()
         if turn.mcp_endpoint:
             await asyncio.to_thread(write_project_settings, home,
-                                    turn.mcp_endpoint, turn.comfy_mcp_argv)
+                                    turn.mcp_endpoint, turn.comfy_mcp_argv, self._host)
         turn = apply_cold_start(turn)
         return await run_cli_turn(
             self._build_argv(turn),

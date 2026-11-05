@@ -4,6 +4,7 @@ import logging
 import time
 from typing import Any, Optional
 
+from .agent_host import AgentHost
 from ._acp import AcpError, AcpProcessError, AcpTransport
 from ._cli_common import (
     PROBE_CACHE_S,
@@ -122,7 +123,9 @@ class DeepSeekHarnessProvider(AgentProvider):
     label = "DeepSeek Harness"
     supports_branch = False
 
-    def __init__(self, *, home_dir: str) -> None:
+    def __init__(self, *, host: Optional[AgentHost] = None, home_dir: str) -> None:
+        from .guide import resolve_host
+        self._host = resolve_host(host)
         self._home_dir = home_dir
         self._probe_cache: Optional[tuple[float, Optional[list[str]], ProviderStatus]] = None
         self._catalog: list[dict] = []
