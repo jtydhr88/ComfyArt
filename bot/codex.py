@@ -22,7 +22,7 @@ from ._cli_common import (
     run_cli_turn,
     run_command,
 )
-from .guide import AGENT_GUIDE
+from .agent_host import AgentHost
 from .providers import (
     AgentProvider,
     BotEvent,
@@ -74,13 +74,6 @@ def resolve_codex_command() -> Optional[list[str]]:
     return None
 
 
-_AGENT_INSTRUCTIONS = (
-    "# ComfyArt Agent\n\n" + AGENT_GUIDE + "\n\n"
-    "Do not use shell, file, web, or desktop-control tools; everything goes "
-    "through the comfyart MCP tools.\n"
-)
-
-
 def read_codex_config() -> dict:
     cfg = Path.home() / ".codex" / "config.toml"
     if tomllib is None or not cfg.exists():
@@ -91,14 +84,14 @@ def read_codex_config() -> dict:
         return {}
 
 
-def write_agent_instructions(home: str) -> Path:
+def write_agent_instructions(home: str, text: str) -> Path:
     path = Path(home) / "AGENTS.md"
     try:
         existing = path.read_text(encoding="utf-8") if path.exists() else ""
     except OSError:
         existing = ""
-    if existing != _AGENT_INSTRUCTIONS:
-        path.write_text(_AGENT_INSTRUCTIONS, encoding="utf-8")
+    if existing != text:
+        path.write_text(text, encoding="utf-8")
     return path
 
 
@@ -242,7 +235,8 @@ class CodexCodeProvider(AgentProvider):
     id = "codex"
     label = "Codex"
 
-    def __init__(self, *, home_dir: str) -> None:
+    def __init__(self, *, host: AgentHost, home_dir: str) -> None:
+        self._host = host
         self._home_dir = home_dir
         self._probe_cache: Optional[tuple[float, ProviderStatus]] = None
 
@@ -251,7 +245,7 @@ class CodexCodeProvider(AgentProvider):
 
     def _resolve_home(self) -> str:
         os.makedirs(self._home_dir, exist_ok=True)
-        write_agent_instructions(self._home_dir)
+        write_agent_instructions(self._home_dir, self._host.codex_instructions)
         return self._home_dir
 
     def _detect_logged_in(self) -> bool:
@@ -307,7 +301,7 @@ class CodexCodeProvider(AgentProvider):
         if not isinstance(servers, dict):
             return args
         for server_id in servers:
-            if server_id != "comfyart":
+            if server_id != self._host.name:
                 args += ["-c", f"mcp_servers.{server_id}.enabled=false"]
         return args
 
@@ -336,9 +330,9 @@ class CodexCodeProvider(AgentProvider):
         flags = ["--json", "--skip-git-repo-check"]
         if turn.mcp_endpoint:
             flags += [
-                "-c", 'mcp_servers.comfyart.url="%s"' % turn.mcp_endpoint,
-                "-c", "mcp_servers.comfyart.required=true",
-                "-c", f"mcp_servers.comfyart.tool_timeout_sec={_MCP_TOOL_TIMEOUT_SEC}",
+                "-c", f'mcp_servers.{self._host.name}.url="{turn.mcp_endpoint}"',
+                "-c", f"mcp_servers.{self._host.name}.required=true",
+                "-c", f"mcp_servers.{self._host.name}.tool_timeout_sec={_MCP_TOOL_TIMEOUT_SEC}",
             ]
         flags += self._mcp_lockdown_args()
         flags += ["-c", "features.shell_tool=false"]

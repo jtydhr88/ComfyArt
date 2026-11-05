@@ -46,7 +46,7 @@ async def unload_models() -> bool:
         await _run(["unload", "--all"], timeout=60)
         return True
     except (OSError, RuntimeError) as e:
-        _log.warning("[ComfyArt/local-llm] model unload failed: %s", e)
+        _log.warning("[LM Studio] model unload failed: %s", e)
         return False
 
 
@@ -56,4 +56,4 @@ async def load_model(model: str) -> None:
     try:
         await _run(["load", model, "--identifier", model, "--gpu", "max", "--yes"])
     except (OSError, RuntimeError) as e:
-        _log.warning("[ComfyArt/local-llm] model reload failed: %s", e)
+        _log.warning("[LM Studio] model reload failed: %s", e)

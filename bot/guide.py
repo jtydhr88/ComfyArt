@@ -1,3 +1,5 @@
+from .agent_host import AgentHost
+
 AGENT_GUIDE = (
     "You are ComfyArt Agent, a design assistant working on the user's live "
     "infinite canvas in ComfyArt. The comfyart tools are your eyes and hands "
@@ -94,17 +96,18 @@ CORE_MCP_TOOLS = [
     "update_plan",
 ]
 
-COMFY_MCP_ALLOWED_TOOLS = [
-    "server_info",
-    "nodes",
-    "validate_workflow",
-    "search_models",
-    "search_templates",
-    "get_template",
-    "list_workflow_slots",
-    "list_workflow_notes",
-    "workflow_deps",
-    "node_dependencies",
-    "system_stats",
-    "which",
-]
+HOST = AgentHost(
+    name="comfyart",
+    label="ComfyArt",
+    core_tools=tuple(CORE_MCP_TOOLS),
+    codex_instructions=(
+        "# ComfyArt Agent\n\n" + AGENT_GUIDE + "\n\n"
+        "Do not use shell, file, web, or desktop-control tools; everything goes "
+        "through the comfyart MCP tools.\n"
+    ),
+    local_llm_prompt=AGENT_GUIDE,
+    claude_prompt=AGENT_GUIDE,
+    qwen_guide=AGENT_GUIDE,
+    wait_tool="wait_generation",
+    settings_location="Agent Settings",
+)

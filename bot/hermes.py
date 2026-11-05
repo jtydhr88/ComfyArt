@@ -8,6 +8,7 @@ from urllib.parse import urlsplit, urlunsplit
 
 from ._acp import AcpTransport
 from ._acp_provider import SESSION_TIMEOUT_S, AcpLaunch, AcpProvider
+from .agent_host import AgentHost
 from .providers import TurnRequest
 
 _log = logging.getLogger(__name__)
@@ -15,17 +16,6 @@ _log = logging.getLogger(__name__)
 _PROFILE_RE = re.compile(r"[a-z0-9][a-z0-9_-]*")
 _SSH_OPTIONS = ["-o", "BatchMode=yes", "-o", "ConnectTimeout=10"]
 TUNNEL_PORTS = (20000, 59999)
-
-SESSION_PREAMBLE = (
-    "[ComfyArt] You are working for the user through a ComfyArt chat. Their ComfyArt canvas and "
-    "its ComfyUI are reachable only through the `comfyart` MCP tools attached to this session "
-    "(named mcp__comfyart__*). They may run on a different machine than you, so 127.0.0.1, "
-    "local ComfyUI or ComfyArt services, and skills or memories about your own machine do not "
-    "refer to them. Never use the terminal, curl, systemctl or sudo to reach, start or stop "
-    "ComfyUI or ComfyArt. Start with server_info and get_canvas; when a task matches a ComfyArt "
-    "skill, read it with the comfyart skill tool."
-)
-
 
 def chat_cwd(home: str, chat_id: str) -> Path:
     safe = re.sub(r"[^A-Za-z0-9_-]", "_", chat_id or "default")[:64] or "default"
@@ -63,8 +53,9 @@ class HermesProvider(AcpProvider):
         "max_turn_requests": "Hermes stopped after the maximum number of model requests.",
     }
 
-    def __init__(self, *, home_dir: str, ssh_host: Callable[[], str], profile: Callable[[], str]) -> None:
-        super().__init__(home_dir=home_dir)
+    def __init__(self, *, host: AgentHost, home_dir: str, ssh_host: Callable[[], str],
+                 profile: Callable[[], str]) -> None:
+        super().__init__(host=host, home_dir=home_dir)
         self._ssh_host = ssh_host
         self._profile = profile
 
@@ -106,7 +97,7 @@ class HermesProvider(AcpProvider):
     def _prompt_blocks(self, turn: TurnRequest, image_supported: bool) -> tuple[list[dict], str]:
         blocks, error = super()._prompt_blocks(turn, image_supported)
         if blocks and not turn.resume_token:
-            blocks.insert(0, {"type": "text", "text": SESSION_PREAMBLE})
+            blocks.insert(0, {"type": "text", "text": self._host.session_preamble})
         return blocks, error
 
     def _catalog_from(self, opened: dict) -> list[dict]:
@@ -120,7 +111,7 @@ class HermesProvider(AcpProvider):
                 "sessionId": session_id, "modelId": turn.model,
             }, timeout=SESSION_TIMEOUT_S)
             await transport.request("session/resume", {
-                "sessionId": session_id, "cwd": launch.session_cwd, "mcpServers": launch.mcp_servers(),
+                "sessionId": session_id, "cwd": launch.session_cwd, "mcpServers": self._mcp_servers(launch),
             }, timeout=SESSION_TIMEOUT_S)
-        _log.info("[ComfyArt/hermes] chat=%s model=%s", turn.chat_id, turn.model or "(Hermes default)")
+        _log.info("[%s/hermes] chat=%s model=%s", self._host.label, turn.chat_id, turn.model or "(Hermes default)")
         return ""

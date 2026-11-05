@@ -11,9 +11,7 @@ from ._cli_common import base_spawn_env
 
 MAC_APP_COMMAND = Path("/Applications/DeepSeek Harness.app/Contents/Resources/runtime/cli/bin/dsh")
 
-BOT_PROFILE = "comfyart-acp"
 TEMPLATE_PROFILE = "acp"
-PERMISSION_PRESET = "comfyart-mcp-only"
 PROFILE_BOOT_TIMEOUT_S = 60.0
 
 DISABLED_ENTRY_IDS = (
@@ -46,9 +44,9 @@ def resolve_command() -> tuple[Optional[list[str]], str]:
                   "DeepSeek Harness app, or `npm install -g @deepseek-ai/dsh`.")
 
 
-def profile_dir() -> Path:
+def profile_dir(profile: str) -> Path:
     home = os.environ.get("DSH_HOME")
-    return (Path(home).expanduser() if home else Path.home() / ".dsh") / "profiles" / BOT_PROFILE
+    return (Path(home).expanduser() if home else Path.home() / ".dsh") / "profiles" / profile
 
 
 def chat_cwd(home: str, chat_id: str) -> Path:
@@ -58,13 +56,14 @@ def chat_cwd(home: str, chat_id: str) -> Path:
     return path
 
 
-def overlay_entries(route: Optional[tuple[str, str]]) -> list[dict]:
+def overlay_entries(prefix: str, route: Optional[tuple[str, str]]) -> list[dict]:
+    preset = f"{prefix}-mcp-only"
     entries: list[dict] = [{
         "id": "permission",
         "config": {
-            "presets": {PERMISSION_PRESET: {"sandbox": "danger-full-access",
-                                            "approval": "never"}},
-            "defaultPreset": PERMISSION_PRESET,
+            "presets": {preset: {"sandbox": "danger-full-access",
+                                 "approval": "never"}},
+            "defaultPreset": preset,
         },
     }]
     entries += [{"id": entry_id, "disabled": True} for entry_id in DISABLED_ENTRY_IDS]
@@ -73,25 +72,25 @@ def overlay_entries(route: Optional[tuple[str, str]]) -> list[dict]:
     return entries
 
 
-def write_turn_overlay(cwd: Path, route: Optional[tuple[str, str]]) -> Path:
-    target = cwd / "comfyart-turn-overlay.yml"
-    target.write_text(json.dumps(overlay_entries(route), indent=2), encoding="utf-8")
+def write_turn_overlay(prefix: str, cwd: Path, route: Optional[tuple[str, str]]) -> Path:
+    target = cwd / f"{prefix}-turn-overlay.yml"
+    target.write_text(json.dumps(overlay_entries(prefix, route), indent=2), encoding="utf-8")
     return target
 
 
-async def ensure_profile(argv: list[str]) -> str:
-    if (profile_dir() / "package.json").is_file():
+async def ensure_profile(argv: list[str], profile: str) -> str:
+    if (profile_dir(profile) / "package.json").is_file():
         return ""
     try:
         proc = await asyncio.create_subprocess_exec(
-            *argv, "--profile", BOT_PROFILE, "--from-default-profile", TEMPLATE_PROFILE,
+            *argv, "--profile", profile, "--from-default-profile", TEMPLATE_PROFILE,
             "--dump-config",
             stdout=asyncio.subprocess.DEVNULL, stderr=asyncio.subprocess.PIPE,
             env=base_spawn_env())
         _, err = await asyncio.wait_for(proc.communicate(), timeout=PROFILE_BOOT_TIMEOUT_S)
     except (OSError, asyncio.TimeoutError) as e:
-        return f"could not create the {BOT_PROFILE} profile: {e}"
-    if (profile_dir() / "package.json").is_file():
+        return f"could not create the {profile} profile: {e}"
+    if (profile_dir(profile) / "package.json").is_file():
         return ""
     detail = (err or b"").decode("utf-8", "replace").strip()
-    return f"could not create the {BOT_PROFILE} profile" + (f": {detail[-400:]}" if detail else "")
+    return f"could not create the {profile} profile" + (f": {detail[-400:]}" if detail else "")

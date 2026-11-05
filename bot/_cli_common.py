@@ -264,7 +264,7 @@ async def run_cli_turn(
             await proc.stdin.drain()
             proc.stdin.close()
         except (OSError, ConnectionError) as e:
-            _log.warning("[ComfyArt/bot] stdin write failed: %s", e)
+            _log.warning("[%s] stdin write failed: %s", exe_label, e)
 
     stderr_buf: list[bytes] = []
 
@@ -297,7 +297,7 @@ async def run_cli_turn(
             except asyncio.TimeoutError:
                 continue
             except ValueError:
-                _log.warning("[ComfyArt/bot] oversized stream line skipped")
+                _log.warning("[%s] oversized stream line skipped", exe_label)
                 last_activity = time.monotonic()
                 continue
             if not line:

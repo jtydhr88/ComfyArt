@@ -8,7 +8,7 @@ from server import PromptServer
 
 from ..bot import BotEvent, TurnHandle, TurnRequest, get_provider
 from ..bot._cli_common import resolve_comfy_mcp_argv
-from ..bot.guide import COMFY_MCP_ALLOWED_TOOLS
+from ..bot.agent_host import COMFY_MCP_ALLOWED_TOOLS
 from . import bot_asks, chat_store
 from .settings import SETTINGS_SPEC, get_setting
 
