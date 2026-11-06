@@ -1,0 +1,14 @@
+{
+  "_comment": "#777 packaging cover rewash — remove LUMIERE ARTISAN; single brand; half-screen distinguishable from Lovart gold.",
+  "assets": [
+    {
+      "skill_id": "packaging",
+      "slot": "cover",
+      "index": 0,
+      "source_path": "docs/design/777/gold/cover.png",
+      "prompt": "Recreate as an ORIGINAL brand packaging design system collage for scented candle boxes. Keep the SAME SUBJECT FAMILY and rough LAYOUT: left = packaging design breakdown board with callouts and detail insets; top-right = three hexagonal product boxes on a clean studio surface; bottom-right = lifestyle shelf scene with the same three boxes. CRITICAL DIFFERENCES for copyright wash and half-screen distinguishability: (1) Use ONE brand only across the ENTIRE collage: brand name 'AURELIA ATELIER' (never LUMIERE, never LUMIERE ARTISAN, never BOTANICA LAB, never Lovart). (2) Change left panel structure: show a flat dieline/technical sheet on top of the left board PLUS a 3/4 hero box below it (not a single hero box with callout lines like the reference). (3) Change scent names to 'OLIVE LEAF', 'CLAY ROSE', 'DRIFTWOOD'; change palette to sage + dusty rose + warm stone; slightly different botanical line art. (4) Lifestyle panel: different shelf props (ceramic vase, linen book, no Kinfolk title). (5) No watermarks, no competitor logos, no multi-brand mix. Photoreal packaging presentation, soft daylight, beige ground, 4:3.",
+      "aspect_ratio": "4:3",
+      "resolution": "2K"
+    }
+  ]
+}

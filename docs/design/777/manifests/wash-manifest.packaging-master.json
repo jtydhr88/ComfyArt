@@ -1,0 +1,14 @@
+{
+  "_comment": "#777 packaging master/主款 template rewash — drop LUMIERE ARTISAN; keep 5-template lock.",
+  "assets": [
+    {
+      "skill_id": "packaging",
+      "slot": "examples",
+      "index": 1,
+      "source_path": "docs/design/777/gold/master.png",
+      "prompt": "Recreate as an ORIGINAL packaging design presentation board for a hexagonal scented-candle box. Keep the SAME SUBJECT and LAYOUT family: one large 3/4 hero box centered with callout annotations around it, four detail inset squares along the bottom, brand header top-left, logo lockup at bottom. CRITICAL: use ONE brand only across the entire board — brand name 'AURELIA ATELIER' (never LUMIERE, never LUMIERE ARTISAN, never Lovart). Product scent 'OLIVE LEAF'. Soft sage green + cream color blocking, botanical line art, photoreal packaging mockup on light marble. Change callout wording and botanical motif enough for half-screen distinguishability. No watermarks.",
+      "aspect_ratio": "3:4",
+      "resolution": "2K"
+    }
+  ]
+}
