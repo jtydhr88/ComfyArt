@@ -6,6 +6,7 @@ import { errorText } from '../jobs'
 import { agentSetupFocusAtom, botSettingsOpenAtom } from './AgentPicker'
 import { docsUrl } from './SettingsMenu'
 import { FieldSelect } from './FieldSelect'
+import { AgentLogo } from './agentLogos'
 import { Icons } from './icons'
 import { Modal } from './Modal'
 import { t } from '../i18n'
@@ -230,7 +231,7 @@ function AgentSetup({ providers, enabled, onError, draft, edit, children }: {
       {providers.filter((p) => p.id !== BUILTIN_AGENT).map((p) => (
         <div key={p.id} className="ca-agentsetup__card" data-agent={p.id}>
           <div className="ca-agentsetup__head">
-            <span className="ca-agentsetup__name">{providerLabel(p)}</span>
+            <span className="ca-agentsetup__name"><AgentLogo id={p.id} />{providerLabel(p)}</span>
             <span className="ca-agentsetup__chip" data-on={p.available || undefined} title={p.detail || p.version}>{p.available ? t('agentSetup.connected') : t('agentPicker.notDetected')}</span>
           </div>
           {p.id === 'hermes' && (

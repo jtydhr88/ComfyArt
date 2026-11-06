@@ -492,7 +492,7 @@ textarea.ca-genblock__text { flex: 1; resize: none; border: none; outline: none;
 .ca-agentsetup { display: flex; flex-direction: column; gap: 8px; }
 .ca-agentsetup__card { border: var(--ca-border-w) solid var(--ca-border); border-radius: 10px; padding: 10px 12px; display: flex; flex-direction: column; gap: 6px; }
 .ca-agentsetup__head { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
-.ca-agentsetup__name { font-weight: 500; }
+.ca-agentsetup__name { display: inline-flex; align-items: center; gap: 8px; font-weight: 500; }
 .ca-agentsetup__chip { font-size: 12px; line-height: 20px; padding: 0 8px; border-radius: 10px; background: var(--ca-field); color: var(--ca-muted); }
 .ca-agentsetup__chip[data-on] { background: color-mix(in srgb, #16a34a 14%, transparent); color: #15803d; }
 :root[data-theme="dark"] .ca-agentsetup__chip[data-on] { color: #4ade80; }
