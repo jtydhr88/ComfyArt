@@ -11,6 +11,7 @@ Each file is the vendor's own asset, unmodified (no recolor, no reshaping). It i
 | Codex | codex.svg | https://developers.openai.com/favicon.svg — OpenAI Blossom on blue disc, served by OpenAI's developer site. Checked first: https://openai.com/brand/ (guidelines only, no downloadable file; direct fetch 403) and github.com/openai/codex (only codex-cli-splash.png). |
 | Gemini CLI | gemini-cli.svg | https://www.gstatic.com/lamda/images/gemini_sparkle_aurora_33f86dc0c0257da337c63.svg — Gemini spark, served by gemini.google.com. github.com/google-gemini/gemini-cli has no SVG logo. |
 | DeepSeek Harness | deepseek.svg | https://github.com/deepseek-ai/DeepSeek-V2/blob/main/figures/logo.svg (the logo the DeepSeek-V3 README embeds). deepseek.com only exposes favicon.ico (raster). **Only the outer `viewBox` was changed** to frame the whale symbol (the wordmark falls outside); paths and colors are untouched — whale-only crop approved by product (#246, 19:20). |
+| Hermes | hermes.svg / hermes-dark.svg | https://github.com/NousResearch/hermes-agent/blob/main/assets/icon-master.svg (+ icon-master-dark.svg) — product app/favicon masters composed from the Nous brand-kit `nous-girl` marks (see hermes-agent `scripts/generate_icons.py`). Bundled as-is aside from SVG namespace cleanup / svgo size pass; colors and silhouette untouched. |
 
 Claude: https://www.anthropic.com/press-kit checked first; no direct SVG download (assets are behind a JS/request flow), so the allowed claude.ai favicon fallback is kept.
 
