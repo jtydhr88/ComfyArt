@@ -49,7 +49,8 @@ def submits(monkeypatch):
             return {"ok": True}
         return handler
     for name in ("generate_image", "generate_video", "edit_image", "update_plan", "wait_generation"):
-        monkeypatch.setitem(mcp.TOOLS, name, {**mcp.TOOLS[name], "handler": fake(name)})
+        monkeypatch.setitem(mcp.TOOLS, name, {**mcp.TOOLS[name], "handler": fake(name), "_paid_guarded": False})
+    mcp._install_paid_handler_guards()
     log.decline = decline
     yield log
     paid_guard.TURNS.clear()
@@ -252,11 +253,15 @@ async def test_declined_runs_do_not_count(monkeypatch, submits):
 
 
 async def test_no_guard_outside_a_bot_turn(submits):
-    # plain MCP clients (no bot chat) are not turn-scoped
+    # #730: plain MCP clients (no bot chat) share a no-turn bucket with the same default cap
+    paid_guard.TURNS.clear()
+    outs = []
     for i in range(6):
-        out = await mcp._tools_call({"name": "generate_image", "arguments": {"prompt": str(i)}})
-        assert not out["isError"]
-    assert len(_paid(submits)) == 6
+        outs.append(await mcp._tools_call({"name": "generate_image", "arguments": {"prompt": str(i)}}))
+    assert len(_paid(submits)) == 4
+    assert all(not o["isError"] for o in outs[:4])
+    assert outs[4]["isError"] and outs[4]["content"][0]["text"].startswith(
+        "Generated 4 images and still not done")
 
 
 def test_charged_reads_cancel_and_errors():

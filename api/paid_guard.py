@@ -181,6 +181,38 @@ class TurnGuard:
 
 TURNS: dict[str, TurnGuard] = {}
 
+NOTURN_PREFIX = "__noturn__:"
+
+
+class PaidRefused(Exception):
+    """Raised by the paid-tool handler wrap when before_call blocks the submit (#730)."""
+
+    def __init__(self, message: str) -> None:
+        self.message = message
+        super().__init__(message)
+
+
+def noturn_key(session_or_client: str) -> str:
+    tag = (session_or_client or "").strip() or "anonymous"
+    return f"{NOTURN_PREFIX}{tag}"
+
+
+def ensure_noturn(chat_id: str) -> TurnGuard:
+    """Open a default-cap guard for a no-turn MCP client; no-op if one already exists."""
+    existing = TURNS.get(chat_id)
+    if existing is not None:
+        return existing
+    if not chat_id.startswith(NOTURN_PREFIX):
+        raise ValueError(f"ensure_noturn expects a {NOTURN_PREFIX!r} key, got {chat_id!r}")
+    return begin_turn(chat_id, text="", provider_text="", lang="en")
+
+
+def resolve_guard_chat_id() -> str:
+    """Chat id for the paid guard: explicit guard key, bot chat, or anonymous noturn."""
+    from .mcp_tools._context import BOT_CHAT_ID, GUARD_CHAT_ID
+    return GUARD_CHAT_ID.get() or BOT_CHAT_ID.get() or noturn_key("anonymous")
+
+
 
 def begin_turn(chat_id: str, *, text: str, provider_text: str, lang: str = "",
                on_stop: Optional[Callable[[], None]] = None) -> TurnGuard:
@@ -248,6 +280,8 @@ def fallback_allowed(chat_id: str, name: str, args: dict) -> bool:
 def before_call(chat_id: str, name: str, args: dict, *, external: bool = False) -> Optional[str]:
     """None to let the call run; otherwise the error text (nothing submitted)."""
     guard = TURNS.get(chat_id)
+    if guard is None and chat_id.startswith(NOTURN_PREFIX):
+        guard = ensure_noturn(chat_id)
     if guard is None:
         return None
     if external:
