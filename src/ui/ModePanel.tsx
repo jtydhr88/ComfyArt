@@ -69,6 +69,7 @@ export function ModePanel({ onError }: { onError: (msg: string) => void }) {
   const [loop, setLoop] = useState(true)
   const [lines, setLines] = useState<string[] | null>(null)
   const [edits, setEdits] = useState<string[]>([])
+  const [held, setHeld] = useState<{ left: number; top: number } | null>(null)
 
   useEffect(() => {
     setPrompt('')
@@ -113,9 +114,11 @@ export function ModePanel({ onError }: { onError: (msg: string) => void }) {
   } else {
     const s = (rect.r - rect.l) / iw
     const right = rect.r + (mode === 'expand' ? pads.r * s : 0)
-    left = right + GAP + size.w > host.width - EDGE ? Math.max(EDGE, rect.l - size.w - GAP) : right + GAP
+    const leftEdge = rect.l - (mode === 'expand' ? pads.l * s : 0)
+    left = right + GAP + size.w > host.width - EDGE ? Math.max(EDGE, leftEdge - size.w - GAP) : right + GAP
     top = Math.min(Math.max(rect.t, EDGE), host.height - size.h - EDGE)
   }
+  if (held) ({ left, top } = held)
 
   const textEdits = (): [string, string][] => (lines ?? []).flatMap((line, i) => ((edits[i] ?? '').trim() !== line ? [[line, (edits[i] ?? '').trim()] as [string, string]] : []))
   const tooBig = Math.max(iw + pads.l + pads.r, ih + pads.t + pads.b) > EXPAND_LIMIT
@@ -185,7 +188,13 @@ export function ModePanel({ onError }: { onError: (msg: string) => void }) {
       className="ca-panel"
       data-wide={below || undefined}
       style={{ left, top }}
-      onPointerDown={(e) => e.stopPropagation()}
+      onPointerDown={(e) => {
+        e.stopPropagation()
+        if (!(e.target instanceof HTMLInputElement) || e.target.type !== 'range') return
+        e.target.setPointerCapture(e.pointerId)
+        setHeld({ left, top })
+      }}
+      onLostPointerCapture={() => setHeld(null)}
       onWheel={(e) => e.stopPropagation()}
     >
       {below ? (
