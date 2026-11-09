@@ -31,6 +31,10 @@ export const IMAGE_MODELS: ModelDef[] = [
     prompt: 'text', sizes: ['size'], lora: 'z-image',
   },
   {
+    id: 'krea2-turbo-t2i.api.json', label: 'Krea 2 Turbo', desc: t('models.krea2TurboFast8Step'), files: ['krea2_turbo_int8_convrot.safetensors'],
+    prompt: 'text', sizes: ['size'], lora: null,
+  },
+  {
     id: 'flux2-klein-9b-t2i.api.json', label: 'Flux.2 Klein 9B', desc: t('models.fast4StepGenerationSupports'), files: ['flux-2-klein-9b-nvfp4.safetensors'],
     refs: 'latent', prompt: 'text', sizes: ['size', 'scheduler'], lora: 'flux2-klein',
   },

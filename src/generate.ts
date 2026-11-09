@@ -171,7 +171,7 @@ async function generateGraph(shape: GeneratorShape): Promise<Built> {
   const { graph, id } = await loadNamed(model.id, 'unet', 'vae', 'prompt', 'size', 'sampler', 'decode', 'save', ...extra)
   graph[id.prompt].inputs[model.prompt!] = model.caption ? await caption(model.caption, prompt, width, height) : prompt
   if (model.negative) graph[id[model.negative[0]]].inputs[model.negative[1]] = negativeOf(shape)
-  if (model.lora) applyLoras(graph, id.unet, lorasOf(shape))
+  if (model.lora !== undefined) applyLoras(graph, id.unet, lorasOf(shape))
   applyRefs(graph, id, model, used, refStrengthsOf(shape), refControlsOf(shape), width, height)
   for (const name of model.sizes!) Object.assign(graph[id[name]].inputs, { width, height })
   graph[id.size].inputs.batch_size = count

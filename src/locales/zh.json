@@ -857,6 +857,7 @@
   "models.flux3KleinFast16Step": "16 步快速生成，支持参考图",
   "models.mossImageFullCaption": "适合用长段、细致的场景描述出图",
   "models.fast8StepGenerationGreat": "8 步极速出图，擅长写实人像和摄影质感",
+  "models.krea2TurboFast8Step": "8 步快速出图，擅长艺术风格和创意表现",
   "models.greatAtLayoutLogosAnd": "擅长排版、Logo 和文字海报（先由 Agent 写结构化描述）",
   "models.highOverallQualityAccurateChinese": "综合质量高，中英文字准确，支持多张参考图",
   "models.solidDetailAndCompositionSupports": "细节与构图稳健，支持线稿、景深、姿势等结构控制",
