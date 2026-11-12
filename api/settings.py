@@ -1,3 +1,5 @@
+import ipaddress
+
 from aiohttp import web
 
 from ._common import app_path, error, json_body, read_json, routes, write_json
@@ -28,6 +30,8 @@ SETTINGS_SPEC: dict[str, object] = {
 }
 
 CHOICES: dict[str, tuple[str, ...]] = {"ocr-engine": ("local", "agent"), "generation-backend": ("local", "cloud")}
+
+LOCAL_ONLY = ("enable-mcp", "enable-bot", "bot-enable-comfy-mcp", "bot-comfy-mcp-command", "bot-hermes-ssh-host")
 
 
 def _file() -> str:
@@ -72,6 +76,10 @@ async def put_settings(request: web.Request) -> web.Response:
         if key in CHOICES and value not in CHOICES[key]:
             return error(f"{key} must be one of {', '.join(CHOICES[key])}", 400)
     current = all_settings()
+    if not ipaddress.ip_address(request.remote).is_loopback:
+        blocked = [k for k in LOCAL_ONLY if k in body and body[k] != current[k]]
+        if blocked:
+            return error(f"{', '.join(blocked)} can only be changed from the machine running ComfyUI", 403)
     current.update(body)
     write_json(_file(), current)
     return web.json_response(current)

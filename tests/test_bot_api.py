@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import asyncio
 
+from aiohttp import web
 from conftest import SENT, wait_bot_done, write_settings
 
 from ComfyArt.api import chat_store
@@ -135,6 +136,17 @@ async def test_settings_validate_keys_and_types(bot_client):
     assert (await bot_client.put("/comfyart/settings", json={"ocr-engine": "cloud"})).status == 400
     saved = await (await bot_client.put("/comfyart/settings", json={"ocr-engine": "agent"})).json()
     assert saved["ocr-engine"] == "agent"
+
+
+async def test_lan_clients_cannot_change_what_the_agent_runs(bot_client, monkeypatch):
+    write_settings(**{"enable-mcp": False, "enable-bot": False})
+    monkeypatch.setattr(web.BaseRequest, "remote", "192.168.0.50")
+    for patch in ({"enable-mcp": True}, {"enable-bot": True}, {"bot-enable-comfy-mcp": True},
+                  {"bot-comfy-mcp-command": "calc"}, {"bot-hermes-ssh-host": "evil"}):
+        resp = await bot_client.put("/comfyart/settings", json=patch)
+        assert resp.status == 403 and next(iter(patch)) in (await resp.json())["error"]
+    saved = await (await bot_client.put("/comfyart/settings", json={"enable-bot": False, "ocr-engine": "agent"})).json()
+    assert saved["ocr-engine"] == "agent" and saved["enable-bot"] is False
 
 
 async def test_status_survives_a_failing_probe(bot_client, fake_provider, monkeypatch):
