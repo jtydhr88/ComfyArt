@@ -19,6 +19,7 @@ export interface ModelDef {
   control?: string
   negative?: [string, string]
   lora?: string | null
+  single?: boolean
 }
 
 export const IMAGE_MODELS: ModelDef[] = [
@@ -45,6 +46,10 @@ export const IMAGE_MODELS: ModelDef[] = [
   {
     id: 'moss-image-t2i.api.json', label: 'MOSS-Image', desc: t('models.mossImageFullCaption'), files: ['moss_image_sft_int8_convrot.safetensors'],
     prompt: 'text', sizes: ['size'], lora: 'moss-image',
+  },
+  {
+    id: 'minimax-h3-image-t2i.api.json', label: 'MiniMax H3 Image', desc: t('models.minimaxH3Image'), files: ['minimax_h3_image_pruned_int8_convrot.safetensors'],
+    refs: 'qwen', prompt: 'prompt', sizes: ['size'], lora: null, single: true,
   },
   {
     id: 'qwen-image-2512-t2i.api.json', label: 'Qwen Image 2512', desc: t('models.solidDetailAndCompositionSupports'), files: ['qwen_image_2512_fp8_e4m3fn.safetensors'],

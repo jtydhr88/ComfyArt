@@ -92,9 +92,10 @@ export const runOnOf = (shape: GeneratorShape) => validTarget(shape.meta.runOn) 
 export const lorasOf = (shape: GeneratorShape) => (shape.meta.loras as LoraPick[] | undefined) ?? []
 
 function applySeed(graph: PromptGraph, seed: number) {
+  let pass = 0
   for (const node of Object.values(graph)) {
     if (node.class_type === 'RandomNoise') node.inputs.noise_seed = seed
-    if (node.class_type === 'KSampler') node.inputs.seed = seed
+    if (node.class_type === 'KSampler') node.inputs.seed = seed + pass++
   }
 }
 
@@ -174,13 +175,14 @@ async function generateGraph(shape: GeneratorShape): Promise<Built> {
   if (model.lora !== undefined) applyLoras(graph, id.unet, lorasOf(shape))
   applyRefs(graph, id, model, used, refStrengthsOf(shape), refControlsOf(shape), width, height)
   for (const name of model.sizes!) Object.assign(graph[id[name]].inputs, { width, height })
-  graph[id.size].inputs.batch_size = count
+  const batch = model.single ? 1 : count
+  graph[id.size].inputs.batch_size = batch
   const base = baseOf(shape)
   if (base) {
     graph.b0 = { class_type: 'LoadImage', inputs: { image: annotated(base.src) } }
     graph.b1 = { class_type: 'ImageScale', inputs: { image: ['b0', 0], upscale_method: 'lanczos', width, height, crop: 'center' } }
     graph.b2 = { class_type: 'VAEEncode', inputs: { pixels: ['b1', 0], vae: [id.vae, 0] } }
-    graph.b3 = { class_type: 'RepeatLatentBatch', inputs: { samples: ['b2', 0], amount: count } }
+    graph.b3 = { class_type: 'RepeatLatentBatch', inputs: { samples: ['b2', 0], amount: batch } }
     graph[id.sampler].inputs.latent_image = ['b3', 0]
     if (graph[id.sampler].class_type === 'KSampler') graph[id.sampler].inputs.denoise = base.strength / 100
     else {
@@ -189,12 +191,20 @@ async function generateGraph(shape: GeneratorShape): Promise<Built> {
     }
   }
   if (model.steps) graph[id[model.steps[0]]].inputs.steps = model.steps[1][quality] ?? model.steps[1].standard
+  let image: [string, number] = [id.decode, 0]
+  for (let i = 1; i < count / batch; i++) {
+    graph[`k${i}`] = { class_type: graph[id.sampler].class_type, inputs: { ...graph[id.sampler].inputs } }
+    graph[`d${i}`] = { class_type: 'VAEDecode', inputs: { samples: [`k${i}`, 0], vae: [id.vae, 0] } }
+    graph[`j${i}`] = { class_type: 'ImageBatch', inputs: { image1: image, image2: [`d${i}`, 0] } }
+    image = [`j${i}`, 0]
+  }
+  graph[id.save].inputs.images = image
   if (transparent) {
     Object.assign(graph, {
       bg1: { class_type: 'LoadBackgroundRemovalModel', inputs: { bg_removal_name: 'birefnet.safetensors' } },
-      bg2: { class_type: 'RemoveBackground', inputs: { bg_removal_model: ['bg1', 0], image: [id.decode, 0] } },
+      bg2: { class_type: 'RemoveBackground', inputs: { bg_removal_model: ['bg1', 0], image } },
       bg3: { class_type: 'InvertMask', inputs: { mask: ['bg2', 0] } },
-      bg4: { class_type: 'JoinImageWithAlpha', inputs: { image: [id.decode, 0], alpha: ['bg3', 0] } },
+      bg4: { class_type: 'JoinImageWithAlpha', inputs: { image, alpha: ['bg3', 0] } },
     })
     graph[id.save].inputs.images = ['bg4', 0]
   }
