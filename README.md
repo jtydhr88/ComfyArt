@@ -1,6 +1,6 @@
 # ComfyArt
 
-English | [中文](README.zh.md)
+English | [中文](README.zh.md) · [![Run on swm cloud](https://img.shields.io/badge/swm%20cloud-Run%20ComfyArt%20Studio-0A84FF?logo=icloud&logoColor=white)](https://cloud.swmgpu.com/w/samofvaani/comfyart-panorama-canvas-studio)
 
 [![ComfyArt promo](docs/media/preview-en.gif)](docs/media/promo-en.mp4)
 
@@ -17,6 +17,8 @@ Documentation with screenshots for every feature: **[comfyart.org](https://comfy
 1. `git clone https://github.com/jtydhr88/ComfyArt` into `ComfyUI/custom_nodes/` and run `pip install -r requirements.txt` in ComfyUI's environment. No build is needed: `dist/` is committed.
 2. Restart ComfyUI (or Comfy Desktop). No local GPU? Set `COMFY_API_KEY` first and every workflow runs on [Comfy Cloud](#comfy-cloud) with no model downloads.
 3. Click **ComfyArt** in ComfyUI's top bar, or open `http://127.0.0.1:8188/comfyart/`. On Cloud, pick Settings → Generate on → Comfy Cloud. **Back to ComfyUI** sits in the home rail and in the logo menu of a project.
+
+Or launch a 1-click cloud GPU pod with ComfyArt and all core weights pre-loaded via the [ComfyArt Infinite Canvas, 360° Panorama Stickers & Qwen-Image-Layered Studio on **swm cloud**](https://cloud.swmgpu.com/w/samofvaani/comfyart-panorama-canvas-studio).
 
 ## Features
 
