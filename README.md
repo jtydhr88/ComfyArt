@@ -18,7 +18,7 @@ Documentation with screenshots for every feature: **[comfyart.org](https://comfy
 2. Restart ComfyUI (or Comfy Desktop). No local GPU? Set `COMFY_API_KEY` first and every workflow runs on [Comfy Cloud](#comfy-cloud) with no model downloads.
 3. Click **ComfyArt** in ComfyUI's top bar, or open `http://127.0.0.1:8188/comfyart/`. On Cloud, pick Settings → Generate on → Comfy Cloud. **Back to ComfyUI** sits in the home rail and in the logo menu of a project.
 
-Or launch a 1-click cloud GPU pod with ComfyArt and all core weights pre-loaded via the [ComfyArt Infinite Canvas, 360° Panorama Stickers & Qwen-Image-Layered Studio on **swm cloud**](https://cloud.swmgpu.com/w/samofvaani/comfyart-panorama-canvas-studio).
+Or launch a 1-click cloud GPU pod with ComfyArt and pre-loaded models via the [ComfyArt Infinite Canvas, 360° Panorama Stickers & Qwen-Image-Layered Studio on **swm cloud**](https://cloud.swmgpu.com/w/samofvaani/comfyart-panorama-canvas-studio).
 
 ## Features
 
