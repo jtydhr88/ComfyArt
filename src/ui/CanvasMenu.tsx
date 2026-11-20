@@ -17,7 +17,7 @@ import { extraRefsAtom } from '../agent'
 import { uploadImage, viewUrl } from '../comfy'
 import { createGenerator } from '../generate'
 import { toMedia } from '../jobs'
-import { KIND_LABELS, libraryAtom, saveLibrary, type LibraryKind } from '../library'
+import { KIND_LABELS, libraryAtom, updateLibrary, type LibraryKind } from '../library'
 import type { GeneratorShape } from '../shapes/GeneratorShape'
 import { chatViewAtom } from './AgentPanel'
 import { renameAtom } from './BatchRename'
@@ -68,11 +68,9 @@ function imageSrcs(editor: Editor): string[] {
 
 function addToLibrary(editor: Editor, kind: LibraryKind, target: string | null) {
   const srcs = imageSrcs(editor)
-  const list = libraryAtom.get()
-  const next = target
+  void updateLibrary((list) => target
     ? list.map((x) => (x.id === target ? { ...x, images: [...x.images, ...srcs.filter((src) => !x.images.includes(src))] } : x))
-    : [...list, { id: uuid().slice(0, 8), kind, name: t('canvasMenu.new', KIND_LABELS[kind]), description: '', images: srcs, colors: [], fonts: [] }]
-  void saveLibrary(next)
+    : [...list, { id: uuid().slice(0, 8), kind, name: t('canvasMenu.new', KIND_LABELS[kind]), description: '', images: srcs, colors: [], fonts: [] }])
   libraryTabAtom.set(kind)
   sideAtom.set('assets')
 }

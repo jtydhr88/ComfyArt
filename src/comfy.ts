@@ -34,7 +34,7 @@ export function api(path: string, init?: RequestInit) {
 const userFile = (path: string) => `/userdata/${encodeURIComponent(path)}`
 
 export async function readUserText(path: string): Promise<string | null> {
-  const res = await api(`/comfyart${userFile(path)}`)
+  const res = await api(`/comfyart${userFile(path)}`, { cache: 'no-store' })
   if (res.status === 204) return null
   if (!res.ok) throw new Error(`read ${path} failed: ${res.status}`)
   return res.text()
