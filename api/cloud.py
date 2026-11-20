@@ -3,6 +3,7 @@ import json
 import mimetypes
 import os
 import re
+from urllib.parse import urlsplit
 
 import aiohttp
 import folder_paths
@@ -101,7 +102,7 @@ async def _download(session: aiohttp.ClientSession, job_id: str, output: dict) -
         raise _fail(web.HTTPBadGateway, f"unexpected output path {output['name']}")
     if not os.path.isfile(path):
         os.makedirs(os.path.dirname(path), exist_ok=True)
-        async with session.get(output["url"]) as res:
+        async with session.get(CLOUD + urlsplit(output["url"]).path) as res:
             res.raise_for_status()
             data = await res.read()
         tmp = path + ".part"

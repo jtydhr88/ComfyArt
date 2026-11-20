@@ -37,7 +37,7 @@ async def fake_cloud(monkeypatch, fresh_user_dir):
         if request.match_info["id"] != JOB:
             return web.json_response({}, status=404)
         if state["status"] == "succeeded":
-            out = [{"node_id": "9", "name": "comfyart/image_00001_.png", "content_type": "image/png", "url": str(request.url.with_path("/content"))}]
+            out = [{"node_id": "9", "name": "comfyart/image_00001_.png", "content_type": "image/png", "url": "http://cloud.comfy.org/content"}]
             return web.json_response({"id": JOB, "status": "succeeded", "outputs": out})
         if state["status"] == "failed":
             return web.json_response({"id": JOB, "status": "failed", "error": {"message": "CUDA out of memory"}})
@@ -56,6 +56,8 @@ async def fake_cloud(monkeypatch, fresh_user_dir):
         return web.json_response({"id": "t1", "status": "completed", "result": {"filename": "hf__qma.safetensors"}})
 
     async def content(request: web.Request):
+        if request.headers.get("Authorization") != "Bearer comfyui-test":
+            return web.json_response({}, status=401)
         return web.Response(body=b"png-bytes")
 
     app.router.add_post("/api/v2/assets", upload)
