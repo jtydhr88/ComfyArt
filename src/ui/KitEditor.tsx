@@ -134,7 +134,7 @@ export function KitEditor({ onError }: { onError: (msg: string) => void }) {
     }
   }
   const addFontFiles = async (list: File[]) => {
-    const added: FontFile[] = await Promise.all(list.map(async (f) => ({ family: f.name.replace(/\.(ttf|otf|woff2?)$/i, ''), src: viewUrl(await uploadImage(f, f.name)) })))
+    const added: FontFile[] = await Promise.all(list.map(async (f) => ({ family: f.name.replace(/\.(ttf|otf|woff2?)$/i, '').replace(/[,"']+/g, ' ').trim(), src: viewUrl(await uploadImage(f, f.name)) })))
     update((x) => ({ ...x, fontFiles: [...(x.fontFiles ?? []), ...added], fonts: [...new Set([...x.fonts, ...added.map((a) => a.family)])] }))
   }
   const removeFont = (family: string) => update((x) => ({ ...x, fonts: x.fonts.filter((f) => f !== family), fontFiles: (x.fontFiles ?? []).filter((f) => f.family !== family) }))
